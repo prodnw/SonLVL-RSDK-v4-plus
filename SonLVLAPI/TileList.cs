@@ -79,7 +79,7 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
-		public List<Bitmap> Images = new List<Bitmap>();
+		public IList<Bitmap> Images = new List<Bitmap>();
 
 		public TileList()
 		{
@@ -366,4 +366,6 @@ namespace SonicRetro.SonLVL.API
 			Invalidate();
 		}
 	}
+
+	public enum Direction { Horizontal, Vertical }
 }

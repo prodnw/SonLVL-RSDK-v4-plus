@@ -26,10 +26,10 @@ namespace SonicRetro.SonLVL.GUI
 		private void PalettePanel_Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.Clear(Color.Black);
-			for (int y = 0; y <= 3; y++)
-				for (int x = 0; x <= 15; x++)
+			for (int y = 0; y < 16; y++)
+				for (int x = 0; x < 16; x++)
 				{
-					e.Graphics.FillRectangle(new SolidBrush(LevelData.PaletteToColor(y, x, false)), x * 16, y * 16, 16, 16);
+					e.Graphics.FillRectangle(new SolidBrush(LevelData.NewPalette[y * 16 + x]), x * 16, y * 16, 16, 16);
 					e.Graphics.DrawRectangle(Pens.White, x * 16, y * 16, 15, 15);
 				}
 			e.Graphics.DrawRectangle(new Pen(Color.Yellow, 2), selectedColor.X * 16, selectedColor.Y * 16, 16, 16);
@@ -50,7 +50,7 @@ namespace SonicRetro.SonLVL.GUI
 		private Tool tool;
 		private void TilePicture_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (e.Button == System.Windows.Forms.MouseButtons.Left)
+			if (e.Button == MouseButtons.Left)
 				switch (tool)
 				{
 					case Tool.Pencil:
@@ -68,7 +68,7 @@ namespace SonicRetro.SonLVL.GUI
 		Point lastpoint;
 		private void TilePicture_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (tool == Tool.Pencil && e.Button == System.Windows.Forms.MouseButtons.Left)
+			if (tool == Tool.Pencil && e.Button == MouseButtons.Left)
 			{
 				if (new Rectangle(Point.Empty, TilePicture.Size).Contains(e.Location))
 				{
@@ -83,7 +83,7 @@ namespace SonicRetro.SonLVL.GUI
 		private Graphics tileGfx;
 		private void DrawTile()
 		{
-			tileGfx.Clear(LevelData.PaletteToColor(2, 0, false));
+			tileGfx.Clear(LevelData.NewPalette[0]);
 			tileGfx.DrawImage(tile.Scale((int)numericUpDown1.Value).ToBitmap(LevelData.BmpPal), 0, 0, tile.Width * (int)numericUpDown1.Value, tile.Height * (int)numericUpDown1.Value);
 		}
 

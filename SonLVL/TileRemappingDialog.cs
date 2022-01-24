@@ -8,7 +8,7 @@ namespace SonicRetro.SonLVL
 {
 	public partial class TileRemappingDialog : Form
 	{
-		public TileRemappingDialog(string title, List<Bitmap> images, int imageWidth, int imageHeight)
+		public TileRemappingDialog(string title, IList<Bitmap> images, int imageWidth, int imageHeight)
 		{
 			InitializeComponent();
 			Text += title;
@@ -21,7 +21,7 @@ namespace SonicRetro.SonLVL
 			TileMap = new Dictionary<int, int>();
 		}
 
-		public Dictionary<int, int> TileMap { get; private set; }
+		public Dictionary<int, int> TileMap { get; }
 
 		private void SourceTileList_SelectedIndexChanged(object sender, EventArgs e)
 		{

@@ -90,8 +90,8 @@ namespace ObjectLayoutMerge
 				fmt = (EngineVersion)(layoutAFileGameSelector.SelectedIndex + 1);
 			switch (fmt)
 			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
+				case EngineVersion.V4:
+				case EngineVersion.V3:
 				case EngineVersion.SCDPC:
 					hasrings = false;
 					break;

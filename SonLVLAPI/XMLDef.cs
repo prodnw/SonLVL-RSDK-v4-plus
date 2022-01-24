@@ -61,9 +61,7 @@ namespace SonicRetro.SonLVL.API.XMLDef
 
 	public class ImageList
 	{
-		[XmlElement("ImageFromMappings", typeof(ImageFromMappings))]
 		[XmlElement("ImageFromBitmap", typeof(ImageFromBitmap))]
-		[XmlElement("ImageFromSprite", typeof(ImageFromSprite))]
 		public Image[] Items { get; set; }
 	}
 
@@ -101,77 +99,10 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public System.Drawing.Point ToPoint() { return new System.Drawing.Point(X, Y); }
 	}
 
-	public class ImageFromMappings : Image
-	{
-		[XmlElement("ArtFile")]
-		public ArtFile[] ArtFiles { get; set; }
-		public MapFile MapFile { get; set; }
-	}
-
-	public class ArtFile
-	{
-		[XmlAttribute]
-		public string filename { get; set; }
-		[XmlAttribute]
-		public CompressionType compression { get; set; }
-		[XmlIgnore]
-		public bool compressionSpecified { get { return compression != CompressionType.Invalid; } set { } }
-		[XmlAttribute]
-		public int offset { get; set; }
-		[XmlIgnore]
-		public bool offsetSpecified { get; set; }
-	}
-
-	public class MapFile
-	{
-		[XmlAttribute]
-		public MapFileType type { get; set; }
-		[XmlAttribute]
-		public string filename { get; set; }
-		[XmlAttribute]
-		public string label { get; set; }
-		[XmlIgnore]
-		public bool labelSpecified { get { return !string.IsNullOrEmpty(label); } set { } }
-		[XmlAttribute]
-		public string dplcfile { get; set; }
-		[XmlIgnore]
-		public bool dplcfileSpecified { get { return !string.IsNullOrEmpty(dplcfile); } set { } }
-		[XmlAttribute]
-		public string dplclabel { get; set; }
-		[XmlIgnore]
-		public bool dplclabelSpecified { get { return !string.IsNullOrEmpty(dplclabel); } set { } }
-		[XmlAttribute]
-		public int frame { get; set; }
-		[XmlIgnore]
-		public bool frameSpecified { get { return string.IsNullOrEmpty(label); } set { } }
-		[XmlAttribute]
-		public int startpal { get; set; }
-		[XmlAttribute]
-		public EngineVersion version { get; set; }
-		[XmlIgnore]
-		public bool versionSpecified { get { return version != EngineVersion.Invalid; } set { } }
-		[XmlAttribute]
-		public EngineVersion dplcver { get; set; }
-		[XmlIgnore]
-		public bool dplcverSpecified { get { return dplcver != EngineVersion.Invalid; } set { } }
-	}
-
-	public enum MapFileType
-	{
-		Binary,
-		ASM
-	}
-
 	public class ImageFromBitmap : Image
 	{
 		[XmlAttribute]
 		public string filename { get; set; }
-	}
-
-	public class ImageFromSprite : Image
-	{
-		[XmlAttribute]
-		public int frame { get; set; }
 	}
 
 	public class ImageSetList
@@ -345,30 +276,5 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		[XmlElement("ImageSetRef", typeof(ImageSetRef))]
 		[XmlElement("ImageRef", typeof(ImageRef))]
 		public object[] Images { get; set; }
-	}
-
-
-	[XmlRoot(Namespace = "http://www.sonicretro.org")]
-	public class StartPosDef
-	{
-		[XmlElement("ImageFromMappings", typeof(ImageFromMappings))]
-		[XmlElement("ImageFromBitmap", typeof(ImageFromBitmap))]
-		[XmlElement("ImageFromSprite", typeof(ImageFromSprite))]
-		public Image[] Images { get; set; }
-
-		static readonly XmlSerializer xs = new XmlSerializer(typeof(StartPosDef));
-
-		public static StartPosDef Load(string filename)
-		{
-			using (XmlTextReader xtr = new XmlTextReader(filename))
-				return (StartPosDef)xs.Deserialize(xtr);
-		}
-
-		public void Save(string filename)
-		{
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filename))
-			using (XmlTextWriter xtr = new XmlTextWriter(sw) { Formatting = Formatting.Indented })
-				xs.Serialize(xtr, this);
-		}
 	}
 }

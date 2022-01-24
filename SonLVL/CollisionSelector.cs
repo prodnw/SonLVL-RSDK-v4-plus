@@ -17,7 +17,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void CollisionSelector_Load(object sender, EventArgs e)
 		{
-			tileList1.Images = new List<Bitmap>(LevelData.ColBmps);
+			tileList1.Images = new List<Bitmap>(LevelData.NewColBmps[0]);
 			tileList1.ChangeSize();
 		}
 

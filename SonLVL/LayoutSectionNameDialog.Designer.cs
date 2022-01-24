@@ -91,7 +91,7 @@ namespace SonicRetro.SonLVL
 			this.Name = "LayoutSectionNameDialog";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "SonLVL";
+			this.Text = "SonLVL-RSDK";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

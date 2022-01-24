@@ -36,14 +36,14 @@ namespace SonicRetro.SonLVL.GUI
 			if (MainForm.Instance != null)
 			{
 				MainForm.Instance.Log(e.ExceptionObject.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
-				System.IO.File.WriteAllLines("SonLVL.log", MainForm.Instance.LogFile.ToArray());
+				System.IO.File.WriteAllLines("SonLVL-RSDK.log", MainForm.Instance.LogFile.ToArray());
 				using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.ExceptionObject.GetType().Name + "\nLog file has been saved.", false))
 					ed.ShowDialog();
 			}
 			else
 			{
-				System.IO.File.WriteAllText("SonLVL.log", e.ExceptionObject.ToString());
-				MessageBox.Show("Unhandled Exception " + e.ExceptionObject.GetType().Name + "\nLog file has been saved.", "SonLVL Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				System.IO.File.WriteAllText("SonLVL-RSDK.log", e.ExceptionObject.ToString());
+				MessageBox.Show("Unhandled Exception " + e.ExceptionObject.GetType().Name + "\nLog file has been saved.", "SonLVL-RSDK Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 	}

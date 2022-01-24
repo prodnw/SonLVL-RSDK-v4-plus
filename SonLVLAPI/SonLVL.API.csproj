@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SonicRetro.SonLVL.API</RootNamespace>
     <AssemblyName>SonLVLAPI</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -36,28 +36,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SonicRetro.KensSharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SonicRetro.KensSharp.Comper">
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Comper.dll</HintPath>
-    </Reference>
-    <Reference Include="SonicRetro.KensSharp.Enigma, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Enigma.dll</HintPath>
-    </Reference>
-    <Reference Include="SonicRetro.KensSharp.Kosinski+, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Kosinski+.dll</HintPath>
-    </Reference>
-    <Reference Include="SonicRetro.KensSharp.Kosinski, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Kosinski.dll</HintPath>
-    </Reference>
-    <Reference Include="SonicRetro.KensSharp.Nemesis, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SonicRetro.KensSharp.Nemesis.dll</HintPath>
+    <Reference Include="RSDKv3_4">
+      <HintPath>..\Dependencies\RSDKv3_4.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,10 +45,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="SZDDComp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SZDDComp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapBits.cs" />
@@ -81,9 +57,7 @@
     <Compile Include="BugReportDialog.Designer.cs">
       <DependentUpon>BugReportDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ByteConverter.cs" />
-    <Compile Include="Chaotix\Object.cs" />
-    <Compile Include="Compression.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="DataTypes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileSelector.cs">
@@ -93,7 +67,6 @@
       <DependentUpon>FileSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSelectorMode.cs" />
-    <Compile Include="GameInfo.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="IniSerializer.cs" />
     <Compile Include="KeyboardPanel.cs">
@@ -102,16 +75,11 @@
     <Compile Include="KeyboardPanel.Designer.cs">
       <DependentUpon>KeyboardPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="LayoutFormat.cs" />
     <Compile Include="LevelData.cs" />
-    <Compile Include="MultiFileIndexer.cs" />
-    <Compile Include="NamedList.cs" />
     <Compile Include="ObjectDefinition.cs" />
-    <Compile Include="ObjectHelper.cs" />
     <Compile Include="ObjectIDEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ObjectLayoutFormat.cs" />
     <Compile Include="ObjectSubTypeEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -121,30 +89,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RingFormat.cs" />
-    <Compile Include="S1\Layout.cs" />
-    <Compile Include="S1\Object.cs" />
-    <Compile Include="S1\Ring.cs" />
-    <Compile Include="S2NA\Layout.cs" />
-    <Compile Include="S2NA\Object.cs" />
-    <Compile Include="S2\Layout.cs" />
-    <Compile Include="S2\Object.cs" />
-    <Compile Include="S2\Ring.cs" />
-    <Compile Include="S3K\Layout.cs" />
-    <Compile Include="S3K\Object.cs" />
-    <Compile Include="S3K\Ring.cs" />
-    <Compile Include="SCDPC\Layout.cs" />
-    <Compile Include="SCD\Object.cs" />
-    <Compile Include="SKC\Layout.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="TileList.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TileList.Designer.cs">
       <DependentUpon>TileList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TileSelector.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="XMLDef.cs" />
   </ItemGroup>
@@ -175,16 +125,9 @@
     <EmbeddedResource Include="TileList.resx">
       <DependentUpon>TileList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TileSelector.resx">
-      <DependentUpon>TileSelector.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\UnknownImg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\UnknownImg3K.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

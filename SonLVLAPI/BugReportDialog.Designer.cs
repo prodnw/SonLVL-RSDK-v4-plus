@@ -94,7 +94,7 @@ namespace SonicRetro.SonLVL.API
             this.Name = "BugReportDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "SonLVL Bug Report";
+            this.Text = "SonLVL-RSDK Bug Report";
             this.Load += new System.EventHandler(this.ErrorReportDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

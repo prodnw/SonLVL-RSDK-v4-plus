@@ -22,9 +22,9 @@ namespace SonicRetro.SonLVL
 
 		bool initializing;
 
-		private ChunkBlock[] selectedObjects;
+		private RSDKv3_4.Tiles128x128.Block.Tile[] selectedObjects;
 		[Browsable(false)]
-		public ChunkBlock[] SelectedObjects
+		public RSDKv3_4.Tiles128x128.Block.Tile[] SelectedObjects
 		{
 			get { return selectedObjects; }
 			set
@@ -32,51 +32,66 @@ namespace SonicRetro.SonLVL
 				initializing = true;
 				if (Enabled = (selectedObjects = value) != null)
 				{
-					ChunkBlock first = value[0];
-					if (value.All(a => a.XFlip == first.XFlip))
-						xFlip.CheckState = first.XFlip ? CheckState.Checked : CheckState.Unchecked;
+					int cnt = value.Count(a => a.direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX));
+					if (cnt == value.Length)
+						xFlip.CheckState = CheckState.Checked;
+					else if (cnt == 0)
+						xFlip.CheckState = CheckState.Unchecked;
 					else
 						xFlip.CheckState = CheckState.Indeterminate;
-					if (value.All(a => a.YFlip == first.YFlip))
-						yFlip.CheckState = first.YFlip ? CheckState.Checked : CheckState.Unchecked;
+					cnt = value.Count(a => a.direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY));
+					if (cnt == value.Length)
+						yFlip.CheckState = CheckState.Checked;
+					else if (cnt == 0)
+						yFlip.CheckState = CheckState.Unchecked;
 					else
 						yFlip.CheckState = CheckState.Indeterminate;
-					if (value.All(a => a.Solid1 == first.Solid1))
-						solidity1.SelectedIndex = (int)first.Solid1;
+					var first = value[0];
+					if (value.All(a => a.solidityA == first.solidityA))
+						solidity1.SelectedIndex = (int)first.solidityA;
 					else
 						solidity1.SelectedIndex = -1;
-					if (first is S2ChunkBlock)
-					{
-						solidity2.Visible = true;
-						if (value.All(a => ((S2ChunkBlock)a).Solid2 == ((S2ChunkBlock)first).Solid2))
-							solidity2.SelectedIndex = (int)((S2ChunkBlock)first).Solid2;
-						else
-							solidity2.SelectedIndex = -1;
-					}
+					if (value.All(a => a.solidityB == first.solidityB))
+						solidity2.SelectedIndex = (int)first.solidityB;
 					else
-						solidity2.Visible = false;
-					block.Maximum = Math.Max(LevelData.GetBlockMax(), LevelData.Blocks.Count) - 1;
-					if (value.All(a => a.Block == first.Block))
+						solidity2.SelectedIndex = -1;
+					block.Maximum = LevelData.NewTiles.Length - 1;
+					if (value.All(a => a.tileIndex == first.tileIndex))
 					{
 						block.Minimum = 0;
-						block.Value = first.Block;
+						block.Value = first.tileIndex;
 					}
 					else
 					{
 						block.Minimum = -1;
 						block.Value = -1;
 					}
+					cnt = value.Count(a => a.visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High);
+					if (cnt == value.Length)
+						highPlane.CheckState = CheckState.Checked;
+					else if (cnt == 0)
+						highPlane.CheckState = CheckState.Unchecked;
+					else
+						highPlane.CheckState = CheckState.Indeterminate;
 				}
 				initializing = false;
 			}
+		}
+
+		private void SetDirection()
+		{
+			RSDKv3_4.Tiles128x128.Block.Tile.Directions dir = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone;
+			if (xFlip.Checked) dir = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX;
+			if (yFlip.Checked) dir ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY;
+			foreach (RSDKv3_4.Tiles128x128.Block.Tile item in selectedObjects)
+				item.direction = dir;
 		}
 
 		private void xFlip_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!initializing && xFlip.CheckState != CheckState.Indeterminate)
 			{
-				foreach (ChunkBlock item in selectedObjects)
-					item.XFlip = xFlip.Checked;
+				SetDirection();
 				PropertyValueChanged(xFlip, EventArgs.Empty);
 			}
 		}
@@ -85,8 +100,7 @@ namespace SonicRetro.SonLVL
 		{
 			if (!initializing && yFlip.CheckState != CheckState.Indeterminate)
 			{
-				foreach (ChunkBlock item in selectedObjects)
-					item.YFlip = yFlip.Checked;
+				SetDirection();
 				PropertyValueChanged(yFlip, EventArgs.Empty);
 			}
 		}
@@ -95,8 +109,8 @@ namespace SonicRetro.SonLVL
 		{
 			if (!initializing && solidity1.SelectedIndex > -1)
 			{
-				foreach (ChunkBlock item in selectedObjects)
-					item.Solid1 = (Solidity)solidity1.SelectedIndex;
+				foreach (RSDKv3_4.Tiles128x128.Block.Tile item in selectedObjects)
+					item.solidityA = (RSDKv3_4.Tiles128x128.Block.Tile.Solidities)solidity1.SelectedIndex;
 				PropertyValueChanged(solidity1, EventArgs.Empty);
 			}
 		}
@@ -105,8 +119,8 @@ namespace SonicRetro.SonLVL
 		{
 			if (!initializing && solidity2.SelectedIndex > -1)
 			{
-				foreach (ChunkBlock item in selectedObjects)
-					((S2ChunkBlock)item).Solid2 = (Solidity)solidity2.SelectedIndex;
+				foreach (RSDKv3_4.Tiles128x128.Block.Tile item in selectedObjects)
+					item.solidityB = (RSDKv3_4.Tiles128x128.Block.Tile.Solidities)solidity2.SelectedIndex;
 				PropertyValueChanged(solidity2, EventArgs.Empty);
 			}
 		}
@@ -116,9 +130,19 @@ namespace SonicRetro.SonLVL
 			if (!initializing && block.Value > -1)
 			{
 				block.Minimum = 0;
-				foreach (ChunkBlock item in selectedObjects)
-					item.Block = (ushort)block.Value;
+				foreach (RSDKv3_4.Tiles128x128.Block.Tile item in selectedObjects)
+					item.tileIndex = (ushort)block.Value;
 				PropertyValueChanged(block, EventArgs.Empty);
+			}
+		}
+
+		private void highPlane_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!initializing && highPlane.CheckState != CheckState.Indeterminate)
+			{
+				foreach (RSDKv3_4.Tiles128x128.Block.Tile item in selectedObjects)
+					item.visualPlane = highPlane.Checked ? RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High : RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low;
+				PropertyValueChanged(highPlane, EventArgs.Empty);
 			}
 		}
 	}

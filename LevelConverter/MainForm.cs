@@ -5,10 +5,6 @@ using System.IO;
 using System.Windows.Forms;
 using SonicRetro.SonLVL.API;
 using System.Linq;
-using S1ObjectEntry = SonicRetro.SonLVL.API.S1.S1ObjectEntry;
-using S2ObjectEntry = SonicRetro.SonLVL.API.S2.S2ObjectEntry;
-using S3KObjectEntry = SonicRetro.SonLVL.API.S3K.S3KObjectEntry;
-using SCDObjectEntry = SonicRetro.SonLVL.API.SCD.SCDObjectEntry;
 
 namespace SonicRetro.SonLVL.LevelConverter
 {
@@ -120,7 +116,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			switch (comboBox2.SelectedIndex)
 			{
 				case 0:
-					OutFmt = EngineVersion.S1;
+					OutFmt = EngineVersion.V4;
 					break;
 				case 1:
 					OutFmt = EngineVersion.S2;
@@ -145,7 +141,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				int yend = 0;
 				for (int y = 0; y < LevelData.FGHeight; y++)
 					for (int x = 0; x < LevelData.FGWidth; x++)
-						if (LevelData.Layout.FGLayout[x, y] > 0)
+						if (LevelData.Scene.layout[y][x] > 0)
 						{
 							xend = Math.Max(xend, x);
 							yend = Math.Max(yend, y);
@@ -155,13 +151,13 @@ namespace SonicRetro.SonLVL.LevelConverter
 				ushort[,] tmp = new ushort[xend, yend];
 				for (int y = 0; y < yend; y++)
 					for (int x = 0; x < xend; x++)
-						tmp[x, y] = LevelData.Layout.FGLayout[x, y];
+						tmp[x, y] = LevelData.Scene.layout[y][x];
 				LevelData.Layout.FGLayout = tmp;
 				xend = 0;
 				yend = 0;
 				for (int y = 0; y < LevelData.BGHeight; y++)
 					for (int x = 0; x < LevelData.BGWidth; x++)
-						if (LevelData.Layout.BGLayout[x, y] > 0)
+						if (LevelData.Background.layers[bglayer].layout[y][x] > 0)
 						{
 							xend = Math.Max(xend, x);
 							yend = Math.Max(yend, y);
@@ -171,7 +167,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				tmp = new ushort[xend, yend];
 				for (int y = 0; y < yend; y++)
 					for (int x = 0; x < xend; x++)
-						tmp[x, y] = LevelData.Layout.BGLayout[x, y];
+						tmp[x, y] = LevelData.Background.layers[bglayer].layout[y][x];
 				LevelData.Layout.BGLayout = tmp;
 			}
 			GameInfo Output = new GameInfo() { EngineVersion = OutFmt };
@@ -192,7 +188,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			{
 				switch (OutFmt)
 				{
-					case EngineVersion.S1:
+					case EngineVersion.V4:
 					case EngineVersion.S2NA:
 						cmp = CompressionType.Nemesis;
 						break;
@@ -216,12 +212,12 @@ namespace SonicRetro.SonLVL.LevelConverter
 				List<ushort>[] tilepals = new List<ushort>[4];
 				for (int i = 0; i < 4; i++)
 					tilepals[i] = new List<ushort>();
-				foreach (Block blk in LevelData.Blocks)
+				foreach (Block blk in LevelData.NewTiles)
 					for (int y = 0; y < 2; y++)
 						for (int x = 0; x < 2; x++)
 							if (!tilepals[blk.Tiles[x, y].Palette].Contains(blk.Tiles[x, y].Tile))
 								tilepals[blk.Tiles[x, y].Palette].Add(blk.Tiles[x, y].Tile);
-				foreach (Block blk in LevelData.Blocks)
+				foreach (Block blk in LevelData.NewTiles)
 					for (int y = 0; y < 2; y++)
 						for (int x = 0; x < 2; x++)
 						{
@@ -241,12 +237,12 @@ namespace SonicRetro.SonLVL.LevelConverter
 				LevelData.Tiles.Clear();
 				LevelData.Tiles.AddFile(tiles, -1);
 				tmp2 = new List<byte> { 0x53, 0x43, 0x52, 0x4C };
-				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.Tiles.Count * 4) + (LevelData.Tiles.Count * 32)));
-				tmp2.AddRange(ByteConverter.GetBytes(LevelData.Tiles.Count));
-				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.Tiles.Count * 4)));
+				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.NewTiles.Length * 4) + (LevelData.NewTiles.Length * 32)));
+				tmp2.AddRange(ByteConverter.GetBytes(LevelData.NewTiles.Length));
+				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.NewTiles.Length * 4)));
 				for (int i = 0; i < 4; i++)
 					tmp2.AddRange(ByteConverter.GetBytes((ushort)tilepals[i].Count));
-				for (int i = 0; i < LevelData.Tiles.Count; i++)
+				for (int i = 0; i < LevelData.NewTiles.Length; i++)
 				{
 					tmp2.AddRange(ByteConverter.GetBytes((ushort)8));
 					tmp2.AddRange(ByteConverter.GetBytes((ushort)8));
@@ -259,7 +255,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			tmp2 = new List<byte>();
 			if (OutFmt == EngineVersion.SKC)
 				LevelData.littleendian = false;
-			foreach (Block b in LevelData.Blocks)
+			foreach (Block b in LevelData.NewTiles)
 			{
 				tmp2.AddRange(b.GetBytes());
 			}
@@ -267,7 +263,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				LevelData.littleendian = true;
 			switch (OutFmt)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 					cmp = CompressionType.Enigma;
 					break;
 				case EngineVersion.S2:
@@ -285,7 +281,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			int chunksz = 16;
 			switch (LevelData.Level.ChunkFormat)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 				case EngineVersion.SCDPC:
 					chunktypes = 0;
 					break;
@@ -306,7 +302,6 @@ namespace SonicRetro.SonLVL.LevelConverter
 					chunksz = 8;
 					break;
 			}
-			LevelData.Level.ChunkWidth = LevelData.Level.ChunkHeight = chunksz * 16;
 			LevelData.Level.ChunkFormat = OutFmt;
 			List<Chunk> tmpchnk = new List<Chunk>();
 			switch (chunktypes)
@@ -325,10 +320,10 @@ namespace SonicRetro.SonLVL.LevelConverter
 					{
 						for (int x = 0; x < LevelData.FGWidth; x += 2)
 						{
-							chnk = LevelData.Layout.FGLayout[x, y];
-							chnk |= (x + 1 < LevelData.FGWidth ? LevelData.Layout.FGLayout[x + 1, y] : 0) << 8;
-							chnk |= (y + 1 < LevelData.FGHeight ? LevelData.Layout.FGLayout[x, y + 1] : 0) << 16;
-							chnk |= (x + 1 < LevelData.FGWidth & y + 1 < LevelData.FGHeight ? LevelData.Layout.FGLayout[x + 1, y + 1] : 0) << 24;
+							chnk = LevelData.Scene.layout[y][x];
+							chnk |= (x + 1 < LevelData.FGWidth ? LevelData.Scene.layout[y][x + 1] : 0) << 8;
+							chnk |= (y + 1 < LevelData.FGHeight ? LevelData.Scene.layout[y + 1][x] : 0) << 16;
+							chnk |= (x + 1 < LevelData.FGWidth & y + 1 < LevelData.FGHeight ? LevelData.Scene.layout[y + 1][x + 1] : 0) << 24;
 							if (chnks.IndexOf(chnk) > -1)
 								newFG1[x / 2, y / 2] = (byte)chnks.IndexOf(chnk);
 							else
@@ -339,40 +334,40 @@ namespace SonicRetro.SonLVL.LevelConverter
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i, j].Block = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i, j].Solid1 = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i, j].XFlip = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i, j].YFlip = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j][i].tileIndex = LevelData.NewChunks.chunkList[chnk & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i + 8, j].Block = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i + 8, j].Solid1 = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i + 8, j].XFlip = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i + 8, j].YFlip = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i, j + 8].Block = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i, j + 8].Solid1 = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i, j + 8].XFlip = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i, j + 8].YFlip = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j + 8][i].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i + 8, j + 8].Block = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i + 8, j + 8].Solid1 = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i + 8, j + 8].XFlip = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i + 8, j + 8].YFlip = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j + 8][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
 									}
 								}
 								tmpchnk.Add(newchnk);
@@ -387,10 +382,10 @@ namespace SonicRetro.SonLVL.LevelConverter
 					{
 						for (int x = 0; x < LevelData.BGWidth; x += 2)
 						{
-							chnk = LevelData.Layout.BGLayout[x, y];
-							chnk |= (x + 1 < LevelData.BGWidth ? LevelData.Layout.BGLayout[x + 1, y] : 0) << 8;
-							chnk |= (y + 1 < LevelData.BGHeight ? LevelData.Layout.BGLayout[x, y + 1] : 0) << 16;
-							chnk |= (x + 1 < LevelData.BGWidth & y + 1 < LevelData.BGHeight ? LevelData.Layout.BGLayout[x + 1, y + 1] : 0) << 24;
+							chnk = LevelData.Background.layers[bglayer].layout[y][x];
+							chnk |= (x + 1 < LevelData.BGWidth ? LevelData.Background.layers[bglayer].layout[y][x + 1] : 0) << 8;
+							chnk |= (y + 1 < LevelData.BGHeight ? LevelData.Background.layers[bglayer].layout[y + 1][x] : 0) << 16;
+							chnk |= (x + 1 < LevelData.BGWidth & y + 1 < LevelData.BGHeight ? LevelData.Background.layers[bglayer].layout[y + 1][x + 1] : 0) << 24;
 							if (chnks.IndexOf(chnk) > -1)
 								newBG1[x / 2, y / 2] = (byte)chnks.IndexOf(chnk);
 							else
@@ -401,40 +396,40 @@ namespace SonicRetro.SonLVL.LevelConverter
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i, j].Block = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i, j].Solid1 = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i, j].XFlip = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i, j].YFlip = LevelData.Chunks[chnk & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j][i].tileIndex = LevelData.NewChunks.chunkList[chnk & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i + 8, j].Block = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i + 8, j].Solid1 = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i + 8, j].XFlip = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i + 8, j].YFlip = LevelData.Chunks[(chnk >> 8) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i, j + 8].Block = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i, j + 8].Solid1 = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i, j + 8].XFlip = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i, j + 8].YFlip = LevelData.Chunks[(chnk >> 16) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j + 8][i].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].YFlip;
 									}
 								}
 								for (int i = 0; i < 8; i++)
 								{
 									for (int j = 0; j < 8; j++)
 									{
-										newchnk.Blocks[i + 8, j + 8].Block = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].Block;
-										newchnk.Blocks[i + 8, j + 8].Solid1 = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].Solid1;
-										newchnk.Blocks[i + 8, j + 8].XFlip = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].XFlip;
-										newchnk.Blocks[i + 8, j + 8].YFlip = LevelData.Chunks[(chnk >> 24) & 0xFF].Blocks[i, j].YFlip;
+										newchnk.tiles[j + 8][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF].tiles[j][i].tileIndex;
+										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
+										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
+										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
 									}
 								}
 								tmpchnk.Add(newchnk);
@@ -454,37 +449,37 @@ namespace SonicRetro.SonLVL.LevelConverter
 						usedcnks.Remove(0);
 					foreach (ushort usedcnk in usedcnks)
 					{
-						Chunk item = LevelData.Chunks[usedcnk];
+						Chunk item = LevelData.NewChunks.chunkList[usedcnk];
 						Chunk[] newchnk = new Chunk[4];
 						for (int i = 0; i < 4; i++)
 							newchnk[i] = new Chunk();
 						for (int y = 0; y < chunksz; y++)
 							for (int x = 0; x < chunksz; x++)
 							{
-								S2ChunkBlock blk = (S2ChunkBlock)newchnk[0].Blocks[x, y];
-								blk.Block = item.Blocks[x, y].Block;
-								blk.Solid1 = item.Blocks[x, y].Solid1;
+								S2ChunkBlock blk = (S2ChunkBlock)newchnk[0].tiles[y][x];
+								blk.Block = item.tiles[y][x].tileIndex;
+								blk.Solid1 = item.tiles[y][x].Solid1;
 								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.Blocks[x, y].XFlip;
-								blk.YFlip = item.Blocks[x, y].YFlip;
-								blk = (S2ChunkBlock)newchnk[1].Blocks[x, y];
-								blk.Block = item.Blocks[x + chunksz, y].Block;
-								blk.Solid1 = item.Blocks[x + chunksz, y].Solid1;
+								blk.XFlip = item.tiles[y][x].XFlip;
+								blk.YFlip = item.tiles[y][x].YFlip;
+								blk = (S2ChunkBlock)newchnk[1].tiles[y][x];
+								blk.Block = item.tiles[y][x + chunksz].tileIndex;
+								blk.Solid1 = item.tiles[y][x + chunksz].Solid1;
 								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.Blocks[x + chunksz, y].XFlip;
-								blk.YFlip = item.Blocks[x + chunksz, y].YFlip;
-								blk = (S2ChunkBlock)newchnk[2].Blocks[x, y];
-								blk.Block = item.Blocks[x, y + chunksz].Block;
-								blk.Solid1 = item.Blocks[x, y + chunksz].Solid1;
+								blk.XFlip = item.tiles[y][x + chunksz].XFlip;
+								blk.YFlip = item.tiles[y][x + chunksz].YFlip;
+								blk = (S2ChunkBlock)newchnk[2].tiles[y][x];
+								blk.Block = item.tiles[y + chunksz][x].tileIndex;
+								blk.Solid1 = item.tiles[y + chunksz][x].Solid1;
 								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.Blocks[x, y + chunksz].XFlip;
-								blk.YFlip = item.Blocks[x, y + chunksz].YFlip;
-								blk = (S2ChunkBlock)newchnk[3].Blocks[x, y];
-								blk.Block = item.Blocks[x + chunksz, y + chunksz].Block;
-								blk.Solid1 = item.Blocks[x + chunksz, y + chunksz].Solid1;
+								blk.XFlip = item.tiles[y + chunksz][x].XFlip;
+								blk.YFlip = item.tiles[y + chunksz][x].YFlip;
+								blk = (S2ChunkBlock)newchnk[3].tiles[y][x];
+								blk.Block = item.tiles[y + chunksz][x + chunksz].tileIndex;
+								blk.Solid1 = item.tiles[y + chunksz][x + chunksz].Solid1;
 								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.Blocks[x + chunksz, y + chunksz].XFlip;
-								blk.YFlip = item.Blocks[x + chunksz, y + chunksz].YFlip;
+								blk.XFlip = item.tiles[y + chunksz][x + chunksz].XFlip;
+								blk.YFlip = item.tiles[y + chunksz][x + chunksz].YFlip;
 							}
 						ushort[] ids = new ushort[4];
 						for (int i = 0; i < 4; i++)
@@ -510,9 +505,9 @@ namespace SonicRetro.SonLVL.LevelConverter
 					ushort[,] newFG = new ushort[LevelData.FGWidth * 2, LevelData.FGHeight * 2];
 					for (int y = 0; y < LevelData.FGHeight; y++)
 						for (int x = 0; x < LevelData.FGWidth; x++)
-							if (LevelData.Layout.FGLayout[x, y] != 0)
+							if (LevelData.Scene.layout[y][x] != 0)
 							{
-								ushort[] ids = cnkinds[LevelData.Layout.FGLayout[x, y]];
+								ushort[] ids = cnkinds[LevelData.Scene.layout[y][x]];
 								newFG[x * 2, y * 2] = ids[0];
 								newFG[(x * 2) + 1, y * 2] = ids[1];
 								newFG[x * 2, (y * 2) + 1] = ids[2];
@@ -522,9 +517,9 @@ namespace SonicRetro.SonLVL.LevelConverter
 					ushort[,] newBG = new ushort[LevelData.BGWidth * 2, LevelData.BGHeight * 2];
 					for (int y = 0; y < LevelData.BGHeight; y++)
 						for (int x = 0; x < LevelData.BGWidth; x++)
-							if (LevelData.Layout.BGLayout[x, y] != 0)
+							if (LevelData.Background.layers[bglayer].layout[y][x] != 0)
 							{
-								ushort[] ids = cnkinds[LevelData.Layout.BGLayout[x, y]];
+								ushort[] ids = cnkinds[LevelData.Background.layers[bglayer].layout[y][x]];
 								newBG[x * 2, y * 2] = ids[0];
 								newBG[(x * 2) + 1, y * 2] = ids[1];
 								newBG[x * 2, (y * 2) + 1] = ids[2];
@@ -547,7 +542,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				LevelData.littleendian = true;
 			switch (OutFmt)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 				case EngineVersion.S2:
 				case EngineVersion.S3K:
 				case EngineVersion.SKC:
@@ -565,7 +560,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			ushort bgh = (ushort)LevelData.BGHeight;
 			switch (OutFmt)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 					tmp2 = new List<byte>
 					{
 						(byte)(LevelData.FGWidth - 1),
@@ -573,7 +568,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					};
 					for (int lr = 0; lr < LevelData.FGHeight; lr++)
 						for (int lc = 0; lc < LevelData.FGWidth; lc++)
-							tmp2.Add((byte)(LevelData.Layout.FGLayout[lc, lr] | (LevelData.Layout.FGLoop?[lc, lr] ?? false ? 0x80 : 0)));
+							tmp2.Add((byte)(LevelData.Scene.layout[lr][lr][lc] | (LevelData.Layout.FGLoop?[lc] ?? false ? 0x80 : 0)));
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
 					Level.FGLayout = "FGLayout.bin";
 					tmp2 = new List<byte>
@@ -583,7 +578,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					};
 					for (int lr = 0; lr < LevelData.BGHeight; lr++)
 						for (int lc = 0; lc < LevelData.BGWidth; lc++)
-							tmp2.Add((byte)(LevelData.Layout.BGLayout[lc, lr] | (LevelData.Layout.BGLoop?[lc, lr] ?? false ? 0x80 : 0)));
+							tmp2.Add((byte)(LevelData.Background.layers[bglayer].layout[lr][lr][lc] | (LevelData.Layout.BGLoop?[lc] ?? false ? 0x80 : 0)));
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
 					Level.BGLayout = "BGLayout.bin";
 					break;
@@ -595,7 +590,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					};
 					for (int lr = 0; lr < LevelData.FGHeight; lr++)
 						for (int lc = 0; lc < LevelData.FGWidth; lc++)
-							tmp2.Add((byte)LevelData.Layout.FGLayout[lc, lr]);
+							tmp2.Add((byte)LevelData.Scene.layout[lr][lc]);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
 					Level.FGLayout = "FGLayout.bin";
 					tmp2 = new List<byte>
@@ -605,7 +600,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					};
 					for (int lr = 0; lr < LevelData.BGHeight; lr++)
 						for (int lc = 0; lc < LevelData.BGWidth; lc++)
-							tmp2.Add((byte)LevelData.Layout.BGLayout[lc, lr]);
+							tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[lr][lc]);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
 					Level.BGLayout = "BGLayout.bin";
 					break;
@@ -616,7 +611,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						if (LevelData.FGHeight > la)
 							for (int laf = 0; laf < 128; laf++)
 								if (LevelData.FGWidth > laf)
-									tmp2.Add((byte)LevelData.Layout.FGLayout[laf, la]);
+									tmp2.Add((byte)LevelData.Scene.layout[la][laf]);
 								else
 									tmp2.Add(0);
 						else
@@ -624,7 +619,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						if (LevelData.BGHeight > la)
 							for (int lab = 0; lab < 128; lab++)
 								if (LevelData.BGWidth > lab)
-									tmp2.Add((byte)LevelData.Layout.BGLayout[lab, la]);
+									tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[la][lab]);
 								else
 									tmp2.Add(0);
 						else
@@ -652,10 +647,10 @@ namespace SonicRetro.SonLVL.LevelConverter
 					}
 					for (int y = 0; y < fgh; y++)
 						for (int x = 0; x < fgw; x++)
-							tmp2.Add((byte)LevelData.Layout.FGLayout[x, y]);
+							tmp2.Add((byte)LevelData.Scene.layout[y][x]);
 					for (int y = 0; y < bgh; y++)
 						for (int x = 0; x < bgw; x++)
-							tmp2.Add((byte)LevelData.Layout.BGLayout[x, y]);
+							tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[y][x]);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Layout.bin"), CompressionType.Uncompressed);
 					Level.Layout = "Layout.bin";
 					break;
@@ -679,10 +674,10 @@ namespace SonicRetro.SonLVL.LevelConverter
 					List<byte> l = new List<byte>();
 					for (int y = 0; y < fgh; y++)
 						for (int x = 0; x < fgw; x++)
-							l.Add((byte)LevelData.Layout.FGLayout[x, y]);
+							l.Add((byte)LevelData.Scene.layout[y][x]);
 					for (int y = 0; y < bgh; y++)
 						for (int x = 0; x < bgw; x++)
-							l.Add((byte)LevelData.Layout.BGLayout[x, y]);
+							l.Add((byte)LevelData.Background.layers[bglayer].layout[y][x]);
 					for (int i = 0; i < l.Count; i++)
 						tmp2.Add(l[i ^ 1]);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Layout.bin"), CompressionType.Uncompressed);
@@ -693,7 +688,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					for (int lr = 0; lr < 8; lr++)
 						for (int lc = 0; lc < 64; lc++)
 							if (lc < fgw & lr < fgh)
-								tmp2.Add((byte)LevelData.Layout.FGLayout[lc, lr]);
+								tmp2.Add((byte)LevelData.Scene.layout[lr][lc]);
 							else
 								tmp2.Add(0);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
@@ -702,7 +697,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					for (int lr = 0; lr < 8; lr++)
 						for (int lc = 0; lc < 64; lc++)
 							if (lc < bgw & lr < bgh)
-								tmp2.Add((byte)LevelData.Layout.BGLayout[lc, lr]);
+								tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[lr][lc]);
 							else
 								tmp2.Add(0);
 					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
@@ -731,7 +726,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			Level.Palette = new PaletteList("Palette.bin:0:0:64");
 			switch (LevelData.Level.ObjectFormat)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 					switch (OutFmt)
 					{
 						case EngineVersion.S2:
@@ -751,7 +746,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				case EngineVersion.S2NA:
 					switch (OutFmt)
 					{
-						case EngineVersion.S1:
+						case EngineVersion.V4:
 							ObjS2ToS1();
 							break;
 						case EngineVersion.S3K:
@@ -767,7 +762,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				case EngineVersion.SKC:
 					switch (OutFmt)
 					{
-						case EngineVersion.S1:
+						case EngineVersion.V4:
 							ObjS3KToS1();
 							break;
 						case EngineVersion.S2:
@@ -782,7 +777,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				case EngineVersion.SCDPC:
 					switch (OutFmt)
 					{
-						case EngineVersion.S1:
+						case EngineVersion.V4:
 							ObjSCDToS1();
 							break;
 						case EngineVersion.S2:
@@ -799,7 +794,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			tmp2 = new List<byte>();
 			switch (OutFmt)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 					for (int oi = 0; oi < LevelData.Objects.Count; oi++)
 					{
 						tmp2.AddRange(((S1ObjectEntry)LevelData.Objects[oi]).GetBytes());
@@ -867,8 +862,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 			if (LevelData.ColInds1 != null)
 				switch (OutFmt)
 				{
-					case EngineVersion.S1:
-					case EngineVersion.SCD:
+					case EngineVersion.V4:
+					case EngineVersion.V3:
 					case EngineVersion.SCDPC:
 						Compression.Compress(LevelData.ColInds1.ToArray(), Path.Combine(OutDir, "Indexes.bin"), CompressionType.Uncompressed);
 						Level.CollisionIndex = "Indexes.bin";
@@ -926,860 +921,6 @@ namespace SonicRetro.SonLVL.LevelConverter
 			}
 			Output.Save(Path.Combine(OutDir, OutFmt.ToString() + "LVL.ini"));
 			LevelData.littleendian = LE;
-		}
-
-		private Size[] RingSpacing = {
-									 new Size(0x10, 0), // horizontal tight
-									 new Size(0x18, 0), // horizontal normal
-									 new Size(0x20, 0), // horizontal wide
-									 new Size(0, 0x10), // vertical tight
-									 new Size(0, 0x18), // vertical normal
-									 new Size(0, 0x20), // vertical wide
-									 new Size(0x10, 0x10), // diagonal
-									 new Size(0x18, 0x18),
-									 new Size(0x20, 0x20),
-									 new Size(-0x10, 0x10),
-									 new Size(-0x18, 0x18),
-									 new Size(-0x20, 0x20),
-									 new Size(0x10, 8),
-									 new Size(0x18, 0x10),
-									 new Size(-0x10, 8),
-									 new Size(-0x18, 0x10)
-								 };
-
-		private void ObjS1ToS2()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			LevelData.Rings = new List<RingEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S1ObjectEntry item1 = LevelData.Objects[i] as S1ObjectEntry;
-				if (!DontChangeObjects)
-				{
-					if (item1.ID == 0x25)
-					{
-						byte rcnt = (byte)(Math.Min(6, item1.SubType & 7) + 1);
-						int rtyp = item1.SubType >> 4;
-						switch (rtyp)
-						{
-							case 1:
-								LevelData.Rings.Add(new API.S2.S2RingEntry() { Direction = Direction.Horizontal, Count = rcnt, X = item1.X, Y = item1.Y });
-								break;
-							case 4:
-								LevelData.Rings.Add(new API.S2.S2RingEntry() { Direction = Direction.Vertical, Count = rcnt, X = item1.X, Y = item1.Y });
-								break;
-							default:
-								Point rpos = new Point(item1.X, item1.Y);
-								for (int r = 0; r < rcnt; r++)
-								{
-									LevelData.Rings.Add(new API.S2.S2RingEntry() { X = (ushort)rpos.X, Y = (ushort)rpos.Y });
-									rpos += RingSpacing[rtyp];
-								}
-								break;
-						}
-					}
-					else
-					{
-						S2ObjectEntry item = new S2ObjectEntry
-						{
-							ID = item1.ID,
-							RememberState = item1.RememberState,
-							SubType = item1.SubType,
-							X = item1.X,
-							XFlip = item1.XFlip,
-							Y = item1.Y,
-							YFlip = item1.YFlip
-						};
-						bool known = true;
-						switch (item.ID)
-						{
-							case 0x0D:
-							case 0x11:
-								break;
-							case 0x18:
-								switch (item.SubType & 0xF)
-								{
-									case 0: // Stationary
-										item.SubType = 0;
-										break;
-									case 1: // Right/Left
-										item.SubType = 1;
-										break;
-									case 2: // Down/Up
-										item.SubType = 2;
-										break;
-									case 3: // Falling
-									case 4:
-										item.SubType = 3;
-										break;
-									case 5: // Left/Right
-										item.SubType = 1;
-										break;
-									case 6: // Up/Down
-									case 7:
-									case 8:
-										item.SubType = 2;
-										break;
-									case 9:
-										item.SubType = 0;
-										break;
-									case 0xA:
-										item.SubType = 0x9A;
-										break;
-									case 0xB:
-									case 0xC:
-										item.SubType = 2;
-										break;
-								}
-								break;
-							case 0x1C:
-								if (item.SubType != 3)
-									known = false;
-								else
-									item.SubType = 2;
-								break;
-							case 0x26:
-								switch (item.SubType)
-								{
-									case 1:
-										item.SubType = 3;
-										break;
-									case 2:
-										item.SubType = 1;
-										break;
-									case 3:
-										item.SubType = 5;
-										break;
-									case 4:
-										item.SubType = 6;
-										break;
-									case 5:
-										item.SubType = 7;
-										break;
-									case 6:
-										item.SubType = 4;
-										break;
-									case 7:
-										item.SubType = 8;
-										break;
-									case 8:
-										item.SubType = 9;
-										break;
-									case 9:
-										item.SubType = 10;
-										break;
-								}
-								break;
-							case 0x3E:
-								if (item.SubType == 1) continue;
-								break;
-							case 0x41:
-								break;
-							case 0x64:
-								item.ID = 0x24;
-								break;
-							case 0x71:
-								item.ID = 0x74;
-								break;
-							case 0x79:
-								break;
-							default:
-								known = false;
-								break;
-						}
-						if (!ConvertKnownObjs | known)
-							Objs.Add(item);
-					}
-				}
-				else
-				{
-					S2ObjectEntry item = new S2ObjectEntry
-					{
-						ID = item1.ID,
-						RememberState = item1.RememberState,
-						SubType = item1.SubType,
-						X = item1.X,
-						XFlip = item1.XFlip,
-						Y = item1.Y,
-						YFlip = item1.YFlip
-					};
-					Objs.Add(item);
-				}
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS1ToS3K()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			LevelData.Rings = new List<RingEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S1ObjectEntry item1 = LevelData.Objects[i] as S1ObjectEntry;
-				if (!DontChangeObjects)
-				{
-					if (item1.ID == 0x25)
-					{
-						byte rcnt = (byte)(Math.Min(6, item1.SubType & 7) + 1);
-						int rtyp = item1.SubType >> 4;
-						Point rpos = new Point(item1.X, item1.Y);
-						for (int r = 0; r < rcnt; r++)
-						{
-							LevelData.Rings.Add(new API.S3K.S3KRingEntry() { X = (ushort)rpos.X, Y = (ushort)rpos.Y });
-							rpos += RingSpacing[rtyp];
-						}
-					}
-					else
-					{
-						S3KObjectEntry item = new S3KObjectEntry
-						{
-							ID = item1.ID,
-							SubType = item1.SubType,
-							X = item1.X,
-							XFlip = item1.XFlip,
-							Y = item1.Y,
-							YFlip = item1.YFlip
-						};
-						bool known = true;
-						switch (item.ID)
-						{
-							case 0x26:
-								item.ID = 1;
-								switch (item.SubType)
-								{
-									case 1:
-										item.SubType = 2;
-										break;
-									case 2:
-										item.SubType = 1;
-										break;
-									case 3:
-										item.SubType = 4;
-										break;
-									case 4:
-										item.SubType = 7;
-										break;
-									case 5:
-										item.SubType = 8;
-										break;
-									case 6:
-										item.SubType = 3;
-										break;
-									case 7:
-										item.SubType = 9;
-										break;
-									case 8:
-										item.SubType = 9;
-										break;
-									case 9:
-										item.SubType = 10;
-										break;
-								}
-								break;
-							case 0x64:
-								item.ID = 0x54;
-								break;
-							default:
-								known = false;
-								break;
-						}
-						if (!ConvertKnownObjs | known)
-							Objs.Add(item);
-					}
-				}
-				else
-				{
-					S3KObjectEntry item = new S3KObjectEntry
-					{
-						ID = item1.ID,
-						SubType = item1.SubType,
-						X = item1.X,
-						XFlip = item1.XFlip,
-						Y = item1.Y,
-						YFlip = item1.YFlip
-					};
-					Objs.Add(item);
-				}
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS1ToSCD()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S1ObjectEntry item1 = LevelData.Objects[i] as S1ObjectEntry;
-				if (!DontChangeObjects)
-				{
-					SCDObjectEntry item = new SCDObjectEntry
-					{
-						ID = item1.ID,
-						SubType = item1.SubType,
-						X = item1.X,
-						XFlip = item1.XFlip,
-						Y = item1.Y,
-						YFlip = item1.YFlip,
-						RememberState = item1.RememberState,
-						ShowPast = true,
-						ShowPresent = true,
-						ShowFuture = true
-					};
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-				{
-					SCDObjectEntry item = new SCDObjectEntry
-					{
-						ID = item1.ID,
-						SubType = item1.SubType,
-						X = item1.X,
-						XFlip = item1.XFlip,
-						Y = item1.Y,
-						YFlip = item1.YFlip,
-						RememberState = item1.RememberState,
-						ShowPast = true,
-						ShowPresent = true,
-						ShowFuture = true
-					};
-					Objs.Add(item);
-				}
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS2ToS1()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S2ObjectEntry item2 = LevelData.Objects[i] as S2ObjectEntry;
-				S1ObjectEntry item = new S1ObjectEntry
-				{
-					ID = item2.ID,
-					RememberState = item2.RememberState,
-					SubType = item2.SubType,
-					X = item2.X,
-					XFlip = item2.XFlip,
-					Y = item2.Y,
-					YFlip = item2.YFlip
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						case 0x24:
-							item.ID = 0x64;
-							break;
-						case 0x26:
-							switch (item.SubType)
-							{
-								case 1:
-									item.SubType = 2;
-									break;
-								case 2:
-									item.SubType = 2;
-									break;
-								case 3:
-									item.SubType = 1;
-									break;
-								case 4:
-									item.SubType = 6;
-									break;
-								case 5:
-									item.SubType = 3;
-									break;
-								case 6:
-									item.SubType = 4;
-									break;
-								case 7:
-									item.SubType = 5;
-									break;
-								case 8:
-									item.SubType = 7;
-									break;
-								case 9:
-									item.SubType = 8;
-									break;
-								case 10:
-									item.SubType = 9;
-									break;
-							}
-							break;
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			if (!DontChangeObjects)
-			{
-				foreach (RingEntry item in LevelData.Rings)
-				{
-					API.S2.S2RingEntry ring = item as API.S2.S2RingEntry;
-					Point rpos = new Point(ring.X, ring.Y);
-					int rtyp = 0;
-					switch (ring.Direction)
-					{
-						case Direction.Horizontal:
-							rtyp = 1;
-							break;
-						case Direction.Vertical:
-							rtyp = 4;
-							break;
-					}
-					Objs.Add(new S1ObjectEntry() { ID = 0x25, SubType = (byte)((ring.Count - 1) | (rtyp << 4)), RememberState = true, X = item.X, Y = item.Y });
-				}
-				LevelData.Rings = null;
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS2ToS3K()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S2ObjectEntry item2 = LevelData.Objects[i] as S2ObjectEntry;
-				S3KObjectEntry item = new S3KObjectEntry
-				{
-					ID = item2.ID,
-					SubType = item2.SubType,
-					X = item2.X,
-					XFlip = item2.XFlip,
-					Y = item2.Y,
-					YFlip = item2.YFlip
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						case 0x24:
-							item.ID = 0x54;
-							break;
-						case 0x26:
-							item.ID = 1;
-							switch (item.SubType)
-							{
-								case 1:
-									item.SubType = 1;
-									break;
-								case 2:
-									item.SubType = 1;
-									break;
-								case 3:
-									item.SubType = 2;
-									break;
-								case 4:
-									item.SubType = 3;
-									break;
-								case 5:
-									item.SubType = 4;
-									break;
-								case 6:
-									item.SubType = 7;
-									break;
-								case 7:
-									item.SubType = 8;
-									break;
-								case 8:
-									item.SubType = 9;
-									break;
-								case 9:
-									item.SubType = 9;
-									break;
-								case 10:
-									item.SubType = 10;
-									break;
-							}
-							break;
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-			if (!DontChangeObjects)
-			{
-				List<RingEntry> Rngs = new List<RingEntry>();
-				foreach (RingEntry item in LevelData.Rings)
-				{
-					API.S2.S2RingEntry ring = item as API.S2.S2RingEntry;
-					Point rpos = new Point(ring.X, ring.Y);
-					int rtyp = 0;
-					switch (ring.Direction)
-					{
-						case Direction.Horizontal:
-							rtyp = 1;
-							break;
-						case Direction.Vertical:
-							rtyp = 4;
-							break;
-					}
-					for (int r = 0; r < ring.Count; r++)
-					{
-						Rngs.Add(new API.S3K.S3KRingEntry() { X = (ushort)rpos.X, Y = (ushort)rpos.Y });
-						rpos += RingSpacing[rtyp];
-					}
-				}
-				LevelData.Rings = Rngs;
-			}
-		}
-
-		private void ObjS2ToSCD()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S2ObjectEntry item2 = LevelData.Objects[i] as S2ObjectEntry;
-				SCDObjectEntry item = new SCDObjectEntry
-				{
-					ID = item2.ID,
-					RememberState = item2.RememberState,
-					SubType = item2.SubType,
-					X = item2.X,
-					XFlip = item2.XFlip,
-					Y = item2.Y,
-					YFlip = item2.YFlip,
-					ShowPast = true,
-					ShowPresent = true,
-					ShowFuture = true
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS3KToS1()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S3KObjectEntry item3k = LevelData.Objects[i] as S3KObjectEntry;
-				S1ObjectEntry item = new S1ObjectEntry
-				{
-					ID = item3k.ID,
-					SubType = item3k.SubType,
-					X = item3k.X,
-					XFlip = item3k.XFlip,
-					Y = item3k.Y,
-					YFlip = item3k.YFlip
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						case 1:
-							item.ID = 0x26;
-							switch (item.SubType)
-							{
-								case 1:
-									item.SubType = 2;
-									break;
-								case 2:
-									item.SubType = 1;
-									break;
-								case 3:
-									item.SubType = 6;
-									break;
-								case 4:
-									item.SubType = 3;
-									break;
-								case 5:
-									item.SubType = 4;
-									break;
-								case 6:
-									item.SubType = 4;
-									break;
-								case 7:
-									item.SubType = 4;
-									break;
-								case 8:
-									item.SubType = 5;
-									break;
-								case 9:
-									item.SubType = 7;
-									break;
-								case 10:
-									item.SubType = 9;
-									break;
-							}
-							break;
-						case 0x54:
-							item.ID = 0x64;
-							break;
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			if (!DontChangeObjects)
-			{
-				foreach (RingEntry item in LevelData.Rings)
-				{
-					Objs.Add(new S1ObjectEntry() { ID = 0x25, RememberState = true, X = item.X, Y = item.Y });
-				}
-				LevelData.Rings = null;
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjS3KToS2()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S3KObjectEntry item3k = LevelData.Objects[i] as S3KObjectEntry;
-				S2ObjectEntry item = new S2ObjectEntry
-				{
-					ID = item3k.ID,
-					SubType = item3k.SubType,
-					X = item3k.X,
-					XFlip = item3k.XFlip,
-					Y = item3k.Y,
-					YFlip = item3k.YFlip
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						case 1:
-							item.ID = 0x26;
-							switch (item.SubType)
-							{
-								case 1:
-									item.SubType = 1;
-									break;
-								case 2:
-									item.SubType = 3;
-									break;
-								case 3:
-									item.SubType = 4;
-									break;
-								case 4:
-									item.SubType = 5;
-									break;
-								case 5:
-									item.SubType = 6;
-									break;
-								case 6:
-									item.SubType = 6;
-									break;
-								case 7:
-									item.SubType = 6;
-									break;
-								case 8:
-									item.SubType = 7;
-									break;
-								case 9:
-									item.SubType = 9;
-									break;
-								case 10:
-									item.SubType = 10;
-									break;
-							}
-							break;
-						case 0x54:
-							item.ID = 0x24;
-							break;
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-			if (!DontChangeObjects)
-			{
-				List<RingEntry> Rngs = new List<RingEntry>();
-				foreach (RingEntry item in LevelData.Rings)
-				{
-					Rngs.Add(new API.S2.S2RingEntry() { X = item.X, Y = item.Y });
-				}
-				LevelData.Rings = Rngs;
-			}
-		}
-
-		private void ObjS3KToSCD()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				S3KObjectEntry item3k = LevelData.Objects[i] as S3KObjectEntry;
-				SCDObjectEntry item = new SCDObjectEntry
-				{
-					ID = item3k.ID,
-					SubType = item3k.SubType,
-					X = item3k.X,
-					XFlip = item3k.XFlip,
-					Y = item3k.Y,
-					YFlip = item3k.YFlip,
-					ShowPast = true,
-					ShowPresent = true,
-					ShowFuture = true
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjSCDToS1()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				SCDObjectEntry itemcd = LevelData.Objects[i] as SCDObjectEntry;
-				S1ObjectEntry item = new S1ObjectEntry
-				{
-					ID = itemcd.ID,
-					SubType = itemcd.SubType,
-					X = itemcd.X,
-					XFlip = itemcd.XFlip,
-					Y = itemcd.Y,
-					YFlip = itemcd.YFlip,
-					RememberState = itemcd.RememberState
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-		}
-
-		private void ObjSCDToS2()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				SCDObjectEntry itemcd = LevelData.Objects[i] as SCDObjectEntry;
-				S2ObjectEntry item = new S2ObjectEntry
-				{
-					ID = itemcd.ID,
-					SubType = itemcd.SubType,
-					X = itemcd.X,
-					XFlip = itemcd.XFlip,
-					Y = itemcd.Y,
-					YFlip = itemcd.YFlip,
-					RememberState = itemcd.RememberState
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-			LevelData.Rings = new List<RingEntry>();
-		}
-
-		private void ObjSCDToS3K()
-		{
-			List<ObjectEntry> Objs = new List<ObjectEntry>();
-			for (int i = 0; i < LevelData.Objects.Count; i++)
-			{
-				SCDObjectEntry itemcd = LevelData.Objects[i] as SCDObjectEntry;
-				S3KObjectEntry item = new S3KObjectEntry
-				{
-					ID = itemcd.ID,
-					SubType = itemcd.SubType,
-					X = itemcd.X,
-					XFlip = itemcd.XFlip,
-					Y = itemcd.Y,
-					YFlip = itemcd.YFlip
-				};
-				if (!DontChangeObjects)
-				{
-					bool known = true;
-					switch (item.ID)
-					{
-						default:
-							known = false;
-							break;
-					}
-					if (!ConvertKnownObjs | known)
-						Objs.Add(item);
-				}
-				else
-					Objs.Add(item);
-			}
-			LevelData.Objects = Objs;
-			LevelData.Rings = new List<RingEntry>();
 		}
 
 		private void button2_Click(object sender, EventArgs e)

@@ -72,17 +72,15 @@ namespace SonicRetro.SonLVL.API
 			else return new Bitmap(bmp);
 		}
 
-		public static Color FindNearestMatch(this Color col, out int distance, params Color[] palette)
+		public static int FindNearestMatch(this Color col, params Color[] palette)
 		{
-			if (Array.IndexOf(palette, col) != -1)
+			int ind = Array.IndexOf(palette, col);
+			if (ind != -1)
+				return ind;
+			int distance = int.MaxValue;
+			for (int i = 0; i < palette.Length; i++)
 			{
-				distance = 0;
-				return col;
-			}
-			Color nearest_color = Color.Empty;
-			distance = int.MaxValue;
-			foreach (Color o in palette)
-			{
+				Color o = palette[i];
 				int test_red = o.R - col.R;
 				test_red *= test_red;
 				int test_green = o.G - col.G;
@@ -91,19 +89,14 @@ namespace SonicRetro.SonLVL.API
 				test_blue *= test_blue;
 				int temp = test_blue +  test_green +  test_red;
 				if (temp == 0)
-					return o;
+					return i;
 				else if (temp < distance)
 				{
 					distance = temp;
-					nearest_color = o;
+					ind = i;
 				}
 			}
-			return nearest_color;
-		}
-
-		public static Color FindNearestMatch(this Color col, params Color[] palette)
-		{
-			return FindNearestMatch(col, out int distance, palette);
+			return ind;
 		}
 
 		/// <summary>

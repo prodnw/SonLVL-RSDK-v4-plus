@@ -93,6 +93,22 @@ namespace SonicRetro.SonLVL.GUI
 			list.RemoveAt(src > dst ? src + 1 : src);
 		}
 
+		public static void Move<T>(this T[] list, int src, int dst)
+		{
+			T tmp = list[src];
+			if (src > dst)
+			{
+				for (int i = src; i > dst; i--)
+					list[i] = list[i - 1];
+			}
+			else
+			{
+				for (int i = src; i < dst; i++)
+					list[i] = list[i + 1];
+			}
+			list[dst] = tmp;
+		}
+
 		public static void AddOrSet<T>(this IList<T> list, int index, T item)
 		{
 			if (list.Count <= index)

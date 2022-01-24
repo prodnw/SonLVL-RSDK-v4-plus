@@ -525,6 +525,22 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
+		public void Flip(RSDKv3_4.Tiles128x128.Block.Tile.Directions dir)
+		{
+			switch (dir)
+			{
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX:
+					Flip(true, false);
+					break;
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY:
+					Flip(false, true);
+					break;
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY:
+					Flip(true, true);
+					break;
+			}
+		}
+
 		public void Clear()
 		{
 			Array.Clear(Bits, 0, Bits.Length);

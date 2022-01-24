@@ -1,5 +1,7 @@
+using RSDKv3_4;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,70 +11,46 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace SonicRetro.SonLVL.API
 {
 	public static class LevelData
 	{
-		public static GameInfo Game;
-		public static LevelInfo Level;
-		public static MultiFileIndexer<byte[]> Tiles;
-		public static byte[] TileArray;
-		public static MultiFileIndexer<Block> Blocks;
-		public static List<BitmapBits[]> BlockBmpBits;
-		public static List<BitmapBits> CompBlockBmpBits;
-		public static List<Bitmap[]> BlockBmps;
-		public static List<Bitmap> CompBlockBmps;
-		public static MultiFileIndexer<Chunk> Chunks;
-		public static List<Sprite> ChunkSprites;
-		public static List<Bitmap[]> ChunkBmps;
-		public static List<Bitmap> CompChunkBmps;
-		public static LayoutData Layout;
-		public static Dictionary<string, KeyValuePair<CompressionType, LayoutData>> AdditionalLayouts;
-		public static LayoutFormat LayoutFormat;
-		public static List<string> PalName;
-		public static List<SonLVLColor[,]> Palette;
-		public static List<byte[,]> PalNum;
-		public static List<int[,]> PalAddr;
-		public static int CurPal;
-		public static ColorPalette BmpPal;
+		public static string EXEFile;
+		public static EngineVersion RSDKVer;
+		public static IDataFile DataFile;
+		public static string ModFolder;
+		public static GameConfig GameConfig;
+		public static GameConfig.StageList.StageInfo StageInfo;
+		public static StageConfig StageConfig;
+		public static Color[] NewPalette = new Color[256];
+		public static BitmapBits[] NewTiles;
+		public static Tiles128x128 NewChunks;
+		public static TileConfig Collision;
+		public static Backgrounds Background;
+		public static Scene Scene;
 		public static List<ObjectEntry> Objects;
-		public static bool objectterm;
-		public static ObjectLayoutFormat ObjectFormat;
-		public static List<RingEntry> Rings;
-		public static bool ringstartterm, ringendterm;
-		public static RingFormat RingFormat;
-		public static List<ExtraObjEntry> ExtraObjects;
-		public static List<StartPositionEntry> StartPositions;
+		public static Bitmap[] NewTileBmps;
+		public static BitmapBits[][] NewColBmpBits;
+		public static Bitmap[][] NewColBmps;
+		public static Sprite[] ChunkSprites;
+		public static Bitmap[][] ChunkBmps;
+		public static Bitmap[] CompChunkBmps;
+		public static ColorPalette BmpPal;
 		public static Dictionary<string, ObjectData> INIObjDefs;
 		public static Dictionary<byte, ObjectDefinition> ObjTypes;
 		public static ObjectDefinition unkobj;
-		public static List<StartPositionDefinition> StartPosDefs;
-		public static bool littleendian;
-		public static Dictionary<string, byte[]> filecache;
-		public static List<byte> ColInds1;
-		public static List<byte> ColInds2;
-		public static sbyte[][] ColArr1;
-		public static byte[] Angles;
-		public static BitmapBits[] ColBmpBits;
-		public static Bitmap[] ColBmps;
-		public static List<BitmapBits[]> ChunkColBmpBits;
-		public static List<Bitmap[]> ChunkColBmps;
-		public static MultiFileIndexer<byte[]> AnimatedTiles;
-		public static List<BitmapBits[]> AnimatedBlockBmpBits;
-		public static int AnimatedBlockOffset;
+		public static BitmapBits[][] ChunkColBmpBits;
+		public static Bitmap[][] ChunkColBmps;
 		public static Bitmap UnknownImg;
 		public static Sprite UnknownSprite;
-		public static List<Sprite> Sprites;
-		public static int WaterPalette;
-		public static ushort WaterHeight = 0x600;
 		public delegate void LogEventHandler(params string[] message);
 		public static event LogEventHandler LogEvent = delegate { };
 		public static event Action PaletteChangedEvent = delegate { };
 		internal static readonly bool IsMonoRuntime = Type.GetType("Mono.Runtime") != null;
 		internal static readonly bool IsWindows = !(Environment.OSVersion.Platform == PlatformID.MacOSX | Environment.OSVersion.Platform == PlatformID.Unix | Environment.OSVersion.Platform == PlatformID.Xbox);
-		private static readonly BitmapBits InvalidTile = new BitmapBits(8, 8);
-		private static readonly BitmapBits[] InvalidBlock = new BitmapBits[] { new BitmapBits(16, 16), new BitmapBits(16, 16) };
+		private static readonly BitmapBits InvalidTile = new BitmapBits(16, 16);
 		public const int ColorTransparent = 0;
 		public const int ColorWhite = 16;
 		public const int ColorYellow = 32;
@@ -80,1215 +58,220 @@ namespace SonicRetro.SonLVL.API
 
 		static LevelData()
 		{
-			InvalidTile.DrawLine(15, 0, 0, 7, 0);
-			InvalidTile.DrawLine(15, 0, 0, 0, 7);
-			InvalidTile.DrawLine(15, 7, 7, 0, 7);
-			InvalidTile.DrawLine(15, 7, 7, 7, 0);
-			InvalidTile.DrawLine(15, 0, 0, 7, 7);
-			InvalidTile.DrawLine(15, 0, 7, 7, 0);
-			InvalidBlock[0].DrawLine(15, 0, 0, 15, 0);
-			InvalidBlock[0].DrawLine(15, 0, 0, 0, 15);
-			InvalidBlock[0].DrawLine(15, 15, 15, 0, 15);
-			InvalidBlock[0].DrawLine(15, 15, 15, 15, 0);
-			InvalidBlock[0].DrawLine(15, 0, 0, 15, 15);
-			InvalidBlock[0].DrawLine(15, 0, 15, 15, 0);
+			InvalidTile.DrawLine(15, 0, 0, 15, 0);
+			InvalidTile.DrawLine(15, 0, 0, 0, 15);
+			InvalidTile.DrawLine(15, 15, 15, 0, 15);
+			InvalidTile.DrawLine(15, 15, 15, 15, 0);
+			InvalidTile.DrawLine(15, 0, 0, 15, 15);
+			InvalidTile.DrawLine(15, 0, 15, 15, 0);
 		}
 
 		public static void LoadGame(string filename)
 		{
-			Log("Opening INI file \"" + filename + "\"...");
-			Game = GameInfo.Load(filename);
-			Environment.CurrentDirectory = Path.GetDirectoryName(filename);
-			if(Game.UnknownImgPath != null)
-			{
-				UnknownImg = new Bitmap(Game.UnknownImgPath);
-			}
-			else switch (Game.EngineVersion)
-			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					UnknownImg = Properties.Resources.UnknownImg.Copy();
-					break;
-				case EngineVersion.SCDPC:
-					UnknownImg = Properties.Resources.UnknownImg.Copy();
-					littleendian = true;
-					break;
-				case EngineVersion.S3K:
-					UnknownImg = Properties.Resources.UnknownImg3K.Copy();
-					break;
-				case EngineVersion.SKC:
-					UnknownImg = Properties.Resources.UnknownImg3K.Copy();
-					littleendian = true;
-					break;
-				case EngineVersion.Custom:
-					throw new NotImplementedException("Engine is custom, and \"unknownimg\" is missing in INI file.");
-				default:
-					throw new NotImplementedException("Game type " + Game.EngineVersion.ToString() + " is not supported!");
-			}
+			Log("Opening game \"" + filename + "\"...");
+			EXEFile = Path.GetFullPath(filename);
+			Environment.CurrentDirectory = Path.GetDirectoryName(EXEFile);
+			string fn = Path.GetFileName(EXEFile);
+			if (fn.StartsWith("RSDKv3", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V3;
+			else if (fn.StartsWith("soniccd", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V3;
+			else if (fn.StartsWith("RSDKv4", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V4;
+			else
+				throw new NotImplementedException("Unrecognized game!");
+			UnknownImg = Properties.Resources.UnknownImg.Copy();
 			UnknownSprite = new Sprite(new BitmapBits(UnknownImg), true, -8, -7);
-			Log("Game type is " + Game.EngineVersion.ToString() + ".");
+			Log("Game type is " + RSDKVer + ".");
+			if (File.Exists("Data.rsdk"))
+			{
+				switch (RSDKVer)
+				{
+					case EngineVersion.V4:
+						DataFile = new RSDKv4.DataFile("Data.rsdk");
+						break;
+					case EngineVersion.V3:
+						DataFile = new RSDKv3.DataFile("Data.rsdk");
+						break;
+				}
+			}
+			else
+				DataFile = null;
 		}
 
-		public static void LoadLevel(string levelname, bool loadGraphics)
+		public static void LoadMod(string path)
+		{
+			ModFolder = path;
+			switch (RSDKVer)
+			{
+				case EngineVersion.V4:
+					GameConfig = ReadFile<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
+					var pal = ((RSDKv4.GameConfig)GameConfig).masterPalette;
+					for (int l = 0; l < pal.colors.Length; l++)
+						for (int c = 0; c < pal.COLORS_PER_ROW; c++)
+							if ((l * pal.COLORS_PER_ROW) + c < 256)
+								NewPalette[(l * pal.COLORS_PER_ROW) + c] = Color.FromArgb(pal.colors[l][c].R, pal.colors[l][c].G, pal.colors[l][c].B);
+					break;
+				case EngineVersion.V3:
+					GameConfig = ReadFile<RSDKv3.GameConfig>("Data/Game/GameConfig.bin");
+					var mpal = ReadFileRaw("Data/Palettes/MasterPalette.act");
+					for (int i = 0; i < Math.Min(mpal.Length / 3, 256); i++)
+						NewPalette[i] = Color.FromArgb(mpal[i * 3], mpal[i * 3 + 1], mpal[i * 3 + 2]);
+					break;
+			}
+		}
+
+		public static T ReadFile<T>(string filename)
+			where T : new()
+		{
+			string modpath = Path.Combine(ModFolder, filename);
+			if (File.Exists(modpath))
+				return (T)Activator.CreateInstance(typeof(T), modpath);
+			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
+				using (MemoryStream ms = new MemoryStream(data))
+					return (T)Activator.CreateInstance(typeof(T), ms);
+			if (File.Exists(filename))
+				return (T)Activator.CreateInstance(typeof(T), filename);
+			return new T();
+		}
+
+		public static byte[] ReadFileRaw(string filename)
+		{
+			string modpath = Path.Combine(ModFolder, filename);
+			if (File.Exists(modpath))
+				return File.ReadAllBytes(modpath);
+			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
+				return data;
+			if (File.Exists(filename))
+				return File.ReadAllBytes(filename);
+			return null;
+		}
+
+		public static void LoadLevel(GameConfig.StageList.StageInfo stage)
 		{
 			System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 			stopwatch.Start();
-			Level = Game.GetLevelInfo(levelname);
-			switch (Level.EngineVersion)
+			Log("Loading " + stage.name + "...");
+			StageInfo = stage;
+			string stgfol = $"Data/Stages/{stage.folder}/";
+			switch (RSDKVer)
 			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					UnknownImg = Properties.Resources.UnknownImg.Copy();
-					littleendian = false;
+				case EngineVersion.V4:
+					StageConfig = ReadFile<RSDKv4.StageConfig>(stgfol + "StageConfig.bin");
 					break;
-				case EngineVersion.SCDPC:
-					UnknownImg = Properties.Resources.UnknownImg.Copy();
-					littleendian = true;
-					break;
-				case EngineVersion.S3K:
-					UnknownImg = Properties.Resources.UnknownImg3K.Copy();
-					littleendian = false;
-					break;
-				case EngineVersion.SKC:
-					UnknownImg = Properties.Resources.UnknownImg3K.Copy();
-					littleendian = true;
-					break;
-				case EngineVersion.Custom:
-					if (Game.UnknownImgPath == null)
-						throw new NotImplementedException("Engine is custom, and \"unknownimg\" is missing in INI file.");
-					break;
-				default:
-					throw new NotImplementedException("Game type " + Level.EngineVersion.ToString() + " is not supported!");
-			}
-			// support for custom unknown images
-			if(Game.UnknownImgPath != null)
-				UnknownImg = new Bitmap(Game.UnknownImgPath);
-			UnknownSprite = new Sprite(new BitmapBits(UnknownImg), true, -8, -7);
-			Log("Loading " + Level.DisplayName + "...");
-			if ((Level.ChunkWidth & 15) != 0)
-				throw new ArgumentException("Chunk width must be divisible by 16!");
-			if ((Level.ChunkHeight & 15) != 0)
-				throw new ArgumentException("Chunk height must be divisible by 16!");
-				if (!Directory.Exists("dllcache"))
-				{
-					DirectoryInfo dir = Directory.CreateDirectory("dllcache");
-					dir.Attributes |= FileAttributes.Hidden;
-				}
-			byte[] tmp = null;
-#if !DEBUG
-			if (Level.EngineVersion != EngineVersion.SKC)
-				Parallel.Invoke(LoadLevelTiles, LoadLevelBlocks, LoadLevelChunks, () => LoadLevelLayout(levelname), LoadLevelPalette,
-					LoadLevelColInds, LoadLevelColArr, LoadLevelAngles);
-			else
-			{
-				Parallel.Invoke(LoadLevelTiles, () => LoadLevelLayout(levelname), LoadLevelPalette,
-					LoadLevelColInds, LoadLevelColArr, LoadLevelAngles);
-				LoadLevelBlocks();
-				LoadLevelChunks();
-			}
-#else
-			LoadLevelTiles();
-			LoadLevelBlocks();
-			LoadLevelChunks();
-			LoadLevelLayout(levelname);
-			LoadLevelPalette();
-			LoadLevelColInds();
-			LoadLevelColArr();
-			LoadLevelAngles();
-#endif
-			if (ColInds1 != null && Level.EngineVersion != EngineVersion.S3K && Level.EngineVersion != EngineVersion.SKC)
-			{
-				if (ColInds1.Count < Blocks.Count)
-					ColInds1.AddRange(new byte[Blocks.Count - ColInds1.Count]);
-				if (ColInds2.Count < Blocks.Count)
-					ColInds2.AddRange(new byte[Blocks.Count - ColInds2.Count]);
-			}
-			switch (Level.ObjectFormat)
-			{
-				case EngineVersion.S1:
-					ObjectFormat = new S1.Object();
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					ObjectFormat = new S2.Object();
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					ObjectFormat = new S3K.Object();
-					break;
-				case EngineVersion.SCD:
-				case EngineVersion.SCDPC:
-					ObjectFormat = new SCD.Object();
-					break;
-				case EngineVersion.Chaotix:
-					ObjectFormat = new Chaotix.Object();
-					break;
-				case EngineVersion.Custom:
-					ObjectFormat = CompileCodeFile<ObjectLayoutFormat>(Level.ObjectCodeFile, Level.ObjectCodeType);
+				case EngineVersion.V3:
+					StageConfig = ReadFile<RSDKv3.StageConfig>(stgfol + "StageConfig.bin");
 					break;
 			}
-			switch (Level.RingFormat)
+			for (int l = 0; l < StageConfig.stagePalette.colors.Length; l++)
+				for (int c = 0; c < StageConfig.stagePalette.colors[l].Length; c++)
+					NewPalette[(l * 16) + c + 96] = Color.FromArgb(StageConfig.stagePalette.colors[l][c].R, StageConfig.stagePalette.colors[l][c].G, StageConfig.stagePalette.colors[l][c].B);
+			Gif tilebmp = ReadFile<Gif>(stgfol + "16x16Tiles.gif");
+			NewTiles = new BitmapBits[tilebmp.height / 16];
+			for (int i = 0; i < tilebmp.height / 16; i++)
 			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-				case EngineVersion.SCDPC:
-					RingFormat = new S1.Ring();
+				NewTiles[i] = new BitmapBits(16, 16);
+				Array.Copy(tilebmp.pixels, i * 256, NewTiles[i].Bits, 0, 256);
+			}
+			for (int i = 128; i < 256; i++)
+				NewPalette[i] = Color.FromArgb(tilebmp.palette[i].R, tilebmp.palette[i].G, tilebmp.palette[i].B);
+			NewChunks = ReadFile<Tiles128x128>(stgfol + "128x128Tiles.bin");
+			Collision = ReadFile<TileConfig>(stgfol + "CollisionMasks.bin");
+			switch (RSDKVer)
+			{
+				case EngineVersion.V4:
+					Background = ReadFile<RSDKv4.Backgrounds>(stgfol + "Backgrounds.bin");
+					Scene = ReadFile<RSDKv4.Scene>($"{stgfol}Act{stage.actID}.bin");
 					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					RingFormat = new S2.Ring();
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					RingFormat = new S3K.Ring();
-					break;
-				case EngineVersion.Custom:
-					RingFormat = CompileCodeFile<RingFormat>(Level.RingCodeFile, Level.RingCodeType);
+				case EngineVersion.V3:
+					Background = ReadFile<RSDKv3.Backgrounds>(stgfol + "Backgrounds.bin");
+					Scene = ReadFile<RSDKv3.Scene>($"{stgfol}Act{stage.actID}.bin");
 					break;
 			}
-			Sprites = new List<Sprite>();
-			if (loadGraphics)
-			{
-				Bitmap palbmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed);
+			Objects = new List<ObjectEntry>(Scene.entities.Count);
+			foreach (var item in Scene.entities)
+				Objects.Add(ObjectEntry.Create(item));
+			using (Bitmap palbmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
 				BmpPal = palbmp.Palette;
-				for (int i = 0; i < 64; i++)
-					BmpPal.Entries[i] = PaletteToColor(i / 16, i % 16, true);
-				for (int i = 64; i < 256; i++)
-					BmpPal.Entries[i] = Color.Black;
-				BmpPal.Entries[ColorWhite] = Color.White;
-				BmpPal.Entries[ColorYellow] = Color.Yellow;
-				BmpPal.Entries[ColorBlack] = Color.Black;
-				BmpPal.Entries[ColorWhite | 0x80] = Color.White;
-				BmpPal.Entries[ColorYellow | 0x80] = Color.Yellow;
-				BmpPal.Entries[ColorBlack | 0x80] = Color.Black;
-				if (Level.ExtraColors != null)
-					foreach (PaletteInfo palent in Level.ExtraColors)
-						if (File.Exists(palent.Filename))
-						{
-							Log("Loading extra color file \"" + palent.Filename + "\"...", "Source: " + palent.Source + " Destination: " + palent.Destination + " Length: " + palent.Length);
-							SonLVLColor[] palfile = SonLVLColor.Load(palent.Filename, Level.PaletteFormat);
-							for (int pa = 0; pa < palent.Length; pa++)
-								BmpPal.Entries[pa + palent.Destination + 0x40] = palfile[pa + palent.Source].RGBColor;
-						}
-				if (Level.ExtraWaterColors != null)
-					foreach (PaletteInfo palent in Level.ExtraWaterColors)
-						if (File.Exists(palent.Filename))
-						{
-							Log("Loading extra water color file \"" + palent.Filename + "\"...", "Source: " + palent.Source + " Destination: " + palent.Destination + " Length: " + palent.Length);
-							SonLVLColor[] palfile = SonLVLColor.Load(palent.Filename, Level.PaletteFormat);
-							for (int pa = 0; pa < palent.Length; pa++)
-								BmpPal.Entries[pa + palent.Destination + 0xC0] = palfile[pa + palent.Source].RGBColor;
-						}
-				UnknownImg.Palette = BmpPal;
-				if (Level.Sprites != null)
-				{
-					tmp = Compression.Decompress(Level.Sprites, CompressionType.SZDD);
-					int numspr = ByteConverter.ToInt32(tmp, 8);
-					int taddr = ByteConverter.ToInt32(tmp, 0xC);
-					for (int i = 0; i < numspr; i++)
-					{
-						ushort width = ByteConverter.ToUInt16(tmp, 0x10 + (i * 0xC) + 4);
-						if ((width & 4) == 4)
-							width += 4;
-						ushort height = ByteConverter.ToUInt16(tmp, 0x10 + (i * 0xC) + 6);
-						ushort startcol = (ushort)(ByteConverter.ToUInt16(tmp, 0x10 + (i * 0xC) + 8) - 0x10);
-						BitmapBits bmp = new BitmapBits(width, height);
-						byte[] til = new byte[height * (width / 2)];
-						Array.Copy(tmp, taddr, til, 0, til.Length);
-						taddr += til.Length;
-						LoadBitmap4BppIndexed(bmp, til, width / 2);
-						bmp.IncrementIndexes(startcol);
-						Sprites.Add(new Sprite(bmp, new Point(ByteConverter.ToInt16(tmp, 0x10 + (i * 0xC) + 0), ByteConverter.ToInt16(tmp, 0x10 + (i * 0xC) + 2))));
-					}
-				}
-				INIObjDefs = new Dictionary<string, ObjectData>();
-				ObjTypes = new Dictionary<byte, ObjectDefinition>();
-				filecache = new Dictionary<string, byte[]>();
-				unkobj = new DefaultObjectDefinition();
-				unkobj.Init(new ObjectData());
-				if (Game.ObjectList != null)
-					foreach (string item in Game.ObjectList)
-						LoadObjectDefinitionFile(item);
-				if (Level.ObjectList != null)
-					foreach (string item in Level.ObjectList)
-						LoadObjectDefinitionFile(item);
-				InitObjectDefinitions();
-			}
-#if !DEBUG
-			Parallel.Invoke(() => LoadLevelObjects(loadGraphics), () => LoadLevelRings(loadGraphics),
-				() => LoadLevelExtraObjects(loadGraphics), () => LoadLevelStartPositions(loadGraphics));
-#else
-			LoadLevelObjects(loadGraphics);
-			LoadLevelRings(loadGraphics);
-			LoadLevelExtraObjects(loadGraphics);
-			LoadLevelStartPositions(loadGraphics);
-#endif
-			if (loadGraphics)
+			NewPalette.CopyTo(BmpPal.Entries, 0);
+			BmpPal.Entries[ColorTransparent] = Color.Transparent;
+			BmpPal.Entries[ColorWhite] = Color.White;
+			BmpPal.Entries[ColorYellow] = Color.Yellow;
+			BmpPal.Entries[ColorBlack] = Color.Black;
+			UnknownImg.Palette = BmpPal;
+			INIObjDefs = new Dictionary<string, ObjectData>();
+			ObjTypes = new Dictionary<byte, ObjectDefinition>();
+			unkobj = new DefaultObjectDefinition();
+			unkobj.Init(new ObjectData());
+			InitObjectDefinitions();
+			byte objid = 1;
+			IEnumerable<GameConfig.ObjectInfo> objlist;
+			if (StageConfig.loadGlobalObjects)
+				objlist = GameConfig.objects.Concat(StageConfig.objects);
+			else
+				objlist = StageConfig.objects;
+			foreach (var item in objlist)
 			{
-				if (Level.AnimatedTiles != null)
+				if (!ObjTypes.ContainsKey(objid))
 				{
-					AnimatedTiles = new MultiFileIndexer<byte[]>();
-					foreach (AnimatedTileInfo info in Level.AnimatedTiles)
-					{
-						tmp = File.ReadAllBytes(info.Filename);
-						List<byte[]> tiles = new List<byte[]>();
-						for (int i = 0; i < info.Length * 32; i += 32)
-						{
-							byte[] tile = new byte[32];
-							Array.Copy(tmp, i + (info.Source * 32), tile, 0, 32);
-							tiles.Add(tile);
-						}
-						AnimatedTiles.AddFile(tiles, info.Destination);
-					}
+					ObjTypes[objid] = new DefaultObjectDefinition();
+					ObjTypes[objid].Init(item);
+					ObjTypes[objid].Init(new ObjectData());
 				}
-				else
-					AnimatedTiles = null;
-				if (Level.AnimatedBlocks != null)
-				{
-					AnimatedBlockBmpBits = new List<BitmapBits[]>();
-					tmp = File.ReadAllBytes(Level.AnimatedBlocks);
-					AnimatedBlockOffset = ByteConverter.ToUInt16(tmp, 0) / Block.Size;
-					int end = ((ByteConverter.ToUInt16(tmp, 2) + 1) * 2) + 4;
-					for (int i = 4; i < end; i += Block.Size)
-					{
-						Block blk = new Block(tmp, i);
-						BitmapBits[] bmp = new BitmapBits[2];
-						bmp[0] = new BitmapBits(16, 16);
-						bmp[1] = new BitmapBits(16, 16);
-						for (int by = 0; by < 2; by++)
-							for (int bx = 0; bx < 2; bx++)
-							{
-								PatternIndex pt = blk.Tiles[bx, by];
-								int pr = pt.Priority ? 1 : 0;
-								BitmapBits tile = TileToBmp8bpp(AnimatedTiles?[pt.Tile] ?? Tiles[pt.Tile], 0, pt.Palette);
-								tile.Flip(pt.XFlip, pt.YFlip);
-								bmp[pr].DrawBitmap(tile, bx * 8, by * 8);
-							}
-						AnimatedBlockBmpBits.Add(bmp);
-					}
-				}
-				else
-					AnimatedBlockBmpBits = null;
-#if !DEBUG
-				Parallel.Invoke(() =>
-				{
-#endif
-					BlockBmps = new List<Bitmap[]>(Blocks.Count);
-					BlockBmpBits = new List<BitmapBits[]>(Blocks.Count);
-					CompBlockBmps = new List<Bitmap>(Blocks.Count);
-					CompBlockBmpBits = new List<BitmapBits>(Blocks.Count);
-					for (int bi = 0; bi < Blocks.Count; bi++)
-					{
-						BlockBmps.Add(new Bitmap[2]);
-						BlockBmpBits.Add(new BitmapBits[2]);
-						CompBlockBmps.Add(null);
-						CompBlockBmpBits.Add(null);
-					}
-#if !DEBUG
-				},
-				() =>
-				{
-#endif
-					ColBmps = new Bitmap[256];
-					ColBmpBits = new BitmapBits[256];
-#if !DEBUG
-				},
-				() =>
-				{
-#endif
-					ChunkBmps = new List<Bitmap[]>(Chunks.Count);
-					ChunkSprites = new List<Sprite>(Chunks.Count);
-					ChunkColBmps = new List<Bitmap[]>(Chunks.Count);
-					ChunkColBmpBits = new List<BitmapBits[]>(Chunks.Count);
-					CompChunkBmps = new List<Bitmap>(Chunks.Count);
-					for (int ci = 0; ci < Chunks.Count; ci++)
-					{
-						ChunkBmps.Add(new Bitmap[2]);
-						ChunkSprites.Add(null);
-						ChunkColBmps.Add(new Bitmap[2]);
-						ChunkColBmpBits.Add(new BitmapBits[2]);
-						CompChunkBmps.Add(null);
-					}
-#if !DEBUG
-				});
-#endif
-				Log("Drawing block bitmaps...");
-#if !DEBUG
-				Parallel.ForEach(Partitioner.Create(0, Blocks.Count), range =>
-				{
-					for (int bi = range.Item1; bi < range.Item2; bi++)
-#else
-				for (int bi = 0; bi < Blocks.Count; bi++)
-#endif
-						RedrawBlock(bi, false);
-#if !DEBUG
-				});
-				Parallel.ForEach(Partitioner.Create(0, 256), range =>
-				{
-					for (int ci = range.Item1; ci < range.Item2; ci++)
-#else
-				for (int ci = 0; ci < 256; ci++)
-#endif
-						RedrawCol(ci, false);
-#if !DEBUG
-				});
-#endif
-				Log("Drawing chunk bitmaps...");
-#if !DEBUG
-				Parallel.ForEach(Partitioner.Create(0, Chunks.Count), range =>
-				{
-					for (int ci = range.Item1; ci < range.Item2; ci++)
-#else
-				for (int ci = 0; ci < Chunks.Count; ci++)
-#endif
-						RedrawChunk(ci);
-#if !DEBUG
-				});
-#endif
+				++objid;
+			}
+			foreach (ObjectEntry obj in Objects)
+				obj.UpdateSprite();
+			Log("Drawing tile bitmaps...");
+			NewTileBmps = new Bitmap[NewTiles.Length];
+			for (int bi = 0; bi < NewTiles.Length; bi++)
+				RedrawBlock(bi, false);
+			Log("Drawing collision bitmaps...");
+			NewColBmpBits = new BitmapBits[Collision.collisionMasks[0].Length][];
+			NewColBmps = new Bitmap[Collision.collisionMasks[0].Length][];
+			for (int i = 0; i < Collision.collisionMasks[0].Length; i++)
+			{
+				NewColBmpBits[i] = new BitmapBits[2];
+				NewColBmps[i] = new Bitmap[2];
+				RedrawCol(i, false);
+			}
+			Log("Drawing chunk bitmaps...");
+			ChunkSprites = new Sprite[NewChunks.chunkList.Length];
+			ChunkBmps = new Bitmap[NewChunks.chunkList.Length][];
+			CompChunkBmps = new Bitmap[NewChunks.chunkList.Length];
+			ChunkColBmpBits = new BitmapBits[NewChunks.chunkList.Length][];
+			ChunkColBmps = new Bitmap[NewChunks.chunkList.Length][];
+			for (int i = 0; i < NewChunks.chunkList.Length; i++)
+			{
+				ChunkBmps[i] = new Bitmap[2];
+				ChunkColBmpBits[i] = new BitmapBits[2];
+				ChunkColBmps[i] = new Bitmap[2];
+				RedrawChunk(i);
 			}
 			stopwatch.Stop();
 			Log($"Level loaded in {stopwatch.Elapsed.TotalSeconds} second(s).");
 		}
 
-		private static void LoadLevelTiles()
-		{
-			Tiles = new MultiFileIndexer<byte[]>(() => new byte[32]);
-			if (Level.Tiles == null || string.IsNullOrWhiteSpace(Level.Tiles[0].Filename))
-				throw new FormatException("Level must contain at least one Tiles file!");
-			if (Level.TileFormat != EngineVersion.SCDPC)
-			{
-				foreach (FileInfo tileent in Level.Tiles)
-				{
-					if (File.Exists(tileent.Filename))
-					{
-						Log("Loading 8x8 tiles from file \"" + tileent.Filename + "\", using compression " + Level.TileCompression.ToString() + "...");
-						byte[] tmp = Compression.Decompress(tileent.Filename, Level.TileCompression);
-						Pad(ref tmp, 32);
-						List<byte[]> tiles = new List<byte[]>();
-						for (int i = 0; i < tmp.Length; i += 32)
-						{
-							byte[] tile = new byte[32];
-							Array.Copy(tmp, i, tile, 0, 32);
-							tiles.Add(tile);
-						}
-						Tiles.AddFile(tiles, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / 32);
-					}
-					else
-					{
-						Log("8x8 tile file \"" + tileent.Filename + "\" not found.");
-						Tiles.AddFile(new List<byte[]>() { new byte[32] }, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / 32);
-					}
-				}
-			}
-			else
-			{
-				Level.TileCompression = CompressionType.SZDD;
-				if (File.Exists(Level.Tiles[0].Filename))
-				{
-					Log("Loading 8x8 tiles from file \"" + Level.Tiles[0].Filename + "\", using compression SZDD...");
-					byte[] tmp = Compression.Decompress(Level.Tiles[0].Filename, CompressionType.SZDD);
-					int sta = ByteConverter.ToInt32(tmp, 0xC);
-					int numt = ByteConverter.ToInt32(tmp, 8);
-					List<byte[]> tiles = new List<byte[]>();
-					for (int i = 0; i < numt; i++)
-					{
-						byte[] tile = new byte[32];
-						Array.Copy(tmp, sta, tile, 0, 32);
-						tiles.Add(tile);
-						sta += 32;
-					}
-					Tiles.AddFile(tiles, -1);
-				}
-				else
-				{
-					Log("8x8 tile file \"" + Level.Tiles[0].Filename + "\" not found.");
-					Tiles.AddFile(new List<byte[]>() { new byte[32] }, -1);
-				}
-			}
-			Tiles.FillGaps();
-			UpdateTileArray();
-		}
-
-		private static void LoadLevelBlocks()
-		{
-			Blocks = new MultiFileIndexer<Block>(() => new Block());
-			if (Level.Blocks == null || string.IsNullOrWhiteSpace(Level.Blocks[0].Filename))
-				throw new FormatException("Level must contain at least one Blocks file!");
-			foreach (FileInfo tileent in Level.Blocks)
-			{
-				if (File.Exists(tileent.Filename))
-				{
-					Log("Loading 16x16 blocks from file \"" + tileent.Filename + "\", using compression " + Level.BlockCompression.ToString() + "...");
-					byte[] tmp = Compression.Decompress(tileent.Filename, Level.BlockCompression);
-					Pad(ref tmp, Block.Size);
-					List<Block> tmpblk = new List<Block>();
-					if (Level.EngineVersion == EngineVersion.SKC)
-						littleendian = false;
-					for (int ba = 0; ba < tmp.Length; ba += Block.Size)
-						tmpblk.Add(new Block(tmp, ba));
-					if (Level.EngineVersion == EngineVersion.SKC)
-						littleendian = true;
-					Blocks.AddFile(tmpblk, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / Block.Size);
-				}
-				else
-				{
-					Log("16x16 block file \"" + tileent.Filename + "\" not found.");
-					Blocks.AddFile(new List<Block>() { new Block() }, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / Block.Size);
-				}
-			}
-			if (Blocks.Count == 0)
-				Blocks.AddFile(new List<Block>() { new Block() }, -1);
-			Blocks.FillGaps();
-		}
-
-		private static void LoadLevelChunks()
-		{
-			Chunks = new MultiFileIndexer<Chunk>(() => new Chunk());
-			if (Level.Chunks == null || string.IsNullOrWhiteSpace(Level.Chunks[0].Filename))
-				throw new FormatException("Level must contain at least one Chunks file!");
-			int fileind = 0;
-			foreach (FileInfo tileent in Level.Chunks)
-			{
-				if (File.Exists(tileent.Filename))
-				{
-					Log("Loading " + Level.ChunkWidth + "x" + Level.ChunkHeight + " chunks from file \"" + tileent.Filename + "\", using compression " + Level.ChunkCompression.ToString() + "...");
-					byte[] tmp = Compression.Decompress(tileent.Filename, Level.ChunkCompression);
-					Pad(ref tmp, Chunk.Size);
-					List<Chunk> tmpchnk = new List<Chunk>();
-					if (fileind == 0)
-					{
-						switch (Level.ChunkFormat)
-						{
-							case EngineVersion.S1:
-							case EngineVersion.SCD:
-							case EngineVersion.SCDPC:
-								tmpchnk.Add(new Chunk());
-								break;
-						}
-					}
-					if (Level.EngineVersion == EngineVersion.SKC)
-						littleendian = false;
-					for (int ba = 0; ba < tmp.Length; ba += Chunk.Size)
-						tmpchnk.Add(new Chunk(tmp, ba));
-					if (Level.EngineVersion == EngineVersion.SKC)
-						littleendian = true;
-					Chunks.AddFile(tmpchnk, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / Chunk.Size);
-					fileind++;
-				}
-				else
-				{
-					Log(Level.ChunkWidth + "x" + Level.ChunkHeight + " chunk file \"" + tileent.Filename + "\" not found.");
-					Chunks.AddFile(new List<Chunk>() { new Chunk() }, tileent.Offset == -1 ? tileent.Offset : tileent.Offset / Chunk.Size);
-				}
-			}
-			if (Chunks.Count == 0)
-				Chunks.AddFile(new List<Chunk>() { new Chunk() }, -1);
-			Chunks.FillGaps();
-		}
-
-		private static void LoadLevelLayout(string levelname)
-		{
-			Layout = new LayoutData();
-			AdditionalLayouts = new Dictionary<string, KeyValuePair<CompressionType, LayoutData>>();
-			switch (Level.LayoutFormat)
-			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-					LayoutFormat = new S1.Layout();
-					break;
-				case EngineVersion.S2NA:
-					LayoutFormat = new S2NA.Layout();
-					break;
-				case EngineVersion.S2:
-					LayoutFormat = new S2.Layout();
-					break;
-				case EngineVersion.S3K:
-					LayoutFormat = new S3K.Layout();
-					break;
-				case EngineVersion.SKC:
-					LayoutFormat = new SKC.Layout();
-					break;
-				case EngineVersion.SCDPC:
-					LayoutFormat = new SCDPC.Layout();
-					break;
-				case EngineVersion.Custom:
-					LayoutFormat = CompileCodeFile<LayoutFormat>(Level.LayoutCodeFile, Level.LayoutCodeType);
-					break;
-			}
-			if (LayoutFormat.IsCombinedLayout)
-			{
-				if (string.IsNullOrWhiteSpace(Level.Layout))
-					throw new FormatException("Level must contain a Layout file!");
-				LayoutFormatCombined lfc = (LayoutFormatCombined)LayoutFormat;
-				lfc.TryReadLayout(Level.Layout, Level.LayoutCompression, Layout);
-				foreach (string lvlname in Game.Levels.Keys)
-					if (lvlname != levelname)
-					{
-						LevelInfo lvlinf = Game.GetLevelInfo(lvlname);
-						if (Level.Layout != lvlinf.Layout && !AdditionalLayouts.ContainsKey(lvlinf.Layout)
-							&& Level.LayoutFormat == lvlinf.LayoutFormat && Level.Chunks.ArrayEqual(lvlinf.Chunks))
-						{
-							LayoutData ld = new LayoutData();
-							lfc.TryReadLayout(lvlinf.Layout, lvlinf.LayoutCompression, ld);
-							AdditionalLayouts.Add(lvlinf.Layout, new KeyValuePair<CompressionType, LayoutData>(lvlinf.LayoutCompression, ld));
-						}
-					}
-			}
-			else
-			{
-				if (string.IsNullOrWhiteSpace(Level.FGLayout) || string.IsNullOrWhiteSpace(Level.BGLayout))
-					throw new FormatException("Level must contain an FGLayout and BGLayout file!");
-				LayoutFormatSeparate lfs = (LayoutFormatSeparate)LayoutFormat;
-				lfs.TryReadLayout(Level.FGLayout, Level.BGLayout, Level.FGLayoutCompression, Level.BGLayoutCompression, Layout);
-				foreach (string lvlname in Game.Levels.Keys)
-					if (lvlname != levelname)
-					{
-						LevelInfo lvlinf = Game.GetLevelInfo(lvlname);
-						if (Level.LayoutFormat == lvlinf.LayoutFormat && Level.Chunks.ArrayEqual(lvlinf.Chunks))
-						{
-							if (Level.FGLayout != lvlinf.FGLayout && !AdditionalLayouts.ContainsKey(lvlinf.FGLayout))
-							{
-								LayoutData ld = new LayoutData();
-								lfs.TryReadFG(lvlinf.FGLayout, lvlinf.FGLayoutCompression, ld);
-								AdditionalLayouts.Add(lvlinf.FGLayout, new KeyValuePair<CompressionType, LayoutData>(lvlinf.FGLayoutCompression, ld));
-							}
-							if (Level.BGLayout != lvlinf.BGLayout && !AdditionalLayouts.ContainsKey(lvlinf.BGLayout))
-							{
-								LayoutData ld = new LayoutData();
-								lfs.TryReadBG(lvlinf.BGLayout, lvlinf.BGLayoutCompression, ld);
-								AdditionalLayouts.Add(lvlinf.BGLayout, new KeyValuePair<CompressionType, LayoutData>(lvlinf.BGLayoutCompression, ld));
-							}
-						}
-					}
-			}
-		}
-
-		private static void LoadLevelPalette()
-		{
-			PalName = new List<string>();
-			Palette = new List<SonLVLColor[,]>();
-			PalNum = new List<byte[,]>();
-			PalAddr = new List<int[,]>();
-			if (Level.Palette == null || string.IsNullOrWhiteSpace(Level.Palette[0].Filename))
-				throw new FormatException("Level must contain at least one Palette file!");
-			byte palfilenum = 0;
-			for (int palnum = 0; palnum < Level.Palettes.Length; palnum++)
-			{
-				PalName.Add(Level.Palettes[palnum].Name);
-				Palette.Add(new SonLVLColor[4, 16]);
-				PalNum.Add(new byte[4, 16]);
-				PalAddr.Add(new int[4, 16]);
-				for (byte pn = 0; pn < Level.Palettes[palnum].Palettes.Collection.Length; pn++)
-				{
-					PaletteInfo palent = Level.Palettes[palnum].Palettes[pn];
-					Log("Loading palette file \"" + palent.Filename + "\"...", "Source: " + palent.Source + " Destination: " + palent.Destination + " Length: " + palent.Length);
-					if (!File.Exists(palent.Filename)) throw new FileNotFoundException("Palette file could not be loaded! Have you set up your disassembly properly?", palent.Filename);
-					SonLVLColor[] palfile = SonLVLColor.Load(palent.Filename, Level.PaletteFormat);
-					for (int pa = 0; pa < palent.Length; pa++)
-					{
-						Palette[palnum][(pa + palent.Destination) / 16, (pa + palent.Destination) % 16] = palfile[pa + palent.Source];
-						PalNum[palnum][(pa + palent.Destination) / 16, (pa + palent.Destination) % 16] = palfilenum;
-						PalAddr[palnum][(pa + palent.Destination) / 16, (pa + palent.Destination) % 16] = pa + palent.Source;
-					}
-					palfilenum++;
-				}
-			}
-			CurPal = 0;
-		}
-
-		private static void LoadLevelColInds()
-		{
-			ColInds1 = new List<byte>();
-			ColInds2 = new List<byte>();
-			switch (Level.CollisionIndexFormat)
-			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-				case EngineVersion.SCDPC:
-					if (Level.CollisionIndex != null && File.Exists(Level.CollisionIndex))
-						ColInds1.AddRange(Compression.Decompress(Level.CollisionIndex, Level.CollisionIndexCompression));
-					ColInds2 = ColInds1;
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					if (Level.CollisionIndex1 != null && File.Exists(Level.CollisionIndex1))
-						ColInds1.AddRange(Compression.Decompress(Level.CollisionIndex1, Level.CollisionIndexCompression));
-					if (Level.CollisionIndex2 != null)
-					{
-						if (File.Exists(Level.CollisionIndex2))
-							ColInds2.AddRange(Compression.Decompress(Level.CollisionIndex2, Level.CollisionIndexCompression));
-					}
-					else
-						ColInds2 = ColInds1;
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					if (Level.CollisionIndex != null && File.Exists(Level.CollisionIndex))
-					{
-						byte[] tmp = Compression.Decompress(Level.CollisionIndex, Level.CollisionIndexCompression);
-						switch (Level.CollisionIndexSize)
-						{
-							case 0:
-							case 1:
-								Array.Resize(ref tmp, 0x600);
-								for (int i = 0; i < 0x600; i += 2)
-								{
-									ColInds1.Add(tmp[i]);
-									ColInds2.Add(tmp[i + 1]);
-								}
-								break;
-							case 2:
-								for (int i = 0; i < 0x600; i += 2)
-									ColInds1.Add((byte)ByteConverter.ToUInt16(tmp, i));
-								for (int i = 0x600; i < 0xC00; i += 2)
-									ColInds2.Add((byte)ByteConverter.ToUInt16(tmp, i));
-								break;
-						}
-					}
-					else
-					{
-						ColInds1.AddRange(new byte[0x300]);
-						ColInds2.AddRange(new byte[0x300]);
-					}
-					break;
-			}
-		}
-
-		private static void LoadLevelColArr()
-		{
-			byte[] tmp;
-			ColArr1 = new sbyte[256][];
-			if (Level.CollisionArray1 != null && File.Exists(Level.CollisionArray1))
-				tmp = Compression.Decompress(Level.CollisionArray1, Level.CollisionArrayCompression);
-			else
-				tmp = new byte[256 * 16];
-			for (int i = 0; i < 256; i++)
-			{
-				ColArr1[i] = new sbyte[16];
-				for (int j = 0; j < 16; j++)
-					ColArr1[i][j] = unchecked((sbyte)tmp[(i * 16) + j]);
-			}
-		}
-
-		private static void LoadLevelAngles()
-		{
-			if (Level.Angles != null && File.Exists(Level.Angles))
-				Angles = Compression.Decompress(Level.Angles, Level.AngleCompression);
-			else
-				Angles = new byte[256];
-		}
-
-		private static void LoadLevelObjects(bool loadGraphics)
-		{
-			if (Level.Objects != null)
-			{
-				Objects = ObjectFormat.TryReadLayout(Level.Objects, Level.ObjectCompression, out objectterm);
-				if (loadGraphics)
-					for (int i = 0; i < Objects.Count; i++)
-						Objects[i].UpdateSprite();
-			}
-			else
-				Objects = new List<ObjectEntry>();
-		}
-
-		private static void LoadLevelRings(bool loadGraphics)
-		{
-			if (Level.Rings != null && RingFormat is RingLayoutFormat)
-			{
-				Rings = ((RingLayoutFormat)RingFormat).TryReadLayout(Level.Rings, Level.RingCompression, out ringstartterm, out ringendterm);
-				if (loadGraphics)
-					foreach (RingEntry ring in Rings)
-						ring.UpdateSprite();
-			}
-			else
-				Rings = new List<RingEntry>();
-		}
-
-		private static void LoadLevelExtraObjects(bool loadGraphics)
-		{
-			if (Level.ExtraObjects != null)
-			{
-				ExtraObjects = new List<ExtraObjEntry>();
-				if (File.Exists(Level.ExtraObjects.Filename))
-				{
-					var tmp = File.ReadAllBytes(Level.ExtraObjects.Filename);
-					if (tmp.Length < 10 || ByteConverter.ToInt16(tmp, 2) < 0) return;
-
-					var ent = CompileCodeFile<ExtraObjEntry>(Level.ExtraObjects.CodeFile, Level.ExtraObjects.CodeType);
-					if (loadGraphics) ent.Init();
-
-					for (var i = 0; true; i += 2)
-					{
-						ent.ID = ByteConverter.ToUInt16(tmp, i);
-						ent.Position = new Position(ByteConverter.ToUInt16(tmp, i += 2), ByteConverter.ToUInt16(tmp, i += 2));
-						ExtraObjects.Add(ent);
-						if (loadGraphics) ent.UpdateSprite();
-
-						if (ByteConverter.ToInt16(tmp, i + 4) < 0) return;
-						ent = (ExtraObjEntry)Activator.CreateInstance(ent.GetType());
-					}
-				}
-			}
-			else if (Level.Bumpers != null)
-			{
-				ExtraObjects = new List<ExtraObjEntry>();
-				if (File.Exists(Level.Bumpers))
-				{
-					Log("Loading bumpers from file \"" + Level.Bumpers + "\", using compression " + Level.BumperCompression + "...");
-					byte[] tmp = Compression.Decompress(Level.Bumpers, Level.BumperCompression);
-					for (int i = 0; i < tmp.Length; i += ExtraObjEntry.Size)
-					{
-						if (ByteConverter.ToUInt16(tmp, i + 2) == 0xFFFF) break;
-						ExtraObjEntry ent = new ActualCNZBumperEntry(tmp, i);
-						ExtraObjects.Add(ent);
-						if (loadGraphics) ent.UpdateSprite();
-					}
-				}
-				else
-					Log("Bumper file \"" + Level.Bumpers + "\" not found.");
-			}
-			else
-			{
-				ExtraObjects = null;
-			}
-		}
-
-		private static void LoadLevelStartPositions(bool loadGraphics)
-		{
-			StartPositions = new List<StartPositionEntry>();
-			StartPosDefs = new List<StartPositionDefinition>();
-			if (Level.StartPositions != null)
-			{
-				foreach (StartPositionInfo item in Level.StartPositions)
-				{
-					StartPositionEntry ent;
-					if (File.Exists(item.Filename))
-					{
-						Log("Loading start position \"" + item.Name + "\" from file \"" + item.Filename + "\"...");
-						ent = new StartPositionEntry(File.ReadAllBytes(item.Filename), item.Offset == -1 ? 0 : item.Offset);
-					}
-					else
-					{
-						Log("Start position file \"" + item.Filename + "\" not found.");
-						ent = new StartPositionEntry();
-					}
-					StartPositions.Add(ent);
-					if (loadGraphics)
-					{
-						if (!string.IsNullOrEmpty(item.Sprite))
-							StartPosDefs.Add(new StartPositionDefinition(INIObjDefs[item.Sprite], item.Name));
-						else
-							StartPosDefs.Add(new StartPositionDefinition(item.Name));
-						ent.UpdateSprite();
-					}
-				}
-			}
-		}
-
-		private static T CompileCodeFile<T>(string codefile, string typename)
-		{
-			string dllfile = Path.Combine("dllcache", typename + ".dll");
-			DateTime modDate = DateTime.MinValue;
-			if (File.Exists(dllfile))
-				modDate = File.GetLastWriteTime(dllfile);
-			string fp = codefile.Replace('/', Path.DirectorySeparatorChar);
-			Log("Loading type " + typename + " from \"" + fp + "\"...");
-			if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
-			{
-				Log("Loading type from cached assembly \"" + dllfile + "\"...");
-				return (T)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(typename));
-			}
-			else
-			{
-				Log("Compiling code file...");
-				string ext = Path.GetExtension(fp);
-				CodeDomProvider pr = null;
-				switch (ext.ToLowerInvariant())
-				{
-					case ".cs":
-						pr = new Microsoft.CSharp.CSharpCodeProvider();
-						break;
-					case ".vb":
-						pr = new Microsoft.VisualBasic.VBCodeProvider();
-						break;
-				}
-				CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
-				{
-					GenerateExecutable = false,
-					GenerateInMemory = false,
-					IncludeDebugInformation = true,
-					OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
-				};
-				CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
-				if (res.Errors.HasErrors)
-				{
-					Log("Compile failed.", "Errors:");
-					foreach (CompilerError item in res.Errors)
-						Log(item.ToString());
-					Log(string.Empty);
-					throw new Exception("Failed compiling file.");
-				}
-				else
-				{
-					Log("Compile succeeded.");
-					return (T)Activator.CreateInstance(res.CompiledAssembly.GetType(typename));
-				}
-			}
-		}
-
 		public static void SaveLevel()
 		{
-			Log("Saving " + Level.DisplayName + "...");
-			switch (Level.EngineVersion)
-			{
-				case EngineVersion.SCDPC:
-					Parallel.Invoke(SaveLevelTiles, SaveLevelChunks, SaveLevelLayout, SaveLevelPalette,
-						SaveLevelObjects, SaveLevelRings, SaveLevelExtraObjects, SaveLevelStartPositions,
-						SaveLevelColInds, SaveLevelColArr1, SaveLevelColArr2, SaveLevelAngles);
-					SaveLevelBlocks(); // SCDPC...
-					break;
-				case EngineVersion.SKC:
-					Parallel.Invoke(SaveLevelTiles, SaveLevelLayout, SaveLevelPalette,
-						SaveLevelObjects, SaveLevelRings, SaveLevelExtraObjects, SaveLevelStartPositions,
-						SaveLevelColInds, SaveLevelColArr1, SaveLevelColArr2, SaveLevelAngles);
-					SaveLevelBlocks();
-					SaveLevelChunks();
-					break;
-				default:
-					Parallel.Invoke(SaveLevelTiles, SaveLevelBlocks, SaveLevelChunks, SaveLevelLayout, SaveLevelPalette,
-						SaveLevelObjects, SaveLevelRings, SaveLevelExtraObjects, SaveLevelStartPositions,
-						SaveLevelColInds, SaveLevelColArr1, SaveLevelColArr2, SaveLevelAngles);
-					break;
-			}
+			Log("Saving " + StageInfo.name + "...");
+			string stgfol = Path.Combine(ModFolder, "Data\\Stages", StageInfo.folder);
+			Directory.CreateDirectory(stgfol);
+			for (int i = 0; i < 32; i++)
+				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.COLORS_PER_ROW][i % StageConfig.stagePalette.COLORS_PER_ROW] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
+			StageConfig.write(Path.Combine(stgfol, "StageConfig.bin"));
+			BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
+			for (int i = 0; i < NewTiles.Length; i++)
+				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
+			using (Bitmap bmp = tiles.ToBitmap(NewPalette))
+				bmp.Save(Path.Combine(stgfol, "16x16Tiles.gif"), ImageFormat.Gif);
+			NewChunks.write(Path.Combine(stgfol, "128x128Tiles.bin"));
+			Collision.write(Path.Combine(stgfol, "CollisionMasks.bin"));
+			Background.write(Path.Combine(stgfol, "Backgrounds.bin"));
+			Scene.write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
 		}
 
-		private static void SaveLevelTiles()
-		{
-			int fileind = -1;
-			ReadOnlyCollection<ReadOnlyCollection<byte[]>> tilefiles = Tiles.GetFiles();
-			if (Level.TileFormat != EngineVersion.SCDPC)
-			{
-				foreach (FileInfo tileent in Level.Tiles)
-				{
-					fileind++;
-					List<byte> tmp = new List<byte>();
-					foreach (byte[] item in tilefiles[fileind])
-						tmp.AddRange(item);
-					Compression.Compress(tmp.ToArray(), tileent.Filename, Level.TileCompression);
-				}
-			}
-			else
-			{
-				List<ushort>[] tilepals = new List<ushort>[4];
-				for (int i = 0; i < 4; i++)
-					tilepals[i] = new List<ushort>();
-				foreach (Block blk in Blocks)
-					for (int y = 0; y < 2; y++)
-						for (int x = 0; x < 2; x++)
-							if (!tilepals[blk.Tiles[x, y].Palette].Contains(blk.Tiles[x, y].Tile))
-								tilepals[blk.Tiles[x, y].Palette].Add(blk.Tiles[x, y].Tile);
-				foreach (Block blk in Blocks)
-					for (int y = 0; y < 2; y++)
-						for (int x = 0; x < 2; x++)
-						{
-							byte pal = blk.Tiles[x, y].Palette;
-							int c = 0;
-							for (int i = pal - 1; i >= 0; i--)
-								c += tilepals[i].Count;
-							blk.Tiles[x, y].Tile = (ushort)(tilepals[pal].IndexOf(blk.Tiles[x, y].Tile) + c);
-						}
-				List<byte[]> tiles = new List<byte[]>();
-				for (int p = 0; p < 4; p++)
-					foreach (ushort item in tilepals[p])
-						if (Tiles[item] != null)
-							tiles.Add(Tiles[item]);
-						else
-							tiles.Add(new byte[32]);
-				Tiles.Clear();
-				Tiles.AddFile(tiles, -1);
-				UpdateTileArray();
-				List<byte> tmp = new List<byte> { 0x53, 0x43, 0x52, 0x4C };
-				tmp.AddRange(ByteConverter.GetBytes(0x18 + (Tiles.Count * 4) + (Tiles.Count * 32)));
-				tmp.AddRange(ByteConverter.GetBytes(Tiles.Count));
-				tmp.AddRange(ByteConverter.GetBytes(0x18 + (Tiles.Count * 4)));
-				for (int i = 0; i < 4; i++)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)tilepals[i].Count));
-				for (int i = 0; i < Tiles.Count; i++)
-				{
-					tmp.AddRange(ByteConverter.GetBytes((ushort)8));
-					tmp.AddRange(ByteConverter.GetBytes((ushort)8));
-				}
-				tmp.AddRange(TileArray);
-				Compression.Compress(tmp.ToArray(), Level.Tiles[0].Filename, CompressionType.SZDD);
-			}
-		}
-
-		private static void SaveLevelBlocks()
-		{
-			int fileind = -1;
-			ReadOnlyCollection<ReadOnlyCollection<Block>> blockfiles = Blocks.GetFiles();
-			foreach (FileInfo tileent in Level.Blocks)
-			{
-				fileind++;
-				List<byte> tmp = new List<byte>();
-				if (Level.EngineVersion == EngineVersion.SKC)
-					littleendian = false;
-				foreach (Block b in blockfiles[fileind])
-					tmp.AddRange(b.GetBytes());
-				if (Level.EngineVersion == EngineVersion.SKC)
-					littleendian = true;
-				Compression.Compress(tmp.ToArray(), tileent.Filename, Level.BlockCompression);
-			}
-		}
-
-		private static void SaveLevelChunks()
-		{
-			int fileind = -1;
-			ReadOnlyCollection<ReadOnlyCollection<Chunk>> chunkfiles = Chunks.GetFiles();
-			foreach (FileInfo tileent in Level.Chunks)
-			{
-				fileind++;
-				List<byte> tmp = new List<byte>();
-				if (Level.EngineVersion == EngineVersion.SKC)
-					littleendian = false;
-				foreach (Chunk c in chunkfiles[fileind])
-					tmp.AddRange(c.GetBytes());
-				if (Level.EngineVersion == EngineVersion.SKC)
-					littleendian = true;
-				if (fileind == 0)
-					switch (Level.ChunkFormat)
-					{
-						case EngineVersion.S1:
-						case EngineVersion.SCD:
-						case EngineVersion.SCDPC:
-							tmp.RemoveRange(0, Chunk.Size);
-							break;
-					}
-				Compression.Compress(tmp.ToArray(), tileent.Filename, Level.ChunkCompression);
-			}
-		}
-
-		private static void SaveLevelLayout()
-		{
-			switch (LayoutFormat)
-			{
-				case LayoutFormatCombined lfc:
-					lfc.WriteLayout(Layout, Level.LayoutCompression, Level.Layout);
-					foreach (var item in AdditionalLayouts)
-						lfc.WriteLayout(item.Value.Value, item.Value.Key, item.Key);
-					break;
-				case LayoutFormatSeparate lfs:
-					lfs.WriteLayout(Layout, Level.FGLayoutCompression, Level.BGLayoutCompression, Level.FGLayout, Level.BGLayout);
-					foreach (var item in AdditionalLayouts)
-						if (item.Value.Value.FGLayout != null)
-							lfs.WriteFG(item.Value.Value, item.Value.Key, item.Key);
-						else
-							lfs.WriteBG(item.Value.Value, item.Value.Key, item.Key);
-					break;
-			}
-		}
-
-		private static void SaveLevelPalette()
-		{
-			if (Level.PaletteFormat != EngineVersion.SCDPC)
-			{
-				byte[] paltmp;
-				List<ushort[]> palfiles = new List<ushort[]>();
-				byte palfilenum = 0;
-				for (int palnum = 0; palnum < Level.Palettes.Length; palnum++)
-				{
-					PaletteList palent = Level.Palettes[palnum].Palettes;
-					for (byte pn = 0; pn < palent.Collection.Length; pn++)
-					{
-						paltmp = File.ReadAllBytes(palent[pn].Filename);
-						ushort[] palfile = new ushort[paltmp.Length / 2];
-						for (int pi = 0; pi < paltmp.Length; pi += 2)
-							palfile[pi / 2] = ByteConverter.ToUInt16(paltmp, pi);
-						palfiles.Add(palfile);
-					}
-					for (int pl = 0; pl < 4; pl++)
-						for (int pi = 0; pi < 16; pi++)
-							palfiles[PalNum[palnum][pl, pi]][PalAddr[palnum][pl, pi]] = Palette[palnum][pl, pi].MDColor;
-					for (byte pn = 0; pn < palent.Collection.Length; pn++)
-					{
-						List<byte> tmp = new List<byte>();
-						for (int pi = 0; pi < palfiles[pn + palfilenum].Length; pi++)
-							tmp.AddRange(ByteConverter.GetBytes(palfiles[pn + palfilenum][pi]));
-						File.WriteAllBytes(palent[pn].Filename, tmp.ToArray());
-					}
-					palfilenum = (byte)palfiles.Count;
-				}
-			}
-			else
-			{
-				List<byte[]> palfiles = new List<byte[]>();
-				byte palfilenum = 0;
-				if (Level.Palettes.Length > 0)
-				{
-					PaletteList palent = Level.Palettes[0].Palettes;
-					for (byte pn = 0; pn < palent.Collection.Length; pn++)
-						palfiles.Add(File.ReadAllBytes(palent[pn].Filename));
-					for (int pl = 0; pl < 4; pl++)
-					{
-						for (int pi = 0; pi < 16; pi++)
-						{
-							palfiles[PalNum[0][pl, pi]][PalAddr[0][pl, pi] * 4] = Palette[0][pl, pi].R;
-							palfiles[PalNum[0][pl, pi]][PalAddr[0][pl, pi] * 4 + 1] = Palette[0][pl, pi].G;
-							palfiles[PalNum[0][pl, pi]][PalAddr[0][pl, pi] * 4 + 2] = Palette[0][pl, pi].B;
-						}
-					}
-					for (byte pn = 0; pn < palent.Collection.Length; pn++)
-						File.WriteAllBytes(palent[pn].Filename, palfiles[pn]);
-					palfilenum = (byte)palfiles.Count;
-				}
-			}
-		}
-
-		private static void SaveLevelObjects()
-		{
-			if (Level.Objects != null)
-			{
-				Objects.Sort();
-				ObjectFormat.WriteLayout(Objects, Level.ObjectCompression, Level.Objects, objectterm);
-			}
-		}
-
-		private static void SaveLevelRings()
-		{
-			if (Level.Rings != null && RingFormat is RingLayoutFormat)
-			{
-				Rings.Sort();
-				((RingLayoutFormat)RingFormat).WriteLayout(Rings, Level.RingCompression, Level.Rings, ringstartterm, ringendterm);
-			}
-		}
-
-		private static void SaveLevelExtraObjects()
-		{
-			if (ExtraObjects != null)
-			{
-				ExtraObjects.Sort();
-				List<byte> tmp = new List<byte>();
-				foreach (ExtraObjEntry item in ExtraObjects)
-					tmp.AddRange(item.GetBytes());
-
-				if (Level.ExtraObjects != null)
-				{
-					tmp.AddRange(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
-					File.WriteAllBytes(Level.ExtraObjects.Filename, tmp.ToArray());
-				}
-				else
-				{
-					tmp.AddRange(new byte[] { 0, 0, 0xFF, 0xFF, 0, 0 });
-					Compression.Compress(tmp.ToArray(), Level.Bumpers, Level.BumperCompression);
-				}
-			}
-		}
-
-		private static void SaveLevelStartPositions()
-		{
-			if (Level.StartPositions != null)
-			{
-				int i = 0;
-				foreach (StartPositionInfo item in Level.StartPositions)
-				{
-					byte[] fc = new byte[4];
-					if (File.Exists(item.Filename))
-						fc = File.ReadAllBytes(item.Filename);
-					StartPositions[i++].GetBytes().CopyTo(fc, item.Offset == -1 ? 0 : item.Offset);
-					Directory.CreateDirectory(Path.GetDirectoryName(item.Filename));
-					File.WriteAllBytes(item.Filename, fc);
-				}
-			}
-		}
-
-		private static void SaveLevelColInds()
-		{
-			switch (Level.CollisionIndexFormat)
-			{
-				case EngineVersion.S1:
-				case EngineVersion.SCD:
-				case EngineVersion.SCDPC:
-					if (Level.CollisionIndex != null)
-						Compression.Compress(ColInds1.ToArray(), Level.CollisionIndex, Level.CollisionIndexCompression);
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					if (Level.CollisionIndex1 != null)
-						Compression.Compress(ColInds1.ToArray(), Level.CollisionIndex1, Level.CollisionIndexCompression);
-					if (Level.CollisionIndex2 != null)
-						Compression.Compress(ColInds2.ToArray(), Level.CollisionIndex2, Level.CollisionIndexCompression);
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					if (Level.CollisionIndex != null)
-					{
-						List<byte> tmp = new List<byte>();
-						byte[] cif = null;
-						switch (Level.CollisionIndexSize)
-						{
-							case 0:
-							case 1:
-								cif = new byte[0x600];
-								for (int i = 0; i < ColInds1.Count; i++)
-								{
-									tmp.Add(ColInds1[i]);
-									tmp.Add(ColInds2[i]);
-								}
-								tmp.CopyTo(0, cif, 0, Math.Min(tmp.Count, cif.Length));
-								break;
-							case 2:
-								cif = new byte[0xC00];
-								foreach (byte item in ColInds1)
-									tmp.AddRange(ByteConverter.GetBytes((ushort)item));
-								tmp.CopyTo(0, cif, 0, Math.Min(tmp.Count, 0x600));
-								tmp.Clear();
-								foreach (byte item in ColInds2)
-									tmp.AddRange(ByteConverter.GetBytes((ushort)item));
-								tmp.CopyTo(0, cif, 0x600, Math.Min(tmp.Count, 0x600));
-								break;
-						}
-						Compression.Compress(cif, Level.CollisionIndex, Level.CollisionIndexCompression);
-					}
-					break;
-			}
-		}
-
-		private static void SaveLevelColArr1()
-		{
-			if (Level.CollisionArray1 != null)
-			{
-				List<byte> tmp = new List<byte>(0x1000);
-				for (int i = 0; i < 256; i++)
-					for (int j = 0; j < 16; j++)
-						tmp.Add(unchecked((byte)ColArr1[i][j]));
-				Compression.Compress(tmp.ToArray(), Level.CollisionArray1, Level.CollisionArrayCompression);
-			}
-		}
-
-		private static void SaveLevelColArr2()
-		{
-			if (Level.CollisionArray2 != null)
-			{
-				sbyte[][] rotcol = GenerateRotatedCollision();
-				List<byte> tmp = new List<byte>(0x1000);
-				for (int i = 0; i < 256; i++)
-					for (int j = 0; j < 16; j++)
-						tmp.Add(unchecked((byte)rotcol[i][j]));
-				Compression.Compress(tmp.ToArray(), Level.CollisionArray2, Level.CollisionArrayCompression);
-			}
-		}
-
-		private static void SaveLevelAngles()
-		{
-			if (Level.Angles != null)
-				Compression.Compress(Angles, Level.Angles, Level.AngleCompression);
-		}
-
-		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2, bool allTimeZones)
+		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -1299,137 +282,68 @@ namespace SonicRetro.SonLVL.API
 				int yend = 0;
 				for (int y = 0; y < FGHeight; y++)
 					for (int x = 0; x < FGWidth; x++)
-						if (Layout.FGLayout[x, y] > 0)
+						if (Scene.layout[y][x] > 0)
 						{
 							xend = Math.Max(xend, x);
 							yend = Math.Max(yend, y);
 						}
 				xend++;
 				yend++;
-				bounds = new Rectangle(0, 0, xend * Level.ChunkWidth, yend * Level.ChunkHeight);
+				bounds = new Rectangle(0, 0, xend * 128, yend * 128);
 			}
 			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
-			int cl = Math.Max(bounds.X / Level.ChunkWidth, 0);
-			int ct = Math.Max(bounds.Y / Level.ChunkHeight, 0);
-			int cr = Math.Min((bounds.Right - 1) / Level.ChunkWidth, FGWidth - 1);
-			int cb = Math.Min((bounds.Bottom - 1) / Level.ChunkHeight, FGHeight - 1);
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
 			for (int y = ct; y <= cb; y++)
 				for (int x = cl; x <= cr; x++)
-					if (Layout.FGLayout[x, y] < Chunks.Count)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
 					{
 						if ((!includeObjects || objectsAboveHighPlane) && lowPlane && highPlane)
 						{
-							LevelImg8bpp.DrawSprite(ChunkSprites[Layout.FGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawSprite(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 							if (collisionPath1)
-								LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][0], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+								LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
 							else if (collisionPath2)
-								LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][1], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+								LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 						}
 						else
 						{
 							if (lowPlane)
-								LevelImg8bpp.DrawSpriteLow(ChunkSprites[Layout.FGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+								LevelImg8bpp.DrawSpriteLow(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 							if (!includeObjects || objectsAboveHighPlane)
 							{
 								if (highPlane)
-									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Layout.FGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 								if (collisionPath1)
-									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][0], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
 								else if (collisionPath2)
-									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][1], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 							}
 						}
 					}
 			if (includeObjects)
 			{
-				List<Entry> objs = new List<Entry>(Objects.Where(o => ObjectVisible(o, allTimeZones)));
-				if (RingFormat is RingLayoutFormat)
-					objs.AddRange(Rings);
-				objs.Sort((a, b) =>
-				{
-					int result = -a.Depth.CompareTo(b.Depth);
-					if (result == 0)
-						result = ((IComparable<Entry>)a).CompareTo(b);
-					return result;
-				});
-				if (objectsAboveHighPlane)
-				{
-					foreach (Entry item in objs)
-						if (item is RingEntry || !(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).ID).Debug))
-							LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-					if (ExtraObjects != null)
-						foreach (ExtraObjEntry item in ExtraObjects.Where(obj => includeDebugObjects || !obj.Debug))
-						{
-							LevelImg8bpp.DrawSpriteHigh(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-							if (includeDebugObjects)
-							{
-								var rect = item.Bounds;
-								LevelImg8bpp.DrawRectangle(ColorWhite, rect.X - bounds.X, rect.Y - bounds.Y, rect.Width - 1, rect.Height - 1);
-							}
-						}
-					for (int si = StartPositions.Count - 1; si >= 0; si--)
-						LevelImg8bpp.DrawSprite(StartPositions[si].Sprite, StartPositions[si].X - bounds.X, StartPositions[si].Y - bounds.Y);
-				}
-				else
-				{
-					BitmapBits objbmplow = new BitmapBits(bounds.Size);
-					BitmapBits objbmplevel = new BitmapBits(bounds.Size);
-					BitmapBits objbmphigh = new BitmapBits(bounds.Size);
-					int curdepth = int.MinValue;
-					foreach (Entry item in objs)
-						if (item is RingEntry || !(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).ID).Debug))
-						{
-							if (item.Depth != curdepth)
-							{
-								curdepth = item.Depth;
-								objbmphigh.DrawBitmapComposited(objbmplevel, 0, 0);
-								objbmplevel.Clear();
-							}
-							objbmplow.DrawSpriteLow(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-							objbmphigh.ClearSpriteLow(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-							objbmplevel.DrawSpriteHigh(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-						}
-					LevelImg8bpp.DrawBitmapComposited(objbmplow, 0, 0);
-					if (ExtraObjects != null)
-						foreach (ExtraObjEntry item in ExtraObjects.Where(obj => includeDebugObjects || !obj.Debug))
-							LevelImg8bpp.DrawSpriteLow(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-					for (int si = StartPositions.Count - 1; si >= 0; si--)
-						LevelImg8bpp.DrawSpriteLow(StartPositions[si].Sprite, StartPositions[si].X - bounds.X, StartPositions[si].Y - bounds.Y);
+				foreach (Entry item in Objects)
+					LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
+				if (!objectsAboveHighPlane)
 					for (int y = ct; y <= cb; y++)
 						for (int x = cl; x <= cr; x++)
-							if (Layout.FGLayout[x, y] < Chunks.Count)
+							if (Scene.layout[y][x] < NewChunks.chunkList.Length)
 							{
 								if (highPlane)
-									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Layout.FGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 								if (collisionPath1)
-									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][0], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
 								else if (collisionPath2)
-									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.FGLayout[x, y]][1], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 							}
-					LevelImg8bpp.DrawBitmapComposited(objbmphigh, 0, 0);
-					LevelImg8bpp.DrawBitmapComposited(objbmplevel, 0, 0);
-					if (ExtraObjects != null)
-						foreach (ExtraObjEntry item in ExtraObjects.Where(obj => includeDebugObjects || !obj.Debug))
-						{
-							LevelImg8bpp.DrawSpriteHigh(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
-							if (includeDebugObjects)
-							{
-								var rect = item.Bounds;
-								LevelImg8bpp.DrawRectangle(ColorWhite, rect.X - bounds.X, rect.Y - bounds.Y, rect.Width - 1, rect.Height - 1);
-							}
-						}
-					for (int si = StartPositions.Count - 1; si >= 0; si--)
-						LevelImg8bpp.DrawSpriteHigh(StartPositions[si].Sprite, StartPositions[si].X - bounds.X, StartPositions[si].Y - bounds.Y);
-				}
-				if (includeDebugObjects)
-					foreach (ObjectEntry item in objs.OfType<ObjectEntry>())
-						if (item.DebugOverlay != null)
-							LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
 			}
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits DrawBackground(Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits DrawBackground(int layer, Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -1438,53 +352,35 @@ namespace SonicRetro.SonLVL.API
 			{
 				int xend = 0;
 				int yend = 0;
-				for (int y = 0; y < Layout.BGLayout.GetLength(1); y++)
-					for (int x = 0; x < Layout.BGLayout.GetLength(0); x++)
-						if (Layout.BGLayout[x, y] > 0)
+				for (int y = 0; y < BGHeight[layer]; y++)
+					for (int x = 0; x < BGWidth[layer]; x++)
+						if (Background.layers[layer].layout[y][x] > 0)
 						{
 							xend = Math.Max(xend, x);
 							yend = Math.Max(yend, y);
 						}
 				xend++;
 				yend++;
-				bounds = new Rectangle(0, 0, xend * Level.ChunkWidth, yend * Level.ChunkHeight);
+				bounds = new Rectangle(0, 0, xend * 128, yend * 128);
 			}
 			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
-			for (int y = Math.Max(bounds.Y / Level.ChunkHeight, 0); y <= Math.Min((bounds.Bottom - 1) / Level.ChunkHeight, Layout.BGLayout.GetLength(1) - 1); y++)
-				for (int x = Math.Max(bounds.X / Level.ChunkWidth, 0); x <= Math.Min((bounds.Right - 1) / Level.ChunkWidth, Layout.BGLayout.GetLength(0) - 1); x++)
-					if (Layout.BGLayout[x, y] < Chunks.Count)
+			for (int y = Math.Max(bounds.Y / 128, 0); y <= Math.Min((bounds.Bottom - 1) / 128, BGHeight[layer] - 1); y++)
+				for (int x = Math.Max(bounds.X / 128, 0); x <= Math.Min((bounds.Right - 1) / 128, BGWidth[layer] - 1); x++)
+					if (Background.layers[layer].layout[y][x] < NewChunks.chunkList.Length)
 					{
 						if (lowPlane && highPlane)
-							LevelImg8bpp.DrawSprite(ChunkSprites[Layout.BGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawSprite(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (lowPlane)
-							LevelImg8bpp.DrawSpriteLow(ChunkSprites[Layout.BGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawSpriteLow(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (highPlane)
-							LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Layout.BGLayout[x, y]], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 						if (collisionPath1)
-							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.BGLayout[x, y]][0], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (collisionPath2)
-							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Layout.BGLayout[x, y]][1], x * Level.ChunkWidth - bounds.X, y * Level.ChunkHeight - bounds.Y);
+							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 					}
 			return LevelImg8bpp;
-		}
-
-		public static bool ObjectVisible(ObjectEntry obj, bool allTimeZones)
-		{
-			if (allTimeZones)
-				return true;
-			if (obj is SCD.SCDObjectEntry scdobj)
-				switch (Level.TimeZone)
-				{
-					case TimeZone.Past:
-						return scdobj.ShowPast;
-					case TimeZone.Present:
-						return scdobj.ShowPresent;
-					case TimeZone.Future:
-						return scdobj.ShowFuture;
-					default:
-						return true;
-				}
-			return true;
+			throw new NotImplementedException();
 		}
 
 		private static void LoadObjectDefinitionFile(string file)
@@ -1492,10 +388,7 @@ namespace SonicRetro.SonLVL.API
 			Log("Loading object definition file \"" + file + "\".");
 			Dictionary<string, ObjectData> obj = IniSerializer.Deserialize<Dictionary<string, ObjectData>>(file);
 			foreach (KeyValuePair<string, ObjectData> group in obj)
-			{
-				group.Value.Init();
 				INIObjDefs[group.Key] = group.Value;
-			}
 		}
 
 		private static void InitObjectDefinitions()
@@ -1507,11 +400,7 @@ namespace SonicRetro.SonLVL.API
 			foreach (KeyValuePair<string, ObjectData> group in INIObjDefs)
 #endif
 			{
-				if (group.Value.ArtCompression == CompressionType.Invalid)
-					group.Value.ArtCompression = Game.ObjectArtCompression;
-				if (group.Key == "Ring" && RingFormat is RingLayoutFormat)
-					((RingLayoutFormat)RingFormat).Init(group.Value);
-				else if (byte.TryParse(group.Key, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.InvariantInfo, out byte ID))
+				if (byte.TryParse(group.Key, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.InvariantInfo, out byte ID))
 				{
 					ObjectDefinition def = null;
 					if (group.Value.CodeFile != null)
@@ -1626,587 +515,6 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
-		public static byte[] ReadFile(string file, CompressionType cmp)
-		{
-			lock (filecache)
-				if (file == "LevelArt")
-					return TileArray;
-				else if (filecache.ContainsKey(file))
-					return filecache[file];
-				else
-				{
-					byte[] val = Compression.Decompress(file, cmp);
-					filecache.Add(file, val);
-					return val;
-				}
-		}
-
-		public static Bitmap TileToBmp4bpp(byte[] file, int index, int palette, bool transparent)
-		{
-			Bitmap bmp = new Bitmap(8, 8, PixelFormat.Format4bppIndexed);
-			if (file != null && index * 32 + 32 <= file.Length)
-			{
-				BitmapData bmpd = bmp.LockBits(new Rectangle(0, 0, 8, 8), ImageLockMode.WriteOnly, PixelFormat.Format4bppIndexed);
-				System.Runtime.InteropServices.Marshal.Copy(file, index * 32, bmpd.Scan0, 32);
-				bmp.UnlockBits(bmpd);
-			}
-			else
-				InvalidTile.ToBitmap4bpp(bmp);
-			ColorPalette pal = bmp.Palette;
-			for (int i = 0; i < 16; i++)
-				pal.Entries[i] = PaletteToColor(palette, i, transparent);
-			bmp.Palette = pal;
-			return bmp;
-		}
-
-		public static Bitmap InterlacedTileToBmp4bpp(byte[] file, int index, int palette)
-		{
-			Bitmap bmp = new Bitmap(8, 16, PixelFormat.Format4bppIndexed);
-			if (file != null && index * 32 + 64 <= file.Length)
-			{
-				BitmapData bmpd = bmp.LockBits(new Rectangle(0, 0, 8, 16), ImageLockMode.WriteOnly, PixelFormat.Format4bppIndexed);
-				System.Runtime.InteropServices.Marshal.Copy(file, index * 32, bmpd.Scan0, 64);
-				bmp.UnlockBits(bmpd);
-			}
-			ColorPalette pal = bmp.Palette;
-			for (int i = 0; i < 16; i++)
-				pal.Entries[i] = PaletteToColor(palette, i, false);
-			bmp.Palette = pal;
-			return bmp;
-		}
-
-		public static BitmapBits TileToBmp8bpp(byte[] file, int index, int pal)
-		{
-			BitmapBits bmp;
-			if (file != null && index * 32 + 32 <= file.Length)
-			{
-				bmp = new BitmapBits(8, 8);
-				for (int i = 0; i < 32; i++)
-				{
-					bmp.Bits[i * 2] = (byte)((file[i + (index * 32)] >> 4) + (pal * 16));
-					bmp.Bits[(i * 2) + 1] = (byte)((file[i + (index * 32)] & 0xF) + (pal * 16));
-					if (bmp.Bits[i * 2] % 16 == 0) bmp.Bits[i * 2] = 0;
-					if (bmp.Bits[(i * 2) + 1] % 16 == 0) bmp.Bits[(i * 2) + 1] = 0;
-				}
-			}
-			else
-			{
-				bmp = new BitmapBits(InvalidTile);
-				bmp.IncrementIndexes(pal * 16);
-			}
-			return bmp;
-		}
-
-		public static BitmapBits InterlacedTileToBmp8bpp(byte[] file, int index, int pal)
-		{
-			BitmapBits bmp = new BitmapBits(8, 16);
-			if (file != null && index * 32 + 64 <= file.Length)
-				for (int i = 0; i < 64; i++)
-				{
-					bmp.Bits[i * 2] = (byte)((file[i + (index * 32)] >> 4) + (pal * 16));
-					bmp.Bits[(i * 2) + 1] = (byte)((file[i + (index * 32)] & 0xF) + (pal * 16));
-					if (bmp.Bits[i * 2] % 16 == 0) bmp.Bits[i * 2] = 0;
-					if (bmp.Bits[(i * 2) + 1] % 16 == 0) bmp.Bits[(i * 2) + 1] = 0;
-				}
-			else if (file != null && index * 32 + 32 <= file.Length)
-			{
-				for (int i = 0; i < 32; i++)
-				{
-					bmp.Bits[i * 2] = (byte)((file[i + (index * 32)] >> 4) + (pal * 16));
-					bmp.Bits[(i * 2) + 1] = (byte)((file[i + (index * 32)] & 0xF) + (pal * 16));
-					if (bmp.Bits[i * 2] % 16 == 0) bmp.Bits[i * 2] = 0;
-					if (bmp.Bits[(i * 2) + 1] % 16 == 0) bmp.Bits[(i * 2) + 1] = 0;
-				}
-				BitmapBits tmp = new BitmapBits(InvalidTile);
-				tmp.IncrementIndexes(pal * 16);
-				bmp.DrawBitmap(tmp, 0, 8);
-			}
-			else
-			{
-				BitmapBits tmp = new BitmapBits(InvalidTile);
-				tmp.IncrementIndexes(pal * 16);
-				bmp.DrawBitmap(tmp, 0, 0);
-				bmp.DrawBitmap(tmp, 0, 8);
-			}
-			return bmp;
-		}
-
-		public static BitmapBits TileToBmp8bpp(byte[] tiles, PatternIndex index)
-		{
-			BitmapBits bmp;
-			if (tiles != null && index.Tile * 32 + 32 <= tiles.Length)
-			{
-				bmp = new BitmapBits(8, 8);
-				for (int i = 0; i < 32; i++)
-				{
-					bmp.Bits[i * 2] = (byte)((tiles[i + (index.Tile * 32)] >> 4) + (index.Palette * 16));
-					bmp.Bits[(i * 2) + 1] = (byte)((tiles[i + (index.Tile * 32)] & 0xF) + (index.Palette * 16));
-					if (bmp.Bits[i * 2] % 16 == 0) bmp.Bits[i * 2] = 0;
-					if (bmp.Bits[(i * 2) + 1] % 16 == 0) bmp.Bits[(i * 2) + 1] = 0;
-				}
-			}
-			else
-			{
-				bmp = new BitmapBits(InvalidTile);
-				bmp.IncrementIndexes(index.Palette * 16);
-			}
-			bmp.Flip(index.XFlip, index.YFlip);
-			return bmp;
-		}
-
-		public static int[] GetOffsetList(byte[] file)
-		{
-			short endlist = short.MaxValue;
-			List<int> addresses = new List<int>();
-			for (int i = 0; i < endlist; i += 2)
-			{
-				short val = ByteConverter.ToInt16(file, i);
-				if (val > -1)
-				{
-					addresses.Add(val);
-					if (val > 0)
-						endlist = Math.Min(endlist, val);
-				}
-			}
-			return addresses.ToArray();
-		}
-
-		public static byte[] ASMToBin(string file, EngineVersion version) { return ASMToBin(file, version, out Dictionary<string, int> labels); }
-
-		public static byte[] ASMToBin(string file, EngineVersion version, out Dictionary<string, int> labels) { return ASMToBin(file, 0, version, out labels); }
-
-		public static byte[] ASMToBin(string file, string label, EngineVersion version) { return ASMToBin(file, label, version, out Dictionary<string, int> labels); }
-
-		public static byte[] ASMToBin(string file, string label, EngineVersion version, out Dictionary<string, int> labels)
-		{
-			string[] fc = File.ReadAllLines(file);
-			int sti = -1;
-			for (int i = 0; i < fc.Length; i++)
-			{
-				if (fc[i].StartsWith(label + ":"))
-				{
-					sti = i;
-					fc[i] = fc[i].Substring(label.Length + 1);
-				}
-			}
-			if (sti == -1)
-			{
-				labels = new Dictionary<string, int>();
-				return new byte[0];
-			}
-			return ASMToBin(file, sti, version, out labels);
-		}
-
-		public static byte[] ASMToBin(string file, int sti, EngineVersion version) { return ASMToBin(file, sti, version, out Dictionary<string, int> labels); }
-
-		public static readonly Dictionary<string, int> asmlabels = new Dictionary<string, int>() {
-			{ "afEnd", 0xFF }, // return to beginning of animation
-			{ "afBack", 0xFE },// go back (specified number) bytes
-			{ "afChange", 0xFD }, // run specified animation
-			{ "afRoutine", 0xFC }, // increment routine counter
-			{ "afReset", 0xFB }, // reset animation and 2nd object routine counter
-			{ "af2ndRoutine", 0xFA } // increment 2nd routine counter
-		};
-
-		public static byte[] ASMToBin(string file, int sti, EngineVersion version, out Dictionary<string, int> labels)
-		{
-			labels = GetASMLabels(file, sti, version);
-			foreach (KeyValuePair<string, int> item in asmlabels)
-				if (!labels.ContainsKey(item.Key))
-					labels.Add(item.Key, item.Value);
-			string[] fc = File.ReadAllLines(file);
-			List<byte> result = new List<byte>();
-			string lastlabel = string.Empty;
-			string offsetLabel = string.Empty;
-			for (int st = sti; st < fc.Length; st++)
-			{
-				string[] ln = fc[st].Split(';')[0].Trim().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-				if (ln.Length == 0) continue;
-				if (!char.IsWhiteSpace(fc[st], 0))
-				{
-					string[] l = ln[0].Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-					lastlabel = l[0];
-					if (l.Length == 1)
-					{
-						string[] ln2 = new string[ln.Length - 1];
-						for (int i = 0; i < ln2.Length; i++)
-							ln2[i] = ln[i + 1];
-						ln = ln2;
-					}
-					else
-						ln[0] = l[1];
-					if (ln.Length == 0) continue;
-				}
-				if (ln[0].Equals("even"))
-				{
-					if (result.Count % 2 == 1)
-						result.Add(0);
-				}
-				else if (ln[0].Equals("align"))
-				{
-					uint alignment = (uint)ParseASMNum(ln[1], labels);
-					if (result.Count % alignment != 0)
-						result.AddRange(new byte[alignment - (result.Count % alignment)]);
-				}
-				else if (ln[0].Equals("offsetTable") | ln[0].Equals("mappingsTable"))
-					offsetLabel = lastlabel;
-				else if (ln[0].StartsWith("offsetTableEntry.") | ln[0].StartsWith("mappingsTableEntry."))
-					switch (ln[0].Split('.')[1])
-					{
-						case "b":
-							result.Add(unchecked((byte)LabelSubtract(ln[1], offsetLabel, labels)));
-							break;
-						case "w":
-							result.AddRange(ByteConverter.GetBytes((short)LabelSubtract(ln[1], offsetLabel, labels)));
-							break;
-						case "l":
-							result.AddRange(ByteConverter.GetBytes(LabelSubtract(ln[1], offsetLabel, labels)));
-							break;
-					}
-				else if (ln[0].StartsWith("dc."))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					switch (ln[0].Split('.')[1])
-					{
-						case "b":
-							foreach (string item in dats)
-								if (!item.StartsWith("-") && item.Contains("-"))
-									result.Add(unchecked((byte)ParseASMOffset(item, labels)));
-								else
-									result.Add((byte)ParseASMNum(item, labels));
-							break;
-						case "w":
-							foreach (string item in dats)
-								if (!item.StartsWith("-") && item.Contains("-"))
-									result.AddRange(ByteConverter.GetBytes((short)ParseASMOffset(item, labels)));
-								else
-									result.AddRange(ByteConverter.GetBytes((ushort)ParseASMNum(item, labels)));
-							break;
-						case "l":
-							foreach (string item in dats)
-								if (!item.StartsWith("-") && item.Contains("-"))
-									result.AddRange(ByteConverter.GetBytes(ParseASMOffset(item, labels)));
-								else
-									result.AddRange(ByteConverter.GetBytes((uint)ParseASMNum(item, labels)));
-							break;
-					}
-				}
-				else if (ln[0].Equals("spriteHeader"))
-				{
-					switch (version)
-					{
-						case EngineVersion.S1:
-							result.Add(unchecked((byte)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 1) / 5)));
-							break;
-						case EngineVersion.S2:
-							result.AddRange(ByteConverter.GetBytes((short)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 2) / 8)));
-							break;
-						case EngineVersion.S3K:
-							result.AddRange(ByteConverter.GetBytes((short)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 2) / 6)));
-							break;
-					}
-				}
-				else if (ln[0].Equals("spritePiece"))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					unchecked { result.AddRange(new MappingsTile((short)ParseASMNum(dats[0], labels), (short)ParseASMNum(dats[1], labels), (byte)ParseASMNum(dats[2], labels), (byte)ParseASMNum(dats[3], labels), (ushort)ParseASMNum(dats[4], labels), (byte)ParseASMNum(dats[5], labels) == 1, (byte)ParseASMNum(dats[6], labels) == 1, (byte)ParseASMNum(dats[7], labels), (byte)ParseASMNum(dats[8], labels) == 1).GetBytes(version)); }
-				}
-				else if (ln[0].Equals("spritePiece2P"))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					unchecked { result.AddRange(new MappingsTile((short)ParseASMNum(dats[0], labels), (short)ParseASMNum(dats[1], labels), (byte)ParseASMNum(dats[2], labels), (byte)ParseASMNum(dats[3], labels), (ushort)ParseASMNum(dats[4], labels), (byte)ParseASMNum(dats[5], labels) == 1, (byte)ParseASMNum(dats[6], labels) == 1, (byte)ParseASMNum(dats[7], labels), (byte)ParseASMNum(dats[8], labels) == 1, (ushort)ParseASMNum(dats[9], labels), (byte)ParseASMNum(dats[10], labels) == 1, (byte)ParseASMNum(dats[11], labels) == 1, (byte)ParseASMNum(dats[12], labels), (byte)ParseASMNum(dats[13], labels) == 1).GetBytes(version)); }
-				}
-				else if (ln[0].Equals("dplcHeader"))
-				{
-					switch (version)
-					{
-						case EngineVersion.S1:
-							result.Add(unchecked((byte)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 1) / 2)));
-							break;
-						case EngineVersion.S2:
-							result.AddRange(ByteConverter.GetBytes((short)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 2) / 2)));
-							break;
-						case EngineVersion.S3K:
-							result.AddRange(ByteConverter.GetBytes((short)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 4) / 2)));
-							break;
-					}
-				}
-				else if (ln[0].Equals("s3kPlayerDplcHeader"))
-					result.AddRange(ByteConverter.GetBytes((short)((LabelSubtract(lastlabel + "_End", lastlabel, labels) - 2) / 2)));
-				else if (ln[0].Equals("dplcEntry"))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					unchecked { result.AddRange(new DPLCEntry((byte)ParseASMNum(dats[0], labels), (ushort)ParseASMNum(dats[1], labels)).GetBytes(version)); }
-				}
-				else if (ln[0].Equals("s3kPlayerDplcEntry"))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					unchecked { result.AddRange(new DPLCEntry((byte)ParseASMNum(dats[0], labels), (ushort)ParseASMNum(dats[1], labels)).GetBytes(EngineVersion.S2)); }
-				}
-				else if (ln[0].Equals("obj1E67Size"))
-					result.AddRange(ByteConverter.GetBytes((short)(LabelSubtract(lastlabel + "_End", lastlabel, labels) - 2)));
-				else
-					break;
-			}
-			return result.ToArray();
-		}
-
-		public static long ParseASMNum(string data, Dictionary<string, int> labels)
-		{
-			data = data.Trim();
-			bool neg = false;
-			if (data.StartsWith("-"))
-			{
-				neg = true;
-				data = data.Substring(1);
-			}
-			long result;
-			if (labels.ContainsKey(data))
-				result = labels[data];
-			else if (data.StartsWith("$"))
-				result = long.Parse(data.Substring(1), System.Globalization.NumberStyles.HexNumber);
-			else if (data.StartsWith("%"))
-				result = Convert.ToInt64(data.Substring(1), 2);
-			else
-				result = long.Parse(data, System.Globalization.NumberStyles.None, System.Globalization.NumberFormatInfo.InvariantInfo);
-			if (neg)
-				return -result;
-			return result;
-		}
-
-		public static int ParseASMOffset(string data, Dictionary<string, int> labels)
-		{
-			return LabelSubtract(data.Split('-')[0], data.Split('-')[1], labels);
-		}
-
-		public static int LabelSubtract(string label1, string label2, Dictionary<string, int> labels)
-		{
-			return (labels.ContainsKey(label1) ? labels[label1] : 0) - (labels.ContainsKey(label2) ? labels[label2] : 0);
-		}
-
-		public static Dictionary<string, int> GetASMLabels(string file, EngineVersion version)
-		{
-			return GetASMLabels(file, 0, version);
-		}
-
-		public static Dictionary<string, int> GetASMLabels(string file, string label, EngineVersion version)
-		{
-			string[] fc = File.ReadAllLines(file);
-			int sti = -1;
-			for (int i = 0; i < fc.Length; i++)
-			{
-				if (fc[i].StartsWith(label + ":"))
-				{
-					sti = i;
-					fc[i] = fc[i].Substring(label.Length + 1);
-				}
-			}
-			if (sti == -1) return new Dictionary<string, int>();
-			return GetASMLabels(file, sti, version);
-		}
-
-
-		public static Dictionary<string, int> GetASMLabels(string file, int sti, EngineVersion version)
-		{
-			string[] fc = File.ReadAllLines(file);
-			Dictionary<string, int> labels = new Dictionary<string, int>();
-			int curaddr = 0;
-			for (int st = sti; st < fc.Length; st++)
-			{
-				string[] ln = fc[st].Split(';')[0].Trim().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-				if (ln.Length == 0) continue;
-				if (!char.IsWhiteSpace(fc[st], 0))
-				{
-					string[] l = ln[0].Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-					labels.Add(l[0], curaddr);
-					if (l.Length == 1)
-					{
-						string[] ln2 = new string[ln.Length - 1];
-						for (int i = 0; i < ln2.Length; i++)
-						{
-							ln2[i] = ln[i + 1];
-						}
-						ln = ln2;
-					}
-					else
-					{
-						ln[0] = l[1];
-					}
-					if (ln.Length == 0) continue;
-				}
-				if (ln[0].Equals("even"))
-				{
-					if (curaddr % 2 == 1)
-						curaddr++;
-				}
-				else if (ln[0].Equals("align"))
-				{
-					uint alignment = (uint)ParseASMNum(ln[1], labels);
-					if (curaddr % alignment != 0)
-						curaddr += (int)(alignment - (curaddr % alignment));
-				}
-				else if (ln[0].Equals("offsetTable") | ln[0].Equals("mappingsTable"))
-					continue;
-				else if (ln[0].StartsWith("offsetTableEntry.") | ln[0].StartsWith("mappingsTableEntry."))
-					switch (ln[0].Split('.')[1])
-					{
-						case "b":
-							curaddr++;
-							break;
-						case "w":
-							curaddr += 2;
-							break;
-						case "l":
-							curaddr += 4;
-							break;
-					}
-				else if (ln[0].StartsWith("dc."))
-				{
-					string d = string.Empty;
-					for (int i = 1; i < ln.Length; i++)
-						d += ln[i];
-					string[] dats = d.Split(',');
-					switch (ln[0].Split('.')[1])
-					{
-						case "b":
-							curaddr += dats.Length;
-							break;
-						case "w":
-							curaddr += dats.Length * 2;
-							break;
-						case "l":
-							curaddr += dats.Length * 4;
-							break;
-					}
-				}
-				else if (ln[0].Equals("spriteHeader") | ln[0].Equals("dplcHeader"))
-					switch (version)
-					{
-						case EngineVersion.S1:
-							curaddr++;
-							break;
-						case EngineVersion.S2:
-						case EngineVersion.S3K:
-							curaddr += 2;
-							break;
-					}
-				else if (ln[0].Equals("s3kPlayerDplcHeader"))
-					curaddr += 2;
-				else if (ln[0].Equals("spritePiece") | ln[0].Equals("spritePiece2P"))
-					switch (version)
-					{
-						case EngineVersion.S1:
-							curaddr += 5;
-							break;
-						case EngineVersion.S2:
-							curaddr += 8;
-							break;
-						case EngineVersion.S3K:
-							curaddr += 6;
-							break;
-					}
-				else if (ln[0].Equals("dplcEntry") | ln[0].Equals("s3kPlayerDplcEntry"))
-					curaddr += 2;
-				else
-					break;
-			}
-			return labels;
-		}
-
-		public static byte[] ProcessDPLC(byte[] artfile, DPLCFrame dplc)
-		{
-			List<byte> result = new List<byte>();
-			byte[] tmp;
-			for (int i = 0; i < dplc.Count; i++)
-			{
-				tmp = new byte[dplc[i].TileCount * 0x20];
-				Array.Copy(artfile, dplc[i].TileNum * 0x20, tmp, 0, tmp.Length);
-				result.AddRange(tmp);
-			}
-			return result.ToArray();
-		}
-
-		public static Sprite MapFrameToBmp(byte[] art, MappingsFrame map, int startpal, bool priority = false)
-		{
-			return MapFrameToBmp(art, map, null, startpal, priority);
-		}
-
-		public static Sprite MapFrameToBmp(byte[] art, MappingsFrame map, DPLCFrame dplc, int startpal, bool priority = false)
-		{
-			if (dplc != null)
-				art = ProcessDPLC(art, dplc);
-			List<Sprite> sprites = new List<Sprite>(map.TileCount);
-			for (int i = map.TileCount - 1; i >= 0; i--)
-				sprites.Add(MapTileToBmp(art, map[i], startpal, priority));
-			return new Sprite(sprites);
-		}
-
-		public static Sprite MapTileToBmp(byte[] art, MappingsTile map, int startpal, bool priority = false)
-		{
-			BitmapBits pcbmp = new BitmapBits(map.Width * 8, map.Height * 8);
-			bool extrapal = startpal >= 4;
-			startpal = (startpal & 3) + (priority ? 4 : 0);
-			startpal += map.Tile.Palette + (map.Tile.Priority ? 4 : 0);
-			priority = (startpal & 4) == 4;
-			startpal &= 3;
-			if (extrapal) startpal += 4;
-			int ti = 0;
-			for (int x = 0; x < map.Width; x++)
-				for (int y = 0; y < map.Height; y++)
-				{
-					pcbmp.DrawBitmap(TileToBmp8bpp(art, map.Tile.Tile + ti, startpal), x * 8, y * 8);
-					ti++;
-				}
-			pcbmp.Flip(map.Tile.XFlip, map.Tile.YFlip);
-			return new Sprite(pcbmp, priority, map.X, map.Y);
-		}
-
-		public static Color PaletteToColor(int line, int index, bool acceptTransparent)
-		{
-			if (acceptTransparent && index == 0)
-				return Color.Transparent;
-			return Palette[CurPal][line, index].RGBColor;
-		}
-
-		public static void ColorToPalette(int line, int index, Color color)
-		{
-			Palette[CurPal][line, index] = new SonLVLColor(color);
-		}
-
-		public static void RedrawBlocksUsingTiles(IEnumerable<int> tiles, bool drawChunks)
-		{
-			List<int> blocks = new List<int>();
-			foreach (int tile in tiles)
-				for (int i = 0; i < Blocks.Count; i++)
-				{
-					if (blocks.Contains(i)) continue;
-					for (int k = 0; k < 2; k++)
-						for (int j = 0; j < 2; j++)
-							if (Blocks[i].Tiles[j, k].Tile == tile)
-							{
-								blocks.Add(i);
-								goto nextblock;
-							}
-					nextblock:;
-				}
-			RedrawBlocks(blocks, drawChunks);
-		}
-
 		public static void RedrawBlocks(IEnumerable<int> blocks, bool drawChunks)
 		{
 			List<int> chunks = new List<int>();
@@ -2214,17 +522,17 @@ namespace SonicRetro.SonLVL.API
 			{
 				RedrawBlock(block, false);
 				if (drawChunks)
-					for (int i = 0; i < Chunks.Count; i++)
+					for (int i = 0; i < NewChunks.chunkList.Length; i++)
 					{
 						if (chunks.Contains(i)) continue;
-						for (int k = 0; k < Level.ChunkHeight / 16; k++)
-							for (int j = 0; j < Level.ChunkWidth / 16; j++)
-								if (Chunks[i].Blocks[j, k].Block == block)
+						for (int k = 0; k < 128 / 16; k++)
+							for (int j = 0; j < 128 / 16; j++)
+								if (NewChunks.chunkList[i].tiles[j][k].tileIndex == block)
 								{
 									chunks.Add(i);
 									goto nextchunk;
 								}
-					nextchunk: ;
+						nextchunk:;
 					}
 			}
 			if (drawChunks)
@@ -2233,33 +541,17 @@ namespace SonicRetro.SonLVL.API
 
 		public static void RedrawBlock(int block, bool drawChunks)
 		{
-			BlockBmpBits[block][0] = new BitmapBits(16, 16);
-			BlockBmpBits[block][1] = new BitmapBits(16, 16);
-			CompBlockBmpBits[block] = new BitmapBits(16, 16);
-			for (int by = 0; by < 2; by++)
-				for (int bx = 0; bx < 2; bx++)
-				{
-					PatternIndex pt = Blocks[block].Tiles[bx, by];
-					int pr = pt.Priority ? 1 : 0;
-					BitmapBits tile = TileToBmp8bpp(AnimatedTiles?[pt.Tile] ?? Tiles[pt.Tile], 0, pt.Palette);
-					tile.Flip(pt.XFlip, pt.YFlip);
-					BlockBmpBits[block][pr].DrawBitmap(tile, bx * 8, by * 8);
-				}
-			CompBlockBmpBits[block].DrawBitmap(BlockBmpBits[block][0], Point.Empty);
-			CompBlockBmpBits[block].DrawBitmapComposited(BlockBmpBits[block][1], Point.Empty);
-			BlockBmps[block][0] = BlockBmpBits[block][0].ToBitmap(BmpPal);
-			BlockBmps[block][1] = BlockBmpBits[block][1].ToBitmap(BmpPal);
-			CompBlockBmps[block] = CompBlockBmpBits[block].ToBitmap(BmpPal);
+			NewTileBmps[block] = NewTiles[block].ToBitmap(BmpPal);
 			if (drawChunks)
-				for (int i = 0; i < Chunks.Count; i++)
+				for (int i = 0; i < NewChunks.chunkList.Length; i++)
 				{
-					bool dr = false;
-					for (int k = 0; k < Level.ChunkHeight / 16; k++)
-						for (int j = 0; j < Level.ChunkWidth / 16; j++)
-							if (Chunks[i].Blocks[j, k].Block == block)
-								dr = true;
-					if (dr)
-						RedrawChunk(i);
+					for (int k = 0; k < 8; k++)
+						for (int j = 0; j < 8; j++)
+							if (NewChunks.chunkList[i].tiles[j][k].tileIndex == block)
+								goto draw;
+					continue;
+					draw:
+					RedrawChunk(i);
 				}
 		}
 
@@ -2269,42 +561,52 @@ namespace SonicRetro.SonLVL.API
 				RedrawChunk(chunk);
 		}
 
+		static readonly Dictionary<Tiles128x128.Block.Tile.Solidities, int> solidcolormap = new Dictionary<Tiles128x128.Block.Tile.Solidities, int>()
+		{
+			{ Tiles128x128.Block.Tile.Solidities.SolidTop, 0 },
+			{ Tiles128x128.Block.Tile.Solidities.SolidAllButTop, 1 },
+			{ Tiles128x128.Block.Tile.Solidities.SolidAll, 2 },
+			{ (Tiles128x128.Block.Tile.Solidities)4, 0 }
+		};
 		public static void RedrawChunk(int chunk)
 		{
-			BitmapBits tmplow = new BitmapBits(Level.ChunkWidth, Level.ChunkHeight);
-			BitmapBits tmphigh = new BitmapBits(Level.ChunkWidth, Level.ChunkHeight);
-			ChunkColBmpBits[chunk][0] = new BitmapBits(Level.ChunkWidth, Level.ChunkHeight);
-			ChunkColBmpBits[chunk][1] = new BitmapBits(Level.ChunkWidth, Level.ChunkHeight);
-			for (int by = 0; by < Level.ChunkHeight / 16; by++)
-				for (int bx = 0; bx < Level.ChunkWidth / 16; bx++)
+			BitmapBits tmplow = new BitmapBits(128, 128);
+			BitmapBits tmphigh = new BitmapBits(128, 128);
+			ChunkColBmpBits[chunk][0] = new BitmapBits(128, 128);
+			ChunkColBmpBits[chunk][1] = new BitmapBits(128, 128);
+			for (int by = 0; by < 8; by++)
+				for (int bx = 0; bx < 8; bx++)
 				{
-					ChunkBlock blk = Chunks[chunk].Blocks[bx, by];
-					BitmapBits[] blkbmp;
-					if (AnimatedBlockBmpBits != null && blk.Block >= AnimatedBlockOffset && blk.Block < AnimatedBlockOffset + AnimatedBlockBmpBits.Count)
-						blkbmp = AnimatedBlockBmpBits[blk.Block - AnimatedBlockOffset];
-					else if (blk.Block < BlockBmpBits.Count)
-						blkbmp = BlockBmpBits[blk.Block];
+					Tiles128x128.Block.Tile blk = NewChunks.chunkList[chunk].tiles[by][bx];
+					BitmapBits blkbmp;
+					if (blk.tileIndex < NewTiles.Length)
+						blkbmp = NewTiles[blk.tileIndex];
 					else
-						blkbmp = InvalidBlock;
-					BitmapBits bmp = new BitmapBits(blkbmp[0]);
-					bmp.Flip(blk.XFlip, blk.YFlip);
-					tmplow.DrawBitmap(bmp, bx * 16, by * 16);
-					bmp = new BitmapBits(blkbmp[1]);
-					bmp.Flip(blk.XFlip, blk.YFlip);
-					tmphigh.DrawBitmap(bmp, bx * 16, by * 16);
-					if (ColInds1.Count > 0)
+						blkbmp = InvalidTile;
+					BitmapBits bmp = new BitmapBits(blkbmp);
+					bmp.Flip(blk.direction);
+					switch (blk.visualPlane)
 					{
-						bmp = new BitmapBits(ColBmpBits[GetColInd1(blk.Block)]);
-						bmp.IncrementIndexes((int)blk.Solid1 - 1);
-						bmp.Flip(blk.XFlip, blk.YFlip);
+						case Tiles128x128.Block.Tile.VisualPlanes.Low:
+							tmplow.DrawBitmap(bmp, bx * 16, by * 16);
+							break;
+						case Tiles128x128.Block.Tile.VisualPlanes.High:
+							tmphigh.DrawBitmap(bmp, bx * 16, by * 16);
+							break;
+					}
+					if (blk.solidityA != Tiles128x128.Block.Tile.Solidities.SolidNone)
+					{
+						bmp = new BitmapBits(NewColBmpBits[blk.tileIndex][0]);
+						bmp.IncrementIndexes(solidcolormap[blk.solidityA]);
+						bmp.Flip(blk.direction);
 						ChunkColBmpBits[chunk][0].DrawBitmap(bmp, bx * 16, by * 16);
-						if (blk is S2ChunkBlock)
-						{
-							bmp = new BitmapBits(ColBmpBits[GetColInd2(blk.Block)]);
-							bmp.IncrementIndexes((int)((S2ChunkBlock)blk).Solid2 - 1);
-							bmp.Flip(blk.XFlip, blk.YFlip);
-							ChunkColBmpBits[chunk][1].DrawBitmap(bmp, bx * 16, by * 16);
-						}
+					}
+					if (blk.solidityB != Tiles128x128.Block.Tile.Solidities.SolidNone)
+					{
+						bmp = new BitmapBits(NewColBmpBits[blk.tileIndex][1]);
+						bmp.IncrementIndexes(solidcolormap[blk.solidityB]);
+						bmp.Flip(blk.direction);
+						ChunkColBmpBits[chunk][1].DrawBitmap(bmp, bx * 16, by * 16);
 					}
 				}
 			ChunkSprites[chunk] = new Sprite(tmplow, tmphigh);
@@ -2328,33 +630,58 @@ namespace SonicRetro.SonLVL.API
 
 		public static ObjectEntry CreateObject(byte ID)
 		{
-			ObjectDefinition def = GetObjectDefinition(ID);
-			ObjectEntry oe = ObjectFormat.CreateObject();
-			oe.ID = ID;
-			oe.SubType = def.DefaultSubtype;
-			if (oe is RememberStateObjectEntry)
-				((RememberStateObjectEntry)oe).RememberState = def.RememberState;
-			return oe;
+			if (Scene.entities.Count < Scene.ENTITY_LIST_SIZE)
+			{
+				Scene.Entity ent;
+				switch (RSDKVer)
+				{
+					case EngineVersion.V4:
+						ent = new RSDKv4.Scene.Entity() { type = ID };
+						break;
+					case EngineVersion.V3:
+						ent = new RSDKv3.Scene.Entity() { type = ID };
+						break;
+					default:
+						return null;
+				}
+				Scene.entities.Add(ent);
+				ObjectEntry obj = ObjectEntry.Create(ent);
+				Objects.Add(obj);
+				return obj;
+			}
+			return null;
+		}
+
+		public static void AddObject(ObjectEntry obj)
+		{
+			if (Scene.entities.Count < Scene.ENTITY_LIST_SIZE)
+			{
+				Objects.Add(obj);
+				Scene.entities.Add(obj.Entity);
+			}
+		}
+
+		public static void DeleteObject(ObjectEntry obj)
+		{
+			Objects.Remove(obj);
+			Scene.entities.Remove(obj.Entity);
 		}
 
 		public static void PaletteChanged()
 		{
-			for (int i = 0; i < 64; i++)
-				BmpPal.Entries[i] = PaletteToColor(i / 16, i % 16, true);
+			NewPalette.CopyTo(BmpPal.Entries, 0);
+			BmpPal.Entries[ColorTransparent] = Color.Transparent;
 			BmpPal.Entries[ColorWhite] = Color.White;
 			BmpPal.Entries[ColorYellow] = Color.Yellow;
 			BmpPal.Entries[ColorBlack] = Color.Black;
-			BmpPal.Entries[ColorWhite | 0x80] = Color.White;
-			BmpPal.Entries[ColorYellow | 0x80] = Color.Yellow;
-			BmpPal.Entries[ColorBlack | 0x80] = Color.Black;
-			foreach (Bitmap[] item in BlockBmps)
+			foreach (Bitmap item in NewTileBmps)
+				item.Palette = BmpPal;
+			foreach (Bitmap[] item in ChunkBmps)
 			{
 				item[0].Palette = BmpPal;
 				item[1].Palette = BmpPal;
 			}
-			foreach (Bitmap item in CompBlockBmps)
-				item.Palette = BmpPal;
-			foreach (Bitmap[] item in ChunkBmps)
+			foreach (Bitmap[] item in ChunkColBmps)
 			{
 				item[0].Palette = BmpPal;
 				item[1].Palette = BmpPal;
@@ -2366,432 +693,188 @@ namespace SonicRetro.SonLVL.API
 
 		public static void RedrawCol(int block, bool drawChunks)
 		{
-			ColBmpBits[block] = new BitmapBits(16, 16);
-			for (int by = 0; by < 16; by++)
+			for (int i = 0; i < 2; i++)
 			{
-				for (int bx = 0; bx < 16; bx++)
-				{
-					switch (Math.Sign(ColArr1[block][bx]))
-					{
-						case -1:
-							if (16 + ColArr1[block][bx] <= by)
-								ColBmpBits[block].Bits[((15 - by) * 16) + bx] = 1;
-							break;
-						case 1:
-							if (ColArr1[block][bx] > by)
-								ColBmpBits[block].Bits[((15 - by) * 16) + bx] = 1;
-							break;
-					}
-				}
+				NewColBmpBits[block][i] = new BitmapBits(16, 16);
+				TileConfig.CollisionMask mask = Collision.collisionMasks[i][block];
+				for (int x = 0; x < 16; x++)
+					if (mask.heightMasks[x].solid)
+						if (mask.flipY)
+						{
+							for (int y = 0; y < mask.heightMasks[x].height; y++)
+								NewColBmpBits[block][i][x, y] = 1;
+						}
+						else
+						{
+							for (int y = 15; y >= mask.heightMasks[x].height; y--)
+								NewColBmpBits[block][i][x, y] = 1;
+						}
+				NewColBmps[block][i] = NewColBmpBits[block][i].ToBitmap(Color.Transparent, Color.White);
 			}
-			ColBmps[block] = ColBmpBits[block].ToBitmap(Color.Transparent, Color.White);
 			if (drawChunks)
 			{
-				for (int i = 0; i < Chunks.Count; i++)
+				for (int i = 0; i < NewChunks.chunkList.Length; i++)
 				{
-					bool dr = false;
-					for (int k = 0; k < Level.ChunkHeight / 16; k++)
-						for (int j = 0; j < Level.ChunkWidth / 16; j++)
-							if (GetColInd1(Chunks[i].Blocks[j, k].Block) == block | GetColInd2(Chunks[i].Blocks[j, k].Block) == block)
-								dr = true;
-					if (dr)
-						RedrawChunk(i);
+					for (int k = 0; k < 8; k++)
+						for (int j = 0; j < 8; j++)
+							if (NewChunks.chunkList[i].tiles[k][j].tileIndex == block)
+								goto draw;
+					continue;
+					draw:
+					RedrawChunk(i);
 				}
 			}
 		}
 
-		public static sbyte[][] GenerateRotatedCollision()
+		public static ImportResult BitmapToTiles(BitmapInfo bmpi, bool[,] priority, ColInfo[][,] collision, byte? forcepal, List<BitmapBits> tiles, List<TileConfig.CollisionMask>[] cols, bool optimize, Action updateProgress = null)
 		{
-			sbyte[][] result = new sbyte[256][];
-			for (int i = 0; i < 256; i++)
-			{
-				result[i] = new sbyte[16];
-				for (int y = 0; y < 16; y++)
+			int w = bmpi.Width / 16;
+			int h = bmpi.Height / 16;
+			ImportResult result = new ImportResult(w, h, collision != null, collision?[1] != null);
+			for (int y = 0; y < h; y++)
+				for (int x = 0; x < w; x++)
 				{
-					sbyte height = 0;
-					int misses = 0;
-					bool f = false;
-					int st = 16;
-					for (int x = 0; x < 16; x++)
+					Tiles128x128.Block.Tile map = new Tiles128x128.Block.Tile() { visualPlane = priority[x, y] ? Tiles128x128.Block.Tile.VisualPlanes.High : Tiles128x128.Block.Tile.VisualPlanes.Low };
+					if (collision != null)
 					{
-						switch (Math.Sign(ColArr1[i][15 - x]))
-						{
-							case 1:
-								if (ColArr1[i][15 - x] >= 16 - y)
-								{
-									height = (sbyte)(x + 1);
-									misses = 0;
-									if (!f)
-									{
-										f = true;
-										st = x;
-									}
-								}
-								else
-									misses++;
-								break;
-							case 0:
-								misses++;
-								break;
-							case -1:
-								if (ColArr1[i][15 - x] <= -y - 1)
-								{
-									height = (sbyte)(x + 1);
-									misses = 0;
-									if (!f)
-									{
-										f = true;
-										st = x;
-									}
-								}
-								else
-									misses++;
-								break;
-						}
-						if (x == 0 & misses == 1)
-							break;
-						if (misses == 3)
-							break;
+						map.solidityA = collision[0][x, y].Solidity;
+						if (collision[1] != null)
+							map.solidityB = collision[1][x, y].Solidity;
 					}
-					sbyte negheight = 0;
-					misses = 0;
-					f = false;
-					int rst = 16;
-					for (int x = 0; x < 16; x++)
+					BitmapBits tile = BmpToTile(new BitmapInfo(bmpi, x * 16, y * 16, 16, 16), forcepal);
+					TileConfig.CollisionMask mask1 = null;
+					TileConfig.CollisionMask mask2 = null;
+					if (collision != null)
 					{
-						switch (Math.Sign(ColArr1[i][x]))
-						{
-							case 1:
-								if (ColArr1[i][x] >= 16 - y)
-								{
-									negheight = (sbyte)(-x - 1);
-									misses = 0;
-									if (!f)
-									{
-										f = true;
-										rst = x;
-									}
-								}
-								else
-									misses++;
-								break;
-							case 0:
-								misses++;
-								break;
-							case -1:
-								if (ColArr1[i][x] <= -y - 1)
-								{
-									negheight = (sbyte)(-x - 1);
-									misses = 0;
-									if (!f)
-									{
-										f = true;
-										rst = x;
-									}
-								}
-								else
-									misses++;
-								break;
-						}
-						if (x == 0 & misses == 1)
-							break;
-						if (misses == 3)
-							break;
+						mask1 = collision[0][x, y].CollisionMask;
+						if (collision[1] != null)
+							mask2 = collision[1][x, y].CollisionMask;
 					}
-					result[i][y] = height;
-					if (Math.Abs(negheight) > height || st > rst)
-						result[i][y] = negheight;
-					if (rst > st)
-						result[i][y] = height;
+					bool match = false;
+					if (optimize)
+					{
+						BitmapBits tileh = new BitmapBits(tile);
+						tileh.Flip(true, false);
+						TileConfig.CollisionMask mask1h = null;
+						TileConfig.CollisionMask mask2h = null;
+						if (mask1 != null)
+						{
+							mask1h = mask1.Clone();
+							mask1h.Flip(true, false);
+							if (mask2 != null)
+							{
+								mask2h = mask2.Clone();
+								mask2h.Flip(true, false);
+							}
+						}
+						BitmapBits tilev = new BitmapBits(tile);
+						tileh.Flip(false, true);
+						TileConfig.CollisionMask mask1v = null;
+						TileConfig.CollisionMask mask2v = null;
+						if (mask1 != null)
+						{
+							mask1v = mask1.Clone();
+							mask1v.Flip(false, true);
+							if (mask2 != null)
+							{
+								mask2v = mask2.Clone();
+								mask2v.Flip(false, true);
+							}
+						}
+						BitmapBits tilehv = new BitmapBits(tilev);
+						tileh.Flip(true, false);
+						TileConfig.CollisionMask mask1hv = null;
+						TileConfig.CollisionMask mask2hv = null;
+						if (mask1v != null)
+						{
+							mask1hv = mask1v.Clone();
+							mask1hv.Flip(true, false);
+							if (mask2v != null)
+							{
+								mask2hv = mask2v.Clone();
+								mask2hv.Flip(true, false);
+							}
+						}
+						for (int i = 0; i < tiles.Count; i++)
+						{
+							if (tiles[i].Bits.FastArrayEqual(tile.Bits)
+								&& (mask1 == null || mask1.Equal(cols[0][i]))
+								&& (mask2 == null || mask2.Equal(cols[0][i])))
+							{
+								match = true;
+								map.tileIndex = (ushort)i;
+								break;
+							}
+							if (tiles[i].Bits.FastArrayEqual(tileh.Bits)
+								&& (mask1h == null || mask1h.Equal(cols[0][i]))
+								&& (mask2h == null || mask2h.Equal(cols[0][i])))
+							{
+								match = true;
+								map.tileIndex = (ushort)i;
+								map.direction = Tiles128x128.Block.Tile.Directions.FlipX;
+								break;
+							}
+							if (tiles[i].Bits.FastArrayEqual(tilev.Bits)
+								&& (mask1v == null || mask1v.Equal(cols[0][i]))
+								&& (mask2v == null || mask2v.Equal(cols[0][i])))
+							{
+								match = true;
+								map.tileIndex = (ushort)i;
+								map.direction = Tiles128x128.Block.Tile.Directions.FlipY;
+								break;
+							}
+							if (tiles[i].Bits.FastArrayEqual(tilehv.Bits)
+								&& (mask1hv == null || mask1hv.Equal(cols[0][i]))
+								&& (mask2hv == null || mask2hv.Equal(cols[0][i])))
+							{
+								match = true;
+								map.tileIndex = (ushort)i;
+								map.direction = Tiles128x128.Block.Tile.Directions.FlipXY;
+								break;
+							}
+						}
+					}
+					if (!match)
+					{
+						tiles.Add(tile);
+						result.Art.Add(tile);
+						if (mask1 != null)
+							result.Collision1.Add(mask1);
+						if (mask2 != null)
+							result.Collision2.Add(mask2);
+						map.tileIndex = (ushort)(tiles.Count - 1);
+					}
+					result.Mappings[x, y] = map;
+					updateProgress?.Invoke();
 				}
-			}
 			return result;
 		}
 
-		public static ImportResult BitmapToTiles(BitmapInfo bmpi, bool[,] priority, byte? forcepal, List<byte[]> tiles, bool interlaced, bool optimize, Action updateProgress = null)
+		public static BitmapBits BmpToTile(BitmapInfo bmp, byte? forcepal)
 		{
-			int w = bmpi.Width / 8;
-			int h = bmpi.Height / (interlaced ? 16 : 8);
-			ImportResult result = new ImportResult(w, bmpi.Height / 8);
-			if (!interlaced)
-			{
-				for (int y = 0; y < bmpi.Height / 8; y++)
-					for (int x = 0; x < bmpi.Width / 8; x++)
-					{
-						PatternIndex map = new PatternIndex() { Priority = priority[x, y] };
-						byte[] tile = BmpToTile(new BitmapInfo(bmpi, x * 8, y * 8, 8, 8), forcepal, out int pal);
-						map.Palette = (byte)pal;
-						bool match = false;
-						if (optimize)
-						{
-							byte[] tileh = FlipTile(tile, true, false);
-							byte[] tilev = FlipTile(tile, false, true);
-							byte[] tilehv = FlipTile(tileh, false, true);
-							for (int i = 0; i < tiles.Count; i++)
-							{
-								if (tiles[i].FastArrayEqual(tile))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tileh))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.XFlip = true;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tilev))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.YFlip = true;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tilehv))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.XFlip = true;
-									map.YFlip = true;
-									break;
-								}
-							}
-						}
-						if (!match)
-						{
-							tiles.Add(tile);
-							result.Art.Add(tile);
-							map.Tile = (ushort)(tiles.Count - 1);
-						}
-						result.Mappings[x, y] = map;
-						updateProgress?.Invoke();
-					}
-			}
-			else
-			{
-				for (int y = 0; y < h; y++)
-					for (int x = 0; x < w; x++)
-					{
-						PatternIndex map = new PatternIndex() { Priority = priority[x, y * 2] };
-						byte[] tile = BmpToTileInterlaced(new BitmapInfo(bmpi, x * 8, y * 16, 8, 16), forcepal, out int pal);
-						map.Palette = (byte)pal;
-						bool match = false;
-						if (optimize)
-						{
-							byte[] tileh = FlipTileInterlaced(tile, true, false);
-							byte[] tilev = FlipTileInterlaced(tile, false, true);
-							byte[] tilehv = FlipTileInterlaced(tileh, false, true);
-							for (int i = 0; i < tiles.Count; i++)
-							{
-								if (tiles[i].FastArrayEqual(tile))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tileh))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.XFlip = true;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tilev))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.YFlip = true;
-									break;
-								}
-								if (tiles[i].FastArrayEqual(tilehv))
-								{
-									match = true;
-									map.Tile = (ushort)i;
-									map.XFlip = true;
-									map.YFlip = true;
-									break;
-								}
-							}
-						}
-
-						if (!match)
-						{
-							tiles.Add(tile);
-							byte[] t1 = new byte[32];
-							Array.Copy(tile, 0, t1, 0, 32);
-							result.Art.Add(t1);
-							byte[] t2 = new byte[32];
-							Array.Copy(tile, 32, t2, 0, 32);
-							result.Art.Add(t2);
-							map.Tile = (ushort)((tiles.Count - 1) * 2);
-						}
-						result.Mappings[x, y * 2] = map;
-						result.Mappings[x, y * 2 + 1] = map.Clone();
-						result.Mappings[x, y * 2 + 1].Tile ^= 1;
-						updateProgress?.Invoke();
-					}
-			}
-			return result;
-		}
-
-		public static byte[] BmpToTile(BitmapInfo bmp, byte? forcepal, out int palette)
-		{
-			BitmapBits bmpbits = new BitmapBits(8, 8);
+			BitmapBits bmpbits = new BitmapBits(16, 16);
 			switch (bmp.PixelFormat)
 			{
 				case PixelFormat.Format1bppIndexed:
 					LoadBitmap1BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					palette = forcepal ?? 0;
-					return bmpbits.ToTile();
+					if (forcepal.HasValue)
+						bmpbits.IncrementIndexes(forcepal.Value * 16);
+					break;
 				case PixelFormat.Format32bppArgb:
-					Color[,] pixels = new Color[8, 8];
-					for (int y = 0; y < bmp.Height; y++)
-					{
-						int srcaddr = y * Math.Abs(bmp.Stride);
-						for (int x = 0; x < bmp.Width; x++)
-							pixels[x, y] = Color.FromArgb(BitConverter.ToInt32(bmp.Pixels, srcaddr + (x * 4)));
-					}
-					palette = forcepal ?? 0;
-					Color[] newpal = new Color[16];
-					if (!forcepal.HasValue)
-					{
-						long mindist = long.MaxValue;
-						for (int i = 0; i < 4; i++)
-						{
-							for (int j = 0; j < 16; j++)
-								newpal[j] = PaletteToColor(i, j, false);
-							long totdist = 0;
-							for (int y = 0; y < 8; y++)
-								for (int x = 0; x < 8; x++)
-									if (pixels[x, y].A >= 128)
-									{
-										pixels[x, y].FindNearestMatch(out int dist, newpal);
-										totdist += dist;
-									}
-							if (totdist < mindist)
-							{
-								palette = i;
-								mindist = totdist;
-							}
-						}
-					}
-					for (int j = 0; j < 16; j++)
-						newpal[j] = PaletteToColor(palette, j, false);
-					for (int y = 0; y < 8; y++)
-						for (int x = 0; x < 8; x++)
-							if (pixels[x, y].A >= 128)
-								bmpbits[x, y] = (byte)Array.IndexOf(newpal, pixels[x, y].FindNearestMatch(newpal));
+					LoadBitmap32BppArgb(bmpbits, bmp.Pixels, bmp.Stride, NewPalette);
 					break;
 				case PixelFormat.Format4bppIndexed:
 					LoadBitmap4BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					palette = forcepal ?? 0;
+					if (forcepal.HasValue)
+						bmpbits.IncrementIndexes(forcepal.Value * 16);
 					break;
 				case PixelFormat.Format8bppIndexed:
 					LoadBitmap8BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					int[] palcnt = new int[4];
-					for (int y = 0; y < 8; y++)
-						for (int x = 0; x < 8; x++)
-						{
-							if ((bmpbits[x, y] & 15) > 0)
-								palcnt[bmpbits[x, y] / 16]++;
-							bmpbits[x, y] &= 15;
-						}
-					palette = forcepal ?? 0;
-					if (!forcepal.HasValue)
-					{
-						if (palcnt[1] > palcnt[palette])
-							palette = 1;
-						if (palcnt[2] > palcnt[palette])
-							palette = 2;
-						if (palcnt[3] > palcnt[palette])
-							palette = 3;
-					}
 					break;
 				default:
 					throw new Exception("wat");
 			}
-			return bmpbits.ToTile();
-		}
-
-		public static byte[] BmpToTileInterlaced(BitmapInfo bmp, byte? forcepal, out int palette)
-		{
-			BitmapBits bmpbits = new BitmapBits(8, 16);
-			switch (bmp.PixelFormat)
-			{
-				case PixelFormat.Format1bppIndexed:
-					LoadBitmap1BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					palette = forcepal ?? 0;
-					return bmpbits.ToTile();
-				case PixelFormat.Format32bppArgb:
-					Color[,] pixels = new Color[8, 16];
-					for (int y = 0; y < bmp.Height; y++)
-					{
-						int srcaddr = y * Math.Abs(bmp.Stride);
-						for (int x = 0; x < bmp.Width; x++)
-							pixels[x, y] = Color.FromArgb(BitConverter.ToInt32(bmp.Pixels, srcaddr + (x * 4)));
-					}
-					palette = forcepal ?? 0;
-					Color[] newpal = new Color[16];
-					if (!forcepal.HasValue)
-					{
-						int mindist = int.MaxValue;
-						for (int i = 0; i < 4; i++)
-						{
-							for (int j = 0; j < 16; j++)
-								newpal[j] = PaletteToColor(i, j, false);
-							int totdist = 0;
-							for (int y = 0; y < 16; y++)
-								for (int x = 0; x < 8; x++)
-									if (pixels[x, y].A >= 128)
-									{
-										pixels[x, y].FindNearestMatch(out int dist, newpal);
-										totdist += dist;
-									}
-							if (totdist < mindist)
-							{
-								palette = i;
-								mindist = totdist;
-							}
-						}
-					}
-					for (int j = 0; j < 16; j++)
-						newpal[j] = PaletteToColor(palette, j, false);
-					for (int y = 0; y < 16; y++)
-						for (int x = 0; x < 8; x++)
-							if (pixels[x, y].A >= 128)
-								bmpbits[x, y] = (byte)Array.IndexOf(newpal, pixels[x, y].FindNearestMatch(newpal));
-					break;
-				case PixelFormat.Format4bppIndexed:
-					LoadBitmap4BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					palette = forcepal ?? 0;
-					break;
-				case PixelFormat.Format8bppIndexed:
-					LoadBitmap8BppIndexed(bmpbits, bmp.Pixels, bmp.Stride);
-					int[] palcnt = new int[4];
-					for (int y = 0; y < 16; y++)
-						for (int x = 0; x < 8; x++)
-						{
-							if ((bmpbits[x, y] & 15) > 0)
-								palcnt[bmpbits[x, y] / 16]++;
-							bmpbits[x, y] &= 15;
-						}
-					palette = forcepal ?? 0;
-					if (!forcepal.HasValue)
-					{
-						if (palcnt[1] > palcnt[palette])
-							palette = 1;
-						if (palcnt[2] > palcnt[palette])
-							palette = 2;
-						if (palcnt[3] > palcnt[palette])
-							palette = 3;
-					}
-					break;
-				default:
-					throw new Exception("wat");
-			}
-			return bmpbits.ToTileInterlaced();
+			return bmpbits;
 		}
 
 		public static ColInfo[,] GetColMap(Bitmap bmp)
@@ -2811,79 +894,125 @@ namespace SonicRetro.SonLVL.API
 				for (int bx = 0; bx < bmpbits.Width / 16; bx++)
 				{
 					ushort[] coltypes = new ushort[3];
-					sbyte[] heightmap = new sbyte[16];
-					Point? start = null;
-					Point? end = null;
-					bool inverted = false;
+					TileConfig.CollisionMask mask = new TileConfig.CollisionMask();
+					int fcnt = 0;
+					int ccnt = 0;
 					for (int x = 0; x < 16; x++)
 					{
-						if (bmpbits[bx * 16 + x, by * 16 + 15] != 0) // solidity starts at bottom
+						if (bmpbits[bx * 16 + x, by * 16] != 0)
 						{
-							for (int y = 15; y >= 0; y--)
+							if (bmpbits[bx * 16 + x, by * 16 + 15] == 0)
+								++ccnt;
+						}
+						else if (bmpbits[bx * 16 + x, by * 16 + 15] != 0)
+							++fcnt;
+					}
+					if (ccnt > fcnt)
+						mask.flipY = true;
+					Point? start = null;
+					Point? end = null;
+					for (int x = 0; x < 16; x++)
+					{
+						if (mask.flipY)
+						{
+							for (int y = 0; y < 16; y++)
+							{
 								if (bmpbits[bx * 16 + x, by * 16 + y] != 0)
+								{
 									coltypes[bmpbits[bx * 16 + x, by * 16 + y] - 1]++;
+									mask.heightMasks[x].solid = true;
+									mask.heightMasks[x].height = (byte)y;
+								}
 								else
 								{
-									if (!start.HasValue)
-										start = new Point(x, y + 1);
-									end = new Point(x, y + 1);
-									heightmap[x] = (sbyte)(15 - y);
+									if (mask.heightMasks[x].solid)
+									{
+										if (!start.HasValue)
+											start = new Point(x, y - 1);
+										end = new Point(x, y - 1);
+									}
 									break;
 								}
-							if (heightmap[x] == 0)
+							}
+							if (mask.heightMasks[x].solid && mask.heightMasks[x].height == 15)
+							{
+								if (!start.HasValue || start.Value.Y == 15)
+									start = new Point(x, 15);
+								if (!end.HasValue || end.Value.Y != 15)
+									end = new Point(x, 15);
+							}
+						}
+						else
+						{
+							for (int y = 15; y >= 0; y--)
+							{
+								if (bmpbits[bx * 16 + x, by * 16 + y] != 0)
+								{
+									coltypes[bmpbits[bx * 16 + x, by * 16 + y] - 1]++;
+									mask.heightMasks[x].solid = true;
+									mask.heightMasks[x].height = (byte)y;
+								}
+								else
+								{
+									if (mask.heightMasks[x].solid)
+									{
+										if (!start.HasValue)
+											start = new Point(x, y + 1);
+										end = new Point(x, y + 1);
+									}
+									break;
+								}
+							}
+							if (mask.heightMasks[x].solid && mask.heightMasks[x].height == 0)
 							{
 								if (!start.HasValue || start.Value.Y == 0)
 									start = new Point(x, 0);
 								if (!end.HasValue || end.Value.Y != 0)
 									end = new Point(x, 0);
-								heightmap[x] = 16;
 							}
 						}
-						else if (bmpbits[bx * 16 + x, by * 16] != 0) // solidity starts at top
-						{
-							inverted = true;
-							for (int y = 0; y < 16; y++)
-								if (bmpbits[bx * 16 + x, by * 16 + y] != 0)
-									coltypes[bmpbits[bx * 16 + x, by * 16 + y] - 1]++;
-								else
-								{
-									if (!start.HasValue)
-										start = new Point(x, y - 1);
-									end = new Point(x, y - 1);
-									heightmap[x] = (sbyte)-y;
-									break;
-								}
-						}
 					}
-					if (inverted)
-					{
-						if (start.HasValue && start.Value.Y == 0)
-							start = new Point(start.Value.X, 15);
-						if (end.HasValue && end.Value.Y == 0)
-							end = new Point(end.Value.X, 15);
-						for (int x = 0; x < 16; x++)
-							if (heightmap[x] == 16)
-								heightmap[x] = -16;
-					}
-					Solidity solid = Solidity.NotSolid;
-					byte angle = 0;
+					Tiles128x128.Block.Tile.Solidities solid = Tiles128x128.Block.Tile.Solidities.SolidNone;
 					if (start.HasValue)
 					{
-						solid = Solidity.TopSolid;
+						solid = Tiles128x128.Block.Tile.Solidities.SolidTop;
 						ushort max = coltypes[0];
 						if (coltypes[1] > max)
 						{
-							solid = Solidity.LRBSolid;
+							solid = Tiles128x128.Block.Tile.Solidities.SolidAllButTop;
 							max = coltypes[1];
 						}
 						if (coltypes[2] > max)
-							solid = Solidity.AllSolid;
-						if (start.Value.Y == end.Value.Y)
-							angle = 0xFF;
-						else
-							angle = (byte)((byte)(Math.Atan2(end.Value.Y - start.Value.Y, (end.Value.X - start.Value.X) * (inverted ? -1 : 1)) * (256 / (2 * Math.PI))) & 0xFC);
+							solid = Tiles128x128.Block.Tile.Solidities.SolidAll;
+						if (start.Value.Y != end.Value.Y)
+							if (mask.flipY)
+							{
+								mask.roofAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)) + 0x80);
+								switch (mask.roofAngle.CompareTo(0x80))
+								{
+									case -1:
+										mask.rWallAngle = mask.roofAngle;
+										break;
+									case 1:
+										mask.lWallAngle = mask.roofAngle;
+										break;
+								}
+							}
+							else
+							{
+								mask.floorAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)));
+								switch (mask.floorAngle.CompareTo(0x80))
+								{
+									case -1:
+										mask.rWallAngle = mask.floorAngle;
+										break;
+									case 1:
+										mask.lWallAngle = mask.floorAngle;
+										break;
+								}
+							}
 					}
-					result[bx, by] = new ColInfo(solid, heightmap, angle);
+					result[bx, by] = new ColInfo(solid, mask);
 				}
 			});
 			return result;
@@ -2900,16 +1029,16 @@ namespace SonicRetro.SonLVL.API
 			System.Runtime.InteropServices.Marshal.Copy(bmpd.Scan0, Bits, 0, Bits.Length);
 			bmp.UnlockBits(bmpd);
 			LoadBitmap32BppArgb(bmpbits, Bits, stride, new Color[] { Color.Black, Color.White });
-			int w = Math.Min(primap.GetLength(0), bmpbits.Width / 8);
-			int h = Math.Min(primap.GetLength(1), bmpbits.Height / 8);
+			int w = Math.Min(primap.GetLength(0), bmpbits.Width / 16);
+			int h = Math.Min(primap.GetLength(1), bmpbits.Height / 16);
 			Parallel.For(0, h, ty =>
 			{
 				for (int tx = 0; tx < w; tx++)
 				{
 					ushort[] cnt = new ushort[2];
-					for (int y = 0; y < 8; y++)
-						for (int x = 0; x < 8; x++)
-							cnt[bmpbits[(tx * 8) + x, (ty * 8) + y]]++;
+					for (int y = 0; y < 16; y++)
+						for (int x = 0; x < 16; x++)
+							cnt[bmpbits[(tx * 16) + x, (ty * 16) + y]]++;
 					primap[tx, ty] = cnt[0] < cnt[1];
 				}
 			});
@@ -2917,67 +1046,64 @@ namespace SonicRetro.SonLVL.API
 
 		private static void LoadBitmap1BppIndexed(BitmapBits bmp, byte[] Bits, int Stride)
 		{
+			int dstaddr = 0;
 			for (int y = 0; y < bmp.Height; y++)
 			{
 				int srcaddr = y * Math.Abs(Stride);
 				for (int x = 0; x < bmp.Width; x += 8)
 				{
-					bmp[x + 0, y] = (byte)((Bits[srcaddr + (x / 8)] >> 7) & 1);
-					bmp[x + 1, y] = (byte)((Bits[srcaddr + (x / 8)] >> 6) & 1);
-					bmp[x + 2, y] = (byte)((Bits[srcaddr + (x / 8)] >> 5) & 1);
-					bmp[x + 3, y] = (byte)((Bits[srcaddr + (x / 8)] >> 4) & 1);
-					bmp[x + 4, y] = (byte)((Bits[srcaddr + (x / 8)] >> 3) & 1);
-					bmp[x + 5, y] = (byte)((Bits[srcaddr + (x / 8)] >> 2) & 1);
-					bmp[x + 6, y] = (byte)((Bits[srcaddr + (x / 8)] >> 1) & 1);
-					bmp[x + 7, y] = (byte)(Bits[srcaddr + (x / 8)] & 1);
+					byte b = Bits[srcaddr++];
+					bmp.Bits[dstaddr++] = (byte)(b >> 7 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 6 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 5 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 4 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 3 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 2 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b >> 1 & 1);
+					bmp.Bits[dstaddr++] = (byte)(b & 1);
 				}
 			}
 		}
 
 		private static void LoadBitmap32BppArgb(BitmapBits bmp, byte[] Bits, int Stride, Color[] palette)
 		{
+			int dstaddr = 0;
 			for (int y = 0; y < bmp.Height; y++)
 			{
 				int srcaddr = y * Math.Abs(Stride);
 				for (int x = 0; x < bmp.Width; x++)
 				{
 					Color col = Color.FromArgb(BitConverter.ToInt32(Bits, srcaddr + (x * 4)));
-					bmp[x, y] = (byte)Array.IndexOf(palette, col.FindNearestMatch(palette));
-					if (col.A < 128)
-						bmp[x, y] = 0;
+					if (col.A >= 128)
+						bmp.Bits[dstaddr++] = (byte)col.FindNearestMatch(palette);
 				}
 			}
 		}
 
 		private static void LoadBitmap4BppIndexed(BitmapBits bmp, byte[] Bits, int Stride)
 		{
+			int dstaddr = 0;
 			for (int y = 0; y < bmp.Height; y++)
 			{
 				int srcaddr = y * Math.Abs(Stride);
 				for (int x = 0; x < bmp.Width; x += 2)
 				{
-					bmp[x, y] = (byte)(Bits[srcaddr + (x / 2)] >> 4);
-					bmp[x + 1, y] = (byte)(Bits[srcaddr + (x / 2)] & 0xF);
+					byte b = Bits[srcaddr++];
+					bmp.Bits[dstaddr++] = (byte)(b >> 4);
+					bmp.Bits[dstaddr++] = (byte)(b & 0xF);
 				}
 			}
 		}
 
 		private static void LoadBitmap8BppIndexed(BitmapBits bmp, byte[] Bits, int Stride)
 		{
+			int dstaddr = 0;
 			for (int y = 0; y < bmp.Height; y++)
 			{
 				int srcaddr = y * Math.Abs(Stride);
 				for (int x = 0; x < bmp.Width; x++)
-					bmp[x, y] = (byte)(Bits[srcaddr + x] & 0x3F);
+					bmp.Bits[dstaddr++] = Bits[srcaddr++];
 			}
-		}
-
-		public static void UpdateTileArray()
-		{
-			List<byte> tils = new List<byte>();
-			foreach (byte[] item in Tiles)
-				tils.AddRange(item);
-			TileArray = tils.ToArray();
 		}
 
 		public static void Log(params string[] message) { LogEvent(message); }
@@ -2987,238 +1113,429 @@ namespace SonicRetro.SonLVL.API
 			return bmp.ToBitmap(BmpPal);
 		}
 
-		public static void Pad<T>(ref T[] array, int multiple)
-		{
-			int off = array.Length % multiple;
-			if (off == 0) return;
-			Array.Resize(ref array, array.Length + (multiple - off));
-		}
-
 		public static Size FGSize { get { return new Size(FGWidth, FGHeight); } }
 
-		public static int FGWidth { get { return Layout.FGLayout.GetLength(0); } }
-		public static int FGHeight { get { return Layout.FGLayout.GetLength(1); } }
+		public static int FGWidth { get { return Scene.width; } }
+		public static int FGHeight { get { return Scene.height; } }
 
-		public static Size BGSize { get { return new Size(BGWidth, BGHeight); } }
+		public static readonly Indexer<int, Size> BGSize = new Indexer<int, Size>(ind => new Size(BGWidth[ind], BGHeight[ind]));
 
-		public static int BGWidth { get { return Layout.BGLayout.GetLength(0); } }
-		public static int BGHeight { get { return Layout.BGLayout.GetLength(1); } }
+		public static readonly Indexer<int, int> BGWidth = new Indexer<int, int>(ind => Background.layers[ind].width);
+		public static readonly Indexer<int, int> BGHeight = new Indexer<int, int>(ind => Background.layers[ind].height);
 
 		public static void ResizeFG(Size newSize) { ResizeFG(newSize.Width, newSize.Height); }
 
 		public static void ResizeFG(int width, int height)
 		{
-			ushort[,] newFG = new ushort[width, height];
-			bool[,] newFGLoop = Layout.FGLoop != null ? new bool[width, height] : null;
-			Size oldsize = FGSize;
-			for (int y = 0; y < Math.Min(height, oldsize.Height); y++)
-				for (int x = 0; x < Math.Min(width, oldsize.Width); x++)
-				{
-					newFG[x, y] = Layout.FGLayout[x, y];
-					if (newFGLoop != null)
-						newFGLoop[x, y] = Layout.FGLoop[x, y];
-				}
-			Layout.FGLayout = newFG;
-			Layout.FGLoop = newFGLoop;
+			Scene.resize((byte)width, (byte)height);
 		}
 
-		public static void ResizeBG(Size newSize) { ResizeBG(newSize.Width, newSize.Height); }
+		public static void ResizeBG(int layer, Size newSize) { ResizeBG(layer, newSize.Width, newSize.Height); }
 
-		public static void ResizeBG(int width, int height)
+		public static void ResizeBG(int layer, int width, int height)
 		{
-			ushort[,] newBG = new ushort[width, height];
-			bool[,] newBGLoop = Layout.BGLoop != null ? new bool[width, height] : null;
-			Size oldsize = BGSize;
-			for (int y = 0; y < Math.Min(height, oldsize.Height); y++)
-				for (int x = 0; x < Math.Min(width, oldsize.Width); x++)
-				{
-					newBG[x, y] = Layout.BGLayout[x, y];
-					if (newBGLoop != null)
-						newBGLoop[x, y] = Layout.BGLoop[x, y];
-				}
-			Layout.BGLayout = newBG;
-			Layout.BGLoop = newBGLoop;
+			Background.layers[layer].resize((byte)width, (byte)height);
 		}
 
-		public static int GetBlockMax()
-		{
-			int blockmax = 0x300;
-			if (Game.BlockMax.HasValue)
-				blockmax = Game.BlockMax.Value;
-			return blockmax;
-		}
-
-		public static int GetChunkMax()
-		{
-			int chunkmax = 0x100;
-			if (Game.ChunkMax.HasValue)
-				chunkmax = Game.ChunkMax.Value;
-			return chunkmax;
-		}
-
-		public static byte GetColInd1(int index)
-		{
-			if (index >= ColInds1.Count)
-				return 0;
-			return ColInds1[index];
-		}
-
-		public static byte GetColInd2(int index)
-		{
-			if (index >= ColInds2.Count)
-				return 0;
-			return ColInds2[index];
-		}
-
-		public static byte[] FlipTile(byte[] tile, bool xflip, bool yflip)
-		{
-			int mode = (xflip ? 1 : 0) | (yflip ? 2 : 0);
-			switch (mode)
-			{
-				default:
-					return tile;
-				case 1:
-					byte[] tileh = new byte[32];
-					for (int ty = 0; ty < 8; ty++)
-						for (int tx = 0; tx < 4; tx++)
-						{
-							byte px = tile[(ty * 4) + tx];
-							tileh[(ty * 4) + (3 - tx)] = (byte)((px >> 4) | (px << 4));
-						}
-					return tileh;
-				case 2:
-					byte[] tilev = new byte[32];
-					for (int ty = 0; ty < 8; ty++)
-						Array.Copy(tile, ty * 4, tilev, (7 - ty) * 4, 4);
-					return tilev;
-				case 3:
-					byte[] tilehv = new byte[32];
-					for (int ty = 0; ty < 8; ty++)
-						for (int tx = 0; tx < 4; tx++)
-						{
-							byte px = tile[(ty * 4) + tx];
-							tilehv[((7 - ty) * 4) + (3 - tx)] = (byte)((px >> 4) | (px << 4));
-						}
-					return tilehv;
-			}
-		}
-
-		public static byte[] FlipTileInterlaced(byte[] tile, bool xflip, bool yflip)
-		{
-			int mode = (xflip ? 1 : 0) | (yflip ? 2 : 0);
-			switch (mode)
-			{
-				default:
-					return tile;
-				case 1:
-					byte[] tileh = new byte[64];
-					for (int ty = 0; ty < 16; ty++)
-						for (int tx = 0; tx < 4; tx++)
-						{
-							byte px = tile[(ty * 4) + tx];
-							tileh[(ty * 4) + (3 - tx)] = (byte)((px >> 4) | (px << 4));
-						}
-					return tileh;
-				case 2:
-					byte[] tilev = new byte[64];
-					for (int ty = 0; ty < 16; ty++)
-						Array.Copy(tile, ty * 4, tilev, (15 - ty) * 4, 4);
-					return tilev;
-				case 3:
-					byte[] tilehv = new byte[64];
-					for (int ty = 0; ty < 16; ty++)
-						for (int tx = 0; tx < 4; tx++)
-						{
-							byte px = tile[(ty * 4) + tx];
-							tilehv[((15 - ty) * 4) + (3 - tx)] = (byte)((px >> 4) | (px << 4));
-						}
-					return tilehv;
-			}
-		}
-
-		public static void RemapLayouts(Action<ushort[,], int, int> func)
+		public static void RemapLayouts(Action<ushort[][], int, int> func)
 		{
 			for (int y = 0; y < FGHeight; y++)
 				for (int x = 0; x < FGWidth; x++)
-					func(Layout.FGLayout, x, y);
-			for (int y = 0; y < BGHeight; y++)
-				for (int x = 0; x < BGWidth; x++)
-					func(Layout.BGLayout, x, y);
-			foreach (var item in AdditionalLayouts.Values)
+					func(Scene.layout, x, y);
+			for (int i = 0; i < 8; i++)
+				for (int y = 0; y < BGHeight[i]; y++)
+					for (int x = 0; x < BGWidth[i]; x++)
+						func(Background.layers[i].layout, x, y);
+		}
+
+		public static Tiles128x128.Block Flip(this Tiles128x128.Block chunk, bool xflip, bool yflip)
+		{
+			Tiles128x128.Block result = new Tiles128x128.Block();
+			if (xflip)
 			{
-				if (item.Value.FGLayout != null)
-					for (int y = 0; y < item.Value.FGLayout.GetLength(1); y++)
-						for (int x = 0; x < item.Value.FGLayout.GetLength(0); x++)
-							func(item.Value.FGLayout, x, y);
-				if (item.Value.BGLayout != null)
-					for (int y = 0; y < item.Value.BGLayout.GetLength(1); y++)
-						for (int x = 0; x < item.Value.BGLayout.GetLength(0); x++)
-							func(item.Value.BGLayout, x, y);
+				if (yflip)
+				{
+					for (int y = 0; y < 8; y++)
+						for (int x = 0; x < 8; x++)
+						{
+							result.tiles[y][x] = chunk.tiles[7 - y][7 - x].Clone();
+							result.tiles[y][x].direction ^= Tiles128x128.Block.Tile.Directions.FlipXY;
+						}
+				}
+				else
+				{
+					for (int y = 0; y < 8; y++)
+						for (int x = 0; x < 8; x++)
+						{
+							result.tiles[y][x] = chunk.tiles[y][7 - x].Clone();
+							result.tiles[y][x].direction ^= Tiles128x128.Block.Tile.Directions.FlipX;
+						}
+				}
+			}
+			else if (yflip)
+			{
+				for (int y = 0; y < 8; y++)
+					for (int x = 0; x < 8; x++)
+					{
+						result.tiles[y][x] = chunk.tiles[7 - y][x].Clone();
+						result.tiles[y][x].direction ^= Tiles128x128.Block.Tile.Directions.FlipY;
+					}
+			}
+			else
+				result = chunk.Clone();
+			return result;
+		}
+
+		public static Tiles128x128.Block Clone(this Tiles128x128.Block src)
+		{
+			Tiles128x128.Block result = new Tiles128x128.Block();
+			for (int y = 0; y < 8; y++)
+				for (int x = 0; x < 8; x++)
+					result.tiles[y][x] = src.tiles[y][x].Clone();
+			return result;
+		}
+
+		public static bool Equal(this Tiles128x128.Block src, Tiles128x128.Block other)
+		{
+			for (int y = 0; y < 8; y++)
+				for (int x = 0; x < 8; x++)
+					if (!src.tiles[y][x].Equal(other.tiles[y][x]))
+						return false;
+			return true;
+		}
+
+		public static Tiles128x128.Block.Tile Clone(this Tiles128x128.Block.Tile src) => new Tiles128x128.Block.Tile()
+		{
+			direction = src.direction,
+			solidityA = src.solidityA,
+			solidityB = src.solidityB,
+			tileIndex = src.tileIndex,
+			visualPlane = src.visualPlane
+		};
+
+		public static bool Equal(this Tiles128x128.Block.Tile src, Tiles128x128.Block.Tile other)
+		{
+			return src.direction == other.direction
+				&& src.solidityA == other.solidityA
+				&& src.solidityB == other.solidityB
+				&& src.tileIndex == other.tileIndex
+				&& src.visualPlane == other.visualPlane;
+		}
+
+		public static bool HasFreeTiles()
+		{
+			return Enumerable.Range(0, NewTiles.Length).Except(NewChunks.chunkList.SelectMany(a => a.tiles.SelectMany(b => b).Select(c => c.tileIndex)).Select(a => (int)a))
+				.Any(c => NewTiles[c].Bits.FastArrayEqual(0));
+		}
+
+		public static bool HasFreeChunks()
+		{
+			return Enumerable.Range(0, NewChunks.chunkList.Length).Except(Scene.layout.SelectMany(a => a).Union(Background.layers.SelectMany(a => a.layout.SelectMany(b => b))).Select(a => (int)a))
+				.Any(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b =>
+				  b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.solidityA == Tiles128x128.Block.Tile.Solidities.SolidNone
+				  && b.solidityB == Tiles128x128.Block.Tile.Solidities.SolidNone && b.tileIndex == 0 && b.visualPlane == Tiles128x128.Block.Tile.VisualPlanes.Low
+			));
+		}
+
+		public static IEnumerable<ushort> GetFreeTiles()
+		{
+			return Enumerable.Range(0, NewTiles.Length).Select(a => (ushort)a).Except(NewChunks.chunkList.SelectMany(a => a.tiles.SelectMany(b => b).Select(c => c.tileIndex)))
+				.Where(c => NewTiles[c].Bits.FastArrayEqual(0));
+		}
+
+		public static IEnumerable<ushort> GetFreeChunks()
+		{
+			return Enumerable.Range(0, NewChunks.chunkList.Length).Select(a => (ushort)a).Except(Scene.layout.SelectMany(a => a).Union(Background.layers.SelectMany(a => a.layout.SelectMany(b => b))))
+				.Where(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b =>
+				  b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.solidityA == Tiles128x128.Block.Tile.Solidities.SolidNone
+				  && b.solidityB == Tiles128x128.Block.Tile.Solidities.SolidNone && b.tileIndex == 0 && b.visualPlane == Tiles128x128.Block.Tile.VisualPlanes.Low
+			));
+		}
+
+		public static void CalcAngles(this TileConfig.CollisionMask mask)
+		{
+			mask.floorAngle = 0;
+			mask.rWallAngle = 0x40;
+			mask.roofAngle = 0x80;
+			mask.lWallAngle = 0xC0;
+			Point? start = null;
+			Point? end = null;
+			for (int x = 0; x < 16; x++)
+			{
+				if (mask.heightMasks[x].solid)
+				{
+					if (!start.HasValue)
+						start = new Point(x, mask.heightMasks[x].height);
+					if (mask.flipY)
+					{
+						if (mask.heightMasks[x].height == 15 && start.Value.Y == 15)
+							start = new Point(x, 15);
+						if (!end.HasValue || end.Value.Y != 15)
+							end = new Point(x, mask.heightMasks[x].height);
+					}
+					else
+					{
+						if (mask.heightMasks[x].height == 0 && start.Value.Y == 0)
+							start = new Point(x, 0);
+						if (!end.HasValue || end.Value.Y != 0)
+							end = new Point(x, mask.heightMasks[x].height);
+					}
+				}
+			}
+			if (start.HasValue && start.Value.Y != end.Value.Y)
+				if (mask.flipY)
+				{
+					mask.roofAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)) + 0x80);
+					switch (mask.roofAngle.CompareTo(0x80))
+					{
+						case -1:
+							mask.rWallAngle = mask.roofAngle;
+							break;
+						case 1:
+							mask.lWallAngle = mask.roofAngle;
+							break;
+					}
+				}
+				else
+				{
+					mask.floorAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)));
+					switch (mask.floorAngle.CompareTo(0x80))
+					{
+						case -1:
+							mask.rWallAngle = mask.floorAngle;
+							break;
+						case 1:
+							mask.lWallAngle = mask.floorAngle;
+							break;
+					}
+				}
+		}
+
+		public static void Flip(this TileConfig.CollisionMask mask, bool xflip, bool yflip)
+		{
+			if (xflip)
+			{
+				Array.Reverse(mask.heightMasks);
+				if (yflip)
+				{
+					mask.flipY = !mask.flipY;
+					for (int i = 0; i < 16; i++)
+						if (mask.heightMasks[i].solid)
+							mask.heightMasks[i].height = (byte)(15 - mask.heightMasks[i].height);
+					if (!mask.flipY)
+					{
+						if (mask.roofAngle != 0x80)
+						{
+							mask.floorAngle = (byte)((mask.roofAngle + 0x80) & 0xFF);
+							switch (mask.floorAngle.CompareTo(0x80))
+							{
+								case -1:
+									mask.rWallAngle = mask.floorAngle;
+									mask.lWallAngle = 0xC0;
+									break;
+								case 1:
+									mask.lWallAngle = mask.floorAngle;
+									mask.rWallAngle = 0x40;
+									break;
+							}
+						}
+					}
+					else
+					{
+						if (mask.floorAngle != 0)
+						{
+							mask.roofAngle = (byte)((mask.floorAngle + 0x80) & 0xFF);
+							switch (mask.roofAngle.CompareTo(0x80))
+							{
+								case -1:
+									mask.rWallAngle = mask.roofAngle;
+									mask.lWallAngle = 0xC0;
+									break;
+								case 1:
+									mask.lWallAngle = mask.roofAngle;
+									mask.rWallAngle = 0x40;
+									break;
+							}
+						}
+					}
+				}
+				else if (mask.flipY)
+				{
+					if (mask.roofAngle != 0x80)
+					{
+						mask.roofAngle = (byte)(-mask.roofAngle & 0xFF);
+						switch (mask.roofAngle.CompareTo(0x80))
+						{
+							case -1:
+								mask.rWallAngle = mask.roofAngle;
+								mask.lWallAngle = 0xC0;
+								break;
+							case 1:
+								mask.lWallAngle = mask.roofAngle;
+								mask.rWallAngle = 0x40;
+								break;
+						}
+					}
+				}
+				else
+				{
+					if (mask.floorAngle != 0)
+					{
+						mask.floorAngle = (byte)(-mask.floorAngle & 0xFF);
+						switch (mask.floorAngle.CompareTo(0x80))
+						{
+							case -1:
+								mask.rWallAngle = mask.floorAngle;
+								mask.lWallAngle = 0xC0;
+								break;
+							case 1:
+								mask.lWallAngle = mask.floorAngle;
+								mask.rWallAngle = 0x40;
+								break;
+						}
+					}
+				}
+			}
+			else if (yflip)
+			{
+				mask.flipY = !mask.flipY;
+				for (int i = 0; i < 16; i++)
+					if (mask.heightMasks[i].solid)
+						mask.heightMasks[i].height = (byte)(15 - mask.heightMasks[i].height);
+				if (!mask.flipY)
+				{
+					if (mask.roofAngle != 0x80)
+					{
+						mask.floorAngle = (byte)((-(mask.roofAngle + 0x40) - 0x40) & 0xFF);
+						switch (mask.floorAngle.CompareTo(0x80))
+						{
+							case -1:
+								mask.rWallAngle = mask.floorAngle;
+								mask.lWallAngle = 0xC0;
+								break;
+							case 1:
+								mask.lWallAngle = mask.floorAngle;
+								mask.rWallAngle = 0x40;
+								break;
+						}
+					}
+				}
+				else
+				{
+					if (mask.floorAngle != 0)
+					{
+						mask.roofAngle = (byte)((-(mask.floorAngle + 0x40) - 0x40) & 0xFF);
+						switch (mask.roofAngle.CompareTo(0x80))
+						{
+							case -1:
+								mask.rWallAngle = mask.roofAngle;
+								mask.lWallAngle = 0xC0;
+								break;
+							case 1:
+								mask.lWallAngle = mask.roofAngle;
+								mask.rWallAngle = 0x40;
+								break;
+						}
+					}
+				}
 			}
 		}
-	}
 
-	public class LayoutData
-	{
-		public ushort[,] FGLayout;
-		public bool[,] FGLoop;
-		public ushort[,] BGLayout;
-		public bool[,] BGLoop;
+		public static TileConfig.CollisionMask Clone(this TileConfig.CollisionMask src)
+		{
+			TileConfig.CollisionMask result = new TileConfig.CollisionMask()
+			{
+				flags = src.flags,
+				flipY = src.flipY,
+				floorAngle = src.floorAngle,
+				rWallAngle = src.rWallAngle,
+				roofAngle = src.roofAngle,
+				lWallAngle = src.lWallAngle
+			};
+			for (int i = 0; i < 16; i++)
+				if (result.heightMasks[i].solid = src.heightMasks[i].solid)
+					result.heightMasks[i].height = src.heightMasks[i].height;
+			return result;
+		}
+
+		public static bool Equal(this TileConfig.CollisionMask src, TileConfig.CollisionMask other)
+		{
+			if (src.flags == other.flags
+				&& src.flipY == other.flipY
+				&& src.floorAngle == other.floorAngle
+				&& src.rWallAngle == other.rWallAngle
+				&& src.roofAngle == other.roofAngle
+				&& src.lWallAngle == other.lWallAngle)
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					if (src.heightMasks[i].solid != other.heightMasks[i].solid)
+						return false;
+					if (src.heightMasks[i].solid)
+						if (src.heightMasks[i].height != other.heightMasks[i].height)
+							return false;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		public static RSDKv3.Scene.Entity Clone(this RSDKv3.Scene.Entity src) => new RSDKv3.Scene.Entity(src.type, src.propertyValue, src.xpos, src.ypos);
+
+		public static RSDKv4.Scene.Entity Clone(this RSDKv4.Scene.Entity src) => new RSDKv4.Scene.Entity(src.type, src.propertyValue, src.xpos, src.ypos)
+		{
+			alpha = src.alpha,
+			animation = src.animation,
+			animationSpeed = src.animationSpeed,
+			direction = src.direction,
+			drawOrder = src.drawOrder,
+			frame = src.frame,
+			inkEffect = src.inkEffect,
+			priority = src.priority,
+			rotation = src.rotation,
+			scale = src.scale,
+			state = src.state,
+			value0 = src.value0,
+			value1 = src.value1,
+			value2 = src.value2,
+			value3 = src.value3
+		};
 	}
 
 	public enum EngineVersion
 	{
 		Invalid,
-		S1,
-		S2NA,
-		S2,
-		S3K,
-		SCD,
-		SCDPC,
-		SKC,
-		Chaotix,
-		Custom
-	}
-
-	public enum TimeZone
-	{
-		None,
-		Present,
-		Past,
-		Future
-	}
-
-	public enum MappingsFormat
-	{
-		Invalid,
-		Binary,
-		ASM,
-		Macro
+		V3,
+		V4
 	}
 
 	[Serializable]
 	public class ColInfo
 	{
-		public Solidity Solidity { get; private set; }
-		public sbyte[] HeightMap { get; private set; }
-		public byte Angle { get; private set; }
+		public Tiles128x128.Block.Tile.Solidities Solidity { get; }
+		public TileConfig.CollisionMask CollisionMask { get; }
 
-		public ColInfo(Solidity solidity, sbyte[] heightMap, byte angle)
+		public ColInfo()
+		{
+			Solidity = Tiles128x128.Block.Tile.Solidities.SolidNone;
+			CollisionMask = new TileConfig.CollisionMask();
+		}
+
+		public ColInfo(Tiles128x128.Block.Tile.Solidities solidity, TileConfig.CollisionMask mask)
 		{
 			Solidity = solidity;
-			HeightMap = heightMap;
-			Angle = angle;
+			CollisionMask = mask;
 		}
 	}
 
 	public class BitmapInfo
 	{
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public Size Size { get { return new Size(Width, Height); } }
-		public PixelFormat PixelFormat { get; private set; }
-		public int Stride { get; private set; }
-		public byte[] Pixels { get; private set; }
+		public int Width { get; }
+		public int Height { get; }
+		public Size Size => new Size(Width, Height);
+		public PixelFormat PixelFormat { get; }
+		public int Stride { get; }
+		public byte[] Pixels { get; }
 
 		public BitmapInfo(Bitmap bitmap)
 		{
@@ -3302,13 +1619,62 @@ namespace SonicRetro.SonLVL.API
 
 	public class ImportResult
 	{
-		public PatternIndex[,] Mappings { get; private set; }
-		public List<byte[]> Art { get; private set; }
+		public Tiles128x128.Block.Tile[,] Mappings { get; }
+		public List<BitmapBits> Art { get; }
+		public List<TileConfig.CollisionMask> Collision1 { get; }
+		public List<TileConfig.CollisionMask> Collision2 { get; }
 
-		public ImportResult(int width, int height)
+		public ImportResult(int width, int height, bool col1, bool col2)
 		{
-			Mappings = new PatternIndex[width, height];
-			Art = new List<byte[]>();
+			Mappings = new Tiles128x128.Block.Tile[width, height];
+			Art = new List<BitmapBits>();
+			if (col1)
+				Collision1 = new List<TileConfig.CollisionMask>();
+			if (col2)
+				Collision2 = new List<TileConfig.CollisionMask>();
+		}
+	}
+
+	[Serializable]
+	public class TileData : IEquatable<TileData>, ICloneable
+	{
+		public BitmapBits Tile { get; set; }
+		public TileConfig.CollisionMask Mask1 { get; set; }
+		public TileConfig.CollisionMask Mask2 { get; set; }
+
+		public TileData(BitmapBits tile, TileConfig.CollisionMask mask1, TileConfig.CollisionMask mask2)
+		{
+			Tile = tile;
+			Mask1 = mask1;
+			Mask2 = mask2;
+		}
+
+		public bool Equals(TileData other) => Tile.Bits.FastArrayEqual(other.Tile.Bits) && Mask1.Equal(other.Mask1) && Mask2.Equal(other.Mask2);
+
+		public TileData Clone() => new TileData(new BitmapBits(Tile), Mask1.Clone(), Mask2.Clone());
+
+		object ICloneable.Clone() => Clone();
+
+		public void Flip(bool xflip, bool yflip)
+		{
+			Tile.Flip(xflip, yflip);
+			Mask1.Flip(xflip, yflip);
+			Mask2.Flip(xflip, yflip);
+		}
+	}
+
+	public class Indexer<TIndex, TResult>
+	{
+		readonly Func<TIndex, TResult> func;
+
+		public Indexer(Func<TIndex, TResult> func)
+		{
+			this.func = func;
+		}
+
+		public TResult this[TIndex index]
+		{
+			get => func(index);
 		}
 	}
 }

@@ -14,7 +14,6 @@ namespace SonicRetro.SonLVL
 
 		[DefaultValue(true)]
 		public bool ShowHUD { get; set; }
-		public string Emulator { get; set; }
 		[IniCollection(IniCollectionMode.SingleLine, Format = "|")]
 		public List<string> MRUList { get; set; }
 		public bool ShowGrid { get; set; }
@@ -41,9 +40,6 @@ namespace SonicRetro.SonLVL
 		public bool TransparentBackgroundExport { get; set; }
 		[DefaultValue(true)]
 		public bool IncludeObjectsFG { get; set; }
-		public bool? IncludeObjectsFGExport { get { return null; } set { if (value.HasValue) IncludeObjectsFG = value.Value; } }
-		public bool HideDebugObjects { get; set; }
-		public bool? HideDebugObjectsExport { get { return null; } set { if (value.HasValue) HideDebugObjects = value.Value; } }
 		public bool UseHexadecimalIndexesExport { get; set; }
 		public bool ExportArtCollisionPriority { get; set; }
 		public bool ObjectsAboveHighPlane { get; set; }
@@ -54,7 +50,6 @@ namespace SonicRetro.SonLVL
 		public bool ViewHighPlane { get; set; }
 		public CollisionPath ViewCollision { get; set; }
 		public bool ViewAngles { get; set; }
-		public bool ViewAllTimeZones { get; set; }
 		[DefaultValue("1x")]
 		public string ZoomLevel { get; set; }
 		public Tab CurrentTab { get; set; }
@@ -68,8 +63,6 @@ namespace SonicRetro.SonLVL
 		[DefaultValue(true)]
 		public bool EnableDraggingTiles { get; set; }
 		[DefaultValue(true)]
-		public bool EnableDraggingBlocks { get; set; }
-		[DefaultValue(true)]
 		public bool EnableDraggingChunks { get; set; }
 
 		public static Settings Load()
@@ -80,27 +73,18 @@ namespace SonicRetro.SonLVL
 			else
 			{
 				Settings result = new Settings();
-				// Import old style settings
-				// Any new settings should not be added to the old settings class, and should have defaults applied here.
-				Properties.Settings oldset = Properties.Settings.Default;
-				result.ShowHUD = oldset.ShowHUD;
-				result.Emulator = oldset.Emulator;
+				result.ShowHUD = true;
 				result.MRUList = new List<string>();
-				if (oldset.MRUList != null)
-					foreach (string item in oldset.MRUList)
-						if (!string.IsNullOrEmpty(item))
-							result.MRUList.Add(item);
-				result.ShowGrid = oldset.ShowGrid;
-				result.GridColor = oldset.GridColor;
-				result.Username = oldset.Username;
-				result.IncludeObjectsInForegroundSelection = oldset.IncludeObjectsInForegroundSelection;
+				result.ShowGrid = false;
+				result.GridColor = Color.Red;
+				result.Username = null;
+				result.IncludeObjectsInForegroundSelection = false;
 				result.TransparentBackgroundExport = true;
 				result.ViewLowPlane = result.ViewHighPlane = true;
 				result.ZoomLevel = "1x";
 				result.ShowMenu = true;
 				result.EnableDraggingPalette = true;
 				result.EnableDraggingTiles = true;
-				result.EnableDraggingBlocks = true;
 				result.EnableDraggingChunks = true;
 				return result;
 			}
@@ -124,13 +108,13 @@ namespace SonicRetro.SonLVL
 		Objects,
 		Foreground,
 		Background,
-		Art
+		Art,
+		Palette
 	}
 
 	public enum ArtTab
 	{
 		Chunks,
-		Blocks,
 		Tiles,
 		Solids
 	}

@@ -21,8 +21,8 @@ namespace ObjectLayoutDiff
 				EngineVersion format = (EngineVersion)Enum.Parse(typeof(EngineVersion), args[1]);
 				switch (format)
 				{
-					case EngineVersion.S1:
-					case EngineVersion.SCD:
+					case EngineVersion.V4:
+					case EngineVersion.V3:
 					case EngineVersion.S2:
 					case EngineVersion.S2NA:
 					case EngineVersion.S3K:
@@ -71,7 +71,7 @@ namespace ObjectLayoutDiff
 						Type objtype = null;
 						switch (format)
 						{
-							case EngineVersion.S1:
+							case EngineVersion.V4:
 								objtype = typeof(S1ObjectEntry);
 								break;
 							case EngineVersion.S2:
@@ -84,7 +84,7 @@ namespace ObjectLayoutDiff
 							case EngineVersion.SKC:
 								objtype = typeof(S3KObjectEntry);
 								break;
-							case EngineVersion.SCD:
+							case EngineVersion.V3:
 							case EngineVersion.SCDPC:
 								objtype = typeof(SCDObjectEntry);
 								break;
@@ -116,7 +116,7 @@ namespace ObjectLayoutDiff
 							tmp.AddRange(obj.GetBytes());
 						switch (format)
 						{
-							case EngineVersion.S1:
+							case EngineVersion.V4:
 								tmp.AddRange(new byte[] { 0xFF, 0xFF });
 								while (tmp.Count % S1ObjectEntry.Size > 0)
 									tmp.Add(0);
@@ -137,7 +137,7 @@ namespace ObjectLayoutDiff
 								while (tmp.Count % S3KObjectEntry.Size > 0)
 									tmp.Add(0);
 								break;
-							case EngineVersion.SCD:
+							case EngineVersion.V3:
 							case EngineVersion.SCDPC:
 								tmp.Add(0xFF);
 								while (tmp.Count % SCDObjectEntry.Size > 0)
@@ -160,7 +160,7 @@ namespace ObjectLayoutDiff
 			List<ObjectEntry> result = new List<ObjectEntry>();
 			switch (format)
 			{
-				case EngineVersion.S1:
+				case EngineVersion.V4:
 					for (int oa = 0; oa < file.Length; oa += S1ObjectEntry.Size)
 					{
 						if (ByteConverter.ToUInt16(file, oa) == 0xFFFF) break;
@@ -189,7 +189,7 @@ namespace ObjectLayoutDiff
 						result.Add(new S3KObjectEntry(file, oa));
 					}
 					break;
-				case EngineVersion.SCD:
+				case EngineVersion.V3:
 				case EngineVersion.SCDPC:
 					for (int oa = 0; oa < file.Length; oa += SCDObjectEntry.Size)
 					{

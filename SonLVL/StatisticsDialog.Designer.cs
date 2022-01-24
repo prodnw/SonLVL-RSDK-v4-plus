@@ -37,24 +37,14 @@
 			this.listView2 = new System.Windows.Forms.ListView();
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.listView3 = new System.Windows.Forms.ListView();
-			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.listView4 = new System.Windows.Forms.ListView();
 			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.listView5 = new System.Windows.Forms.ListView();
-			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
-			this.tabPage3.SuspendLayout();
 			this.tabPage4.SuspendLayout();
-			this.tabPage5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -65,6 +55,7 @@
 			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView1.FullRowSelect = true;
 			this.listView1.GridLines = true;
+			this.listView1.HideSelection = false;
 			this.listView1.LabelWrap = false;
 			this.listView1.Location = new System.Drawing.Point(3, 3);
 			this.listView1.Name = "listView1";
@@ -86,9 +77,7 @@
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Controls.Add(this.tabPage4);
-			this.tabControl1.Controls.Add(this.tabPage5);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -126,6 +115,7 @@
 			this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView2.FullRowSelect = true;
 			this.listView2.GridLines = true;
+			this.listView2.HideSelection = false;
 			this.listView2.LabelWrap = false;
 			this.listView2.Location = new System.Drawing.Point(3, 3);
 			this.listView2.Name = "listView2";
@@ -142,42 +132,6 @@
 			// columnHeader4
 			// 
 			this.columnHeader4.Text = "Count";
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Controls.Add(this.listView3);
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(276, 236);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Blocks";
-			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
-			// listView3
-			// 
-			this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6});
-			this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView3.FullRowSelect = true;
-			this.listView3.GridLines = true;
-			this.listView3.LabelWrap = false;
-			this.listView3.Location = new System.Drawing.Point(3, 3);
-			this.listView3.Name = "listView3";
-			this.listView3.Size = new System.Drawing.Size(270, 230);
-			this.listView3.TabIndex = 1;
-			this.listView3.UseCompatibleStateImageBehavior = false;
-			this.listView3.View = System.Windows.Forms.View.Details;
-			this.listView3.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
-			// 
-			// columnHeader5
-			// 
-			this.columnHeader5.Text = "ID";
-			// 
-			// columnHeader6
-			// 
-			this.columnHeader6.Text = "Count";
 			// 
 			// tabPage4
 			// 
@@ -198,6 +152,7 @@
 			this.listView4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView4.FullRowSelect = true;
 			this.listView4.GridLines = true;
+			this.listView4.HideSelection = false;
 			this.listView4.LabelWrap = false;
 			this.listView4.Location = new System.Drawing.Point(3, 3);
 			this.listView4.Name = "listView4";
@@ -215,42 +170,6 @@
 			// 
 			this.columnHeader8.Text = "Count";
 			// 
-			// tabPage5
-			// 
-			this.tabPage5.Controls.Add(this.listView5);
-			this.tabPage5.Location = new System.Drawing.Point(4, 22);
-			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(276, 236);
-			this.tabPage5.TabIndex = 4;
-			this.tabPage5.Text = "Solids";
-			this.tabPage5.UseVisualStyleBackColor = true;
-			// 
-			// listView5
-			// 
-			this.listView5.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader9,
-            this.columnHeader10});
-			this.listView5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView5.FullRowSelect = true;
-			this.listView5.GridLines = true;
-			this.listView5.LabelWrap = false;
-			this.listView5.Location = new System.Drawing.Point(3, 3);
-			this.listView5.Name = "listView5";
-			this.listView5.Size = new System.Drawing.Size(270, 230);
-			this.listView5.TabIndex = 1;
-			this.listView5.UseCompatibleStateImageBehavior = false;
-			this.listView5.View = System.Windows.Forms.View.Details;
-			this.listView5.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
-			// 
-			// columnHeader9
-			// 
-			this.columnHeader9.Text = "ID";
-			// 
-			// columnHeader10
-			// 
-			this.columnHeader10.Text = "Count";
-			// 
 			// StatisticsDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -266,9 +185,7 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
-			this.tabPage5.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -284,17 +201,9 @@
 		private System.Windows.Forms.ListView listView2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
-		private System.Windows.Forms.TabPage tabPage3;
-		private System.Windows.Forms.ListView listView3;
-		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private System.Windows.Forms.ColumnHeader columnHeader6;
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.ListView listView4;
 		private System.Windows.Forms.ColumnHeader columnHeader7;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
-		private System.Windows.Forms.TabPage tabPage5;
-		private System.Windows.Forms.ListView listView5;
-		private System.Windows.Forms.ColumnHeader columnHeader9;
-		private System.Windows.Forms.ColumnHeader columnHeader10;
 	}
 }

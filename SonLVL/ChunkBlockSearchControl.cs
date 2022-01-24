@@ -19,23 +19,10 @@ namespace SonicRetro.SonLVL
 		public void UpdateStuff()
 		{
 			initializing = true;
-			switch (LevelData.Level.ChunkFormat)
-			{
-				case EngineVersion.S2NA:
-				case EngineVersion.S2:
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					solidity2.Visible = true;
-					break;
-				default:
-					solidity2.SelectedIndex = 0;
-					solidity2.Visible = false;
-					break;
-			}
-			block.Maximum = Math.Max(LevelData.GetBlockMax(), LevelData.Blocks.Count) - 1;
-			blockList.Images = LevelData.CompBlockBmps;
+			block.Maximum = LevelData.NewTiles.Length - 1;
+			blockList.Images = LevelData.NewTileBmps;
 			blockList.ChangeSize();
-			blockList.SelectedIndex = block.Value >= LevelData.Blocks.Count ? -1 : (int)block.Value;
+			blockList.SelectedIndex = block.Value >= LevelData.NewTiles.Length ? -1 : (int)block.Value;
 			initializing = false;
 		}
 
@@ -44,7 +31,7 @@ namespace SonicRetro.SonLVL
 			if (!initializing)
 			{
 				initializing = true;
-				blockList.SelectedIndex = block.Value >= LevelData.Blocks.Count ? -1 : (int)block.Value;
+				blockList.SelectedIndex = block.Value >= LevelData.NewTiles.Length ? -1 : (int)block.Value;
 				initializing = false;
 			}
 		}
@@ -85,26 +72,38 @@ namespace SonicRetro.SonLVL
 		}
 
 		[Browsable(false)]
-		public Solidity? Solidity1
+		public RSDKv3_4.Tiles128x128.Block.Tile.Solidities? Solidity1
 		{
 			get
 			{
 				if (solidity1.SelectedIndex == 0)
 					return null;
 				else
-					return (Solidity)(solidity1.SelectedIndex - 1);
+					return (RSDKv3_4.Tiles128x128.Block.Tile.Solidities)(solidity1.SelectedIndex - 1);
 			}
 		}
 
 		[Browsable(false)]
-		public Solidity? Solidity2
+		public RSDKv3_4.Tiles128x128.Block.Tile.Solidities? Solidity2
 		{
 			get
 			{
 				if (solidity2.SelectedIndex == 0)
 					return null;
 				else
-					return (Solidity)(solidity2.SelectedIndex - 1);
+					return (RSDKv3_4.Tiles128x128.Block.Tile.Solidities)(solidity2.SelectedIndex - 1);
+			}
+		}
+
+		[Browsable(false)]
+		public RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes? Plane
+		{
+			get
+			{
+				if (highPlane.CheckState == CheckState.Indeterminate)
+					return null;
+				else
+					return highPlane.Checked ? RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High : RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low;
 			}
 		}
 

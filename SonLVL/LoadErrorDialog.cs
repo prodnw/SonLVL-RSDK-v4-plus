@@ -20,7 +20,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void reportButton_Click(object sender, EventArgs e)
 		{
-			using (API.BugReportDialog dlg = new API.BugReportDialog("SonLVL", string.Join(Environment.NewLine, MainForm.Instance.LogFile.ToArray())))
+			using (API.BugReportDialog dlg = new API.BugReportDialog("SonLVL-RSDK", string.Join(Environment.NewLine, MainForm.Instance.LogFile.ToArray())))
 				dlg.ShowDialog(this);
 			Close();
 		}

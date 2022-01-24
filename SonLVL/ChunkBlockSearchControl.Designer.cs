@@ -36,6 +36,7 @@
 			this.blockList = new SonicRetro.SonLVL.API.TileList();
 			this.block = new System.Windows.Forms.NumericUpDown();
 			this.searchBlock = new System.Windows.Forms.CheckBox();
+			this.highPlane = new System.Windows.Forms.CheckBox();
 			groupBox1 = new System.Windows.Forms.GroupBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.block)).BeginInit();
@@ -61,10 +62,10 @@
 			this.solidity2.FormattingEnabled = true;
 			this.solidity2.Items.AddRange(new object[] {
             "N/A",
-            "Not Solid",
+            "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "All Solid"});
+            "Not Solid"});
 			this.solidity2.Location = new System.Drawing.Point(6, 46);
 			this.solidity2.Name = "solidity2";
 			this.solidity2.Size = new System.Drawing.Size(121, 21);
@@ -76,10 +77,10 @@
 			this.solidity1.FormattingEnabled = true;
 			this.solidity1.Items.AddRange(new object[] {
             "N/A",
-            "Not Solid",
+            "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "All Solid"});
+            "Not Solid"});
 			this.solidity1.Location = new System.Drawing.Point(6, 19);
 			this.solidity1.Name = "solidity1";
 			this.solidity1.Size = new System.Drawing.Size(121, 21);
@@ -120,18 +121,18 @@
 			this.blockList.ImageHeight = 64;
 			this.blockList.ImageSize = 64;
 			this.blockList.ImageWidth = 64;
-			this.blockList.Location = new System.Drawing.Point(3, 141);
+			this.blockList.Location = new System.Drawing.Point(3, 164);
 			this.blockList.Name = "blockList";
 			this.blockList.ScrollValue = 0;
 			this.blockList.SelectedIndex = -1;
-			this.blockList.Size = new System.Drawing.Size(138, 140);
+			this.blockList.Size = new System.Drawing.Size(138, 137);
 			this.blockList.TabIndex = 3;
 			this.blockList.SelectedIndexChanged += new System.EventHandler(this.blockList_SelectedIndexChanged);
 			// 
 			// block
 			// 
 			this.block.Hexadecimal = true;
-			this.block.Location = new System.Drawing.Point(62, 115);
+			this.block.Location = new System.Drawing.Point(65, 138);
 			this.block.Maximum = new decimal(new int[] {
             2047,
             0,
@@ -147,7 +148,7 @@
 			this.searchBlock.AutoSize = true;
 			this.searchBlock.Checked = true;
 			this.searchBlock.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.searchBlock.Location = new System.Drawing.Point(0, 116);
+			this.searchBlock.Location = new System.Drawing.Point(3, 139);
 			this.searchBlock.Name = "searchBlock";
 			this.searchBlock.Size = new System.Drawing.Size(56, 17);
 			this.searchBlock.TabIndex = 11;
@@ -155,10 +156,24 @@
 			this.searchBlock.UseVisualStyleBackColor = true;
 			this.searchBlock.CheckedChanged += new System.EventHandler(this.searchBlock_CheckedChanged);
 			// 
+			// highPlane
+			// 
+			this.highPlane.AutoSize = true;
+			this.highPlane.Checked = true;
+			this.highPlane.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+			this.highPlane.Location = new System.Drawing.Point(3, 115);
+			this.highPlane.Name = "highPlane";
+			this.highPlane.Size = new System.Drawing.Size(78, 17);
+			this.highPlane.TabIndex = 12;
+			this.highPlane.Text = "High Plane";
+			this.highPlane.ThreeState = true;
+			this.highPlane.UseVisualStyleBackColor = true;
+			// 
 			// ChunkBlockSearchControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.highPlane);
 			this.Controls.Add(this.searchBlock);
 			this.Controls.Add(this.block);
 			this.Controls.Add(this.blockList);
@@ -166,7 +181,7 @@
 			this.Controls.Add(this.yFlip);
 			this.Controls.Add(this.xFlip);
 			this.Name = "ChunkBlockSearchControl";
-			this.Size = new System.Drawing.Size(144, 284);
+			this.Size = new System.Drawing.Size(144, 304);
 			groupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.block)).EndInit();
 			this.ResumeLayout(false);
@@ -183,5 +198,6 @@
 		private API.TileList blockList;
 		private System.Windows.Forms.NumericUpDown block;
 		private System.Windows.Forms.CheckBox searchBlock;
+		private System.Windows.Forms.CheckBox highPlane;
 	}
 }

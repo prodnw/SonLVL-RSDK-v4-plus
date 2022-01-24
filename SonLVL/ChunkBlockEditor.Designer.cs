@@ -35,6 +35,7 @@ namespace SonicRetro.SonLVL
 			this.xFlip = new System.Windows.Forms.CheckBox();
 			this.yFlip = new System.Windows.Forms.CheckBox();
 			this.block = new SonicRetro.SonLVL.NumericUpDownMulti();
+			this.highPlane = new System.Windows.Forms.CheckBox();
 			groupBox1 = new System.Windows.Forms.GroupBox();
 			label2 = new System.Windows.Forms.Label();
 			groupBox1.SuspendLayout();
@@ -60,10 +61,10 @@ namespace SonicRetro.SonLVL
 			this.solidity2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.solidity2.FormattingEnabled = true;
 			this.solidity2.Items.AddRange(new object[] {
-            "Not Solid",
+            "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "All Solid"});
+            "Not Solid"});
 			this.solidity2.Location = new System.Drawing.Point(6, 46);
 			this.solidity2.Name = "solidity2";
 			this.solidity2.Size = new System.Drawing.Size(121, 21);
@@ -75,10 +76,10 @@ namespace SonicRetro.SonLVL
 			this.solidity1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.solidity1.FormattingEnabled = true;
 			this.solidity1.Items.AddRange(new object[] {
-            "Not Solid",
+            "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "All Solid"});
+            "Not Solid"});
 			this.solidity1.Location = new System.Drawing.Point(6, 19);
 			this.solidity1.Name = "solidity1";
 			this.solidity1.Size = new System.Drawing.Size(121, 21);
@@ -130,19 +131,31 @@ namespace SonicRetro.SonLVL
 			this.block.TabIndex = 10;
 			this.block.ValueChanged += new System.EventHandler(this.block_ValueChanged);
 			// 
+			// highPlane
+			// 
+			this.highPlane.AutoSize = true;
+			this.highPlane.Location = new System.Drawing.Point(3, 141);
+			this.highPlane.Name = "highPlane";
+			this.highPlane.Size = new System.Drawing.Size(78, 17);
+			this.highPlane.TabIndex = 11;
+			this.highPlane.Text = "High Plane";
+			this.highPlane.UseVisualStyleBackColor = true;
+			this.highPlane.CheckedChanged += new System.EventHandler(this.highPlane_CheckedChanged);
+			// 
 			// ChunkBlockEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.Controls.Add(this.highPlane);
 			this.Controls.Add(this.block);
 			this.Controls.Add(label2);
 			this.Controls.Add(groupBox1);
 			this.Controls.Add(this.yFlip);
 			this.Controls.Add(this.xFlip);
 			this.Name = "ChunkBlockEditor";
-			this.Size = new System.Drawing.Size(139, 138);
+			this.Size = new System.Drawing.Size(139, 161);
 			this.Load += new System.EventHandler(this.ChunkBlockEditor_Load);
 			groupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.block)).EndInit();
@@ -158,5 +171,6 @@ namespace SonicRetro.SonLVL
 		private System.Windows.Forms.ComboBox solidity1;
 		private System.Windows.Forms.ComboBox solidity2;
 		private NumericUpDownMulti block;
+		private System.Windows.Forms.CheckBox highPlane;
 	}
 }

@@ -93,7 +93,7 @@ namespace SonicRetro.SonLVL.GUI
 			this.Name = "ErrorDialog";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "SonLVL Error";
+			this.Text = "SonLVL-RSDK Error";
 			this.ResumeLayout(false);
 
 		}

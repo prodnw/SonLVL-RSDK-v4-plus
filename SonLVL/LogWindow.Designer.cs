@@ -91,7 +91,7 @@ namespace SonicRetro.SonLVL.GUI
 			this.Name = "LogWindow";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "SonLVL Log";
+			this.Text = "SonLVL-RSDK Log";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LogWindow_FormClosed);
 			this.Load += new System.EventHandler(this.LogWindow_Load);
 			this.panel1.ResumeLayout(false);

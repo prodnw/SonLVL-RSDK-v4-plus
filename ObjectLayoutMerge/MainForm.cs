@@ -70,7 +70,7 @@ namespace ObjectLayoutMerge
 				LevelData.littleendian = false;
 				switch (fileSelectDialog.LayoutAFileGame)
 				{
-					case EngineVersion.S1:
+					case EngineVersion.V4:
 						objectFormat = new SonicRetro.SonLVL.API.S1.Object();
 						break;
 					case EngineVersion.S2:
@@ -87,7 +87,7 @@ namespace ObjectLayoutMerge
 						objectFormat = new SonicRetro.SonLVL.API.S3K.Object();
 						ringFormat = new SonicRetro.SonLVL.API.S3K.Ring();
 						break;
-					case EngineVersion.SCD:
+					case EngineVersion.V3:
 						objectFormat = new SonicRetro.SonLVL.API.SCD.Object();
 						break;
 					case EngineVersion.SCDPC:
@@ -366,21 +366,21 @@ namespace ObjectLayoutMerge
 
 		private void previewPanel_PanelKeyDown(object sender, KeyEventArgs e)
 		{
-			long hstep = e.Control ? int.MaxValue : e.Shift ? LevelData.Level.ChunkWidth : 16;
-			long vstep = e.Control ? int.MaxValue : e.Shift ? LevelData.Level.ChunkHeight : 16;
+			long hstep = e.Control ? int.MaxValue : e.Shift ? 128 : 16;
+			long vstep = e.Control ? int.MaxValue : e.Shift ? 128 : 16;
 			switch (e.KeyCode)
 			{
 				case Keys.Up:
 					previewPanel.VScrollValue = (int)Math.Max(previewPanel.VScrollValue - vstep, previewPanel.VScrollMinimum);
 					break;
 				case Keys.Down:
-					previewPanel.VScrollValue = (int)Math.Min(previewPanel.VScrollValue + vstep, previewPanel.VScrollMaximum - LevelData.Level.ChunkHeight + 1);
+					previewPanel.VScrollValue = (int)Math.Min(previewPanel.VScrollValue + vstep, previewPanel.VScrollMaximum - 128 + 1);
 					break;
 				case Keys.Left:
 					previewPanel.HScrollValue = (int)Math.Max(previewPanel.HScrollValue - hstep, previewPanel.HScrollMinimum);
 					break;
 				case Keys.Right:
-					previewPanel.HScrollValue = (int)Math.Min(previewPanel.HScrollValue + hstep, previewPanel.HScrollMaximum - LevelData.Level.ChunkWidth + 1);
+					previewPanel.HScrollValue = (int)Math.Min(previewPanel.HScrollValue + hstep, previewPanel.HScrollMaximum - 128 + 1);
 					break;
 			}
 		}
@@ -403,7 +403,7 @@ namespace ObjectLayoutMerge
 			}
 			Point camera = new Point(previewPanel.HScrollValue, previewPanel.VScrollValue);
 			Rectangle dispRect = new Rectangle(camera.X, camera.Y, previewPanel.PanelWidth, previewPanel.PanelHeight);
-			BitmapBits img8 = LevelData.DrawForeground(dispRect, true, true, true, true, true, false, false, false);
+			BitmapBits img8 = LevelData.DrawForeground(dispRect, true, true, true, true, false, false);
 			Bitmap bmp = img8.ToBitmap(LevelData.BmpPal).To32bpp();
 			Graphics gfx = Graphics.FromImage(bmp);
 			gfx.SetOptions();

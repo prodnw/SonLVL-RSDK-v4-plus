@@ -74,17 +74,46 @@ namespace SonicRetro.SonLVL.GUI
 			// levelWidth
 			// 
 			this.levelWidth.Location = new System.Drawing.Point(56, 12);
+			this.levelWidth.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.levelWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.levelWidth.Name = "levelWidth";
 			this.levelWidth.Size = new System.Drawing.Size(53, 20);
 			this.levelWidth.TabIndex = 3;
+			this.levelWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// levelHeight
 			// 
 			this.levelHeight.Location = new System.Drawing.Point(162, 12);
+			this.levelHeight.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.levelHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.levelHeight.Name = "levelHeight";
 			this.levelHeight.Size = new System.Drawing.Size(53, 20);
 			this.levelHeight.TabIndex = 5;
-			this.levelHeight.ValueChanged += new System.EventHandler(this.levelHeight_ValueChanged);
+			this.levelHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// label2
 			// 

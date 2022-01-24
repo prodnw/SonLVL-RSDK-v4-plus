@@ -24,9 +24,9 @@ namespace SonicRetro.SonLVL
 			if (Visible)
 			{
 				tileList2.Images = tileList1.Images = LevelData.CompChunkBmps;
-				tileList2.ImageWidth = tileList1.ImageWidth = LevelData.Level.ChunkWidth;
-				tileList2.ImageHeight = tileList1.ImageHeight = LevelData.Level.ChunkHeight;
-				replaceChunk.Maximum = findChunk.Maximum = LevelData.Chunks.Count;
+				tileList2.ImageWidth = tileList1.ImageWidth = 128;
+				tileList2.ImageHeight = tileList1.ImageHeight = 128;
+				replaceChunk.Maximum = findChunk.Maximum = LevelData.NewChunks.chunkList.Length;
 				tileList1.SelectedIndex = (int)findChunk.Value;
 				tileList2.SelectedIndex = (int)replaceChunk.Value;
 			}

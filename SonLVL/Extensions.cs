@@ -7,54 +7,6 @@ namespace SonicRetro.SonLVL.GUI
 {
 	public static class Extensions
 	{
-		public static Bitmap To32bpp(this Bitmap bmp)
-		{
-			if (Program.IsWindows) return bmp.Clone(new Rectangle(Point.Empty, bmp.Size), PixelFormat.Format32bppArgb);
-			else return new Bitmap(bmp);
-		}
-
-		/// <summary>
-		/// Resizes the <see cref="Bitmap" />, maintaining the original aspect ratio.
-		/// </summary>
-		public static Bitmap Resize(this Bitmap image, Size newsize)
-		{
-			Bitmap bmp = new Bitmap(newsize.Width, newsize.Height);
-			Graphics gfx = Graphics.FromImage(bmp);
-			gfx.CompositingQuality = CompositingQuality.HighQuality;
-			gfx.InterpolationMode = InterpolationMode.NearestNeighbor;
-			gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			gfx.SmoothingMode = SmoothingMode.HighQuality;
-			gfx.Clear(Color.Transparent);
-			int mywidth = image.Width;
-			int myheight = image.Height;
-			while (myheight > newsize.Height | mywidth > newsize.Width)
-			{
-				if (mywidth > newsize.Width)
-				{
-					mywidth = newsize.Width;
-					myheight = (int)(image.Height * ((double)newsize.Width / image.Width));
-				}
-				else if (myheight > newsize.Height)
-				{
-					myheight = newsize.Height;
-					mywidth = (int)(image.Width * ((double)newsize.Height / image.Height));
-				}
-			}
-			gfx.DrawImage(image, (int)(((double)newsize.Width - mywidth) / 2), (int)(((double)newsize.Height - myheight) / 2), mywidth, myheight);
-			return bmp;
-		}
-
-		/// <summary>
-		/// Sets options to enable faster rendering.
-		/// </summary>
-		public static void SetOptions(this Graphics gfx)
-		{
-			gfx.CompositingQuality = CompositingQuality.HighQuality;
-			gfx.InterpolationMode = InterpolationMode.NearestNeighbor;
-			gfx.PixelOffsetMode = PixelOffsetMode.None;
-			gfx.SmoothingMode = SmoothingMode.HighSpeed;
-		}
-
 		public static void ShowHide(this System.Windows.Forms.Control ctrl)
 		{
 			if (ctrl.Visible)

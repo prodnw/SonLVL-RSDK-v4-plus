@@ -227,6 +227,7 @@ namespace SonicRetro.SonLVL.GUI
 			replaceBGChunksDialog = new ReplaceChunksDialog();
 			replaceChunkBlocksDialog = new ReplaceChunkBlocksDialog();
 			collisionLayerSelector.SelectedIndex = 0;
+			objectOrder.ListViewItemSorter = new ListViewIndexComparer();
 			if (Program.Arguments.Length > 0)
 				LoadINI(Program.Arguments[0]);
 		}
@@ -502,10 +503,13 @@ namespace SonicRetro.SonLVL.GUI
 				ObjectSelect.listView1.SelectedIndexChanged += new EventHandler(ObjectSelect_listView1_SelectedIndexChanged);
 				ObjectSelect.listView2.SelectedIndexChanged += new EventHandler(ObjectSelect_listView2_SelectedIndexChanged);
 			}
+			ObjectSelect.listView1.BeginUpdate();
 			ObjectSelect.listView1.Items.Clear();
 			ObjectSelect.imageList1.Images.Clear();
+			objectTypeList.BeginUpdate();
 			objectTypeList.Items.Clear();
 			objectTypeImages.Images.Clear();
+			objectTypeImages.Images.Add(LevelData.UnknownImg.Resize(objectTypeImages.ImageSize));
 			foreach (KeyValuePair<byte, ObjectDefinition> item in LevelData.ObjTypes)
 			{
 				Bitmap image = item.Value.Image.GetBitmap().ToBitmap(LevelData.BmpPal);
@@ -514,8 +518,15 @@ namespace SonicRetro.SonLVL.GUI
 				objectTypeImages.Images.Add(image.Resize(objectTypeImages.ImageSize));
 				objectTypeList.Items.Add(new ListViewItem(item.Value.Name, objectTypeImages.Images.Count - 1) { Tag = item.Key });
 			}
+			ObjectSelect.listView1.EndUpdate();
+			objectTypeList.EndUpdate();
 			ObjectSelect.listView2.Items.Clear();
 			ObjectSelect.imageList2.Images.Clear();
+			objectOrder.BeginUpdate();
+			objectOrder.Items.Clear();
+			foreach (var obj in LevelData.Objects)
+				objectOrder.Items.Add(obj.Name, obj.ID < objectTypeImages.Images.Count ? obj.ID : 0);
+			objectOrder.EndUpdate();
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle + " - " + this.levelname;
 			UpdateScrollBars();
 			objectPanel.HScrollValue = 0;
@@ -1069,7 +1080,15 @@ namespace SonicRetro.SonLVL.GUI
 		void ObjectProperties_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			foreach (Entry item in SelectedItems)
+			{
+				if (item is ObjectEntry oe && e.ChangedItem.PropertyDescriptor.Name == "ID")
+				{
+					var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oe)];
+					lvi.Text = item.Name;
+					lvi.ImageIndex = oe.ID < objectTypeImages.Images.Count ? oe.ID : 0;
+				}
 				item.UpdateSprite();
+			}
 			DrawLevel();
 		}
 
@@ -1078,6 +1097,7 @@ namespace SonicRetro.SonLVL.GUI
 			foreach (var item in bgLayerDropDown.DropDownItems.OfType<ToolStripMenuItem>())
 				item.Checked = item == e.ClickedItem;
 			bglayer = bgLayerDropDown.DropDownItems.IndexOf(e.ClickedItem);
+			bgLayerDropDown.Text = $"Layer: {bglayer + 1}";
 			UpdateScrollBars();
 			DrawLevel();
 		}
@@ -1416,6 +1436,9 @@ namespace SonicRetro.SonLVL.GUI
 						if (SelectedItems[i] is ObjectEntry oi)
 						{
 							oi.ID = (byte)(oi.ID == 0 ? 255 : oi.ID - 1);
+							var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
+							lvi.Text = oi.Name;
+							lvi.ImageIndex = oi.ID < objectTypeImages.Images.Count ? oi.ID : 0;
 							SelectedItems[i].UpdateSprite();
 						}
 					}
@@ -1485,6 +1508,9 @@ namespace SonicRetro.SonLVL.GUI
 							if (SelectedItems[i] is ObjectEntry oi)
 							{
 								oi.ID = (byte)(oi.ID == 255 ? 0 : oi.ID + 1);
+								var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
+								lvi.Text = oi.Name;
+								lvi.ImageIndex = oi.ID < objectTypeImages.Images.Count ? oi.ID : 0;
 								SelectedItems[i].UpdateSprite();
 							}
 						}
@@ -1766,6 +1792,7 @@ namespace SonicRetro.SonLVL.GUI
 						if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE && ObjectSelect.ShowDialog(this) == DialogResult.OK)
 						{
 							ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
+							objectOrder.Items.Add(ent.Name, ent.ID < objectTypeImages.Images.Count ? ent.ID : 0);
 							ent.SubType = (byte)ObjectSelect.numericUpDown2.Value;
 							ent.X = gridx;
 							ent.Y = gridy;
@@ -1908,7 +1935,6 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (Entry item in SelectedItems)
 						item.UpdateSprite();
 				ObjectProperties.SelectedObjects = SelectedItems.ToArray();
-				LevelData.Objects.Sort();
 			}
 			objdrag = false;
 			selecting = false;
@@ -2143,6 +2169,11 @@ namespace SonicRetro.SonLVL.GUI
 			alignBottomsToolStripButton.Enabled = alignCentersToolStripButton.Enabled = alignLeftsToolStripButton.Enabled =
 				alignMiddlesToolStripButton.Enabled = alignRightsToolStripButton.Enabled = alignTopsToolStripButton.Enabled =
 				SelectedItems.Count > 1;
+			if (SelectedItems.Count > 0)
+			{
+				objectOrder.SelectedIndices.Clear();
+				objectOrder.SelectedIndices.Add(LevelData.Objects.IndexOf((ObjectEntry)SelectedItems[0]));
+			}
 		}
 
 		private void ScrollBar_ValueChanged(object sender, EventArgs e)
@@ -2179,6 +2210,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
 			{
 				ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
+				objectOrder.Items.Add(ent.Name, ent.ID < objectTypeImages.Images.Count ? ent.ID : 0);
 				ent.SubType = (byte)ObjectSelect.numericUpDown2.Value;
 				double gs = 1 << ObjGrid;
 				ent.X = (ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
@@ -2187,7 +2219,6 @@ namespace SonicRetro.SonLVL.GUI
 				SelectedItems.Clear();
 				SelectedItems.Add(ent);
 				SelectedObjectChanged();
-				LevelData.Objects.Sort();
 				DrawLevel();
 			}
 		}
@@ -2217,6 +2248,7 @@ namespace SonicRetro.SonLVL.GUI
 							for (int x = 0; x < dlg.Columns.Value; x++)
 							{
 								ObjectEntry ent = LevelData.CreateObject(ID);
+								objectOrder.Items.Add(ent.Name, ent.ID < objectTypeImages.Images.Count ? ent.ID : 0);
 								ent.SubType = sub;
 								ent.X = (ushort)(pt.X);
 								ent.Y = (ushort)(pt.Y);
@@ -2228,7 +2260,6 @@ namespace SonicRetro.SonLVL.GUI
 							pt += ysz;
 						}
 						SelectedObjectChanged();
-						LevelData.Objects.Sort();
 						DrawLevel();
 					}
 				}
@@ -2242,6 +2273,7 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				if (item is ObjectEntry oe)
 				{
+					objectOrder.Items.RemoveAt(LevelData.Objects.IndexOf(oe));
 					LevelData.DeleteObject(oe);
 					selitems.Add(item);
 				}
@@ -2287,11 +2319,13 @@ namespace SonicRetro.SonLVL.GUI
 					item.Y = (ushort)(Math.Round(item.Y / gs, MidpointRounding.AwayFromZero) * gs);
 					item.ResetPos();
 					if (item is ObjectEntry oe)
+					{
 						LevelData.AddObject(oe);
+						objectOrder.Items.Add(oe.Name, oe.ID < objectTypeImages.Images.Count ? oe.ID : 0);
+					}
 					item.UpdateSprite();
 				}
 				SelectedObjectChanged();
-				LevelData.Objects.Sort();
 				DrawLevel();
 			}
 		}
@@ -2301,9 +2335,10 @@ namespace SonicRetro.SonLVL.GUI
 			List<Entry> selitems = new List<Entry>();
 			foreach (Entry item in SelectedItems)
 			{
-				if (item is ObjectEntry)
+				if (item is ObjectEntry oe)
 				{
-					LevelData.DeleteObject((ObjectEntry)item);
+					objectOrder.Items.RemoveAt(LevelData.Objects.IndexOf(oe));
+					LevelData.DeleteObject(oe);
 					selitems.Add(item);
 				}
 			}
@@ -3217,10 +3252,11 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			if (newChunks.Count > 0)
 			{
-				for (int cy = 0; cy < h / 128; cy++)
-					for (int cx = 0; cx < w / 128; cx++)
-						if (layout[cx, cy] >= LevelData.NewChunks.chunkList.Length)
-							layout[cx, cy] = freechunks[layout[cx, cy] - LevelData.NewChunks.chunkList.Length];
+				if (layout != null)
+					for (int cy = 0; cy < h / 128; cy++)
+						for (int cx = 0; cx < w / 128; cx++)
+							if (layout[cx, cy] >= LevelData.NewChunks.chunkList.Length)
+								layout[cx, cy] = freechunks[layout[cx, cy] - LevelData.NewChunks.chunkList.Length];
 				foreach (var (cnk, ind) in newChunks.Zip(freechunks, (a, b) => (a, b)))
 				{
 					Application.DoEvents();
@@ -3532,21 +3568,23 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				int x = selection.Left * 128;
 				int y = selection.Top * 128;
-				if (LevelData.Objects != null)
-					foreach (ObjectEntry item in LevelData.Objects)
-						if (item.Y >= y & item.Y < selection.Bottom * 128
-							& item.X >= x & item.X < selection.Right * 128)
-						{
-							Entry ent = item.Clone();
-							ent.X -= (ushort)x;
-							ent.Y -= (ushort)y;
-							objectselection.Add(ent);
-							objstodelete.Add(item);
-						}
+				foreach (ObjectEntry item in LevelData.Objects)
+					if (item.Y >= y & item.Y < selection.Bottom * 128
+						& item.X >= x & item.X < selection.Right * 128)
+					{
+						Entry ent = item.Clone();
+						ent.X -= (ushort)x;
+						ent.Y -= (ushort)y;
+						objectselection.Add(ent);
+						objstodelete.Add(item);
+					}
 				foreach (Entry item in objstodelete)
 				{
 					if (item is ObjectEntry oe)
+					{
+						objectOrder.Items.RemoveAt(LevelData.Objects.IndexOf(oe));
 						LevelData.DeleteObject(oe);
+					}
 					if (SelectedItems.Contains(item))
 						SelectedItems.Remove(item);
 				}
@@ -3631,11 +3669,13 @@ namespace SonicRetro.SonLVL.GUI
 					Entry newent = item.Clone();
 					newent.X = (ushort)(newent.X + off.Width);
 					newent.Y = (ushort)(newent.Y + off.Height);
-					if (newent is ObjectEntry)
-						LevelData.AddObject((ObjectEntry)newent);
+					if (newent is ObjectEntry oe)
+					{
+						LevelData.AddObject(oe);
+						objectOrder.Items.Add(oe.Name, oe.ID < objectTypeImages.Images.Count ? oe.ID : 0);
+					}
 					newent.UpdateSprite();
 				}
-				LevelData.Objects.Sort();
 			}
 			DrawLevel();
 		}
@@ -3681,13 +3721,15 @@ namespace SonicRetro.SonLVL.GUI
 							it2.Y = (ushort)(it2.Y + off.Height);
 							if (it2.X < bottomright.X & it2.Y < bottomright.Y)
 							{
-								if (it2 is ObjectEntry)
-									LevelData.AddObject((ObjectEntry)it2);
+								if (it2 is ObjectEntry oe)
+								{
+									LevelData.AddObject(oe);
+									objectOrder.Items.Add(oe.Name, oe.ID < objectTypeImages.Images.Count ? oe.ID : 0);
+								}
 								it2.UpdateSprite();
 							}
 						}
 					}
-				LevelData.Objects.Sort();
 			}
 			DrawLevel();
 		}
@@ -3719,8 +3761,11 @@ namespace SonicRetro.SonLVL.GUI
 							objectselection.Add(item);
 				foreach (Entry item in objectselection)
 				{
-					if (item is ObjectEntry)
-						LevelData.DeleteObject((ObjectEntry)item);
+					if (item is ObjectEntry oe)
+					{
+						objectOrder.Items.RemoveAt(LevelData.Objects.IndexOf(oe));
+						LevelData.DeleteObject(oe);
+					}
 					if (SelectedItems.Contains(item))
 						SelectedItems.Remove(item);
 				}
@@ -3824,10 +3869,10 @@ namespace SonicRetro.SonLVL.GUI
 				Point clientPoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
 				clientPoint = new Point((int)(clientPoint.X / ZoomLevel), (int)(clientPoint.Y / ZoomLevel));
 				ObjectEntry obj = LevelData.CreateObject((byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop"));
+				objectOrder.Items.Add(obj.Name, obj.ID < objectTypeImages.Images.Count ? obj.ID : 0);
 				obj.X = (ushort)(Math.Round((clientPoint.X + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				obj.Y = (ushort)(Math.Round((clientPoint.Y + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				obj.UpdateSprite();
-				LevelData.Objects.Sort();
 				SelectedItems = new List<Entry>(1) { obj };
 				SelectedObjectChanged();
 				DrawLevel();
@@ -5298,7 +5343,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (MessageBox.Show(this, "Are you sure you want to clear all tiles not used in chunks?", "Delete Unused Tiles", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			int numdel = 0;
-			foreach (var i in Enumerable.Range(0, LevelData.NewTiles.Length).Cast<ushort>().Except(LevelData.NewChunks.chunkList.SelectMany(a => a.tiles.SelectMany(b => b).Select(c => c.tileIndex))))
+			foreach (var i in Enumerable.Range(0, LevelData.NewTiles.Length).Select(a => (ushort)a).Except(LevelData.NewChunks.chunkList.SelectMany(a => a.tiles.SelectMany(b => b).Select(c => c.tileIndex))))
 			{
 				LevelData.NewTiles[i].Clear();
 				LevelData.RedrawBlock(i, false);
@@ -5316,7 +5361,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (MessageBox.Show(this, "This action may break other levels that share the same chunk set, or levels that alter the level layout dynamically.\n\nAre you sure you want to clear all chunks not used in the layout?", "Delete Unused Chunks", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			int numdel = 0;
-			foreach (var i in Enumerable.Range(0, LevelData.NewChunks.chunkList.Length).Cast<ushort>().Except(LevelData.Scene.layout.SelectMany(a => a).Union(LevelData.Background.layers.SelectMany(a => a.layout.SelectMany(b => b)))))
+			foreach (var i in Enumerable.Range(0, LevelData.NewChunks.chunkList.Length).Select(a => (ushort)a).Except(LevelData.Scene.layout.SelectMany(a => a).Union(LevelData.Background.layers.SelectMany(a => a.layout.SelectMany(b => b)))))
 			{
 				LevelData.NewChunks.chunkList[i] = new RSDKv3_4.Tiles128x128.Block();
 				LevelData.RedrawChunk(i);
@@ -5734,6 +5779,66 @@ namespace SonicRetro.SonLVL.GUI
 				}
 		}
 
+		private void objectOrder_ItemDrag(object sender, ItemDragEventArgs e)
+		{
+			objectOrder.DoDragDrop(new DataObject("SonicRetro.SonLVLRSDK.GUI.ObjectIndex", e.Item), DragDropEffects.Move | DragDropEffects.Scroll);
+		}
+
+		private void objectOrder_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectIndex"))
+				e.Effect = e.AllowedEffect;
+		}
+
+		private void objectOrder_DragOver(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectIndex"))
+				objectOrder.InsertionMark.Index = objectOrder.InsertionMark.NearestIndex(objectOrder.PointToClient(new Point(e.X, e.Y)));
+		}
+
+		private void objectOrder_DragLeave(object sender, EventArgs e)
+		{
+			objectOrder.InsertionMark.Index = -1;
+		}
+
+		private void objectOrder_DragDrop(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectIndex"))
+			{
+				ListViewItem item = (ListViewItem)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectIndex");
+				int src = objectOrder.Items.IndexOf(item);
+				int dst = objectOrder.InsertionMark.Index;
+				if (src != dst && dst != src + 1)
+				{
+					LevelData.Scene.entities.Move(src, dst);
+					LevelData.Objects.Move(src, dst);
+					objectOrder.BeginUpdate();
+					ListViewItem item1 = (ListViewItem)item.Clone();
+					objectOrder.Items.Insert(dst, item1);
+					if (item1.Index == src) LevelData.NewChunks.chunkList[700].Clone();
+					objectOrder.Items.Remove(item);
+					objectOrder.EndUpdate();
+					item1.Selected = true;
+				}
+			}
+		}
+
+		private void objectOrder_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (objectOrder.SelectedIndices.Count > 0)
+			{
+				ObjectEntry item = LevelData.Objects[objectOrder.SelectedIndices[0]];
+				if (!SelectedItems.Contains(item))
+				{
+					SelectedItems.Clear();
+					SelectedItems.Add(item);
+					SelectedObjectChanged();
+					ScrollToObject(item);
+					DrawLevel();
+				}
+			}
+		}
+
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show(this, "Are you sure you want to remove all duplicate tiles?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
@@ -5946,6 +6051,14 @@ namespace SonicRetro.SonLVL.GUI
 			Image = new Sprite(image);
 			Width = image.Width;
 			Height = image.Height;
+		}
+	}
+
+	class ListViewIndexComparer : System.Collections.IComparer
+	{
+		public int Compare(object x, object y)
+		{
+			return ((ListViewItem)x).Index - ((ListViewItem)y).Index;
 		}
 	}
 }

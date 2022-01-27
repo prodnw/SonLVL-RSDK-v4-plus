@@ -33,7 +33,7 @@ namespace SonicRetro.SonLVL.GUI
 				floorAngle.TextChanged += ColAngle_TextChanged;
 		}
 
-		const int ColorGrid = 64;
+		const int ColorGrid = 255;
 
 		void LevelData_PaletteChangedEvent()
 		{
@@ -583,6 +583,7 @@ namespace SonicRetro.SonLVL.GUI
 			layoutSectionListBox.EndUpdate();
 			foundobjs = null;
 			SelectedObjectChanged();
+			UpdateScrollControls();
 			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
 			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
@@ -1098,6 +1099,7 @@ namespace SonicRetro.SonLVL.GUI
 				item.Checked = item == e.ClickedItem;
 			bglayer = bgLayerDropDown.DropDownItems.IndexOf(e.ClickedItem);
 			bgLayerDropDown.Text = $"Layer: {bglayer + 1}";
+			UpdateScrollControls();
 			UpdateScrollBars();
 			DrawLevel();
 		}
@@ -1198,6 +1200,44 @@ namespace SonicRetro.SonLVL.GUI
 									}
 									DrawHUDNum(x * 128 + a * 16 - camera.X, y * 128 + b * 16 - camera.Y, angle.ToString("X2"));
 								}
+			if (CurrentTab == Tab.Background && tabControl3.SelectedIndex == 2 && LevelData.BGScroll[bglayer].Count > 0)
+				switch (LevelData.Background.layers[bglayer].type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+						int scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.Y);
+						if (scrlind > 0)
+							scrlind--;
+						else
+							scrlind = 0;
+						for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Bottom; scrlind++)
+						{
+							ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
+							int height;
+							if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
+								height = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+							else
+								height = dispRect.Bottom - scrollData.StartPos;
+							LevelImg8bpp.DrawLine(LevelData.ColorYellow, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
+						}
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.X);
+						if (scrlind > 0)
+							scrlind--;
+						else
+							scrlind = 0;
+						for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Right; scrlind++)
+						{
+							ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
+							int width;
+							if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
+								width = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+							else
+								width = dispRect.Right - scrollData.StartPos;
+							LevelImg8bpp.DrawLine(LevelData.ColorYellow, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
+						}
+						break;
+				}
 			if (hUDToolStripMenuItem.Checked)
 			{
 				Rectangle hudbnd;
@@ -1257,7 +1297,6 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Tab.Foreground:
-				case Tab.Background:
 					if (!selecting && SelectedChunk < LevelData.NewChunks.chunkList.Length)
 						LevelGfx.DrawImage(LevelData.CompChunkBmps[SelectedChunk],
 						new Rectangle(((((int)(pnlcur.X / ZoomLevel) + camera.X) / 128) * 128) - camera.X, ((((int)(pnlcur.Y / ZoomLevel) + camera.Y) / 128) * 128) - camera.Y, 128, 128),
@@ -1270,6 +1309,24 @@ namespace SonicRetro.SonLVL.GUI
 						LevelGfx.FillRectangle(selectionBrush, selbnds);
 						selbnds.Width--; selbnds.Height--;
 						LevelGfx.DrawRectangle(selectionPen, selbnds);
+					}
+					break;
+				case Tab.Background:
+					if (tabControl3.SelectedIndex != 2)
+					{
+						if (!selecting && SelectedChunk < LevelData.NewChunks.chunkList.Length)
+							LevelGfx.DrawImage(LevelData.CompChunkBmps[SelectedChunk],
+							new Rectangle(((((int)(pnlcur.X / ZoomLevel) + camera.X) / 128) * 128) - camera.X, ((((int)(pnlcur.Y / ZoomLevel) + camera.Y) / 128) * 128) - camera.Y, 128, 128),
+							0, 0, 128, 128,
+							GraphicsUnit.Pixel, imageTransparency);
+						if (!selection.IsEmpty)
+						{
+							Rectangle selbnds = selection.Scale(128, 128);
+							selbnds.Offset(-camera.X, -camera.Y);
+							LevelGfx.FillRectangle(selectionBrush, selbnds);
+							selbnds.Width--; selbnds.Height--;
+							LevelGfx.DrawRectangle(selectionPen, selbnds);
+						}
 					}
 					break;
 			}
@@ -3803,6 +3860,8 @@ namespace SonicRetro.SonLVL.GUI
 					cursize = LevelData.BGSize[bglayer];
 				else
 					cursize = LevelData.FGSize;
+				if (cursize.IsEmpty)
+					cursize = new Size(1, 1);
 				dg.levelHeight.Value = cursize.Height;
 				dg.levelWidth.Value = cursize.Width;
 				if (dg.ShowDialog(this) == DialogResult.OK)
@@ -3814,6 +3873,7 @@ namespace SonicRetro.SonLVL.GUI
 					loaded = false;
 					UpdateScrollBars();
 					loaded = true;
+					UpdateScrollControls();
 					DrawLevel();
 				}
 			}
@@ -5837,6 +5897,161 @@ namespace SonicRetro.SonLVL.GUI
 					DrawLevel();
 				}
 			}
+		}
+
+		private void UpdateScrollControls()
+		{
+			if (LevelData.BGSize[bglayer].IsEmpty)
+			{
+				tabPage13.Hide();
+				return;
+			}
+			else
+				tabPage13.Show();
+			layerScrollType.SelectedIndex = (int)LevelData.Background.layers[bglayer].type - 1;
+			switch (LevelData.Background.layers[bglayer].type)
+			{
+				case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+				case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+					scrollEditPanel.Enabled = true;
+					layerParallaxFactor.Value = LevelData.Background.layers[bglayer].parallaxFactor / 256m;
+					layerScrollSpeed.Value = LevelData.Background.layers[bglayer].scrollSpeed / 64m;
+					scrollList.BeginUpdate();
+					scrollList.Items.Clear();
+					foreach (var item in LevelData.BGScroll[bglayer])
+						scrollList.Items.Add(item.StartPos.ToString("X4"));
+					scrollList.EndUpdate();
+					scrollList.SelectedIndex = 0;
+					break;
+				default:
+					scrollEditPanel.Enabled = false;
+					break;
+			}
+		}
+
+		private void layerScrollType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			if ((RSDKv3_4.Backgrounds.Layer.LayerTypes)(layerScrollType.SelectedIndex + 1) == LevelData.Background.layers[bglayer].type) return;
+			if (MessageBox.Show(this, "Changing scroll type will reset all scroll settings for the layer! Are you sure?", "SonLVL-RSDK", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+			{
+				LevelData.Background.layers[bglayer].type = (RSDKv3_4.Backgrounds.Layer.LayerTypes)(layerScrollType.SelectedIndex + 1);
+				LevelData.BGScroll[bglayer].Clear();
+				switch (LevelData.Background.layers[bglayer].type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						LevelData.BGScroll[bglayer].Add(new ScrollData());
+						break;
+				}
+				UpdateScrollControls();
+			}
+			else
+				layerScrollType.SelectedIndex = (int)LevelData.Background.layers[bglayer].type - 1;
+		}
+
+		private void layerParallaxFactor_ValueChanged(object sender, EventArgs e)
+		{
+			LevelData.Background.layers[bglayer].parallaxFactor = (short)(layerParallaxFactor.Value * 256);
+		}
+
+		private void layerScrollSpeed_ValueChanged(object sender, EventArgs e)
+		{
+			LevelData.Background.layers[bglayer].scrollSpeed = (byte)(layerScrollSpeed.Value * 64m);
+		}
+
+		private void scrollList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (scrollList.SelectedIndex == -1) return;
+			int max = 0;
+			if (scrollList.SelectedIndex == LevelData.BGScroll[bglayer].Count - 1)
+				switch (LevelData.Background.layers[bglayer].type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+						max = LevelData.BGHeight[bglayer] * 128 - 1;
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						max = LevelData.BGWidth[bglayer] * 128 - 1;
+						break;
+				}
+			else
+				max = LevelData.BGScroll[bglayer][scrollList.SelectedIndex + 1].StartPos - 1;
+			addScrollButton.Enabled = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos != max;
+			if (scrollList.SelectedIndex > 0)
+			{
+				deleteScrollButton.Enabled = true;
+				loaded = false;
+				scrollOffset.Enabled = true;
+				scrollOffset.Minimum = LevelData.BGScroll[bglayer][scrollList.SelectedIndex - 1].StartPos + 1;
+				scrollOffset.Maximum = max;
+				scrollOffset.Value = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos;
+				loaded = true;
+			}
+			else
+			{
+				deleteScrollButton.Enabled = false;
+				loaded = false;
+				scrollOffset.Enabled = false;
+				scrollOffset.Minimum = 0;
+				scrollOffset.Maximum = 0;
+				loaded = true;
+			}
+			scrollEnableDeformation.Checked = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].Deform;
+			scrollParallaxFactor.Value = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ParallaxFactor;
+			scrollScrollSpeed.Value = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ScrollSpeed;
+		}
+
+		private void addScrollButton_Click(object sender, EventArgs e)
+		{
+			int max = 0;
+			if (scrollList.SelectedIndex == LevelData.BGScroll[bglayer].Count - 1)
+				switch (LevelData.Background.layers[bglayer].type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+						max = LevelData.BGHeight[bglayer] * 128 - 1;
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						max = LevelData.BGWidth[bglayer] * 128 - 1;
+						break;
+				}
+			else
+				max = LevelData.BGScroll[bglayer][scrollList.SelectedIndex + 1].StartPos - 1;
+			if (LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos != max - 1)
+				max = (max - LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos) / 2;
+			LevelData.BGScroll[bglayer].Insert(scrollList.SelectedIndex + 1, new ScrollData((ushort)max));
+			scrollList.Items.Insert(scrollList.SelectedIndex + 1, max.ToString("X4"));
+			scrollList.SelectedIndex++;
+		}
+
+		private void deleteScrollButton_Click(object sender, EventArgs e)
+		{
+			int ind = scrollList.SelectedIndex;
+			LevelData.BGScroll[bglayer].RemoveAt(scrollList.SelectedIndex + 1);
+			scrollList.Items.RemoveAt(scrollList.SelectedIndex + 1);
+			if (ind == scrollList.Items.Count)
+				--ind;
+			scrollList.SelectedIndex = ind;
+		}
+
+		private void scrollOffset_ValueChanged(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos = (ushort)scrollOffset.Value;
+		}
+
+		private void scrollEnableDeformation_CheckedChanged(object sender, EventArgs e)
+		{
+			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].Deform = scrollEnableDeformation.Checked;
+		}
+
+		private void scrollParallaxFactor_ValueChanged(object sender, EventArgs e)
+		{
+			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ParallaxFactor = scrollParallaxFactor.Value;
+		}
+
+		private void scrollScrollSpeed_ValueChanged(object sender, EventArgs e)
+		{
+			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ScrollSpeed = scrollScrollSpeed.Value;
 		}
 
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)

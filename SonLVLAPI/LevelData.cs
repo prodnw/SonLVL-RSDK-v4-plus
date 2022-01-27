@@ -31,6 +31,7 @@ namespace SonicRetro.SonLVL.API
 		public static Backgrounds Background;
 		public static Scene Scene;
 		public static List<ObjectEntry> Objects;
+		public static List<ScrollData>[] BGScroll = new List<ScrollData>[8];
 		public static Bitmap[] NewTileBmps;
 		public static BitmapBits[][] NewColBmpBits;
 		public static Bitmap[][] NewColBmps;
@@ -41,6 +42,7 @@ namespace SonicRetro.SonLVL.API
 		public static Dictionary<string, ObjectData> INIObjDefs;
 		public static Dictionary<byte, ObjectDefinition> ObjTypes;
 		public static ObjectDefinition unkobj;
+		private static Dictionary<string, BitmapBits> spriteSheets;
 		public static BitmapBits[][] ChunkColBmpBits;
 		public static Bitmap[][] ChunkColBmps;
 		public static Bitmap UnknownImg;
@@ -52,9 +54,9 @@ namespace SonicRetro.SonLVL.API
 		internal static readonly bool IsWindows = !(Environment.OSVersion.Platform == PlatformID.MacOSX | Environment.OSVersion.Platform == PlatformID.Unix | Environment.OSVersion.Platform == PlatformID.Xbox);
 		private static readonly BitmapBits InvalidTile = new BitmapBits(16, 16);
 		public const int ColorTransparent = 0;
-		public const int ColorWhite = 16;
-		public const int ColorYellow = 32;
-		public const int ColorBlack = 48;
+		public const int ColorWhite = 252;
+		public const int ColorYellow = 253;
+		public const int ColorBlack = 254;
 
 		static LevelData()
 		{
@@ -191,6 +193,35 @@ namespace SonicRetro.SonLVL.API
 			Objects = new List<ObjectEntry>(Scene.entities.Count);
 			foreach (var item in Scene.entities)
 				Objects.Add(ObjectEntry.Create(item));
+			for (int i = 0; i < 8; i++)
+			{
+				BGScroll[i] = new List<ScrollData>();
+				switch (Background.layers[i].type)
+				{
+					case Backgrounds.Layer.LayerTypes.HScroll:
+					case Backgrounds.Layer.LayerTypes.VScroll:
+						int lastind = -1;
+						for (ushort y = 0; y < Background.layers[i].lineScroll.Length; y++)
+						{
+							if (Background.layers[i].lineScroll[y] != lastind)
+							{
+								lastind = Background.layers[i].lineScroll[y];
+								Backgrounds.ScrollInfo si = null;
+								switch (Background.layers[i].type)
+								{
+									case Backgrounds.Layer.LayerTypes.HScroll:
+										si = Background.hScroll[lastind];
+										break;
+									case Backgrounds.Layer.LayerTypes.VScroll:
+										si = Background.vScroll[lastind];
+										break;
+								}
+								BGScroll[i].Add(new ScrollData(y, si));
+							}
+						}
+						break;
+				}
+			}
 			using (Bitmap palbmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
 				BmpPal = palbmp.Palette;
 			NewPalette.CopyTo(BmpPal.Entries, 0);
@@ -202,24 +233,13 @@ namespace SonicRetro.SonLVL.API
 			INIObjDefs = new Dictionary<string, ObjectData>();
 			ObjTypes = new Dictionary<byte, ObjectDefinition>();
 			unkobj = new DefaultObjectDefinition();
+			spriteSheets = new Dictionary<string, BitmapBits>();
+			if (File.Exists("SonLVLObjDefs.ini"))
+				LoadObjectDefinitionFile("SonLVLObjDefs.ini");
+			if (File.Exists(Path.Combine(ModFolder, "SonLVLObjDefs.ini")))
+				LoadObjectDefinitionFile(Path.Combine(ModFolder, "SonLVLObjDefs.ini"));
 			unkobj.Init(new ObjectData());
 			InitObjectDefinitions();
-			byte objid = 1;
-			IEnumerable<GameConfig.ObjectInfo> objlist;
-			if (StageConfig.loadGlobalObjects)
-				objlist = GameConfig.objects.Concat(StageConfig.objects);
-			else
-				objlist = StageConfig.objects;
-			foreach (var item in objlist)
-			{
-				if (!ObjTypes.ContainsKey(objid))
-				{
-					ObjTypes[objid] = new DefaultObjectDefinition();
-					ObjTypes[objid].Init(item);
-					ObjTypes[objid].Init(new ObjectData());
-				}
-				++objid;
-			}
 			foreach (ObjectEntry obj in Objects)
 				obj.UpdateSprite();
 			Log("Drawing tile bitmaps...");
@@ -267,6 +287,53 @@ namespace SonicRetro.SonLVL.API
 				bmp.Save(Path.Combine(stgfol, "16x16Tiles.gif"), ImageFormat.Gif);
 			NewChunks.write(Path.Combine(stgfol, "128x128Tiles.bin"));
 			Collision.write(Path.Combine(stgfol, "CollisionMasks.bin"));
+			Background.hScroll.Clear();
+			Background.vScroll.Clear();
+			for (int i = 0; i < 8; i++)
+			{
+				int height;
+				List<Backgrounds.ScrollInfo> scrlist;
+				switch (Background.layers[i].type)
+				{
+					case Backgrounds.Layer.LayerTypes.HScroll:
+						height = Background.layers[i].height * 128;
+						scrlist = Background.hScroll;
+						break;
+					case Backgrounds.Layer.LayerTypes.VScroll:
+						height = Background.layers[i].width * 128;
+						scrlist = Background.vScroll;
+						break;
+					default:
+						continue;
+				}
+				Background.layers[i].lineScroll = new byte[height];
+				byte scrind = 0;
+				int datind = 0;
+				for (int y = 0; y < height; y++)
+				{
+					if (BGScroll[i][datind].StartPos == y)
+					{
+						Backgrounds.ScrollInfo si = null;
+						switch (RSDKVer)
+						{
+							case EngineVersion.V3:
+								si = BGScroll[i][datind++].GetInfoV3();
+								break;
+							case EngineVersion.V4:
+								si = BGScroll[i][datind++].GetInfoV4();
+								break;
+						}
+						int tmpind = scrlist.FindIndex(a => si.Equal(a));
+						if (tmpind == -1)
+						{
+							tmpind = scrlist.Count;
+							scrlist.Add(si);
+						}
+						scrind = (byte)tmpind;
+					}
+					Background.layers[i].lineScroll[y] = scrind;
+				}
+			}
 			Background.write(Path.Combine(stgfol, "Backgrounds.bin"));
 			Scene.write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
 		}
@@ -393,80 +460,87 @@ namespace SonicRetro.SonLVL.API
 
 		private static void InitObjectDefinitions()
 		{
+			IEnumerable<(GameConfig.ObjectInfo objinf, byte ind)> objlist;
+			if (StageConfig.loadGlobalObjects)
+				objlist = GameConfig.objects.Concat(StageConfig.objects).Select((o, i) => (o, (byte)(i + 1)));
+			else
+				objlist = StageConfig.objects.Select((o, i) => (o, (byte)(i + 1)));
 			List<KeyValuePair<byte, ObjectDefinition>> objdefs = new List<KeyValuePair<byte, ObjectDefinition>>();
+			ObjectData emptydata = new ObjectData();
 #if !DEBUG
-			Parallel.ForEach(INIObjDefs, (KeyValuePair<string, ObjectData> group) =>
+			Parallel.ForEach(objlist, group =>
 #else
-			foreach (KeyValuePair<string, ObjectData> group in INIObjDefs)
+			foreach (var group in objlist)
 #endif
 			{
-				if (byte.TryParse(group.Key, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.InvariantInfo, out byte ID))
+				ObjectData data;
+				lock (objdefs)
+					data = INIObjDefs.GetValueOrDefault(group.objinf.script, emptydata);
+				ObjectDefinition def = null;
+				if (data.CodeFile != null)
 				{
-					ObjectDefinition def = null;
-					if (group.Value.CodeFile != null)
+					string fulltypename = data.CodeType;
+					string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
+					DateTime modDate = DateTime.MinValue;
+					if (File.Exists(dllfile))
+						modDate = File.GetLastWriteTime(dllfile);
+					string fp = data.CodeFile.Replace('/', Path.DirectorySeparatorChar);
+					Log("Loading ObjectDefinition type " + fulltypename + " from \"" + fp + "\"...");
+					if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
 					{
-						string fulltypename = group.Value.CodeType;
-						string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
-						DateTime modDate = DateTime.MinValue;
-						if (File.Exists(dllfile))
-							modDate = File.GetLastWriteTime(dllfile);
-						string fp = group.Value.CodeFile.Replace('/', Path.DirectorySeparatorChar);
-						Log("Loading ObjectDefinition type " + fulltypename + " from \"" + fp + "\"...");
-						if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
+						Log("Loading type from cached assembly \"" + dllfile + "\"...");
+						def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename));
+					}
+					else
+					{
+						Log("Compiling code file...");
+						string ext = Path.GetExtension(fp);
+						CodeDomProvider pr = null;
+						switch (ext.ToLowerInvariant())
 						{
-							Log("Loading type from cached assembly \"" + dllfile + "\"...");
-							def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename));
+							case ".cs":
+								pr = new Microsoft.CSharp.CSharpCodeProvider();
+								break;
+							case ".vb":
+								pr = new Microsoft.VisualBasic.VBCodeProvider();
+								break;
 						}
-						else
+						if (pr != null)
 						{
-							Log("Compiling code file...");
-							string ext = Path.GetExtension(fp);
-							CodeDomProvider pr = null;
-							switch (ext.ToLowerInvariant())
+							CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
 							{
-								case ".cs":
-									pr = new Microsoft.CSharp.CSharpCodeProvider();
-									break;
-								case ".vb":
-									pr = new Microsoft.VisualBasic.VBCodeProvider();
-									break;
-							}
-							if (pr != null)
+								GenerateExecutable = false,
+								GenerateInMemory = false,
+								IncludeDebugInformation = true,
+								OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
+							};
+							CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
+							if (res.Errors.HasErrors)
 							{
-								CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
-								{
-									GenerateExecutable = false,
-									GenerateInMemory = false,
-									IncludeDebugInformation = true,
-									OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
-								};
-								CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
-								if (res.Errors.HasErrors)
-								{
-									Log("Compile failed.", "Errors:");
-									foreach (CompilerError item in res.Errors)
-										Log(item.ToString());
-									Log(string.Empty);
-									def = new DefaultObjectDefinition();
-								}
-								else
-								{
-									Log("Compile succeeded.");
-									def = (ObjectDefinition)Activator.CreateInstance(res.CompiledAssembly.GetType(fulltypename));
-								}
+								Log("Compile failed.", "Errors:");
+								foreach (CompilerError item in res.Errors)
+									Log(item.ToString());
+								Log(string.Empty);
+								def = new DefaultObjectDefinition();
 							}
 							else
-								def = new DefaultObjectDefinition();
+							{
+								Log("Compile succeeded.");
+								def = (ObjectDefinition)Activator.CreateInstance(res.CompiledAssembly.GetType(fulltypename));
+							}
 						}
+						else
+							def = new DefaultObjectDefinition();
 					}
-					else if (group.Value.XMLFile != null)
-						def = new XMLObjectDefinition();
-					else
-						def = new DefaultObjectDefinition();
-					lock (objdefs)
-						objdefs.Add(new KeyValuePair<byte, ObjectDefinition>(ID, def));
-					def.Init(group.Value);
 				}
+				else if (data.XMLFile != null)
+					def = new XMLObjectDefinition();
+				else
+					def = new DefaultObjectDefinition();
+				lock (objdefs)
+					objdefs.Add(new KeyValuePair<byte, ObjectDefinition>(group.ind, def));
+				def.Init(group.objinf);
+				def.Init(data);
 #if !DEBUG
 			});
 #else
@@ -1113,6 +1187,19 @@ namespace SonicRetro.SonLVL.API
 			return bmp.ToBitmap(BmpPal);
 		}
 
+		public static BitmapBits GetSpriteSheet(string sheetname)
+		{
+			lock (spriteSheets)
+			{
+				sheetname = "Data/Sprites/" + sheetname;
+				if (spriteSheets.TryGetValue(sheetname, out BitmapBits bits))
+					return bits;
+				BitmapBits img = new BitmapBits(LevelData.ReadFile<Gif>(sheetname));
+				spriteSheets.Add(sheetname, img);
+				return img;
+			}
+		}
+
 		public static Size FGSize { get { return new Size(FGWidth, FGHeight); } }
 
 		public static int FGWidth { get { return Scene.width; } }
@@ -1480,6 +1567,8 @@ namespace SonicRetro.SonLVL.API
 			return false;
 		}
 
+		public static bool Equal(this Backgrounds.ScrollInfo src, Backgrounds.ScrollInfo other) => src.deform == other.deform && src.parallaxFactor == other.parallaxFactor && src.scrollSpeed == other.scrollSpeed;
+
 		public static RSDKv3.Scene.Entity Clone(this RSDKv3.Scene.Entity src) => new RSDKv3.Scene.Entity(src.type, src.propertyValue, src.xpos, src.ypos);
 
 		public static RSDKv4.Scene.Entity Clone(this RSDKv4.Scene.Entity src) => new RSDKv4.Scene.Entity(src.type, src.propertyValue, src.xpos, src.ypos)
@@ -1632,34 +1721,6 @@ namespace SonicRetro.SonLVL.API
 				Collision1 = new List<TileConfig.CollisionMask>();
 			if (col2)
 				Collision2 = new List<TileConfig.CollisionMask>();
-		}
-	}
-
-	[Serializable]
-	public class TileData : IEquatable<TileData>, ICloneable
-	{
-		public BitmapBits Tile { get; set; }
-		public TileConfig.CollisionMask Mask1 { get; set; }
-		public TileConfig.CollisionMask Mask2 { get; set; }
-
-		public TileData(BitmapBits tile, TileConfig.CollisionMask mask1, TileConfig.CollisionMask mask2)
-		{
-			Tile = tile;
-			Mask1 = mask1;
-			Mask2 = mask2;
-		}
-
-		public bool Equals(TileData other) => Tile.Bits.FastArrayEqual(other.Tile.Bits) && Mask1.Equal(other.Mask1) && Mask2.Equal(other.Mask2);
-
-		public TileData Clone() => new TileData(new BitmapBits(Tile), Mask1.Clone(), Mask2.Clone());
-
-		object ICloneable.Clone() => Clone();
-
-		public void Flip(bool xflip, bool yflip)
-		{
-			Tile.Flip(xflip, yflip);
-			Mask1.Flip(xflip, yflip);
-			Mask2.Flip(xflip, yflip);
 		}
 	}
 

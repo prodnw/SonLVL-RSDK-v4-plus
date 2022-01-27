@@ -225,9 +225,14 @@ namespace SonicRetro.SonLVL.API
 
 		public override void UpdateSprite()
 		{
-			_sprite = LevelData.UnknownSprite;
-			_bounds = _sprite.Bounds;
-			_bounds.Offset(X, Y);
+			ObjectDefinition def = LevelData.GetObjectDefinition(ID);
+			_sprite = def.GetSprite(this);
+			_bounds = def.GetBounds(this);
+			if (_bounds.IsEmpty)
+			{
+				_bounds = _sprite.Bounds;
+				_bounds.Offset(X, Y);
+			}
 		}
 
 		public override string Name
@@ -583,5 +588,59 @@ namespace SonicRetro.SonLVL.API
 					entity.value3 = value;
 			}
 		}
+	}
+
+	[Serializable]
+	public class TileData : IEquatable<TileData>, ICloneable
+	{
+		public BitmapBits Tile { get; set; }
+		public TileConfig.CollisionMask Mask1 { get; set; }
+		public TileConfig.CollisionMask Mask2 { get; set; }
+
+		public TileData(BitmapBits tile, TileConfig.CollisionMask mask1, TileConfig.CollisionMask mask2)
+		{
+			Tile = tile;
+			Mask1 = mask1;
+			Mask2 = mask2;
+		}
+
+		public bool Equals(TileData other) => Tile.Bits.FastArrayEqual(other.Tile.Bits) && Mask1.Equal(other.Mask1) && Mask2.Equal(other.Mask2);
+
+		public TileData Clone() => new TileData(new BitmapBits(Tile), Mask1.Clone(), Mask2.Clone());
+
+		object ICloneable.Clone() => Clone();
+
+		public void Flip(bool xflip, bool yflip)
+		{
+			Tile.Flip(xflip, yflip);
+			Mask1.Flip(xflip, yflip);
+			Mask2.Flip(xflip, yflip);
+		}
+	}
+
+	public class ScrollData
+	{
+		public ushort StartPos { get; set; }
+		public bool Deform { get; set; }
+		public decimal ParallaxFactor { get; set; }
+		public decimal ScrollSpeed { get; set; }
+
+		public ScrollData(ushort pos = 0)
+		{
+			StartPos = pos;
+			ParallaxFactor = 1;
+		}
+
+		public ScrollData(ushort pos, Backgrounds.ScrollInfo info)
+		{
+			StartPos = pos;
+			Deform = info.deform;
+			ParallaxFactor = info.parallaxFactor / 256m;
+			ScrollSpeed = info.scrollSpeed / 64m;
+		}
+
+		public RSDKv3.Backgrounds.ScrollInfo GetInfoV3() => new RSDKv3.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (byte)(ScrollSpeed * 64) };
+
+		public RSDKv4.Backgrounds.ScrollInfo GetInfoV4() => new RSDKv4.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (byte)(ScrollSpeed * 64) };
 	}
 }

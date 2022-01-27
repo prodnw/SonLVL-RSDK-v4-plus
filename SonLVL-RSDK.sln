@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectLayoutDiff", "ObjectL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectLayoutMerge", "ObjectLayoutMerge\ObjectLayoutMerge.csproj", "{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjDefGen", "ObjDefGen\ObjDefGen.csproj", "{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -53,6 +53,14 @@ namespace SonicRetro.SonLVL.API
 				LoadBitmap(bmp);
 		}
 
+		public BitmapBits(RSDKv3_4.Gif gif)
+		{
+			Width = gif.width;
+			Height = gif.height;
+			Bits = gif.pixels;
+			OriginalFormat = PixelFormat.Format8bppIndexed;
+		}
+
 		private void LoadBitmap(Bitmap bmp)
 		{
 			switch (bmp.PixelFormat)

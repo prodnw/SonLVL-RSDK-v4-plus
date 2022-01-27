@@ -61,7 +61,7 @@ namespace SonicRetro.SonLVL.API.XMLDef
 
 	public class ImageList
 	{
-		[XmlElement("ImageFromBitmap", typeof(ImageFromBitmap))]
+		[XmlElement("ImageFromSheet", typeof(ImageFromSheet))]
 		public Image[] Items { get; set; }
 	}
 
@@ -74,6 +74,20 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public XmlPoint Offset { get; set; }
 		[XmlIgnore]
 		public bool OffsetSpecified { get { return !Offset.IsEmpty; } set { } }
+	}
+
+	public class ImageFromSheet : Image
+	{
+		[XmlAttribute]
+		public string sheet { get; set; }
+		[XmlAttribute]
+		public int sourcex { get; set; }
+		[XmlAttribute]
+		public int sourcey { get; set; }
+		[XmlAttribute]
+		public int width { get; set; }
+		[XmlAttribute]
+		public int height { get; set; }
 	}
 
 	public struct XmlPoint
@@ -94,15 +108,9 @@ namespace SonicRetro.SonLVL.API.XMLDef
 			Y = y;
 		}
 
-		public bool IsEmpty { get { return X == 0 & Y == 0; } }
+		public bool IsEmpty => X == 0 && Y == 0;
 
-		public System.Drawing.Point ToPoint() { return new System.Drawing.Point(X, Y); }
-	}
-
-	public class ImageFromBitmap : Image
-	{
-		[XmlAttribute]
-		public string filename { get; set; }
+		public System.Drawing.Point ToPoint() => new System.Drawing.Point(X, Y);
 	}
 
 	public class ImageSetList
@@ -168,12 +176,10 @@ namespace SonicRetro.SonLVL.API.XMLDef
 
 	public class PropertyList
 	{
-		[XmlElement("CustomProperty", typeof(CustomProperty))]
-		[XmlElement("BitsProperty", typeof(BitsProperty))]
 		public Property[] Items { get; set; }
 	}
 
-	public abstract class Property
+	public class Property
 	{
 		[XmlAttribute]
 		public string name { get; set; }
@@ -187,16 +193,10 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public string description { get; set; }
 		[XmlIgnore]
 		public bool descriptionSpecified { get { return !string.IsNullOrEmpty(description); } set { } }
-	}
-
-	public class CustomProperty : Property
-	{
-		public string get { get; set; }
-		public string set { get; set; }
-	}
-
-	public class BitsProperty : Property
-	{
+		[XmlAttribute]
+		public string source { get; set; }
+		[XmlIgnore]
+		public bool sourceSpecified { get { return !string.IsNullOrEmpty(source); } set { } }
 		[XmlAttribute]
 		public int startbit { get; set; }
 		[XmlAttribute]

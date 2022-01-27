@@ -1,12 +1,8 @@
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 
 namespace SonicRetro.SonLVL.API
 {
@@ -23,12 +19,10 @@ namespace SonicRetro.SonLVL.API
 		public string Name;
 		[IniName("pri")]
 		public bool Priority;
-		[IniName("image")]
-		public string Image;
-		[IniName("offset")]
-		public Size Offset;
-		[IniName("rememberstate")]
-		public bool RememberState;
+		[IniName("sheet")]
+		public string Sheet;
+		[IniName("frame")]
+		public SpriteFrame Frame;
 		[IniName("defaultsubtype")]
 		[TypeConverter(typeof(ByteHexConverter))]
 		public byte DefaultSubtype;
@@ -39,6 +33,64 @@ namespace SonicRetro.SonLVL.API
 		public byte[] Subtypes;
 		[IniCollection(IniCollectionMode.IndexOnly)]
 		public Dictionary<string, string> CustomProperties;
+	}
+
+	[TypeConverter(typeof(SpriteFrameConverter))]
+	public class SpriteFrame
+	{
+		public int OffX;
+		public int OffY;
+		public int Width;
+		public int Height;
+		public int X;
+		public int Y;
+
+		public SpriteFrame(string data)
+		{
+			string[] split = data.Split(',');
+			OffX = int.Parse(split[0]);
+			OffY = int.Parse(split[1]);
+			Width = int.Parse(split[2]);
+			Height = int.Parse(split[3]);
+			X = int.Parse(split[4]);
+			Y = int.Parse(split[5]);
+		}
+
+		public override string ToString()
+		{
+			return $"{OffX},{OffY},{Width},{Height},{X},{Y}";
+		}
+	}
+
+	public class SpriteFrameConverter : TypeConverter
+	{
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+		{
+			if (destinationType == typeof(SpriteFrame))
+				return true;
+			return base.CanConvertTo(context, destinationType);
+		}
+
+		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		{
+			if (destinationType == typeof(string) && value is SpriteFrame sf)
+				return sf.ToString();
+			return base.ConvertTo(context, culture, value, destinationType);
+		}
+
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+		{
+			if (sourceType == typeof(string))
+				return true;
+			return base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		{
+			if (value is string st)
+				return new SpriteFrame(st);
+			return base.ConvertFrom(context, culture, value);
+		}
 	}
 
 	public abstract class ObjectDefinition
@@ -55,7 +107,6 @@ namespace SonicRetro.SonLVL.API
 		public abstract Sprite SubtypeImage(byte subtype);
 		public string Name { get; private set; }
 		public string Script { get; private set; }
-		public virtual bool RememberState { get { return false; } }
 		public virtual byte DefaultSubtype { get { return 0; } }
 		public abstract Sprite Image { get; }
 		public abstract Sprite GetSprite(ObjectEntry obj);
@@ -449,7 +500,6 @@ namespace SonicRetro.SonLVL.API
 	public class DefaultObjectDefinition : ObjectDefinition
 	{
 		private Sprite[] spr = new Sprite[4];
-		private bool rememberstate;
 		private byte defsub;
 		private List<byte> subtypes = new List<byte>();
 		bool debug = false;
@@ -458,10 +508,10 @@ namespace SonicRetro.SonLVL.API
 		{
 			try
 			{
-				if (data.Image != null)
+				if (data.Sheet != null && data.Frame != null)
 				{
-					BitmapBits img = new BitmapBits(data.Image);
-					spr[0] = new Sprite(img, new Point(data.Offset));
+					BitmapBits img = LevelData.GetSpriteSheet(data.Sheet);
+					spr[0] = new Sprite(img.GetSection(data.Frame.X, data.Frame.Y, data.Frame.Width, data.Frame.Height), data.Frame.OffX, data.Frame.OffY);
 					if (data.Priority)
 						spr[0].InvertPriority();
 					debug = true;
@@ -484,7 +534,6 @@ namespace SonicRetro.SonLVL.API
 			spr[2].Flip(false, true);
 			spr[3] = new Sprite(spr[1]);
 			spr[3].Flip(false, true);
-			rememberstate = data.RememberState;
 			defsub = data.DefaultSubtype;
 			debug |= data.Debug;
 			if (data.Subtypes != null)
@@ -496,8 +545,6 @@ namespace SonicRetro.SonLVL.API
 		public override string SubtypeName(byte subtype) { return string.Empty; }
 
 		public override Sprite SubtypeImage(byte subtype) { return Image; }
-
-		public override bool RememberState { get { return rememberstate; } }
 
 		public override byte DefaultSubtype { get { return defsub; } }
 
@@ -603,9 +650,10 @@ namespace SonicRetro.SonLVL.API
 					Sprite sprite = default(Sprite);
 					switch (item)
 					{
-						case XMLDef.ImageFromBitmap bmpimg:
-							sprite = new Sprite(new BitmapBits(bmpimg.filename), bmpimg.Offset.ToPoint());
-							if (bmpimg.priority) sprite.InvertPriority();
+						case XMLDef.ImageFromSheet sheetimg:
+							BitmapBits bmp = LevelData.GetSpriteSheet(sheetimg.sheet);
+							sprite = new Sprite(bmp.GetSection(sheetimg.sourcex, sheetimg.sourcey, sheetimg.width, sheetimg.height), sheetimg.Offset.ToPoint());
+							if (sheetimg.priority) sprite.InvertPriority();
 							break;
 					}
 					images.Add(item.id, sprite);
@@ -639,7 +687,7 @@ namespace SonicRetro.SonLVL.API
 			{
 				List<PropertySpec> custprops = new List<PropertySpec>(xmldef.Properties.Items.Length);
 				Dictionary<string, PropertyInfo> propinf = new Dictionary<string, PropertyInfo>(xmldef.Properties.Items.Length);
-				foreach (XMLDef.BitsProperty property in xmldef.Properties.Items.OfType<XMLDef.BitsProperty>())
+				foreach (XMLDef.Property property in xmldef.Properties.Items)
 				{
 					int mask = 0;
 					int prop_startbit = property.startbit;
@@ -670,126 +718,6 @@ namespace SonicRetro.SonLVL.API
 						custprops.Add(new PropertySpec(property.displayname ?? property.name, type, "Extended", property.description, null, getMethod, setMethod));
 						propinf.Add(property.name, new PropertyInfo(type, getMethod, setMethod));
 					}
-				}
-				if (xmldef.Properties.Items.Any(a => a is XMLDef.CustomProperty))
-				{
-					Type functype = null;
-					string fulltypename = xmldef.Namespace + "." + xmldef.TypeName;
-					string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
-					DateTime modDate = DateTime.MinValue;
-					if (File.Exists(dllfile))
-						modDate = File.GetLastWriteTime(dllfile);
-					if (modDate >= File.GetLastWriteTime(data.XMLFile) && modDate > File.GetLastWriteTime(System.Windows.Forms.Application.ExecutablePath))
-					{
-						LevelData.Log("Loading type from cached assembly \"" + dllfile + "\"...");
-						functype = System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename);
-					}
-					else
-					{
-						LevelData.Log("Building code file...");
-						CodeDomProvider pr = null;
-						switch (xmldef.Language.ToLowerInvariant())
-						{
-							case "cs":
-								pr = new Microsoft.CSharp.CSharpCodeProvider();
-								break;
-							case "vb":
-								pr = new Microsoft.VisualBasic.VBCodeProvider();
-								break;
-#if false
-								case "js":
-									pr = new Microsoft.JScript.JScriptCodeProvider();
-									break;
-#endif
-						}
-						List<CodeTypeMember> members = new List<CodeTypeMember>();
-						CodeMemberMethod method = new CodeMemberMethod();
-						Type basetype = null;
-						foreach (XMLDef.CustomProperty item in xmldef.Properties.Items.OfType<XMLDef.CustomProperty>())
-						{
-							method = new CodeMemberMethod()
-							{
-								Attributes = MemberAttributes.Public | MemberAttributes.Static,
-								Name = "Get" + item.name
-							};
-							method.Parameters.Add(new CodeParameterDeclarationExpression(typeof(ObjectEntry), "_obj"));
-							method.ReturnType = new CodeTypeReference(typeof(object));
-							method.Statements.Add(new CodeVariableDeclarationStatement(basetype, "obj", new CodeCastExpression(basetype, new CodeArgumentReferenceExpression("_obj"))));
-							method.Statements.Add(new CodeSnippetStatement(((XMLDef.CustomProperty)item).get));
-							members.Add(method);
-							method = new CodeMemberMethod()
-							{
-								Attributes = MemberAttributes.Public | MemberAttributes.Static,
-								Name = "Set" + item.name
-							};
-							method.Parameters.AddRange(new CodeParameterDeclarationExpression[] { new CodeParameterDeclarationExpression(typeof(ObjectEntry), "_obj"), new CodeParameterDeclarationExpression(typeof(object), "_val") });
-							method.ReturnType = new CodeTypeReference(typeof(void));
-							method.Statements.Add(new CodeVariableDeclarationStatement(basetype, "obj", new CodeCastExpression(basetype, new CodeArgumentReferenceExpression("_obj"))));
-							if (enums.ContainsKey(item.type))
-								method.Statements.Add(new CodeVariableDeclarationStatement(typeof(int), "value", new CodeCastExpression(typeof(int), new CodeArgumentReferenceExpression("_val"))));
-							else
-								method.Statements.Add(new CodeVariableDeclarationStatement(LevelData.ExpandTypeName(item.type), "value", new CodeCastExpression(LevelData.ExpandTypeName(item.type), new CodeArgumentReferenceExpression("_val"))));
-							method.Statements.Add(new CodeSnippetStatement(((XMLDef.CustomProperty)item).set));
-							members.Add(method);
-						}
-						CodeTypeDeclaration ctd = new CodeTypeDeclaration(xmldef.TypeName)
-						{
-							Attributes = MemberAttributes.Public | MemberAttributes.Static,
-							IsClass = true
-						};
-						ctd.Members.AddRange(members.ToArray());
-						CodeNamespace cn = new CodeNamespace(xmldef.Namespace);
-						cn.Types.Add(ctd);
-						cn.Imports.Add(new CodeNamespaceImport(typeof(LevelData).Namespace));
-						CodeCompileUnit ccu = new CodeCompileUnit();
-						ccu.Namespaces.Add(cn);
-						ccu.ReferencedAssemblies.AddRange(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location });
-						LevelData.Log("Compiling code file...");
-						if (pr != null)
-						{
-#if DEBUG
-							using (StreamWriter sw = new StreamWriter(Path.Combine("dllcache", xmldef.Namespace + "." + xmldef.TypeName + "." + pr.FileExtension)))
-								pr.GenerateCodeFromCompileUnit(ccu, sw, new CodeGeneratorOptions() { BlankLinesBetweenMembers = true, BracingStyle = "C", VerbatimOrder = true });
-#endif
-							CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
-							{
-								GenerateExecutable = false,
-								GenerateInMemory = false,
-								IncludeDebugInformation = true,
-								OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
-							};
-							CompilerResults res = pr.CompileAssemblyFromDom(para, ccu);
-							if (res.Errors.HasErrors)
-							{
-								LevelData.Log("Compile failed.", "Errors:");
-								foreach (CompilerError item in res.Errors)
-									LevelData.Log(item.ToString());
-								LevelData.Log(string.Empty);
-							}
-							else
-							{
-								LevelData.Log("Compile succeeded.");
-								functype = res.CompiledAssembly.GetType(fulltypename);
-							}
-						}
-					}
-					if (functype != null)
-						foreach (XMLDef.CustomProperty property in xmldef.Properties.Items.OfType<XMLDef.CustomProperty>())
-						{
-							Func<ObjectEntry, object> getMethod = (Func<ObjectEntry, object>)Delegate.CreateDelegate(typeof(Func<ObjectEntry, object>), functype.GetMethod("Get" + property.name));
-							Action<ObjectEntry, object> setMethod = (Action<ObjectEntry, object>)Delegate.CreateDelegate(typeof(Action<ObjectEntry, object>), functype.GetMethod("Set" + property.name));
-							if (enums.ContainsKey(property.type))
-							{
-								custprops.Add(new PropertySpec(property.displayname ?? property.name, typeof(int), "Extended", property.description, null, enums[property.type], getMethod, setMethod));
-								propinf.Add(property.name, new PropertyInfo(typeof(int), enums[property.type], getMethod, setMethod));
-							}
-							else
-							{
-								Type type = Type.GetType(LevelData.ExpandTypeName(property.type));
-								custprops.Add(new PropertySpec(property.displayname ?? property.name, type, "Extended", property.description, null, getMethod, setMethod));
-								propinf.Add(property.name, new PropertyInfo(type, getMethod, setMethod));
-							}
-						}
 				}
 				customProperties = custprops.ToArray();
 				propertyInfo = propinf;
@@ -1015,10 +943,10 @@ namespace SonicRetro.SonLVL.API
 					}
 					else
 					{
-						/*System.Reflection.PropertyInfo prop = LevelData.ObjectFormat.ObjectType.GetProperty(cond.property);
+						System.Reflection.PropertyInfo prop = obj.GetType().GetProperty(cond.property);
 						object value = prop.GetValue(obj, null);
 						if (!object.Equals(value, prop.PropertyType.InvokeMember("Parse", System.Reflection.BindingFlags.DeclaredOnly | System.Reflection.BindingFlags.InvokeMethod | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, null, null, new[] { cond.value })))
-							return false;*/
+							return false;
 					}
 				}
 			return true;
@@ -1027,11 +955,6 @@ namespace SonicRetro.SonLVL.API
 		public override bool Debug
 		{
 			get { return xmldef.Debug; }
-		}
-
-		public override bool RememberState
-		{
-			get { return xmldef.RememberState; }
 		}
 
 		public override byte DefaultSubtype

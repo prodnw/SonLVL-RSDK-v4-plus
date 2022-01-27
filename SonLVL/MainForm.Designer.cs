@@ -72,7 +72,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.remapTilesButton = new System.Windows.Forms.ToolStripButton();
 			this.enableDraggingTilesButton = new System.Windows.Forms.ToolStripButton();
 			this.tabPage8 = new System.Windows.Forms.TabPage();
-			this.ChunkSelector = new SonicRetro.SonLVL.API.TileList();
 			this.tabPage9 = new System.Windows.Forms.TabPage();
 			this.layoutSectionSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.layoutSectionListBox = new System.Windows.Forms.ListBox();
@@ -84,12 +83,10 @@ namespace SonicRetro.SonLVL.GUI
 			this.rotateTileRightButton = new System.Windows.Forms.Button();
 			this.TileCount = new System.Windows.Forms.Label();
 			this.flipChunkVButton = new System.Windows.Forms.Button();
-			this.chunkBlockEditor = new SonicRetro.SonLVL.ChunkBlockEditor();
 			this.flipChunkHButton = new System.Windows.Forms.Button();
 			this.ChunkCount = new System.Windows.Forms.Label();
 			this.chunkCtrlLabel = new System.Windows.Forms.Label();
 			this.ChunkID = new System.Windows.Forms.NumericUpDown();
-			this.ChunkPicture = new SonicRetro.SonLVL.API.KeyboardPanel();
 			this.ceilingAngle = new System.Windows.Forms.NumericUpDown();
 			this.rightAngle = new System.Windows.Forms.NumericUpDown();
 			this.leftAngle = new System.Windows.Forms.NumericUpDown();
@@ -185,7 +182,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.splitContainer4 = new System.Windows.Forms.SplitContainer();
 			this.objectTypeList = new System.Windows.Forms.ListView();
 			this.objectTypeImages = new System.Windows.Forms.ImageList(this.components);
-			this.objectPanel = new SonicRetro.SonLVL.ScrollingPanel();
 			this.objToolStrip = new System.Windows.Forms.ToolStrip();
 			this.objGridSizeDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -216,13 +212,11 @@ namespace SonicRetro.SonLVL.GUI
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.foregroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
 			this.fgToolStrip = new System.Windows.Forms.ToolStrip();
 			this.replaceForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.clearForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-			this.backgroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
 			this.bgToolStrip = new System.Windows.Forms.ToolStrip();
 			this.bgLayerDropDown = new System.Windows.Forms.ToolStripDropDownButton();
 			this.replaceBackgroundToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -230,12 +224,29 @@ namespace SonicRetro.SonLVL.GUI
 			this.tabControl3 = new System.Windows.Forms.TabControl();
 			this.tabPage10 = new System.Windows.Forms.TabPage();
 			this.tabPage11 = new System.Windows.Forms.TabPage();
+			this.tabPage13 = new System.Windows.Forms.TabPage();
+			this.scrollEditPanel = new System.Windows.Forms.Panel();
+			this.scrollOffset = new System.Windows.Forms.NumericUpDown();
+			this.label13 = new System.Windows.Forms.Label();
+			this.scrollScrollSpeed = new System.Windows.Forms.NumericUpDown();
+			this.label11 = new System.Windows.Forms.Label();
+			this.scrollParallaxFactor = new System.Windows.Forms.NumericUpDown();
+			this.label12 = new System.Windows.Forms.Label();
+			this.deleteScrollButton = new System.Windows.Forms.Button();
+			this.addScrollButton = new System.Windows.Forms.Button();
+			this.scrollEnableDeformation = new System.Windows.Forms.CheckBox();
+			this.scrollList = new System.Windows.Forms.ListBox();
+			this.layerScrollSpeed = new System.Windows.Forms.NumericUpDown();
+			this.label10 = new System.Windows.Forms.Label();
+			this.layerParallaxFactor = new System.Windows.Forms.NumericUpDown();
+			this.label9 = new System.Windows.Forms.Label();
+			this.layerScrollType = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.tabControl4 = new System.Windows.Forms.TabControl();
 			this.tabPage12 = new System.Windows.Forms.TabPage();
 			this.tabPage14 = new System.Windows.Forms.TabPage();
-			this.TileSelector = new SonicRetro.SonLVL.API.TileList();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel8 = new System.Windows.Forms.Panel();
@@ -279,6 +290,13 @@ namespace SonicRetro.SonLVL.GUI
 			this.copyChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pasteChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.clearChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ChunkSelector = new SonicRetro.SonLVL.API.TileList();
+			this.ChunkPicture = new SonicRetro.SonLVL.API.KeyboardPanel();
+			this.TileSelector = new SonicRetro.SonLVL.API.TileList();
+			this.objectPanel = new SonicRetro.SonLVL.ScrollingPanel();
+			this.foregroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
+			this.backgroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
+			this.chunkBlockEditor = new SonicRetro.SonLVL.ChunkBlockEditor();
 			this.importProgressControl1 = new SonicRetro.SonLVL.ImportProgressControl();
 			toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -359,6 +377,13 @@ namespace SonicRetro.SonLVL.GUI
 			this.splitContainer3.SuspendLayout();
 			this.bgToolStrip.SuspendLayout();
 			this.tabControl3.SuspendLayout();
+			this.tabPage13.SuspendLayout();
+			this.scrollEditPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.scrollOffset)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.scrollScrollSpeed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.scrollParallaxFactor)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.layerScrollSpeed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.layerParallaxFactor)).BeginInit();
 			this.tabPage4.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabControl4.SuspendLayout();
@@ -596,30 +621,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.tabPage8.Text = "Chunks";
 			this.tabPage8.UseVisualStyleBackColor = true;
 			// 
-			// ChunkSelector
-			// 
-			this.ChunkSelector.BackColor = System.Drawing.SystemColors.Window;
-			this.ChunkSelector.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ChunkSelector.ImageHeight = 128;
-			this.ChunkSelector.ImageSize = 128;
-			this.ChunkSelector.ImageWidth = 128;
-			this.ChunkSelector.Location = new System.Drawing.Point(0, 0);
-			this.ChunkSelector.Margin = new System.Windows.Forms.Padding(0);
-			this.ChunkSelector.Name = "ChunkSelector";
-			this.ChunkSelector.ScrollValue = 0;
-			this.ChunkSelector.SelectedIndex = -1;
-			this.ChunkSelector.Size = new System.Drawing.Size(278, 451);
-			this.ChunkSelector.TabIndex = 1;
-			this.ChunkSelector.SelectedIndexChanged += new System.EventHandler(this.ChunkSelector_SelectedIndexChanged);
-			this.ChunkSelector.ItemDrag += new System.EventHandler(this.ChunkSelector_ItemDrag);
-			this.ChunkSelector.DragDrop += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragDrop);
-			this.ChunkSelector.DragEnter += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragEnter);
-			this.ChunkSelector.DragOver += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragOver);
-			this.ChunkSelector.DragLeave += new System.EventHandler(this.ChunkSelector_DragLeave);
-			this.ChunkSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.ChunkSelector_Paint);
-			this.ChunkSelector.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TileList_KeyDown);
-			this.ChunkSelector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChunkSelector_MouseDown);
-			// 
 			// tabPage9
 			// 
 			this.tabPage9.Controls.Add(this.layoutSectionSplitContainer);
@@ -830,17 +831,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.flipChunkVButton.UseVisualStyleBackColor = true;
 			this.flipChunkVButton.Click += new System.EventHandler(this.flipChunkVButton_Click);
 			// 
-			// chunkBlockEditor
-			// 
-			this.chunkBlockEditor.AutoSize = true;
-			this.chunkBlockEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.chunkBlockEditor.Location = new System.Drawing.Point(3, 84);
-			this.chunkBlockEditor.Name = "chunkBlockEditor";
-			this.chunkBlockEditor.SelectedObjects = null;
-			this.chunkBlockEditor.Size = new System.Drawing.Size(139, 161);
-			this.chunkBlockEditor.TabIndex = 3;
-			this.chunkBlockEditor.PropertyValueChanged += new System.EventHandler(this.chunkBlockEditor_PropertyValueChanged);
-			// 
 			// flipChunkHButton
 			// 
 			this.flipChunkHButton.AutoSize = true;
@@ -886,18 +876,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.ChunkID.Size = new System.Drawing.Size(94, 20);
 			this.ChunkID.TabIndex = 2;
 			this.ChunkID.ValueChanged += new System.EventHandler(this.ChunkID_ValueChanged);
-			// 
-			// ChunkPicture
-			// 
-			this.ChunkPicture.Location = new System.Drawing.Point(3, 3);
-			this.ChunkPicture.Name = "ChunkPicture";
-			this.ChunkPicture.Size = new System.Drawing.Size(128, 128);
-			this.ChunkPicture.TabIndex = 1;
-			this.ChunkPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.ChunkPicture_Paint);
-			this.ChunkPicture.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChunkPicture_KeyDown);
-			this.ChunkPicture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseDown);
-			this.ChunkPicture.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseMove);
-			this.ChunkPicture.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseUp);
 			// 
 			// panel9
 			// 
@@ -1901,39 +1879,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.objectTypeImages.ImageSize = new System.Drawing.Size(32, 32);
 			this.objectTypeImages.TransparentColor = System.Drawing.Color.Transparent;
 			// 
-			// objectPanel
-			// 
-			this.objectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.objectPanel.HScrollEnabled = false;
-			this.objectPanel.HScrollLargeChange = 128;
-			this.objectPanel.HScrollMaximum = 128;
-			this.objectPanel.HScrollMinimum = 0;
-			this.objectPanel.HScrollSmallChange = 16;
-			this.objectPanel.HScrollValue = 0;
-			this.objectPanel.Location = new System.Drawing.Point(0, 25);
-			this.objectPanel.Name = "objectPanel";
-			this.objectPanel.PanelAllowDrop = true;
-			this.objectPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-			this.objectPanel.Size = new System.Drawing.Size(348, 452);
-			this.objectPanel.TabIndex = 5;
-			this.objectPanel.VScrollEnabled = false;
-			this.objectPanel.VScrollLargeChange = 128;
-			this.objectPanel.VScrollMaximum = 128;
-			this.objectPanel.VScrollMinimum = 0;
-			this.objectPanel.VScrollSmallChange = 16;
-			this.objectPanel.VScrollValue = 0;
-			this.objectPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-			this.objectPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.objectPanel_KeyDown);
-			this.objectPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseDown);
-			this.objectPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseUp);
-			this.objectPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseMove);
-			this.objectPanel.PanelDragEnter += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragEnter);
-			this.objectPanel.PanelDragOver += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragOver);
-			this.objectPanel.PanelDragLeave += new System.EventHandler(this.objectPanel_DragLeave);
-			this.objectPanel.PanelDragDrop += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragDrop);
-			this.objectPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-			this.objectPanel.Resize += new System.EventHandler(this.panel_Resize);
-			// 
 			// objToolStrip
 			// 
 			this.objToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -2244,35 +2189,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.splitContainer2.SplitterDistance = 360;
 			this.splitContainer2.TabIndex = 4;
 			// 
-			// foregroundPanel
-			// 
-			this.foregroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.foregroundPanel.HScrollEnabled = false;
-			this.foregroundPanel.HScrollLargeChange = 128;
-			this.foregroundPanel.HScrollMaximum = 128;
-			this.foregroundPanel.HScrollMinimum = 0;
-			this.foregroundPanel.HScrollSmallChange = 16;
-			this.foregroundPanel.HScrollValue = 0;
-			this.foregroundPanel.Location = new System.Drawing.Point(0, 25);
-			this.foregroundPanel.Name = "foregroundPanel";
-			this.foregroundPanel.PanelAllowDrop = false;
-			this.foregroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-			this.foregroundPanel.Size = new System.Drawing.Size(360, 452);
-			this.foregroundPanel.TabIndex = 5;
-			this.foregroundPanel.VScrollEnabled = false;
-			this.foregroundPanel.VScrollLargeChange = 128;
-			this.foregroundPanel.VScrollMaximum = 128;
-			this.foregroundPanel.VScrollMinimum = 0;
-			this.foregroundPanel.VScrollSmallChange = 16;
-			this.foregroundPanel.VScrollValue = 0;
-			this.foregroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-			this.foregroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.foregroundPanel_KeyDown);
-			this.foregroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseDown);
-			this.foregroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseUp);
-			this.foregroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseMove);
-			this.foregroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-			this.foregroundPanel.Resize += new System.EventHandler(this.panel_Resize);
-			// 
 			// fgToolStrip
 			// 
 			this.fgToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -2334,35 +2250,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.splitContainer3.SplitterDistance = 360;
 			this.splitContainer3.TabIndex = 4;
 			// 
-			// backgroundPanel
-			// 
-			this.backgroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.backgroundPanel.HScrollEnabled = false;
-			this.backgroundPanel.HScrollLargeChange = 128;
-			this.backgroundPanel.HScrollMaximum = 128;
-			this.backgroundPanel.HScrollMinimum = 0;
-			this.backgroundPanel.HScrollSmallChange = 16;
-			this.backgroundPanel.HScrollValue = 0;
-			this.backgroundPanel.Location = new System.Drawing.Point(0, 25);
-			this.backgroundPanel.Name = "backgroundPanel";
-			this.backgroundPanel.PanelAllowDrop = false;
-			this.backgroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-			this.backgroundPanel.Size = new System.Drawing.Size(360, 452);
-			this.backgroundPanel.TabIndex = 6;
-			this.backgroundPanel.VScrollEnabled = false;
-			this.backgroundPanel.VScrollLargeChange = 128;
-			this.backgroundPanel.VScrollMaximum = 128;
-			this.backgroundPanel.VScrollMinimum = 0;
-			this.backgroundPanel.VScrollSmallChange = 16;
-			this.backgroundPanel.VScrollValue = 0;
-			this.backgroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-			this.backgroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.backgroundPanel_KeyDown);
-			this.backgroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseDown);
-			this.backgroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseUp);
-			this.backgroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseMove);
-			this.backgroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-			this.backgroundPanel.Resize += new System.EventHandler(this.panel_Resize);
-			// 
 			// bgToolStrip
 			// 
 			this.bgToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -2416,6 +2303,7 @@ namespace SonicRetro.SonLVL.GUI
 			// 
 			this.tabControl3.Controls.Add(this.tabPage10);
 			this.tabControl3.Controls.Add(this.tabPage11);
+			this.tabControl3.Controls.Add(this.tabPage13);
 			this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl3.Location = new System.Drawing.Point(0, 0);
 			this.tabControl3.Name = "tabControl3";
@@ -2440,6 +2328,249 @@ namespace SonicRetro.SonLVL.GUI
 			this.tabPage11.TabIndex = 1;
 			this.tabPage11.Text = "Layout Sections";
 			this.tabPage11.UseVisualStyleBackColor = true;
+			// 
+			// tabPage13
+			// 
+			this.tabPage13.Controls.Add(this.scrollEditPanel);
+			this.tabPage13.Controls.Add(this.layerScrollType);
+			this.tabPage13.Controls.Add(this.label8);
+			this.tabPage13.Location = new System.Drawing.Point(4, 22);
+			this.tabPage13.Name = "tabPage13";
+			this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage13.Size = new System.Drawing.Size(278, 451);
+			this.tabPage13.TabIndex = 2;
+			this.tabPage13.Text = "Scrolling";
+			this.tabPage13.UseVisualStyleBackColor = true;
+			// 
+			// scrollEditPanel
+			// 
+			this.scrollEditPanel.AutoSize = true;
+			this.scrollEditPanel.Controls.Add(this.scrollOffset);
+			this.scrollEditPanel.Controls.Add(this.label13);
+			this.scrollEditPanel.Controls.Add(this.scrollScrollSpeed);
+			this.scrollEditPanel.Controls.Add(this.label11);
+			this.scrollEditPanel.Controls.Add(this.scrollParallaxFactor);
+			this.scrollEditPanel.Controls.Add(this.label12);
+			this.scrollEditPanel.Controls.Add(this.deleteScrollButton);
+			this.scrollEditPanel.Controls.Add(this.addScrollButton);
+			this.scrollEditPanel.Controls.Add(this.scrollEnableDeformation);
+			this.scrollEditPanel.Controls.Add(this.scrollList);
+			this.scrollEditPanel.Controls.Add(this.layerScrollSpeed);
+			this.scrollEditPanel.Controls.Add(this.label10);
+			this.scrollEditPanel.Controls.Add(this.layerParallaxFactor);
+			this.scrollEditPanel.Controls.Add(this.label9);
+			this.scrollEditPanel.Enabled = false;
+			this.scrollEditPanel.Location = new System.Drawing.Point(3, 30);
+			this.scrollEditPanel.Margin = new System.Windows.Forms.Padding(0);
+			this.scrollEditPanel.Name = "scrollEditPanel";
+			this.scrollEditPanel.Size = new System.Drawing.Size(272, 418);
+			this.scrollEditPanel.TabIndex = 2;
+			// 
+			// scrollOffset
+			// 
+			this.scrollOffset.Hexadecimal = true;
+			this.scrollOffset.Location = new System.Drawing.Point(118, 320);
+			this.scrollOffset.Name = "scrollOffset";
+			this.scrollOffset.Size = new System.Drawing.Size(81, 20);
+			this.scrollOffset.TabIndex = 13;
+			this.scrollOffset.ValueChanged += new System.EventHandler(this.scrollOffset_ValueChanged);
+			// 
+			// label13
+			// 
+			this.label13.AutoSize = true;
+			this.label13.Location = new System.Drawing.Point(3, 322);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(38, 13);
+			this.label13.TabIndex = 12;
+			this.label13.Text = "Offset:";
+			// 
+			// scrollScrollSpeed
+			// 
+			this.scrollScrollSpeed.DecimalPlaces = 5;
+			this.scrollScrollSpeed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.scrollScrollSpeed.Location = new System.Drawing.Point(118, 395);
+			this.scrollScrollSpeed.Maximum = new decimal(new int[] {
+            3984375,
+            0,
+            0,
+            393216});
+			this.scrollScrollSpeed.Name = "scrollScrollSpeed";
+			this.scrollScrollSpeed.Size = new System.Drawing.Size(81, 20);
+			this.scrollScrollSpeed.TabIndex = 11;
+			this.scrollScrollSpeed.ValueChanged += new System.EventHandler(this.scrollScrollSpeed_ValueChanged);
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(3, 397);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(70, 13);
+			this.label11.TabIndex = 10;
+			this.label11.Text = "Scroll Speed:";
+			// 
+			// scrollParallaxFactor
+			// 
+			this.scrollParallaxFactor.DecimalPlaces = 5;
+			this.scrollParallaxFactor.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.scrollParallaxFactor.Location = new System.Drawing.Point(118, 369);
+			this.scrollParallaxFactor.Maximum = new decimal(new int[] {
+            -85292513,
+            2,
+            0,
+            524288});
+			this.scrollParallaxFactor.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
+			this.scrollParallaxFactor.Name = "scrollParallaxFactor";
+			this.scrollParallaxFactor.Size = new System.Drawing.Size(81, 20);
+			this.scrollParallaxFactor.TabIndex = 9;
+			this.scrollParallaxFactor.ValueChanged += new System.EventHandler(this.scrollParallaxFactor_ValueChanged);
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(3, 371);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(80, 13);
+			this.label12.TabIndex = 8;
+			this.label12.Text = "Parallax Factor:";
+			// 
+			// deleteScrollButton
+			// 
+			this.deleteScrollButton.Enabled = false;
+			this.deleteScrollButton.Location = new System.Drawing.Point(84, 291);
+			this.deleteScrollButton.Name = "deleteScrollButton";
+			this.deleteScrollButton.Size = new System.Drawing.Size(75, 23);
+			this.deleteScrollButton.TabIndex = 7;
+			this.deleteScrollButton.Text = "Delete";
+			this.deleteScrollButton.UseVisualStyleBackColor = true;
+			this.deleteScrollButton.Click += new System.EventHandler(this.deleteScrollButton_Click);
+			// 
+			// addScrollButton
+			// 
+			this.addScrollButton.Location = new System.Drawing.Point(3, 291);
+			this.addScrollButton.Name = "addScrollButton";
+			this.addScrollButton.Size = new System.Drawing.Size(75, 23);
+			this.addScrollButton.TabIndex = 6;
+			this.addScrollButton.Text = "Add";
+			this.addScrollButton.UseVisualStyleBackColor = true;
+			this.addScrollButton.Click += new System.EventHandler(this.addScrollButton_Click);
+			// 
+			// scrollEnableDeformation
+			// 
+			this.scrollEnableDeformation.AutoSize = true;
+			this.scrollEnableDeformation.Location = new System.Drawing.Point(3, 346);
+			this.scrollEnableDeformation.Name = "scrollEnableDeformation";
+			this.scrollEnableDeformation.Size = new System.Drawing.Size(119, 17);
+			this.scrollEnableDeformation.TabIndex = 5;
+			this.scrollEnableDeformation.Text = "Enable Deformation";
+			this.scrollEnableDeformation.UseVisualStyleBackColor = true;
+			this.scrollEnableDeformation.CheckedChanged += new System.EventHandler(this.scrollEnableDeformation_CheckedChanged);
+			// 
+			// scrollList
+			// 
+			this.scrollList.FormattingEnabled = true;
+			this.scrollList.IntegralHeight = false;
+			this.scrollList.Location = new System.Drawing.Point(3, 55);
+			this.scrollList.Name = "scrollList";
+			this.scrollList.Size = new System.Drawing.Size(266, 230);
+			this.scrollList.TabIndex = 4;
+			this.scrollList.SelectedIndexChanged += new System.EventHandler(this.scrollList_SelectedIndexChanged);
+			// 
+			// layerScrollSpeed
+			// 
+			this.layerScrollSpeed.DecimalPlaces = 5;
+			this.layerScrollSpeed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.layerScrollSpeed.Location = new System.Drawing.Point(118, 29);
+			this.layerScrollSpeed.Maximum = new decimal(new int[] {
+            3984375,
+            0,
+            0,
+            393216});
+			this.layerScrollSpeed.Name = "layerScrollSpeed";
+			this.layerScrollSpeed.Size = new System.Drawing.Size(81, 20);
+			this.layerScrollSpeed.TabIndex = 3;
+			this.layerScrollSpeed.ValueChanged += new System.EventHandler(this.layerScrollSpeed_ValueChanged);
+			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(3, 31);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(99, 13);
+			this.label10.TabIndex = 2;
+			this.label10.Text = "Layer Scroll Speed:";
+			// 
+			// layerParallaxFactor
+			// 
+			this.layerParallaxFactor.DecimalPlaces = 5;
+			this.layerParallaxFactor.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.layerParallaxFactor.Location = new System.Drawing.Point(118, 3);
+			this.layerParallaxFactor.Maximum = new decimal(new int[] {
+            -85292513,
+            2,
+            0,
+            524288});
+			this.layerParallaxFactor.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
+			this.layerParallaxFactor.Name = "layerParallaxFactor";
+			this.layerParallaxFactor.Size = new System.Drawing.Size(81, 20);
+			this.layerParallaxFactor.TabIndex = 1;
+			this.layerParallaxFactor.ValueChanged += new System.EventHandler(this.layerParallaxFactor_ValueChanged);
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(3, 5);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(109, 13);
+			this.label9.TabIndex = 0;
+			this.label9.Text = "Layer Parallax Factor:";
+			// 
+			// layerScrollType
+			// 
+			this.layerScrollType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.layerScrollType.FormattingEnabled = true;
+			this.layerScrollType.Items.AddRange(new object[] {
+            "Horizontal",
+            "Vertical",
+            "3D Sky",
+            "3D Floor"});
+			this.layerScrollType.Location = new System.Drawing.Point(46, 6);
+			this.layerScrollType.Name = "layerScrollType";
+			this.layerScrollType.Size = new System.Drawing.Size(121, 21);
+			this.layerScrollType.TabIndex = 1;
+			this.layerScrollType.SelectedIndexChanged += new System.EventHandler(this.layerScrollType_SelectedIndexChanged);
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(6, 9);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(34, 13);
+			this.label8.TabIndex = 0;
+			this.label8.Text = "Type:";
 			// 
 			// tabPage4
 			// 
@@ -2512,31 +2643,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.tabPage14.TabIndex = 2;
 			this.tabPage14.Text = "Tiles";
 			this.tabPage14.UseVisualStyleBackColor = true;
-			// 
-			// TileSelector
-			// 
-			this.TileSelector.AllowDrop = true;
-			this.TileSelector.BackColor = System.Drawing.SystemColors.Window;
-			this.TileSelector.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.TileSelector.ImageHeight = 64;
-			this.TileSelector.ImageSize = 64;
-			this.TileSelector.ImageWidth = 64;
-			this.TileSelector.Location = new System.Drawing.Point(3, 28);
-			this.TileSelector.Name = "TileSelector";
-			this.TileSelector.ScrollValue = 0;
-			this.TileSelector.SelectedIndex = -1;
-			this.TileSelector.Size = new System.Drawing.Size(729, 520);
-			this.TileSelector.TabIndex = 2;
-			this.TileSelector.SelectedIndexChanged += new System.EventHandler(this.TileSelector_SelectedIndexChanged);
-			this.TileSelector.ItemDrag += new System.EventHandler(this.TileSelector_ItemDrag);
-			this.TileSelector.DragDrop += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragDrop);
-			this.TileSelector.DragEnter += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragEnter);
-			this.TileSelector.DragOver += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragOver);
-			this.TileSelector.DragLeave += new System.EventHandler(this.TileSelector_DragLeave);
-			this.TileSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.TileSelector_Paint);
-			this.TileSelector.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TileList_KeyDown);
-			this.TileSelector.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TileSelector_MouseDoubleClick);
-			this.TileSelector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileSelector_MouseDown);
 			// 
 			// tabPage6
 			// 
@@ -2940,6 +3046,169 @@ namespace SonicRetro.SonLVL.GUI
 			this.clearChunkBlocksToolStripMenuItem.Text = "&Clear";
 			this.clearChunkBlocksToolStripMenuItem.Click += new System.EventHandler(this.clearChunkBlocksToolStripMenuItem_Click);
 			// 
+			// ChunkSelector
+			// 
+			this.ChunkSelector.BackColor = System.Drawing.SystemColors.Window;
+			this.ChunkSelector.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ChunkSelector.ImageHeight = 128;
+			this.ChunkSelector.ImageSize = 128;
+			this.ChunkSelector.ImageWidth = 128;
+			this.ChunkSelector.Location = new System.Drawing.Point(0, 0);
+			this.ChunkSelector.Margin = new System.Windows.Forms.Padding(0);
+			this.ChunkSelector.Name = "ChunkSelector";
+			this.ChunkSelector.ScrollValue = 0;
+			this.ChunkSelector.SelectedIndex = -1;
+			this.ChunkSelector.Size = new System.Drawing.Size(278, 451);
+			this.ChunkSelector.TabIndex = 1;
+			this.ChunkSelector.SelectedIndexChanged += new System.EventHandler(this.ChunkSelector_SelectedIndexChanged);
+			this.ChunkSelector.ItemDrag += new System.EventHandler(this.ChunkSelector_ItemDrag);
+			this.ChunkSelector.DragDrop += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragDrop);
+			this.ChunkSelector.DragEnter += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragEnter);
+			this.ChunkSelector.DragOver += new System.Windows.Forms.DragEventHandler(this.ChunkSelector_DragOver);
+			this.ChunkSelector.DragLeave += new System.EventHandler(this.ChunkSelector_DragLeave);
+			this.ChunkSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.ChunkSelector_Paint);
+			this.ChunkSelector.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TileList_KeyDown);
+			this.ChunkSelector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChunkSelector_MouseDown);
+			// 
+			// ChunkPicture
+			// 
+			this.ChunkPicture.Location = new System.Drawing.Point(3, 3);
+			this.ChunkPicture.Name = "ChunkPicture";
+			this.ChunkPicture.Size = new System.Drawing.Size(128, 128);
+			this.ChunkPicture.TabIndex = 1;
+			this.ChunkPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.ChunkPicture_Paint);
+			this.ChunkPicture.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChunkPicture_KeyDown);
+			this.ChunkPicture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseDown);
+			this.ChunkPicture.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseMove);
+			this.ChunkPicture.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChunkPicture_MouseUp);
+			// 
+			// TileSelector
+			// 
+			this.TileSelector.AllowDrop = true;
+			this.TileSelector.BackColor = System.Drawing.SystemColors.Window;
+			this.TileSelector.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.TileSelector.ImageHeight = 64;
+			this.TileSelector.ImageSize = 64;
+			this.TileSelector.ImageWidth = 64;
+			this.TileSelector.Location = new System.Drawing.Point(3, 28);
+			this.TileSelector.Name = "TileSelector";
+			this.TileSelector.ScrollValue = 0;
+			this.TileSelector.SelectedIndex = -1;
+			this.TileSelector.Size = new System.Drawing.Size(729, 520);
+			this.TileSelector.TabIndex = 2;
+			this.TileSelector.SelectedIndexChanged += new System.EventHandler(this.TileSelector_SelectedIndexChanged);
+			this.TileSelector.ItemDrag += new System.EventHandler(this.TileSelector_ItemDrag);
+			this.TileSelector.DragDrop += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragDrop);
+			this.TileSelector.DragEnter += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragEnter);
+			this.TileSelector.DragOver += new System.Windows.Forms.DragEventHandler(this.TileSelector_DragOver);
+			this.TileSelector.DragLeave += new System.EventHandler(this.TileSelector_DragLeave);
+			this.TileSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.TileSelector_Paint);
+			this.TileSelector.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TileList_KeyDown);
+			this.TileSelector.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TileSelector_MouseDoubleClick);
+			this.TileSelector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileSelector_MouseDown);
+			// 
+			// objectPanel
+			// 
+			this.objectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.objectPanel.HScrollEnabled = false;
+			this.objectPanel.HScrollLargeChange = 128;
+			this.objectPanel.HScrollMaximum = 128;
+			this.objectPanel.HScrollMinimum = 0;
+			this.objectPanel.HScrollSmallChange = 16;
+			this.objectPanel.HScrollValue = 0;
+			this.objectPanel.Location = new System.Drawing.Point(0, 25);
+			this.objectPanel.Name = "objectPanel";
+			this.objectPanel.PanelAllowDrop = true;
+			this.objectPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+			this.objectPanel.Size = new System.Drawing.Size(348, 452);
+			this.objectPanel.TabIndex = 5;
+			this.objectPanel.VScrollEnabled = false;
+			this.objectPanel.VScrollLargeChange = 128;
+			this.objectPanel.VScrollMaximum = 128;
+			this.objectPanel.VScrollMinimum = 0;
+			this.objectPanel.VScrollSmallChange = 16;
+			this.objectPanel.VScrollValue = 0;
+			this.objectPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+			this.objectPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.objectPanel_KeyDown);
+			this.objectPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseDown);
+			this.objectPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseUp);
+			this.objectPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseMove);
+			this.objectPanel.PanelDragEnter += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragEnter);
+			this.objectPanel.PanelDragOver += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragOver);
+			this.objectPanel.PanelDragLeave += new System.EventHandler(this.objectPanel_DragLeave);
+			this.objectPanel.PanelDragDrop += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragDrop);
+			this.objectPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+			this.objectPanel.Resize += new System.EventHandler(this.panel_Resize);
+			// 
+			// foregroundPanel
+			// 
+			this.foregroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.foregroundPanel.HScrollEnabled = false;
+			this.foregroundPanel.HScrollLargeChange = 128;
+			this.foregroundPanel.HScrollMaximum = 128;
+			this.foregroundPanel.HScrollMinimum = 0;
+			this.foregroundPanel.HScrollSmallChange = 16;
+			this.foregroundPanel.HScrollValue = 0;
+			this.foregroundPanel.Location = new System.Drawing.Point(0, 25);
+			this.foregroundPanel.Name = "foregroundPanel";
+			this.foregroundPanel.PanelAllowDrop = false;
+			this.foregroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+			this.foregroundPanel.Size = new System.Drawing.Size(360, 452);
+			this.foregroundPanel.TabIndex = 5;
+			this.foregroundPanel.VScrollEnabled = false;
+			this.foregroundPanel.VScrollLargeChange = 128;
+			this.foregroundPanel.VScrollMaximum = 128;
+			this.foregroundPanel.VScrollMinimum = 0;
+			this.foregroundPanel.VScrollSmallChange = 16;
+			this.foregroundPanel.VScrollValue = 0;
+			this.foregroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+			this.foregroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.foregroundPanel_KeyDown);
+			this.foregroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseDown);
+			this.foregroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseUp);
+			this.foregroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseMove);
+			this.foregroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+			this.foregroundPanel.Resize += new System.EventHandler(this.panel_Resize);
+			// 
+			// backgroundPanel
+			// 
+			this.backgroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.backgroundPanel.HScrollEnabled = false;
+			this.backgroundPanel.HScrollLargeChange = 128;
+			this.backgroundPanel.HScrollMaximum = 128;
+			this.backgroundPanel.HScrollMinimum = 0;
+			this.backgroundPanel.HScrollSmallChange = 16;
+			this.backgroundPanel.HScrollValue = 0;
+			this.backgroundPanel.Location = new System.Drawing.Point(0, 25);
+			this.backgroundPanel.Name = "backgroundPanel";
+			this.backgroundPanel.PanelAllowDrop = false;
+			this.backgroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+			this.backgroundPanel.Size = new System.Drawing.Size(360, 452);
+			this.backgroundPanel.TabIndex = 6;
+			this.backgroundPanel.VScrollEnabled = false;
+			this.backgroundPanel.VScrollLargeChange = 128;
+			this.backgroundPanel.VScrollMaximum = 128;
+			this.backgroundPanel.VScrollMinimum = 0;
+			this.backgroundPanel.VScrollSmallChange = 16;
+			this.backgroundPanel.VScrollValue = 0;
+			this.backgroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+			this.backgroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.backgroundPanel_KeyDown);
+			this.backgroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseDown);
+			this.backgroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseUp);
+			this.backgroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseMove);
+			this.backgroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+			this.backgroundPanel.Resize += new System.EventHandler(this.panel_Resize);
+			// 
+			// chunkBlockEditor
+			// 
+			this.chunkBlockEditor.AutoSize = true;
+			this.chunkBlockEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.chunkBlockEditor.Location = new System.Drawing.Point(3, 84);
+			this.chunkBlockEditor.Name = "chunkBlockEditor";
+			this.chunkBlockEditor.SelectedObjects = null;
+			this.chunkBlockEditor.Size = new System.Drawing.Size(139, 161);
+			this.chunkBlockEditor.TabIndex = 3;
+			this.chunkBlockEditor.PropertyValueChanged += new System.EventHandler(this.chunkBlockEditor_PropertyValueChanged);
+			// 
 			// importProgressControl1
 			// 
 			this.importProgressControl1.AutoSize = true;
@@ -3037,6 +3306,15 @@ namespace SonicRetro.SonLVL.GUI
 			this.bgToolStrip.ResumeLayout(false);
 			this.bgToolStrip.PerformLayout();
 			this.tabControl3.ResumeLayout(false);
+			this.tabPage13.ResumeLayout(false);
+			this.tabPage13.PerformLayout();
+			this.scrollEditPanel.ResumeLayout(false);
+			this.scrollEditPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.scrollOffset)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.scrollScrollSpeed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.scrollParallaxFactor)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.layerScrollSpeed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.layerParallaxFactor)).EndInit();
 			this.tabPage4.ResumeLayout(false);
 			this.tabPage4.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
@@ -3289,5 +3567,23 @@ namespace SonicRetro.SonLVL.GUI
 		private System.Windows.Forms.TabPage tabPage7;
 		private System.Windows.Forms.ListView objectOrder;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.TabPage tabPage13;
+		private System.Windows.Forms.ComboBox layerScrollType;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Panel scrollEditPanel;
+		private System.Windows.Forms.NumericUpDown layerParallaxFactor;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.NumericUpDown layerScrollSpeed;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.ListBox scrollList;
+		private System.Windows.Forms.Button addScrollButton;
+		private System.Windows.Forms.CheckBox scrollEnableDeformation;
+		private System.Windows.Forms.Button deleteScrollButton;
+		private System.Windows.Forms.NumericUpDown scrollScrollSpeed;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.NumericUpDown scrollParallaxFactor;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.NumericUpDown scrollOffset;
+		private System.Windows.Forms.Label label13;
 	}
 }

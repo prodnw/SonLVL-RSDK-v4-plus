@@ -103,6 +103,7 @@ namespace SonicRetro.SonLVL.GUI
 			this.panel10 = new System.Windows.Forms.Panel();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.selectModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.changeLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.presentationStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.regularStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,6 +121,7 @@ namespace SonicRetro.SonLVL.GUI
 			this.findPreviousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.resizeLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.clearLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
 			this.includeObjectsWithForegroundSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -341,7 +343,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.pasteChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.clearChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.importProgressControl1 = new SonicRetro.SonLVL.ImportProgressControl();
-			this.clearLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
 			label4 = new System.Windows.Forms.Label();
@@ -1234,6 +1235,7 @@ namespace SonicRetro.SonLVL.GUI
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.selectModToolStripMenuItem,
             this.changeLevelToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.buildAndRunToolStripMenuItem,
@@ -1253,6 +1255,12 @@ namespace SonicRetro.SonLVL.GUI
 			this.openToolStripMenuItem.Text = "&Open...";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
+			// selectModToolStripMenuItem
+			// 
+			this.selectModToolStripMenuItem.Name = "selectModToolStripMenuItem";
+			this.selectModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.selectModToolStripMenuItem.Text = "Select &Mod";
+			// 
 			// changeLevelToolStripMenuItem
 			// 
 			this.changeLevelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1267,25 +1275,25 @@ namespace SonicRetro.SonLVL.GUI
 			// presentationStagesToolStripMenuItem
 			// 
 			this.presentationStagesToolStripMenuItem.Name = "presentationStagesToolStripMenuItem";
-			this.presentationStagesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.presentationStagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.presentationStagesToolStripMenuItem.Text = "Presentation Stages";
 			// 
 			// regularStagesToolStripMenuItem
 			// 
 			this.regularStagesToolStripMenuItem.Name = "regularStagesToolStripMenuItem";
-			this.regularStagesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.regularStagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.regularStagesToolStripMenuItem.Text = "Regular Stages";
 			// 
 			// specialStagesToolStripMenuItem
 			// 
 			this.specialStagesToolStripMenuItem.Name = "specialStagesToolStripMenuItem";
-			this.specialStagesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.specialStagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.specialStagesToolStripMenuItem.Text = "Special Stages";
 			// 
 			// bonusStagesToolStripMenuItem
 			// 
 			this.bonusStagesToolStripMenuItem.Name = "bonusStagesToolStripMenuItem";
-			this.bonusStagesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.bonusStagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.bonusStagesToolStripMenuItem.Text = "Bonus Stages";
 			// 
 			// saveToolStripMenuItem
@@ -1398,6 +1406,13 @@ namespace SonicRetro.SonLVL.GUI
 			this.resizeLevelToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
 			this.resizeLevelToolStripMenuItem.Text = "Re&size Level...";
 			this.resizeLevelToolStripMenuItem.Click += new System.EventHandler(this.resizeLevelToolStripMenuItem_Click);
+			// 
+			// clearLevelToolStripMenuItem
+			// 
+			this.clearLevelToolStripMenuItem.Name = "clearLevelToolStripMenuItem";
+			this.clearLevelToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+			this.clearLevelToolStripMenuItem.Text = "&Clear Level";
+			this.clearLevelToolStripMenuItem.Click += new System.EventHandler(this.clearLevelToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator14
 			// 
@@ -3838,13 +3853,6 @@ namespace SonicRetro.SonLVL.GUI
 			this.importProgressControl1.Visible = false;
 			this.importProgressControl1.SizeChanged += new System.EventHandler(this.importProgressControl1_SizeChanged);
 			// 
-			// clearLevelToolStripMenuItem
-			// 
-			this.clearLevelToolStripMenuItem.Name = "clearLevelToolStripMenuItem";
-			this.clearLevelToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-			this.clearLevelToolStripMenuItem.Text = "&Clear Level";
-			this.clearLevelToolStripMenuItem.Click += new System.EventHandler(this.clearLevelToolStripMenuItem_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4265,5 +4273,6 @@ namespace SonicRetro.SonLVL.GUI
 		private System.Windows.Forms.Button sfxAddButton;
 		private System.Windows.Forms.ListBox sfxListBox;
 		private System.Windows.Forms.ToolStripMenuItem clearLevelToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem selectModToolStripMenuItem;
 	}
 }

@@ -99,6 +99,16 @@ namespace SonicRetro.SonLVL.API
 			}
 			else
 				DataFile = null;
+			ModFolder = null;
+			switch (RSDKVer)
+			{
+				case EngineVersion.V4:
+					GameConfig = ReadFile<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
+					break;
+				case EngineVersion.V3:
+					GameConfig = ReadFile<RSDKv3.GameConfig>("Data/Game/GameConfig.bin");
+					break;
+			}
 		}
 
 		public static void LoadMod(string path)
@@ -126,9 +136,12 @@ namespace SonicRetro.SonLVL.API
 		public static T ReadFile<T>(string filename)
 			where T : new()
 		{
-			string modpath = Path.Combine(ModFolder, filename);
-			if (File.Exists(modpath))
-				return (T)Activator.CreateInstance(typeof(T), modpath);
+			if (ModFolder != null)
+			{
+				string modpath = Path.Combine(ModFolder, filename);
+				if (File.Exists(modpath))
+					return (T)Activator.CreateInstance(typeof(T), modpath);
+			}
 			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
 				using (MemoryStream ms = new MemoryStream(data))
 					return (T)Activator.CreateInstance(typeof(T), ms);
@@ -139,9 +152,12 @@ namespace SonicRetro.SonLVL.API
 
 		public static byte[] ReadFileRaw(string filename)
 		{
-			string modpath = Path.Combine(ModFolder, filename);
-			if (File.Exists(modpath))
-				return File.ReadAllBytes(modpath);
+			if (ModFolder != null)
+			{
+				string modpath = Path.Combine(ModFolder, filename);
+				if (File.Exists(modpath))
+					return File.ReadAllBytes(modpath);
+			}
 			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
 				return data;
 			if (File.Exists(filename))
@@ -196,31 +212,30 @@ namespace SonicRetro.SonLVL.API
 			for (int i = 0; i < 8; i++)
 			{
 				BGScroll[i] = new List<ScrollData>();
+				List<Backgrounds.ScrollInfo> info;
 				switch (Background.layers[i].type)
 				{
 					case Backgrounds.Layer.LayerTypes.HScroll:
-					case Backgrounds.Layer.LayerTypes.VScroll:
-						int lastind = -1;
-						for (ushort y = 0; y < Background.layers[i].lineScroll.Length; y++)
-						{
-							if (Background.layers[i].lineScroll[y] != lastind)
-							{
-								lastind = Background.layers[i].lineScroll[y];
-								Backgrounds.ScrollInfo si = null;
-								switch (Background.layers[i].type)
-								{
-									case Backgrounds.Layer.LayerTypes.HScroll:
-										si = Background.hScroll[lastind];
-										break;
-									case Backgrounds.Layer.LayerTypes.VScroll:
-										si = Background.vScroll[lastind];
-										break;
-								}
-								BGScroll[i].Add(new ScrollData(y, si));
-							}
-						}
+						info = Background.hScroll;
 						break;
+					case Backgrounds.Layer.LayerTypes.VScroll:
+						info = Background.vScroll;
+						break;
+					default:
+						continue;
 				}
+				if (info.Count > 0)
+				{
+					int lastind = -1;
+					for (ushort y = 0; y < Background.layers[i].lineScroll.Length; y++)
+						if (Background.layers[i].lineScroll[y] != lastind)
+						{
+							lastind = Background.layers[i].lineScroll[y];
+							BGScroll[i].Add(new ScrollData(y, info[lastind]));
+						}
+				}
+				else
+					BGScroll[i].Add(new ScrollData());
 			}
 			using (Bitmap palbmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
 				BmpPal = palbmp.Palette;
@@ -235,7 +250,7 @@ namespace SonicRetro.SonLVL.API
 			spriteSheets = new Dictionary<string, BitmapBits>();
 			if (File.Exists("SonLVLObjDefs.ini"))
 				LoadObjectDefinitionFile("SonLVLObjDefs.ini");
-			if (File.Exists(Path.Combine(ModFolder, "SonLVLObjDefs.ini")))
+			if (ModFolder != null && File.Exists(Path.Combine(ModFolder, "SonLVLObjDefs.ini")))
 				LoadObjectDefinitionFile(Path.Combine(ModFolder, "SonLVLObjDefs.ini"));
 			unkobj.Init(new ObjectData());
 			InitObjectDefinitions();

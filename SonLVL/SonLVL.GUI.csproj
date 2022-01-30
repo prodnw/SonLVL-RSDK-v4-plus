@@ -69,6 +69,12 @@
     <Compile Include="LoadErrorDialog.Designer.cs">
       <DependentUpon>LoadErrorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewModDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewModDialog.designer.cs">
+      <DependentUpon>NewModDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -225,6 +231,9 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewModDialog.resx">
+      <DependentUpon>NewModDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReplaceChunkBlocksDialog.resx">
       <DependentUpon>ReplaceChunkBlocksDialog.cs</DependentUpon>

@@ -66,6 +66,12 @@ namespace SonicRetro.SonLVL.GUI
 			}
 		}
 
+		class ModStuff
+		{
+			public string Path;
+			public ToolStripMenuItem MenuItem;
+		}
+
 		class LevelStuff
 		{
 			public string FullName;
@@ -95,6 +101,7 @@ namespace SonicRetro.SonLVL.GUI
 		Point lastmouse;
 		internal LogWindow LogWindow;
 		internal List<string> LogFile = new List<string>();
+		List<ModStuff> modMenuItems;
 		List<LevelStuff> levelMenuItems;
 		string levelname;
 		List<string> scriptFiles;
@@ -288,23 +295,71 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			catch (Exception ex)
 			{
+				fileToolStripMenuItem.HideDropDown();
 				using (LoadErrorDialog ed = new LoadErrorDialog(false, ex.GetType().Name + ": " + ex.Message))
 					ed.ShowDialog(this);
 				return;
 			}
-			fileToolStripMenuItem.HideDropDown();
-			using (OpenFileDialog dlg = new OpenFileDialog()
+			modMenuItems = new List<ModStuff>();
+			selectModToolStripMenuItem.DropDownItems.Clear();
+			ModStuff ms = new ModStuff();
+			ToolStripMenuItem menuitem = new ToolStripMenuItem("None (Read Only)", null, new EventHandler(LoadMod)) { Tag = ms };
+			ms.MenuItem = menuitem;
+			modMenuItems.Add(ms);
+			selectModToolStripMenuItem.DropDownItems.Add(menuitem);
+			string[] mods = ModInfo.GetModFiles(new DirectoryInfo("mods")).ToArray();
+			ToolStripMenuItem parent = selectModToolStripMenuItem;
+			if (mods.Length > 10)
+				parent = (ToolStripMenuItem)selectModToolStripMenuItem.DropDownItems.Add("Set 1");
+			for (int i = 0; i < mods.Length; i++)
 			{
-				DefaultExt = "ini",
-				Filter = "Mod INI Files|mod.ini|All Files|*.*",
-				Title = "Select the mod you want to edit.",
-				RestoreDirectory = true
-			})
+				if (i > 0 && i % 10 == 0)
+					parent = (ToolStripMenuItem)selectModToolStripMenuItem.DropDownItems.Add($"Set {i / 10 + 1}");
+				ms = new ModStuff() { Path = mods[i] };
+				menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(mods[i]).Name ?? "Unknown Mod", null, new EventHandler(LoadMod)) { Tag = ms };
+				ms.MenuItem = menuitem;
+				parent.DropDownItems.Add(menuitem);
+				modMenuItems.Add(ms);
+			}
+			selectModToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem("New Mod...", null, new EventHandler(NewMod)));
+			if (Settings.MRUList.Count == 0)
+				recentProjectsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem2);
+			if (Settings.MRUList.Contains(filename))
+			{
+				recentProjectsToolStripMenuItem.DropDownItems.RemoveAt(Settings.MRUList.IndexOf(filename));
+				Settings.MRUList.Remove(filename);
+			}
+			Settings.MRUList.Insert(0, filename);
+			recentProjectsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(filename));
+			switch (LevelData.RSDKVer)
+			{
+				case EngineVersion.V4:
+					Icon = Properties.Resources.Tailsmon2;
+					break;
+				case EngineVersion.V3:
+					Icon = Properties.Resources.clockmon;
+					break;
+				default:
+					throw new NotImplementedException("Game type is not supported!");
+			}
+			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
+		}
+
+		private void NewMod(object sender, EventArgs e)
+		{
+			using (NewModDialog dlg = new NewModDialog())
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 				{
+					foreach (var item in modMenuItems)
+						item.MenuItem.Checked = false;
+					ModStuff ms = new ModStuff() { Path = dlg.ModFile };
+					ToolStripMenuItem menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(dlg.ModFile).Name ?? "Unknown Mod", null, new EventHandler(LoadMod)) { Tag = ms, Checked = true };
+					ms.MenuItem = menuitem;
+					modMenuItems.Add(ms);
+					selectModToolStripMenuItem.DropDownItems.Insert(selectModToolStripMenuItem.DropDownItems.Count - 1, menuitem);
 					try
 					{
-						LevelData.LoadMod(Path.GetDirectoryName(dlg.FileName));
+						LevelData.LoadMod(Path.GetDirectoryName(dlg.ModFile));
 					}
 					catch (Exception ex)
 					{
@@ -312,80 +367,85 @@ namespace SonicRetro.SonLVL.GUI
 							ed.ShowDialog(this);
 						return;
 					}
-					levelMenuItems = new List<LevelStuff>();
-					List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[] groups = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[4];
-					for (int i = 0; i < 4; i++)
+					SetupLevels();
+				}
+		}
+
+		private void LoadMod(object sender, EventArgs e)
+		{
+			ModStuff mod = (ModStuff)((ToolStripMenuItem)sender).Tag;
+			foreach (var item in modMenuItems)
+				item.MenuItem.Checked = false;
+			mod.MenuItem.Checked = true;
+			if (mod.Path == null) saveToolStripMenuItem.Enabled = false;
+			try
+			{
+				LevelData.LoadMod(Path.GetDirectoryName(mod.Path));
+			}
+			catch (Exception ex)
+			{
+				using (LoadErrorDialog ed = new LoadErrorDialog(false, ex.GetType().Name + ": " + ex.Message))
+					ed.ShowDialog(this);
+				return;
+			}
+			SetupLevels();
+		}
+
+		private void SetupLevels()
+		{
+			levelMenuItems = new List<LevelStuff>();
+			List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[] groups = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[4];
+			for (int i = 0; i < 4; i++)
+			{
+				groups[i] = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>();
+				List<RSDKv3_4.GameConfig.StageList.StageInfo> curgrp = null;
+				foreach (var item in LevelData.GameConfig.stageLists[i].list)
+					if (item.highlighted)
 					{
-						groups[i] = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>();
-						List<RSDKv3_4.GameConfig.StageList.StageInfo> curgrp = null;
-						foreach (var item in LevelData.GameConfig.stageLists[i].list)
-							if (item.highlighted)
-							{
-								curgrp = new List<RSDKv3_4.GameConfig.StageList.StageInfo>() { item };
-								groups[i].Add(curgrp);
-							}
-							else
-								curgrp.Add(item);
+						curgrp = new List<RSDKv3_4.GameConfig.StageList.StageInfo>() { item };
+						groups[i].Add(curgrp);
 					}
-					for (int i = 0; i < 4; i++)
+					else
+						curgrp.Add(item);
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				ToolStripMenuItem parent = (ToolStripMenuItem)changeLevelToolStripMenuItem.DropDownItems[i];
+				parent.DropDownItems.Clear();
+				foreach (var grp in groups[i])
+				{
+					if (grp.Count > 1)
 					{
-						ToolStripMenuItem parent = (ToolStripMenuItem)changeLevelToolStripMenuItem.DropDownItems[i];
-						parent.DropDownItems.Clear();
-						foreach (var grp in groups[i])
-						{
-							if (grp.Count > 1)
+						string basename = grp[0].name.Substring(0, grp[0].name.Length - grp.Skip(1).Max(a => a.name.Length));
+						var par2 = new ToolStripMenuItem(basename.Trim());
+						parent.DropDownItems.Add(par2);
+						foreach (var item in grp)
+							if (!string.IsNullOrEmpty(item.name))
 							{
-								string basename = grp[0].name.Substring(0, grp[0].name.Length - grp.Skip(1).Max(a => a.name.Length));
-								var par2 = new ToolStripMenuItem(basename.Trim());
-								parent.DropDownItems.Add(par2);
-								foreach (var item in grp)
-									if (!string.IsNullOrEmpty(item.name))
-									{
-										string name = item.name;
-										string text = item.name;
-										if (item.highlighted)
-											text = text.Remove(0, basename.Length);
-										else
-											name = basename + name;
-										LevelStuff ls = new LevelStuff() { FullName = name, Stage = item };
-										ToolStripMenuItem ts = new ToolStripMenuItem(text, null, new EventHandler(LevelToolStripMenuItem_Clicked)) { Tag = ls };
-										ls.MenuItem = ts;
-										levelMenuItems.Add(ls);
-										par2.DropDownItems.Add(ts);
-									}
-							}
-							else if (!string.IsNullOrEmpty(grp[0].name))
-							{
-								LevelStuff ls = new LevelStuff() { FullName = grp[0].name, Stage = grp[0] };
-								ToolStripMenuItem ts = new ToolStripMenuItem(grp[0].name, null, new EventHandler(LevelToolStripMenuItem_Clicked)) { Tag = ls };
+								string name = item.name;
+								string text = item.name;
+								if (item.highlighted)
+									text = text.Remove(0, basename.Length);
+								else
+									name = basename + name;
+								LevelStuff ls = new LevelStuff() { FullName = name, Stage = item };
+								ToolStripMenuItem ts = new ToolStripMenuItem(text, null, new EventHandler(LevelToolStripMenuItem_Clicked)) { Tag = ls };
 								ls.MenuItem = ts;
 								levelMenuItems.Add(ls);
-								parent.DropDownItems.Add(ts);
+								par2.DropDownItems.Add(ts);
 							}
-						}
 					}
-					switch (LevelData.RSDKVer)
+					else if (!string.IsNullOrEmpty(grp[0].name))
 					{
-						case EngineVersion.V4:
-							Icon = Properties.Resources.Tailsmon2;
-							break;
-						case EngineVersion.V3:
-							Icon = Properties.Resources.clockmon;
-							break;
-						default:
-							throw new NotImplementedException("Game type is not supported!");
+						LevelStuff ls = new LevelStuff() { FullName = grp[0].name, Stage = grp[0] };
+						ToolStripMenuItem ts = new ToolStripMenuItem(grp[0].name, null, new EventHandler(LevelToolStripMenuItem_Clicked)) { Tag = ls };
+						ls.MenuItem = ts;
+						levelMenuItems.Add(ls);
+						parent.DropDownItems.Add(ts);
 					}
-					Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
-					if (Settings.MRUList.Count == 0)
-						recentProjectsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem2);
-					if (Settings.MRUList.Contains(filename))
-					{
-						recentProjectsToolStripMenuItem.DropDownItems.RemoveAt(Settings.MRUList.IndexOf(filename));
-						Settings.MRUList.Remove(filename);
-					}
-					Settings.MRUList.Insert(0, filename);
-					recentProjectsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(filename));
 				}
+			}
+			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
 		}
 
 		#region Main Menu
@@ -433,16 +493,17 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = false;
 			foreach (var item in levelMenuItems)
 				item.MenuItem.Checked = false;
-			((ToolStripMenuItem)sender).Checked = true;
+			ToolStripMenuItem menuitem = (ToolStripMenuItem)sender;
+			menuitem.Checked = true;
 			Enabled = false;
 			UseWaitCursor = true;
-			levelname = ((LevelStuff)((ToolStripMenuItem)sender).Tag).FullName;
+			levelname = ((LevelStuff)menuitem.Tag).FullName;
 			Text = $"SonLVL-RSDK - {LevelData.GameConfig.gameTitle} - Loading {levelname}...";
 #if !DEBUG
 			initerror = null;
-			backgroundLevelLoader.RunWorkerAsync(((ToolStripMenuItem)sender).Tag);
+			backgroundLevelLoader.RunWorkerAsync(menuitem.Tag);
 #else
-			backgroundLevelLoader_DoWork(null, new DoWorkEventArgs(((ToolStripMenuItem)sender).Tag));
+			backgroundLevelLoader_DoWork(null, new DoWorkEventArgs(menuitem.Tag));
 			backgroundLevelLoader_RunWorkerCompleted(null, null);
 #endif
 		}
@@ -466,14 +527,14 @@ namespace SonicRetro.SonLVL.GUI
 				scriptFiles = new List<string>();
 				if (Directory.Exists("Scripts"))
 					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Scripts"), "*.txt"));
-				if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
+				if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
 					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
 				objectScriptBox.AutoCompleteCustomSource.Clear();
 				objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
 				sfxFiles = new List<string>();
 				if (Directory.Exists("Data/SoundFX"))
 					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.wav"));
-				if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+				if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
 					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
 				sfxFileBox.AutoCompleteCustomSource.Clear();
 				sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
@@ -577,7 +638,7 @@ namespace SonicRetro.SonLVL.GUI
 			sfxAddButton.Enabled = LevelData.StageConfig.soundFX.Count < 255;
 			loaded = true;
 			SelectedItems = new List<Entry>();
-			saveToolStripMenuItem.Enabled = true;
+			saveToolStripMenuItem.Enabled = LevelData.ModFolder != null;
 			editToolStripMenuItem.Enabled = true;
 			exportToolStripMenuItem.Enabled = true;
 			if (invertColorsToolStripMenuItem.Checked)
@@ -963,8 +1024,8 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								if (LevelData.Scene.layout[ly][lx] >= LevelData.NewChunks.chunkList.Length) continue;
 								RSDKv3_4.Tiles128x128.Block cnk = LevelData.NewChunks.chunkList[LevelData.Scene.layout[ly][lx]];
-								for (int cy = 0; cy < 128 / 16; cy++)
-									for (int cx = 0; cx < 128 / 16; cx++)
+								for (int cy = 0; cy < 8; cy++)
+									for (int cx = 0; cx < 8; cx++)
 										if (cnk.tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
 											bmp.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
 							}
@@ -981,7 +1042,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			/*using (SaveFileDialog a = new SaveFileDialog()
+			using (SaveFileDialog a = new SaveFileDialog()
 			{
 				DefaultExt = "png",
 				Filter = "PNG Files|*.png",
@@ -993,83 +1054,40 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						string pathBase = Path.Combine(Path.GetDirectoryName(a.FileName), Path.GetFileNameWithoutExtension(a.FileName));
 						string pathExt = Path.GetExtension(a.FileName);
-						BitmapBits bmp = LevelData.DrawBackground(null, true, true, false, false);
-						for (int i = 0; i < bmp.Bits.Length; i++)
-							if (bmp.Bits[i] == 0)
-								bmp.Bits[i] = 32;
+						BitmapBits bmp = LevelData.DrawBackground(bglayer, null, true, true, false, false);
 						Bitmap res = bmp.ToBitmap();
 						ColorPalette pal = res.Palette;
-						for (int i = 0; i < 64; i++)
-							pal.Entries[i] = LevelData.PaletteToColor(i / 16, i % 16, transparentBackgroundToolStripMenuItem.Checked);
-						pal.Entries.Fill(Color.Black, 64, 192);
+						LevelData.NewPalette.CopyTo(pal.Entries, 0);
+						if (transparentBackgroundToolStripMenuItem.Checked)
+							pal.Entries[0] = Color.Transparent;
 						res.Palette = pal;
 						res.Save(a.FileName);
-						bool dualPath = false;
-						switch (LevelData.Level.ChunkFormat)
-						{
-							case EngineVersion.S2:
-							case EngineVersion.S2NA:
-							case EngineVersion.S3K:
-							case EngineVersion.SKC:
-								dualPath = !Object.ReferenceEquals(LevelData.ColInds1, LevelData.ColInds2);
-								break;
-						}
-						if (dualPath)
-						{
-							bmp = LevelData.DrawBackground(null, false, false, true, false);
-							bmp.UnfixUIColors();
-							bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
-							bmp = LevelData.DrawBackground(null, false, false, false, true);
-							bmp.UnfixUIColors();
-							bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
-						}
-						else if (LevelData.LayoutFormat.HasLoopFlag && LevelData.Layout.BGLoop.OfType<bool>().Any(b => b))
-						{
-							bmp = LevelData.DrawBackground(null, false, false, true, false);
-							bmp.UnfixUIColors();
-							bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
-							ushort[,] copy = (ushort[,])LevelData.Layout.BGLayout.Clone();
-							for (int y = 0; y < LevelData.BGHeight; y++)
-								for (int x = 0; x < LevelData.BGWidth; x++)
-									if (LevelData.Layout.BGLoop[x, y])
-										LevelData.Background.layers[bglayer].layout[y][x]++;
-							bmp = LevelData.DrawBackground(null, false, false, true, false);
-							bmp.UnfixUIColors();
-							bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
-							LevelData.Layout.BGLayout = copy;
-						}
-						else
-						{
-							bmp = LevelData.DrawBackground(null, false, false, true, false);
-							bmp.UnfixUIColors();
-							bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col" + pathExt);
-						}
+						bmp = LevelData.DrawBackground(bglayer, null, false, false, true, false);
+						bmp.UnfixUIColors();
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
+						bmp = LevelData.DrawBackground(bglayer, null, false, false, false, true);
+						bmp.UnfixUIColors();
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
 						bmp.Clear();
-						for (int ly = 0; ly < LevelData.BGHeight; ly++)
-							for (int lx = 0; lx < LevelData.BGWidth; lx++)
+						for (int ly = 0; ly < LevelData.BGHeight[bglayer]; ly++)
+							for (int lx = 0; lx < LevelData.BGWidth[bglayer]; lx++)
 							{
 								if (LevelData.Background.layers[bglayer].layout[ly][lx] >= LevelData.NewChunks.chunkList.Length) continue;
-								Chunk cnk = LevelData.NewChunks.chunkList[LevelData.Background.layers[bglayer].layout[ly][lx]];
-								for (int cy = 0; cy < 128 / 16; cy++)
-									for (int cx = 0; cx < 128 / 16; cx++)
-									{
-										if (cnk.tiles[cy][cx].tileIndex >= LevelData.NewTiles.Length) continue;
-										Block blk = LevelData.NewTiles[cnk.tiles[cy][cx].tileIndex];
-										for (int by = 0; by < 2; by++)
-											for (int bx = 0; bx < 2; bx++)
-												if (blk.Tiles[bx, by].Priority)
-													bmp.FillRectangle(1, lx * 128 + cx * 16 + bx * 8, ly * 128 + cy * 16 + by * 8, 8, 8);
-									}
+								RSDKv3_4.Tiles128x128.Block cnk = LevelData.NewChunks.chunkList[LevelData.Background.layers[bglayer].layout[ly][lx]];
+								for (int cy = 0; cy < 8; cy++)
+									for (int cx = 0; cx < 8; cx++)
+										if (cnk.tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
+											bmp.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
 							}
 						bmp.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
 					}
 					else
 					{
-						BitmapBits bmp = LevelData.DrawBackground(null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+						BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 						using (Bitmap res = bmp.ToBitmap(LevelImgPalette))
 							res.Save(a.FileName);
 					}
-				}*/
+				}
 		}
 
 		private void transparentBackgroundToolStripMenuItem_CheckedChanged(object sender, EventArgs e)

@@ -643,4 +643,38 @@ namespace SonicRetro.SonLVL.API
 
 		public RSDKv4.Backgrounds.ScrollInfo GetInfoV4() => new RSDKv4.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (byte)(ScrollSpeed * 64) };
 	}
+
+	public class ModInfo
+	{
+		public string Name { get; set; }
+		public string Author { get; set; }
+		public string Version { get; set; }
+		public string Description { get; set; }
+		public bool TxtScripts { get; set; }
+		public bool DisablePauseFocus { get; set; }
+		public bool RedirectSaveRAM { get; set; }
+		public bool DisableSaveIniOverride { get; set; }
+		public bool SkipStartMenu { get; set; }
+
+		public static IEnumerable<string> GetModFiles(DirectoryInfo directoryInfo)
+		{
+			string modini = Path.Combine(directoryInfo.FullName, "mod.ini");
+			if (File.Exists(modini))
+			{
+				yield return modini;
+				yield break;
+			}
+
+			foreach (DirectoryInfo item in directoryInfo.GetDirectories())
+			{
+				if (item.Name[0] == '.')
+				{
+					continue;
+				}
+
+				foreach (string filename in GetModFiles(item))
+					yield return filename;
+			}
+		}
+	}
 }

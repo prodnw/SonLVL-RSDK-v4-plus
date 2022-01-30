@@ -6875,8 +6875,8 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.StageConfig.loadGlobalObjects)
 				idx += (byte)LevelData.GameConfig.objects.Count;
 			LevelData.GetObjectDefinition(idx).Init(info);
-			ObjectSelect.listView1.Items[idx].Text = objectNameBox.Text;
-			objectTypeList.Items[idx].Text = objectNameBox.Text;
+			ObjectSelect.listView1.Items[idx - 1].Text = objectNameBox.Text;
+			objectTypeList.Items[idx - 1].Text = objectNameBox.Text;
 			loaded = false;
 			objectListBox.Items[objectListBox.SelectedIndex] = objectNameBox.Text;
 			loaded = true;

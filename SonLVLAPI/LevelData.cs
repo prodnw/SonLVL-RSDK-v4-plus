@@ -376,7 +376,7 @@ namespace SonicRetro.SonLVL.API
 				int datind = 0;
 				for (int y = 0; y < height; y++)
 				{
-					if (BGScroll[i][datind].StartPos == y)
+					if (datind < BGScroll[i].Count && BGScroll[i][datind].StartPos == y)
 					{
 						Backgrounds.ScrollInfo si = null;
 						switch (RSDKVer)

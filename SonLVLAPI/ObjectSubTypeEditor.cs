@@ -89,7 +89,7 @@ namespace SonicRetro.SonLVL.API
 			listView1.BeginUpdate();
 			listView1.Items.Clear();
 			imageList1.Images.Clear();
-			if (LevelData.ObjTypes.ContainsKey(id))
+			if (id < LevelData.ObjTypes.Count)
 				foreach (byte item in LevelData.ObjTypes[id].Subtypes)
 				{
 					imageList1.Images.Add(LevelData.ObjTypes[id].SubtypeImage(item).GetBitmap().ToBitmap(LevelData.BmpPal).Resize(imageList1.ImageSize));
@@ -145,7 +145,7 @@ namespace SonicRetro.SonLVL.API
 			{
 				// Display an angle selection control and retrieve the value.
 				byte sub = (byte)value;
-				SubTypeControl SubTypeControl = new SubTypeControl(((ObjectEntry)context.Instance).ID, sub, edSvc);
+				SubTypeControl SubTypeControl = new SubTypeControl(((ObjectEntry)context.Instance).Type, sub, edSvc);
 				edSvc.DropDownControl(SubTypeControl);
 				return SubTypeControl.value;
 			}
@@ -161,9 +161,9 @@ namespace SonicRetro.SonLVL.API
 		{
 			if (!(e.Context.Instance is ObjectEntry)) return;
 			if (e.Value == null) return;
-			if (!LevelData.ObjTypes.ContainsKey(((ObjectEntry)e.Context.Instance).ID)) return;
+			if (((ObjectEntry)e.Context.Instance).Type >= LevelData.ObjTypes.Count) return;
 			byte sub = (byte)e.Value;
-			e.Graphics.DrawImage(LevelData.ObjTypes[((ObjectEntry)e.Context.Instance).ID].SubtypeImage(sub).GetBitmap().ToBitmap(LevelData.BmpPal).Resize(e.Bounds.Size), e.Bounds);
+			e.Graphics.DrawImage(LevelData.ObjTypes[((ObjectEntry)e.Context.Instance).Type].SubtypeImage(sub).GetBitmap().ToBitmap(LevelData.BmpPal).Resize(e.Bounds.Size), e.Bounds);
 		}
 
 		public override bool IsDropDownResizable { get { return true; } }

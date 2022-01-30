@@ -38,7 +38,7 @@ namespace SonicRetro.SonLVL
 			subtypeList.BeginUpdate();
 			subtypeList.Items.Clear();
 			imageList1.Images.Clear();
-			if (LevelData.ObjTypes.ContainsKey(idSelect.Value))
+			if (idSelect.Value < LevelData.ObjTypes.Count)
 			{
 				byte value = LevelData.ObjTypes[idSelect.Value].DefaultSubtype;
 				foreach (byte item in LevelData.ObjTypes[idSelect.Value].Subtypes)

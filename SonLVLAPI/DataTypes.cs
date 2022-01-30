@@ -195,7 +195,7 @@ namespace SonicRetro.SonLVL.API
 		[Description("The ID number of the object.")]
 		[Editor(typeof(IDEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		[TypeConverter(typeof(ByteHexConverter))]
-		public byte ID
+		public byte Type
 		{
 			get => Entity.type;
 			set => Entity.type = value;
@@ -205,7 +205,7 @@ namespace SonicRetro.SonLVL.API
 		[Description("The subtype of the object.")]
 		[Editor(typeof(SubTypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		[TypeConverter(typeof(ByteHexConverter))]
-		public byte SubType
+		public byte PropertyValue
 		{
 			get => Entity.propertyValue;
 			set => Entity.propertyValue = value;
@@ -225,7 +225,7 @@ namespace SonicRetro.SonLVL.API
 
 		public override void UpdateSprite()
 		{
-			ObjectDefinition def = LevelData.GetObjectDefinition(ID);
+			ObjectDefinition def = LevelData.GetObjectDefinition(Type);
 			_sprite = def.GetSprite(this);
 			_bounds = def.GetBounds(this);
 			if (_bounds.IsEmpty)
@@ -239,8 +239,8 @@ namespace SonicRetro.SonLVL.API
 		{
 			get
 			{
-				if (ID == 0) return "Blank Object";
-				return LevelData.GetObjectDefinition(ID).Name;
+				if (Type == 0) return "Blank Object";
+				return LevelData.GetObjectDefinition(Type).Name;
 			}
 		}
 
@@ -252,8 +252,8 @@ namespace SonicRetro.SonLVL.API
 		{
 			get
 			{
-				if (ID == 0) return string.Empty;
-				return LevelData.GetObjectDefinition(ID).Script;
+				if (Type == 0) return string.Empty;
+				return LevelData.GetObjectDefinition(Type).Script;
 			}
 		}
 
@@ -324,7 +324,7 @@ namespace SonicRetro.SonLVL.API
 		{
 			PropertyDescriptorCollection result = TypeDescriptor.GetProperties(this, attributes, true);
 
-			ObjectDefinition objdef = LevelData.GetObjectDefinition(ID);
+			ObjectDefinition objdef = LevelData.GetObjectDefinition(Type);
 			if (objdef.CustomProperties == null || objdef.CustomProperties.Length == 0) return result;
 			List<PropertyDescriptor> props = new List<PropertyDescriptor>(result.Count);
 			foreach (PropertyDescriptor item in result)

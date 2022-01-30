@@ -18,13 +18,13 @@ namespace SonicRetro.SonLVL
 		private void StatisticsDialog_Load(object sender, EventArgs e)
 		{
 			Dictionary<int, int> counts = new Dictionary<int, int>();
-			foreach (var item in LevelData.ObjTypes)
-				counts.Add(item.Key, 0);
+			for (int i = 1; i < LevelData.ObjTypes.Count; i++)
+				counts.Add(i, 0);
 			foreach (ObjectEntry item in LevelData.Objects)
-				if (counts.ContainsKey(item.ID))
-					counts[item.ID]++;
+				if (counts.ContainsKey(item.Type))
+					counts[item.Type]++;
 				else
-					counts.Add(item.ID, 1);
+					counts.Add(item.Type, 1);
 			listView1.BeginUpdate();
 			foreach (KeyValuePair<int, int> item in counts)
 			{

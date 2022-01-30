@@ -20,7 +20,7 @@ namespace SonicRetro.SonLVL.API
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://github.com/sonicretro/SonLVL/issues");
+			System.Diagnostics.Process.Start("https://github.com/MainMemory/SonLVL-RSDK/issues");
 			Close();
 		}
 
@@ -32,12 +32,9 @@ namespace SonicRetro.SonLVL.API
 		private void ErrorReportDialog_Load(object sender, EventArgs e)
 		{
 			StringBuilder text = new StringBuilder();
-			text.Append("Program: ");
-			text.AppendLine(programName);
-			text.Append("Build Date: ");
-			text.AppendLine(File.GetLastWriteTimeUtc(Application.ExecutablePath).ToString(CultureInfo.InvariantCulture));
-			text.Append("OS Version: ");
-			text.AppendLine(Environment.OSVersion.ToString());
+			text.AppendLine($"Program: {programName}");
+			text.AppendLine($"Build Date: {File.GetLastWriteTimeUtc(Application.ExecutablePath).ToString(CultureInfo.InvariantCulture)}");
+			text.AppendLine($"OS Version: {Environment.OSVersion}");
 			text.AppendLine("Log:");
 			text.AppendLine(log);
 			textBox1.Text = text.ToString();

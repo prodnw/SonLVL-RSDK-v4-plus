@@ -155,6 +155,7 @@ namespace SonicRetro.SonLVL
 			this.findXFlip.Text = "X Flip";
 			this.findXFlip.ThreeState = true;
 			this.findXFlip.UseVisualStyleBackColor = true;
+			this.findXFlip.Visible = false;
 			// 
 			// findYFlip
 			// 
@@ -168,6 +169,7 @@ namespace SonicRetro.SonLVL
 			this.findYFlip.Text = "Y Flip";
 			this.findYFlip.ThreeState = true;
 			this.findYFlip.UseVisualStyleBackColor = true;
+			this.findYFlip.Visible = false;
 			// 
 			// FindObjectsDialog
 			// 

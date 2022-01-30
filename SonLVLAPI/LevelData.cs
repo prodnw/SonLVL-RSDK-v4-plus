@@ -40,7 +40,7 @@ namespace SonicRetro.SonLVL.API
 		public static Bitmap[] CompChunkBmps;
 		public static ColorPalette BmpPal;
 		public static Dictionary<string, ObjectData> INIObjDefs;
-		public static Dictionary<byte, ObjectDefinition> ObjTypes;
+		public static List<ObjectDefinition> ObjTypes;
 		public static ObjectDefinition unkobj;
 		private static Dictionary<string, BitmapBits> spriteSheets;
 		public static BitmapBits[][] ChunkColBmpBits;
@@ -230,9 +230,8 @@ namespace SonicRetro.SonLVL.API
 			BmpPal.Entries[ColorYellow] = Color.Yellow;
 			BmpPal.Entries[ColorBlack] = Color.Black;
 			UnknownImg.Palette = BmpPal;
-			INIObjDefs = new Dictionary<string, ObjectData>();
-			ObjTypes = new Dictionary<byte, ObjectDefinition>();
 			unkobj = new DefaultObjectDefinition();
+			INIObjDefs = new Dictionary<string, ObjectData>();
 			spriteSheets = new Dictionary<string, BitmapBits>();
 			if (File.Exists("SonLVLObjDefs.ini"))
 				LoadObjectDefinitionFile("SonLVLObjDefs.ini");
@@ -270,6 +269,72 @@ namespace SonicRetro.SonLVL.API
 			}
 			stopwatch.Stop();
 			Log($"Level loaded in {stopwatch.Elapsed.TotalSeconds} second(s).");
+		}
+
+		public static void ClearLevel()
+		{
+			Log("Clearing level...");
+			switch (RSDKVer)
+			{
+				case EngineVersion.V4:
+					StageConfig = new RSDKv4.StageConfig();
+					break;
+				case EngineVersion.V3:
+					StageConfig = new RSDKv3.StageConfig();
+					break;
+			}
+			for (int l = 0; l < StageConfig.stagePalette.colors.Length; l++)
+				for (int c = 0; c < StageConfig.stagePalette.colors[l].Length; c++)
+					NewPalette[(l * 16) + c + 96] = Color.FromArgb(StageConfig.stagePalette.colors[l][c].R, StageConfig.stagePalette.colors[l][c].G, StageConfig.stagePalette.colors[l][c].B);
+			foreach (var item in LevelData.NewTiles)
+				item.Clear();
+			NewPalette.Fill(Color.Black, 128, 128);
+			NewChunks = new Tiles128x128();
+			Collision = new TileConfig();
+			switch (RSDKVer)
+			{
+				case EngineVersion.V4:
+					Background = new RSDKv4.Backgrounds();
+					Scene = new RSDKv4.Scene();
+					break;
+				case EngineVersion.V3:
+					Background = new RSDKv3.Backgrounds();
+					Scene = new RSDKv3.Scene();
+					break;
+			}
+			Objects = new List<ObjectEntry>();
+			for (int i = 0; i < 8; i++)
+				BGScroll[i] = new List<ScrollData>();
+			NewPalette.CopyTo(BmpPal.Entries, 0);
+			BmpPal.Entries[ColorTransparent] = Color.Transparent;
+			BmpPal.Entries[ColorWhite] = Color.White;
+			BmpPal.Entries[ColorYellow] = Color.Yellow;
+			BmpPal.Entries[ColorBlack] = Color.Black;
+			UnknownImg.Palette = BmpPal;
+			InitObjectDefinitions();
+			NewTileBmps = new Bitmap[NewTiles.Length];
+			for (int bi = 0; bi < NewTiles.Length; bi++)
+				RedrawBlock(bi, false);
+			NewColBmpBits = new BitmapBits[Collision.collisionMasks[0].Length][];
+			NewColBmps = new Bitmap[Collision.collisionMasks[0].Length][];
+			for (int i = 0; i < Collision.collisionMasks[0].Length; i++)
+			{
+				NewColBmpBits[i] = new BitmapBits[2];
+				NewColBmps[i] = new Bitmap[2];
+				RedrawCol(i, false);
+			}
+			ChunkSprites = new Sprite[NewChunks.chunkList.Length];
+			ChunkBmps = new Bitmap[NewChunks.chunkList.Length][];
+			CompChunkBmps = new Bitmap[NewChunks.chunkList.Length];
+			ChunkColBmpBits = new BitmapBits[NewChunks.chunkList.Length][];
+			ChunkColBmps = new Bitmap[NewChunks.chunkList.Length][];
+			for (int i = 0; i < NewChunks.chunkList.Length; i++)
+			{
+				ChunkBmps[i] = new Bitmap[2];
+				ChunkColBmpBits[i] = new BitmapBits[2];
+				ChunkColBmps[i] = new Bitmap[2];
+				RedrawChunk(i);
+			}
 		}
 
 		public static void SaveLevel()
@@ -344,20 +409,7 @@ namespace SonicRetro.SonLVL.API
 			if (section.HasValue)
 				bounds = section.Value;
 			else
-			{
-				int xend = 0;
-				int yend = 0;
-				for (int y = 0; y < FGHeight; y++)
-					for (int x = 0; x < FGWidth; x++)
-						if (Scene.layout[y][x] > 0)
-						{
-							xend = Math.Max(xend, x);
-							yend = Math.Max(yend, y);
-						}
-				xend++;
-				yend++;
-				bounds = new Rectangle(0, 0, xend * 128, yend * 128);
-			}
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
 			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
 			int cl = Math.Max(bounds.X / 128, 0);
 			int ct = Math.Max(bounds.Y / 128, 0);
@@ -416,20 +468,7 @@ namespace SonicRetro.SonLVL.API
 			if (section.HasValue)
 				bounds = section.Value;
 			else
-			{
-				int xend = 0;
-				int yend = 0;
-				for (int y = 0; y < BGHeight[layer]; y++)
-					for (int x = 0; x < BGWidth[layer]; x++)
-						if (Background.layers[layer].layout[y][x] > 0)
-						{
-							xend = Math.Max(xend, x);
-							yend = Math.Max(yend, y);
-						}
-				xend++;
-				yend++;
-				bounds = new Rectangle(0, 0, xend * 128, yend * 128);
-			}
+				bounds = new Rectangle(0, 0, BGWidth[layer] * 128, BGHeight[layer] * 128);
 			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
 			for (int y = Math.Max(bounds.Y / 128, 0); y <= Math.Min((bounds.Bottom - 1) / 128, BGHeight[layer] - 1); y++)
 				for (int x = Math.Max(bounds.X / 128, 0); x <= Math.Min((bounds.Right - 1) / 128, BGWidth[layer] - 1); x++)
@@ -447,7 +486,6 @@ namespace SonicRetro.SonLVL.API
 							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 					}
 			return LevelImg8bpp;
-			throw new NotImplementedException();
 		}
 
 		private static void LoadObjectDefinitionFile(string file)
@@ -466,126 +504,131 @@ namespace SonicRetro.SonLVL.API
 			else
 				objlist = StageConfig.objects.Select((o, i) => (o, (byte)(i + 1)));
 			List<KeyValuePair<byte, ObjectDefinition>> objdefs = new List<KeyValuePair<byte, ObjectDefinition>>();
-			ObjectData emptydata = new ObjectData();
 #if !DEBUG
 			Parallel.ForEach(objlist, group =>
 #else
 			foreach (var group in objlist)
 #endif
 			{
-				ObjectData data;
-				lock (objdefs)
-					data = INIObjDefs.GetValueOrDefault(group.objinf.script, emptydata);
-				ObjectDefinition def = null;
-				if (data.CodeFile != null)
-				{
-					string fulltypename = data.CodeType;
-					string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
-					DateTime modDate = DateTime.MinValue;
-					if (File.Exists(dllfile))
-						modDate = File.GetLastWriteTime(dllfile);
-					string fp = data.CodeFile.Replace('/', Path.DirectorySeparatorChar);
-					Log("Loading ObjectDefinition type " + fulltypename + " from \"" + fp + "\"...");
-					if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
-					{
-						Log("Loading type from cached assembly \"" + dllfile + "\"...");
-						def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename));
-					}
-					else
-					{
-						Log("Compiling code file...");
-						string ext = Path.GetExtension(fp);
-						CodeDomProvider pr = null;
-						switch (ext.ToLowerInvariant())
-						{
-							case ".cs":
-								pr = new Microsoft.CSharp.CSharpCodeProvider();
-								break;
-							case ".vb":
-								pr = new Microsoft.VisualBasic.VBCodeProvider();
-								break;
-						}
-						if (pr != null)
-						{
-							CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
-							{
-								GenerateExecutable = false,
-								GenerateInMemory = false,
-								IncludeDebugInformation = true,
-								OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
-							};
-							CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
-							if (res.Errors.HasErrors)
-							{
-								Log("Compile failed.", "Errors:");
-								foreach (CompilerError item in res.Errors)
-									Log(item.ToString());
-								Log(string.Empty);
-								def = new DefaultObjectDefinition();
-							}
-							else
-							{
-								Log("Compile succeeded.");
-								def = (ObjectDefinition)Activator.CreateInstance(res.CompiledAssembly.GetType(fulltypename));
-							}
-						}
-						else
-							def = new DefaultObjectDefinition();
-					}
-				}
-				else if (data.XMLFile != null)
-					def = new XMLObjectDefinition();
-				else
-					def = new DefaultObjectDefinition();
+				ObjectDefinition def = MakeObjectDefinition(group.objinf);
 				lock (objdefs)
 					objdefs.Add(new KeyValuePair<byte, ObjectDefinition>(group.ind, def));
-				def.Init(group.objinf);
-				def.Init(data);
 #if !DEBUG
 			});
 #else
 			}
 #endif
+			ObjTypes = new List<ObjectDefinition>() { unkobj };
 			foreach (var item in objdefs.OrderBy(a => a.Key))
-				ObjTypes[item.Key] = item.Value;
+				ObjTypes.Add(item.Value);
 		}
 
-		internal static string ExpandTypeName(string type)
+		public static ObjectDefinition MakeObjectDefinition(GameConfig.ObjectInfo objinf)
+		{
+			if (!INIObjDefs.TryGetValue(objinf.script, out ObjectData data))
+				data = new ObjectData();
+			ObjectDefinition def;
+			if (data.CodeFile != null)
+			{
+				string fulltypename = data.CodeType;
+				string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
+				DateTime modDate = DateTime.MinValue;
+				if (File.Exists(dllfile))
+					modDate = File.GetLastWriteTime(dllfile);
+				string fp = data.CodeFile.Replace('/', Path.DirectorySeparatorChar);
+				Log("Loading ObjectDefinition type " + fulltypename + " from \"" + fp + "\"...");
+				if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
+				{
+					Log("Loading type from cached assembly \"" + dllfile + "\"...");
+					def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename));
+				}
+				else
+				{
+					Log("Compiling code file...");
+					string ext = Path.GetExtension(fp);
+					CodeDomProvider pr = null;
+					switch (ext.ToLowerInvariant())
+					{
+						case ".cs":
+							pr = new Microsoft.CSharp.CSharpCodeProvider();
+							break;
+						case ".vb":
+							pr = new Microsoft.VisualBasic.VBCodeProvider();
+							break;
+					}
+					if (pr != null)
+					{
+						CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
+						{
+							GenerateExecutable = false,
+							GenerateInMemory = false,
+							IncludeDebugInformation = true,
+							OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
+						};
+						CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
+						if (res.Errors.HasErrors)
+						{
+							Log("Compile failed.", "Errors:");
+							foreach (CompilerError item in res.Errors)
+								Log(item.ToString());
+							Log(string.Empty);
+							def = new DefaultObjectDefinition();
+						}
+						else
+						{
+							Log("Compile succeeded.");
+							def = (ObjectDefinition)Activator.CreateInstance(res.CompiledAssembly.GetType(fulltypename));
+						}
+					}
+					else
+						def = new DefaultObjectDefinition();
+				}
+			}
+			else if (data.XMLFile != null)
+				def = new XMLObjectDefinition();
+			else
+				def = new DefaultObjectDefinition();
+			def.Init(objinf);
+			def.Init(data);
+			return def;
+		}
+
+		internal static Type ExpandTypeName(string type)
 		{
 			switch (type)
 			{
 				case "bool":
-					return typeof(bool).FullName;
+					return typeof(bool);
 				case "byte":
-					return typeof(byte).FullName;
+					return typeof(byte);
 				case "char":
-					return typeof(char).FullName;
+					return typeof(char);
 				case "decimal":
-					return typeof(decimal).FullName;
+					return typeof(decimal);
 				case "double":
-					return typeof(double).FullName;
+					return typeof(double);
 				case "float":
-					return typeof(float).FullName;
+					return typeof(float);
 				case "int":
-					return typeof(int).FullName;
+					return typeof(int);
 				case "long":
-					return typeof(long).FullName;
+					return typeof(long);
 				case "object":
-					return typeof(object).FullName;
+					return typeof(object);
 				case "sbyte":
-					return typeof(sbyte).FullName;
+					return typeof(sbyte);
 				case "short":
-					return typeof(short).FullName;
+					return typeof(short);
 				case "string":
-					return typeof(string).FullName;
+					return typeof(string);
 				case "uint":
-					return typeof(uint).FullName;
+					return typeof(uint);
 				case "ulong":
-					return typeof(ulong).FullName;
+					return typeof(ulong);
 				case "ushort":
-					return typeof(ushort).FullName;
+					return typeof(ushort);
 				default:
-					return type;
+					return Type.GetType(type);
 			}
 		}
 
@@ -696,7 +739,7 @@ namespace SonicRetro.SonLVL.API
 
 		public static ObjectDefinition GetObjectDefinition(byte ID)
 		{
-			if (ObjTypes != null && ObjTypes.ContainsKey(ID))
+			if (ObjTypes != null && ID < ObjTypes.Count)
 				return ObjTypes[ID];
 			else
 				return unkobj;

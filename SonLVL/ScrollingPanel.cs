@@ -26,24 +26,28 @@ namespace SonicRetro.SonLVL
 
 		public bool PanelAllowDrop
 		{
-			get { return panel.AllowDrop; }
-			set { panel.AllowDrop = value; }
+			get => panel.AllowDrop;
+			set => panel.AllowDrop = value;
 		}
 
 		[Browsable(false)]
 		public Graphics PanelGraphics { get; private set; }
 
 		[Browsable(false)]
-		public int PanelWidth { get { return panel.Width; } }
+		public int PanelWidth => panel.Width;
 
 		[Browsable(false)]
-		public int PanelHeight { get { return panel.Height; } }
+		public int PanelHeight => panel.Height;
 
 		public Cursor PanelCursor
 		{
-			get { return panel.Cursor; }
-			set { panel.Cursor = value; }
+			get => panel.Cursor;
+			set => panel.Cursor = value;
 		}
+
+		public Point PanelPointToClient(Point p) => panel.PointToClient(p);
+
+		public bool FocusPanel() => panel.Focus();
 
 		public int VScrollMinimum
 		{
@@ -223,11 +227,6 @@ namespace SonicRetro.SonLVL
 		{
 			PanelGraphics = panel.CreateGraphics();
 			PanelGraphics.SetOptions();
-		}
-
-		public Point PanelPointToClient(Point p)
-		{
-			return panel.PointToClient(p);
 		}
 	}
 }

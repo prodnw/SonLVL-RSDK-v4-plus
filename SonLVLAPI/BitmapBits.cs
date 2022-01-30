@@ -1065,6 +1065,27 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
+		public void ScrollVH(BitmapBits destination, int dstX, int srcX, params int[] srcY)
+		{
+			if (dstX < 0 || dstX >= destination.Width) return;
+			for (int i = 0; i < srcY.Length; i++)
+			{
+				srcY[i] %= Height;
+				if (srcY[i] < 0)
+					srcY[i] += Height;
+			}
+			srcX %= Width;
+			if (srcX < 0)
+				srcX += Width;
+			for (int x = 0; x < destination.Width - dstX; x++)
+			{
+				int amount = srcY[(srcX + x) % srcY.Length];
+				int xoff = (x + srcX) % Width;
+				for (int y = 0; y < destination.Height; y++)
+					destination[x + dstX, y] = this[xoff, (y + amount) % Height];
+			}
+		}
+
 		public unsafe void ApplyWaterPalette(int waterHeight)
 		{
 			if (waterHeight < 0 || waterHeight > Height) throw new ArgumentOutOfRangeException("waterHeight");

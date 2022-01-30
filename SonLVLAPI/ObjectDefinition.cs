@@ -552,6 +552,8 @@ namespace SonicRetro.SonLVL.API
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
+			if (obj is V4ObjectEntry obj4)
+				return spr[(int)obj4.Direction];
 			return spr[0];
 		}
 

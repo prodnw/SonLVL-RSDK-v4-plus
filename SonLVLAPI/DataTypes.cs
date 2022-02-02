@@ -17,11 +17,38 @@ namespace SonicRetro.SonLVL.API
 		private readonly Entry ent;
 		private ushort x, y;
 		[Description("The horizontal component of the position.")]
-		[TypeConverter(typeof(UInt16HexConverter))]
-		public ushort X { get { if (ent != null) x = ent.X; return x; } set { x = value; if (ent != null) ent.X = value; } }
+		public ushort X
+		{
+			get
+			{
+				if (ent != null)
+					x = ent.X;
+				return x;
+			}
+			set
+			{
+				x = value;
+				if (ent != null)
+					ent.X = value;
+			}
+		}
+
 		[Description("The vertical component of the position.")]
-		[TypeConverter(typeof(UInt16HexConverter))]
-		public ushort Y { get { if (ent != null) y = ent.Y; return y; } set { y = value; if (ent != null) ent.Y = value; } }
+		public ushort Y
+		{
+			get
+			{
+				if (ent != null)
+					y = ent.Y;
+				return y;
+			}
+			set
+			{
+				y = value;
+				if (ent != null)
+					ent.Y = value;
+			}
+		}
 
 		public Position() { }
 
@@ -35,8 +62,8 @@ namespace SonicRetro.SonLVL.API
 		public Position(string data)
 		{
 			string[] a = data.Split(',');
-			X = ushort.Parse(a[0], System.Globalization.NumberStyles.HexNumber);
-			Y = ushort.Parse(a[1], System.Globalization.NumberStyles.HexNumber);
+			X = ushort.Parse(a[0]);
+			Y = ushort.Parse(a[1]);
 		}
 
 		public Position(ushort x, ushort y)
@@ -47,7 +74,7 @@ namespace SonicRetro.SonLVL.API
 
 		public override string ToString()
 		{
-			return X.ToString("X4") + ", " + Y.ToString("X4");
+			return X + ", " + Y;
 		}
 
 		public ushort[] ToArray()
@@ -420,32 +447,31 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
-		[DefaultValue(0x200)]
-		[Description("The object’s scale, generally used with generally used with DrawSpriteFX and FX_ROTATE or FX_ROTOZOOM.\nUses a 9 - bit bitshifted value, so 0x200(512) == 1.0.")]
-		[TypeConverter(typeof(Int32HexConverter))]
-		public int Scale
+		[DefaultValue(1)]
+		[Description("The object’s scale, generally used with DrawSpriteFX and FX_SCALE or FX_ROTOZOOM.")]
+		public decimal Scale
 		{
-			get => entity.scale ?? 0x200;
+			get => (entity.scale ?? 0x200) / 512m;
 			set
 			{
-				if (value == 0x200)
+				if (value == 1)
 					entity.scale = null;
 				else
-					entity.scale = value;
+					entity.scale = (int)(value * 512);
 			}
 		}
 
 		[DefaultValue(0)]
-		[Description("The object’s rotation, generally used with DrawSpriteFX and FX_ROTATE or FX_ROTOZOOM(ranges from 0 - 511).")]
-		public int Rotation
+		[Description("The object’s rotation (in degrees), generally used with DrawSpriteFX and FX_ROTATE or FX_ROTOZOOM.")]
+		public decimal Rotation
 		{
-			get => entity.rotation ?? 0;
+			get => entity.rotation ?? 0 / 1.4222222222222222222222222222222m;
 			set
 			{
 				if (value == 0)
 					entity.rotation = null;
 				else
-					entity.rotation = value;
+					entity.rotation = (int)(value * 1.4222222222222222222222222222222m);
 			}
 		}
 
@@ -604,7 +630,16 @@ namespace SonicRetro.SonLVL.API
 			Mask2 = mask2;
 		}
 
-		public bool Equals(TileData other) => Tile.Bits.FastArrayEqual(other.Tile.Bits) && Mask1.Equal(other.Mask1) && Mask2.Equal(other.Mask2);
+		public bool Equals(TileData other)
+		{
+			if (other == null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Tile.Bits.FastArrayEqual(other.Tile.Bits) && Mask1.Equal(other.Mask1) && Mask2.Equal(other.Mask2);
+		}
+
+		public override bool Equals(object obj) => Equals(obj as TileData);
+
+		public override int GetHashCode() => Tile.GetHashCode() ^ Mask1.GetHashCode() ^ Mask2.GetHashCode();
 
 		public TileData Clone() => new TileData(new BitmapBits(Tile), Mask1.Clone(), Mask2.Clone());
 

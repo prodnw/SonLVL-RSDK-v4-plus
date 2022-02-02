@@ -63,6 +63,12 @@
     <Compile Include="FileSelectDialog.Designer.cs">
       <DependentUpon>FileSelectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameConfigEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameConfigEditorDialog.Designer.cs">
+      <DependentUpon>GameConfigEditorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FindObjectsDialog.resx">
       <DependentUpon>FindObjectsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameConfigEditorDialog.resx">
+      <DependentUpon>GameConfigEditorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImportProgressControl.resx">
       <DependentUpon>ImportProgressControl.cs</DependentUpon>

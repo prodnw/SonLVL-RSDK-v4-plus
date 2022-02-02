@@ -45,6 +45,7 @@
 			this.disablePauseFocus = new System.Windows.Forms.CheckBox();
 			this.redirectSave = new System.Windows.Forms.CheckBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.useGameXml = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -203,6 +204,16 @@
 			this.checkBox1.Text = "checkBox1";
 			this.checkBox1.UseVisualStyleBackColor = true;
 			// 
+			// useGameXml
+			// 
+			this.useGameXml.AutoSize = true;
+			this.useGameXml.Location = new System.Drawing.Point(280, 185);
+			this.useGameXml.Name = "useGameXml";
+			this.useGameXml.Size = new System.Drawing.Size(92, 17);
+			this.useGameXml.TabIndex = 18;
+			this.useGameXml.Text = "Use game.xml";
+			this.useGameXml.UseVisualStyleBackColor = true;
+			// 
 			// NewModDialog
 			// 
 			this.AcceptButton = this.buttonOK;
@@ -210,6 +221,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(384, 252);
+			this.Controls.Add(this.useGameXml);
 			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.redirectSave);
 			this.Controls.Add(this.disablePauseFocus);
@@ -256,5 +268,6 @@
 		private System.Windows.Forms.CheckBox disablePauseFocus;
 		private System.Windows.Forms.CheckBox redirectSave;
 		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox useGameXml;
 	}
 }

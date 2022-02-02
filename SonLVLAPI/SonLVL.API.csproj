@@ -67,6 +67,7 @@
       <DependentUpon>FileSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSelectorMode.cs" />
+    <Compile Include="GameXML.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="IniSerializer.cs" />
     <Compile Include="KeyboardPanel.cs">

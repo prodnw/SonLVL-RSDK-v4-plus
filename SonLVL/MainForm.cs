@@ -303,7 +303,7 @@ namespace SonicRetro.SonLVL.GUI
 			modMenuItems = new List<ModStuff>();
 			selectModToolStripMenuItem.DropDownItems.Clear();
 			ModStuff ms = new ModStuff();
-			ToolStripMenuItem menuitem = new ToolStripMenuItem("None (Read Only)", null, new EventHandler(LoadMod)) { Tag = ms };
+			ToolStripMenuItem menuitem = new ToolStripMenuItem("None (Read Only)", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms };
 			ms.MenuItem = menuitem;
 			modMenuItems.Add(ms);
 			selectModToolStripMenuItem.DropDownItems.Add(menuitem);
@@ -316,12 +316,12 @@ namespace SonicRetro.SonLVL.GUI
 				if (i > 0 && i % 10 == 0)
 					parent = (ToolStripMenuItem)selectModToolStripMenuItem.DropDownItems.Add($"Set {i / 10 + 1}");
 				ms = new ModStuff() { Path = mods[i] };
-				menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(mods[i]).Name ?? "Unknown Mod", null, new EventHandler(LoadMod)) { Tag = ms };
+				menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(mods[i]).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms };
 				ms.MenuItem = menuitem;
 				parent.DropDownItems.Add(menuitem);
 				modMenuItems.Add(ms);
 			}
-			selectModToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem("New Mod...", null, new EventHandler(NewMod)));
+			selectModToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem("New Mod...", null, new EventHandler(NewModToolStripMenuItem_Clicked)));
 			if (Settings.MRUList.Count == 0)
 				recentProjectsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem2);
 			if (Settings.MRUList.Contains(filename))
@@ -345,7 +345,7 @@ namespace SonicRetro.SonLVL.GUI
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
 		}
 
-		private void NewMod(object sender, EventArgs e)
+		private void NewModToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
 			using (NewModDialog dlg = new NewModDialog())
 				if (dlg.ShowDialog(this) == DialogResult.OK)
@@ -353,34 +353,35 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (var item in modMenuItems)
 						item.MenuItem.Checked = false;
 					ModStuff ms = new ModStuff() { Path = dlg.ModFile };
-					ToolStripMenuItem menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(dlg.ModFile).Name ?? "Unknown Mod", null, new EventHandler(LoadMod)) { Tag = ms, Checked = true };
+					ToolStripMenuItem menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(dlg.ModFile).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms, Checked = true };
 					ms.MenuItem = menuitem;
 					modMenuItems.Add(ms);
 					selectModToolStripMenuItem.DropDownItems.Insert(selectModToolStripMenuItem.DropDownItems.Count - 1, menuitem);
-					try
-					{
-						LevelData.LoadMod(Path.GetDirectoryName(dlg.ModFile));
-					}
-					catch (Exception ex)
-					{
-						using (LoadErrorDialog ed = new LoadErrorDialog(false, ex.GetType().Name + ": " + ex.Message))
-							ed.ShowDialog(this);
-						return;
-					}
-					SetupLevels();
+					LoadMod(dlg.ModFile);
 				}
 		}
 
-		private void LoadMod(object sender, EventArgs e)
+		private void ModToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
 			ModStuff mod = (ModStuff)((ToolStripMenuItem)sender).Tag;
 			foreach (var item in modMenuItems)
 				item.MenuItem.Checked = false;
 			mod.MenuItem.Checked = true;
-			if (mod.Path == null) saveToolStripMenuItem.Enabled = false;
+			LoadMod(mod.Path);
+		}
+
+		private void LoadMod(string path)
+		{
+			if (path == null)
+			{
+				saveToolStripMenuItem.Enabled = false;
+				editGameConfigToolStripMenuItem.Enabled = false;
+			}
+			else
+				editGameConfigToolStripMenuItem.Enabled = true;
 			try
 			{
-				LevelData.LoadMod(Path.GetDirectoryName(mod.Path));
+				LevelData.LoadMod(Path.GetDirectoryName(path));
 			}
 			catch (Exception ex)
 			{
@@ -388,18 +389,13 @@ namespace SonicRetro.SonLVL.GUI
 					ed.ShowDialog(this);
 				return;
 			}
-			SetupLevels();
-		}
-
-		private void SetupLevels()
-		{
 			levelMenuItems = new List<LevelStuff>();
 			List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[] groups = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>[4];
 			for (int i = 0; i < 4; i++)
 			{
 				groups[i] = new List<List<RSDKv3_4.GameConfig.StageList.StageInfo>>();
 				List<RSDKv3_4.GameConfig.StageList.StageInfo> curgrp = null;
-				foreach (var item in LevelData.GameConfig.stageLists[i].list)
+				foreach (var item in LevelData.StageLists[i])
 					if (item.highlighted)
 					{
 						curgrp = new List<RSDKv3_4.GameConfig.StageList.StageInfo>() { item };
@@ -445,8 +441,24 @@ namespace SonicRetro.SonLVL.GUI
 					}
 				}
 			}
+			scriptFiles = new List<string>();
+			if (Directory.Exists("Scripts"))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Scripts"), "*.txt"));
+			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			objectScriptBox.AutoCompleteCustomSource.Clear();
+			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
+			sfxFiles = new List<string>();
+			if (Directory.Exists("Data/SoundFX"))
+				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.wav"));
+			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
+			sfxFileBox.AutoCompleteCustomSource.Clear();
+			sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
 		}
+
+		private IEnumerable<string> GetFilesRelative(string folder, string pattern) => Directory.EnumerateFiles(folder, pattern, SearchOption.AllDirectories).Select(a => a.Substring(folder.Length + 1).Replace(Path.DirectorySeparatorChar, '/'));
 
 		#region Main Menu
 		#region File Menu
@@ -476,6 +488,37 @@ namespace SonicRetro.SonLVL.GUI
 				}
 		}
 
+		private void editGameConfigToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			fileToolStripMenuItem.DropDown.Hide();
+			if (loaded)
+			{
+				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+				{
+					case DialogResult.Yes:
+						saveToolStripMenuItem_Click(this, EventArgs.Empty);
+						break;
+					case DialogResult.Cancel:
+						return;
+				}
+			}
+			using (GameConfigEditorDialog dlg = new GameConfigEditorDialog(scriptFiles, sfxFiles))
+				if (dlg.ShowDialog(this) == DialogResult.OK)
+				{
+					loaded = false;
+					LoadMod(LevelData.ModFolder);
+					LevelStuff stuff = levelMenuItems.FirstOrDefault(a => a.Stage.folder == LevelData.StageInfo.folder && a.Stage.actID == LevelData.StageInfo.actID);
+					if (stuff != null)
+					{
+						stuff.MenuItem.Checked = true;
+						Enabled = false;
+						UseWaitCursor = true;
+						levelname = stuff.FullName;
+						LoadLevel(stuff);
+					}
+				}
+		}
+
 		private void LevelToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
 			if (loaded)
@@ -497,14 +540,20 @@ namespace SonicRetro.SonLVL.GUI
 			menuitem.Checked = true;
 			Enabled = false;
 			UseWaitCursor = true;
-			levelname = ((LevelStuff)menuitem.Tag).FullName;
+			LevelStuff level = (LevelStuff)menuitem.Tag;
+			levelname = level.FullName;
+			LoadLevel(level);
+		}
+
+		private void LoadLevel(LevelStuff level)
+		{
 			Text = $"SonLVL-RSDK - {LevelData.GameConfig.gameTitle} - Loading {levelname}...";
 #if !DEBUG
 			initerror = null;
-			backgroundLevelLoader.RunWorkerAsync(menuitem.Tag);
+			backgroundLevelLoader.RunWorkerAsync(level);
 #else
-			backgroundLevelLoader_DoWork(null, new DoWorkEventArgs(menuitem.Tag));
-			backgroundLevelLoader_RunWorkerCompleted(null, null);
+			LoadLevelPart2(level);
+			LoadLevelPart3();
 #endif
 		}
 
@@ -515,36 +564,25 @@ namespace SonicRetro.SonLVL.GUI
 			try
 #endif
 			{
-				SelectedChunk = 0;
-				LevelData.LoadLevel(((LevelStuff)e.Argument).Stage);
-				LevelImgPalette = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
-				LevelData.BmpPal.Entries.CopyTo(LevelImgPalette.Entries, 0);
-				LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[160];
-				LevelImgPalette.Entries[LevelData.ColorWhite] = Color.White;
-				LevelImgPalette.Entries[LevelData.ColorYellow] = Color.Yellow;
-				LevelImgPalette.Entries[LevelData.ColorBlack] = Color.Black;
-				LevelImgPalette.Entries[ColorGrid] = Settings.GridColor;
-				scriptFiles = new List<string>();
-				if (Directory.Exists("Scripts"))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Scripts"), "*.txt"));
-				if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
-				objectScriptBox.AutoCompleteCustomSource.Clear();
-				objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
-				sfxFiles = new List<string>();
-				if (Directory.Exists("Data/SoundFX"))
-					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.wav"));
-				if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
-					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
-				sfxFileBox.AutoCompleteCustomSource.Clear();
-				sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
+				LoadLevelPart2((LevelStuff)e.Argument);
 			}
 #if !DEBUG
 			catch (Exception ex) { initerror = ex; }
 #endif
 		}
 
-		private IEnumerable<string> GetFilesRelative(string folder, string pattern) => Directory.EnumerateFiles(folder, pattern, SearchOption.AllDirectories).Select(a => a.Substring(folder.Length + 1).Replace(Path.DirectorySeparatorChar, '/'));
+		private void LoadLevelPart2(LevelStuff argument)
+		{
+			SelectedChunk = 0;
+			LevelData.LoadLevel(argument.Stage);
+			LevelImgPalette = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
+			LevelData.BmpPal.Entries.CopyTo(LevelImgPalette.Entries, 0);
+			LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[160];
+			LevelImgPalette.Entries[LevelData.ColorWhite] = Color.White;
+			LevelImgPalette.Entries[LevelData.ColorYellow] = Color.Yellow;
+			LevelImgPalette.Entries[LevelData.ColorBlack] = Color.Black;
+			LevelImgPalette.Entries[ColorGrid] = Settings.GridColor;
+		}
 
 		private void backgroundLevelLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
@@ -565,6 +603,11 @@ namespace SonicRetro.SonLVL.GUI
 				Enabled = true;
 				return;
 			}
+			LoadLevelPart3();
+		}
+
+		private void LoadLevelPart3()
+		{
 			Log("Load completed.");
 			ChunkSelector.Images = LevelData.CompChunkBmps;
 			ChunkSelector.SelectedIndex = 0;
@@ -917,7 +960,7 @@ namespace SonicRetro.SonLVL.GUI
 					for (int i = 0; i < LevelData.NewTileBmps.Length; i++)
 						LevelData.NewTileBmps[i]
 							.Save(Path.Combine(a.SelectedPath,
-							(useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X2") : i.ToString()) + ".png"));
+							(useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 		}
 
 		private void chunksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -939,7 +982,7 @@ namespace SonicRetro.SonLVL.GUI
 					for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 					{
 						BitmapBits bits = null;
-						string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X2") : i.ToString());
+						string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
 						if (exportArtcollisionpriorityToolStripMenuItem.Checked)
 						{
 							bits = new BitmapBits(128, 128);
@@ -984,9 +1027,9 @@ namespace SonicRetro.SonLVL.GUI
 					for (int i = 0; i < LevelData.NewColBmpBits[0].Length; i++)
 					{
 						LevelData.NewColBmpBits[0][i].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
-							"0_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X2") : i.ToString()) + ".png"));
+							"0_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 						LevelData.NewColBmpBits[1][i].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
-							"1_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X2") : i.ToString()) + ".png"));
+							"1_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 					}
 		}
 
@@ -1409,10 +1452,10 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				Rectangle hudbnd;
 				Rectangle tmpbnd = hudbnd = DrawHUDStr(8, 8, "Screen Pos: ");
-				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, camera.X.ToString("X4") + ' ' + camera.Y.ToString("X4")));
+				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, camera.X.ToString("D5") + ' ' + camera.Y.ToString("D5")));
 				tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Level Size: ");
 				hudbnd = Rectangle.Union(hudbnd, tmpbnd);
-				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, (lvlsize.Width * 128).ToString("X4") + ' ' + (lvlsize.Height * 128).ToString("X4")));
+				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, (lvlsize.Width * 128).ToString("D5") + ' ' + (lvlsize.Height * 128).ToString("D5")));
 				switch (CurrentTab)
 				{
 					case Tab.Objects:
@@ -1426,7 +1469,7 @@ namespace SonicRetro.SonLVL.GUI
 					case Tab.Background:
 						tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Chunk: ");
 						hudbnd = Rectangle.Union(hudbnd, tmpbnd);
-						hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X2")));
+						hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X3")));
 						break;
 				}
 				if (path1ToolStripMenuItem.Checked)
@@ -6742,7 +6785,11 @@ namespace SonicRetro.SonLVL.GUI
 					case DialogResult.Yes:
 						foreach (var item in LevelData.Objects)
 							if (item.Type > 0)
-								item.Type += (byte)LevelData.GameConfig.objects.Count;
+								item.Type += (byte)LevelData.GlobalObjects.Count;
+						foreach (var astg in LevelData.AdditionalScenes)
+							foreach (var item in astg.Scene.entities)
+								if (item.type > 0)
+									item.type += (byte)LevelData.GlobalObjects.Count;
 						break;
 					case DialogResult.No:
 						reload = true;
@@ -6753,7 +6800,7 @@ namespace SonicRetro.SonLVL.GUI
 						loaded = true;
 						return;
 				}
-				LevelData.ObjTypes.InsertRange(1, LevelData.GameConfig.objects.Select(o => LevelData.MakeObjectDefinition(o)));
+				LevelData.ObjTypes.InsertRange(1, LevelData.GlobalObjects.Select(o => LevelData.MakeObjectDefinition(o)));
 				InitObjectTypes();
 				if (reload)
 					foreach (var item in LevelData.Objects)
@@ -6771,8 +6818,8 @@ namespace SonicRetro.SonLVL.GUI
 						foreach (var item in LevelData.Objects)
 							if (item.Type > 0)
 							{
-								if (item.Type > LevelData.GameConfig.objects.Count + 1)
-									item.Type -= (byte)LevelData.GameConfig.objects.Count;
+								if (item.Type > LevelData.GlobalObjects.Count + 1)
+									item.Type -= (byte)LevelData.GlobalObjects.Count;
 								else
 									todelete.Add(item);
 							}
@@ -6781,6 +6828,13 @@ namespace SonicRetro.SonLVL.GUI
 							LevelData.DeleteObject(item);
 							SelectedItems.Remove(item);
 						}
+						foreach (var astg in LevelData.AdditionalScenes)
+							for (int i = 0; i < astg.Scene.entities.Count; i++)
+								if (astg.Scene.entities[i].type > 0)
+									if (astg.Scene.entities[i].type > LevelData.GlobalObjects.Count + 1)
+										astg.Scene.entities[i].type -= (byte)LevelData.GlobalObjects.Count;
+									else
+										astg.Scene.entities.RemoveAt(i--);
 						break;
 					case DialogResult.No:
 						reload = true;
@@ -6791,7 +6845,7 @@ namespace SonicRetro.SonLVL.GUI
 						loaded = true;
 						return;
 				}
-				LevelData.ObjTypes.RemoveRange(1, LevelData.GameConfig.objects.Count);
+				LevelData.ObjTypes.RemoveRange(1, LevelData.GlobalObjects.Count);
 				InitObjectTypes();
 				if (reload)
 					foreach (var item in LevelData.Objects)
@@ -6845,7 +6899,7 @@ namespace SonicRetro.SonLVL.GUI
 			bool reload = false;
 			byte idx = (byte)(objectListBox.SelectedIndex + 1);
 			if (LevelData.StageConfig.loadGlobalObjects)
-				idx += (byte)LevelData.GameConfig.objects.Count;
+				idx += (byte)LevelData.GlobalObjects.Count;
 			switch (MessageBox.Show(this, "Do you want to adjust the types of all the entities in the level and delete entities using this type?", "Delete Object Type", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 			{
 				case DialogResult.Yes:
@@ -6865,6 +6919,17 @@ namespace SonicRetro.SonLVL.GUI
 						LevelData.DeleteObject(item);
 						SelectedItems.Remove(item);
 					}
+					foreach (var astg in LevelData.AdditionalScenes)
+						for (int i = 0; i < astg.Scene.entities.Count; i++)
+							switch (astg.Scene.entities[i].type.CompareTo(idx))
+							{
+								case 1:
+									astg.Scene.entities[i].type--;
+									break;
+								case 0:
+									astg.Scene.entities.RemoveAt(i--);
+									break;
+							}
 					break;
 				case DialogResult.No:
 					reload = true;
@@ -6891,7 +6956,7 @@ namespace SonicRetro.SonLVL.GUI
 			info.name = objectNameBox.Text;
 			byte idx = (byte)(objectListBox.SelectedIndex + 1);
 			if (LevelData.StageConfig.loadGlobalObjects)
-				idx += (byte)LevelData.GameConfig.objects.Count;
+				idx += (byte)LevelData.GlobalObjects.Count;
 			LevelData.GetObjectDefinition(idx).Init(info);
 			ObjectSelect.listView1.Items[idx - 1].Text = objectNameBox.Text;
 			objectTypeList.Items[idx - 1].Text = objectNameBox.Text;
@@ -6910,7 +6975,7 @@ namespace SonicRetro.SonLVL.GUI
 			info.script = objectScriptBox.Text;
 			byte idx = (byte)(objectListBox.SelectedIndex + 1);
 			if (LevelData.StageConfig.loadGlobalObjects)
-				idx += (byte)LevelData.GameConfig.objects.Count;
+				idx += (byte)LevelData.GlobalObjects.Count;
 			var def = LevelData.MakeObjectDefinition(info);
 			LevelData.ObjTypes[idx] = def;
 			Bitmap image = def.Image.GetBitmap().ToBitmap(LevelData.BmpPal);

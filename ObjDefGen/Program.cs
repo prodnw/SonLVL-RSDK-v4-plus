@@ -21,7 +21,7 @@ namespace ObjDefGen
 				folder = Console.ReadLine().Trim('"');
 			}
 			folder = Path.GetFullPath(folder);
-			Dictionary<string, ObjectData> defs = new Dictionary<string, ObjectData>();
+			Dictionary<string, Dictionary<string, ObjectData>> defs = new Dictionary<string, Dictionary<string, ObjectData>>();
 			foreach (var fn in Directory.EnumerateFiles(folder, "*.txt", SearchOption.AllDirectories))
 			{
 				string[] lines = File.ReadAllLines(fn);
@@ -42,7 +42,10 @@ namespace ObjDefGen
 							if (m.Success)
 							{
 								string scrpath = fn.Substring(folder.Length + 1).Replace(Path.DirectorySeparatorChar, '/');
-								defs.Add(scrpath, new ObjectData() { Sheet = sheet, Frame = new SpriteFrame(m.Groups[1].Value) });
+								string fol = scrpath.Remove(scrpath.IndexOf('/'));
+								if (!defs.ContainsKey(fol))
+									defs.Add(fol, new Dictionary<string, ObjectData>());
+								defs[fol].Add(scrpath, new ObjectData() { Sheet = sheet, Frame = new SpriteFrame(m.Groups[1].Value) });
 								break;
 							}
 						}
@@ -50,7 +53,8 @@ namespace ObjDefGen
 				}
 			}
 			if (defs.Count > 0)
-				IniSerializer.Serialize(defs, Path.Combine(folder, "SonLVLObjDefs.ini"));
+				foreach (var item in defs)
+					IniSerializer.Serialize(item.Value, Path.Combine(folder, item.Key + ".ini"));
 		}
 	}
 }

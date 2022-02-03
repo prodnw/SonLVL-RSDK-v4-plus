@@ -46,6 +46,7 @@ namespace SonicRetro.SonLVL.API
 		public static Dictionary<string, ObjectData> INIObjDefs;
 		public static List<ObjectDefinition> ObjTypes;
 		public static ObjectDefinition unkobj;
+		private static string dllcache;
 		private static Dictionary<string, BitmapBits> spriteSheets;
 		public static BitmapBits[][] ChunkColBmpBits;
 		public static Bitmap[][] ChunkColBmps;
@@ -74,7 +75,7 @@ namespace SonicRetro.SonLVL.API
 
 		public static void LoadGame(string filename)
 		{
-			Log("Opening game \"" + filename + "\"...");
+			Log($"Opening game \"{filename}\"...");
 			EXEFile = Path.GetFullPath(filename);
 			Environment.CurrentDirectory = Path.GetDirectoryName(EXEFile);
 			string fn = Path.GetFileName(EXEFile);
@@ -296,11 +297,23 @@ namespace SonicRetro.SonLVL.API
 			unkobj = new DefaultObjectDefinition();
 			INIObjDefs = new Dictionary<string, ObjectData>();
 			spriteSheets = new Dictionary<string, BitmapBits>();
-			if (File.Exists("SonLVLObjDefs.ini"))
-				LoadObjectDefinitionFile("SonLVLObjDefs.ini");
-			if (ModFolder != null && File.Exists(Path.Combine(ModFolder, "SonLVLObjDefs.ini")))
-				LoadObjectDefinitionFile(Path.Combine(ModFolder, "SonLVLObjDefs.ini"));
+			if (Directory.Exists("SonLVLObjDefs"))
+				foreach (string file in Directory.EnumerateFiles("SonLVLObjDefs", "*.ini"))
+					LoadObjectDefinitionFile(file);
+			if (ModFolder != null && Directory.Exists(Path.Combine(ModFolder, "SonLVLObjDefs")))
+			{
+				foreach (string file in Directory.EnumerateFiles(Path.Combine(ModFolder, "SonLVLObjDefs"), "*.ini"))
+					LoadObjectDefinitionFile(file);
+				dllcache = Path.Combine(ModFolder, "SonLVLObjDefs", "dllcache");
+			}
+			else
+				dllcache = Path.Combine("SonLVLObjDefs", "dllcache");
 			unkobj.Init(new ObjectData());
+			if (INIObjDefs.Count > 0 && !Directory.Exists(dllcache))
+			{
+				DirectoryInfo dir = Directory.CreateDirectory(dllcache);
+				dir.Attributes |= FileAttributes.Hidden;
+			}
 			InitObjectDefinitions();
 			foreach (ObjectEntry obj in Objects)
 				obj.UpdateSprite();
@@ -406,7 +419,7 @@ namespace SonicRetro.SonLVL.API
 
 		public static void SaveLevel()
 		{
-			Log("Saving " + StageInfo.name + "...");
+			Log($"Saving {StageInfo.name}...");
 			if (GameXML != null)
 			{
 				GameXML.palette.RemoveAll(a => a.bank == 0 && a.index < 96);
@@ -509,7 +522,7 @@ namespace SonicRetro.SonLVL.API
 						break;
 				}
 			}
-			string stgfol = Path.Combine(ModFolder, "Data\\Stages", StageInfo.folder);
+			string stgfol = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder);
 			Directory.CreateDirectory(stgfol);
 			for (int i = 0; i < 32; i++)
 				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.COLORS_PER_ROW][i % StageConfig.stagePalette.COLORS_PER_ROW] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
@@ -629,6 +642,9 @@ namespace SonicRetro.SonLVL.API
 								else if (collisionPath2)
 									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 							}
+				foreach (ObjectEntry item in Objects)
+					if (item.DebugOverlay != null)
+						LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
 			}
 			return LevelImg8bpp;
 		}
@@ -661,10 +677,18 @@ namespace SonicRetro.SonLVL.API
 
 		private static void LoadObjectDefinitionFile(string file)
 		{
-			Log("Loading object definition file \"" + file + "\".");
+			Log($"Loading object definition file \"{file}\".");
+			string basepath = Path.GetDirectoryName(file);
 			Dictionary<string, ObjectData> obj = IniSerializer.Deserialize<Dictionary<string, ObjectData>>(file);
 			foreach (KeyValuePair<string, ObjectData> group in obj)
-				INIObjDefs[group.Key] = group.Value;
+				if (!string.IsNullOrEmpty(group.Key))
+				{
+					INIObjDefs[group.Key] = group.Value;
+					if (!string.IsNullOrEmpty(group.Value.CodeFile))
+						group.Value.CodeFile = Path.Combine(basepath, group.Value.CodeFile);
+					if (!string.IsNullOrEmpty(group.Value.XMLFile))
+						group.Value.XMLFile = Path.Combine(basepath, group.Value.XMLFile);
+				}
 		}
 
 		private static void InitObjectDefinitions()
@@ -702,16 +726,16 @@ namespace SonicRetro.SonLVL.API
 			if (data.CodeFile != null)
 			{
 				string fulltypename = data.CodeType;
-				string dllfile = Path.Combine("dllcache", fulltypename + ".dll");
+				string dllfile = Path.Combine(dllcache, fulltypename + ".dll");
 				DateTime modDate = DateTime.MinValue;
 				if (File.Exists(dllfile))
 					modDate = File.GetLastWriteTime(dllfile);
 				string fp = data.CodeFile.Replace('/', Path.DirectorySeparatorChar);
-				Log("Loading ObjectDefinition type " + fulltypename + " from \"" + fp + "\"...");
+				Log($"Loading ObjectDefinition type {fulltypename} from \"{fp}\"...");
 				if (modDate >= File.GetLastWriteTime(fp) & modDate > File.GetLastWriteTime(Application.ExecutablePath))
 				{
-					Log("Loading type from cached assembly \"" + dllfile + "\"...");
-					def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, dllfile)).GetType(fulltypename));
+					Log($"Loading type from cached assembly \"{dllfile}\"...");
+					def = (ObjectDefinition)Activator.CreateInstance(System.Reflection.Assembly.LoadFile(Path.GetFullPath(dllfile)).GetType(fulltypename));
 				}
 				else
 				{
@@ -729,12 +753,12 @@ namespace SonicRetro.SonLVL.API
 					}
 					if (pr != null)
 					{
-						CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location })
+						CompilerParameters para = new CompilerParameters(new string[] { "System.dll", "System.Core.dll", "System.Drawing.dll", System.Reflection.Assembly.GetExecutingAssembly().Location, typeof(Scene).Assembly.Location })
 						{
 							GenerateExecutable = false,
 							GenerateInMemory = false,
 							IncludeDebugInformation = true,
-							OutputAssembly = Path.Combine(Environment.CurrentDirectory, dllfile)
+							OutputAssembly = Path.GetFullPath(dllfile)
 						};
 						CompilerResults res = pr.CompileAssemblyFromFile(para, fp);
 						if (res.Errors.HasErrors)

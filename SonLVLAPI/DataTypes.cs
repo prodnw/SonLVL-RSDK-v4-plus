@@ -250,6 +250,11 @@ namespace SonicRetro.SonLVL.API
 			set => Entity.ypos = value << 16;
 		}
 
+		[NonSerialized]
+		private Sprite _debugOverlay;
+		[Browsable(false)]
+		public Sprite DebugOverlay => _debugOverlay;
+
 		public override void UpdateSprite()
 		{
 			ObjectDefinition def = LevelData.GetObjectDefinition(Type);
@@ -260,6 +265,12 @@ namespace SonicRetro.SonLVL.API
 				_bounds = _sprite.Bounds;
 				_bounds.Offset(X, Y);
 			}
+			UpdateDebugOverlay();
+		}
+
+		public void UpdateDebugOverlay()
+		{
+			_debugOverlay = LevelData.GetObjectDefinition(Type).GetDebugOverlay(this);
 		}
 
 		public override string Name

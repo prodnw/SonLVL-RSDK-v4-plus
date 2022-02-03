@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="blank">
+  <Images>
+    <ImageFromSheet id="blank" sheet="Global/Items.gif" sourcex="51" sourcey="67" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="rings" sheet="Global/Items.gif" sourcex="18" sourcey="1" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="shield" sheet="Global/Items.gif" sourcex="18" sourcey="34" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="invincibility" sheet="Global/Items.gif" sourcex="18" sourcey="67" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="shoes" sheet="Global/Items.gif" sourcex="18" sourcey="100" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="sonic" sheet="Global/Items.gif" sourcex="18" sourcey="133" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="clock" sheet="Global/Items.gif" sourcex="18" sourcey="166" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="tails" sheet="Global/Items.gif" sourcex="51" sourcey="100" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="super" sheet="Global/Items.gif" sourcex="51" sourcey="133" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="static" sheet="Global/Items.gif" sourcex="51" sourcey="1" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Blank" image="blank" />
+    <Subtype id="01" name="Rings" image="rings" />
+    <Subtype id="02" name="Shield" image="shield" />
+    <Subtype id="03" name="Invincibility" image="invincibility" />
+    <Subtype id="04" name="Shoes" image="shoes" />
+    <Subtype id="05" name="Sonic" image="sonic" />
+    <Subtype id="06" name="Clock" image="clock" />
+    <Subtype id="07" name="Tails" image="tails" />
+    <Subtype id="08" name="Super" image="super" />
+    <Subtype id="09" name="Static" image="static" />
+  </Subtypes>
+  <Properties>
+    <Property name="Contents" type="MonitorType" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="MonitorType">
+      <EnumMember name="Blank" />
+      <EnumMember name="Rings" />
+      <EnumMember name="Shield" />
+      <EnumMember name="Invincibility" />
+      <EnumMember name="Shoes" />
+      <EnumMember name="Sonic" />
+      <EnumMember name="Clock" />
+      <EnumMember name="Tails" />
+      <EnumMember name="Super" />
+      <EnumMember name="Static" />
+    </Enum>
+  </Enums>
+</ObjDef>

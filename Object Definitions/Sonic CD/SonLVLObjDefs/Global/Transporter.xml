@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org">
+  <Images>
+    <ImageFromSheet id="activebase" sheet="Global/Items3.gif" sourcex="175" sourcey="61" width="80" height="24">
+      <Offset X="-40" Y="-32" />
+    </ImageFromSheet>
+    <ImageFromSheet id="electricity" sheet="Global/Items3.gif" sourcex="149" sourcey="1" width="12" height="16" />
+    <ImageFromSheet id="inactivebase" sheet="Global/Items3.gif" sourcex="175" sourcey="18" width="80" height="25">
+      <Offset X="-40" Y="-32" />
+    </ImageFromSheet>
+    <ImageFromSheet id="activedestroyed" sheet="Global/Items3.gif" sourcex="175" sourcey="44" width="80" height="16">
+      <Offset X="-40" Y="16" />
+    </ImageFromSheet>
+    <ImageFromSheet id="inactivedestroyed" sheet="Global/Items3.gif" sourcex="175" sourcey="1" width="80" height="16">
+      <Offset X="-40" Y="16" />
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="active">
+	  <ImageRef image="activebase" />
+	  <ImageRef image="activebase" yflip="ReverseFlip" />
+	  <ImageRef image="electricity">
+	    <Offset X="-6" Y="-8" />
+	  </ImageRef>
+	  <ImageRef image="electricity">
+	    <Offset X="-22" Y="-8" />
+	  </ImageRef>
+	  <ImageRef image="electricity">
+	    <Offset X="10" Y="-8" />
+	  </ImageRef>
+	</ImageSet>
+    <ImageSet id="inactive">
+	  <ImageRef image="inactivebase" />
+	  <ImageRef image="inactivebase" yflip="ReverseFlip" />
+	</ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="active" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Active">
+	  <ImageSetRef set="active" />
+	</Subtype>
+    <Subtype id="01" name="Inactive">
+	  <ImageSetRef set="inactive" />
+	</Subtype>
+	<Subtype id="02" name="Active, Destroyed" image="activedestroyed" />
+	<Subtype id="03" name="Inactive, Destroyed" image="inactivedestroyed" />
+  </Subtypes>
+  <Properties>
+    <Property name="Inactive" type="bool" startbit="0" length="1" />
+    <Property name="Destroyed" type="bool" startbit="1" length="1" />
+  </Properties>
+</ObjDef>

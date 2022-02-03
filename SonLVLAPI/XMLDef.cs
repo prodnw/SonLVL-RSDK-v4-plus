@@ -35,13 +35,15 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public int Depth { get; set; }
 		[XmlIgnore]
 		public bool DepthSpecified { get; set; }
-		public ImageList Images { get; set; }
-		public ImageSetList ImageSets { get; set; }
+		[XmlArrayItem(typeof(ImageFromSheet))]
+		[XmlArrayItem(typeof(ImageFromAnim))]
+		public Image[] Images { get; set; }
+		public ImageSet[] ImageSets { get; set; }
 		public ImageRefList DefaultImage { get; set; }
-		public SubtypeList Subtypes { get; set; }
-		public PropertyList Properties { get; set; }
-		public EnumList Enums { get; set; }
-		public Display Display { get; set; }
+		public Subtype[] Subtypes { get; set; }
+		public Property[] Properties { get; set; }
+		public Enum[] Enums { get; set; }
+		public DisplayOption[] Display { get; set; }
 
 		static readonly XmlSerializer xs = new XmlSerializer(typeof(ObjDef));
 
@@ -61,7 +63,6 @@ namespace SonicRetro.SonLVL.API.XMLDef
 
 	public class ImageList
 	{
-		[XmlElement("ImageFromSheet", typeof(ImageFromSheet))]
 		public Image[] Items { get; set; }
 	}
 
@@ -88,6 +89,16 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public int width { get; set; }
 		[XmlAttribute]
 		public int height { get; set; }
+	}
+
+	public class ImageFromAnim : Image
+	{
+		[XmlAttribute]
+		public string file { get; set; }
+		[XmlAttribute]
+		public int anim { get; set; }
+		[XmlAttribute]
+		public int frame { get; set; }
 	}
 
 	public struct XmlPoint
@@ -172,11 +183,6 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		public int depth { get; set; }
 		[XmlIgnore]
 		public bool depthSpecified { get; set; }
-	}
-
-	public class PropertyList
-	{
-		public Property[] Items { get; set; }
 	}
 
 	public class Property
@@ -273,8 +279,8 @@ namespace SonicRetro.SonLVL.API.XMLDef
 
 	public class ImageRefList
 	{
-		[XmlElement("ImageSetRef", typeof(ImageSetRef))]
-		[XmlElement("ImageRef", typeof(ImageRef))]
+		[XmlElement(typeof(ImageSetRef))]
+		[XmlElement(typeof(ImageRef))]
 		public object[] Images { get; set; }
 	}
 }

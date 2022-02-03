@@ -23,6 +23,8 @@ namespace SonicRetro.SonLVL.API
 		public string Sheet;
 		[IniName("frame")]
 		public SpriteFrame Frame;
+		[IniName("anim")]
+		public AnimData Anim;
 		[IniName("defaultsubtype")]
 		[TypeConverter(typeof(ByteHexConverter))]
 		public byte DefaultSubtype;
@@ -56,10 +58,7 @@ namespace SonicRetro.SonLVL.API
 			Y = int.Parse(split[5]);
 		}
 
-		public override string ToString()
-		{
-			return $"{OffX},{OffY},{Width},{Height},{X},{Y}";
-		}
+		public override string ToString() => $"{OffX},{OffY},{Width},{Height},{X},{Y}";
 	}
 
 	public class SpriteFrameConverter : TypeConverter
@@ -89,6 +88,55 @@ namespace SonicRetro.SonLVL.API
 		{
 			if (value is string st)
 				return new SpriteFrame(st);
+			return base.ConvertFrom(context, culture, value);
+		}
+	}
+
+	[TypeConverter(typeof(AnimDataConverter))]
+	public class AnimData
+	{
+		public string File;
+		public int Anim;
+		public int Frame;
+
+		public AnimData(string data)
+		{
+			string[] split = data.Split(':');
+			File = split[0];
+			Anim = int.Parse(split[1]);
+			Frame = int.Parse(split[2]);
+		}
+
+		public override string ToString() => $"{File}:{Anim}:{Frame}";
+	}
+
+	public class AnimDataConverter : TypeConverter
+	{
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+		{
+			if (destinationType == typeof(AnimData))
+				return true;
+			return base.CanConvertTo(context, destinationType);
+		}
+
+		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		{
+			if (destinationType == typeof(string) && value is AnimData sf)
+				return sf.ToString();
+			return base.ConvertTo(context, culture, value, destinationType);
+		}
+
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+		{
+			if (sourceType == typeof(string))
+				return true;
+			return base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		{
+			if (value is string st)
+				return new AnimData(st);
 			return base.ConvertFrom(context, culture, value);
 		}
 	}
@@ -508,13 +556,21 @@ namespace SonicRetro.SonLVL.API
 		{
 			try
 			{
-				if (data.Sheet != null && data.Frame != null)
+				if (data.Anim != null)
+				{
+					RSDKv3_4.Animation anim = LevelData.ReadFile<RSDKv3_4.Animation>($"Data/Animations/{data.Anim.File}");
+					RSDKv3_4.Animation.AnimationEntry.Frame frame = anim.animations[data.Anim.Anim].frames[data.Anim.Frame];
+					BitmapBits img = LevelData.GetSpriteSheet(anim.spriteSheets[frame.sheet]);
+					spr[0] = new Sprite(img.GetSection(frame.sprX, frame.sprY, frame.width, frame.height), frame.pivotX, frame.pivotY);
+					if (data.Priority)
+						spr[0].InvertPriority();
+				}
+				else if (data.Sheet != null && data.Frame != null)
 				{
 					BitmapBits img = LevelData.GetSpriteSheet(data.Sheet);
 					spr[0] = new Sprite(img.GetSection(data.Frame.X, data.Frame.Y, data.Frame.Width, data.Frame.Height), data.Frame.OffX, data.Frame.OffY);
 					if (data.Priority)
 						spr[0].InvertPriority();
-					debug = true;
 				}
 				else
 				{
@@ -646,8 +702,8 @@ namespace SonicRetro.SonLVL.API
 		public override void Init(ObjectData data)
 		{
 			xmldef = XMLDef.ObjDef.Load(data.XMLFile);
-			if (xmldef.Images != null && xmldef.Images.Items != null)
-				foreach (XMLDef.Image item in xmldef.Images.Items)
+			if (xmldef.Images != null)
+				foreach (XMLDef.Image item in xmldef.Images)
 				{
 					Sprite sprite = default(Sprite);
 					switch (item)
@@ -657,20 +713,25 @@ namespace SonicRetro.SonLVL.API
 							sprite = new Sprite(bmp.GetSection(sheetimg.sourcex, sheetimg.sourcey, sheetimg.width, sheetimg.height), sheetimg.Offset.ToPoint());
 							if (sheetimg.priority) sprite.InvertPriority();
 							break;
+						case XMLDef.ImageFromAnim animimg:
+							RSDKv3_4.Animation anim = LevelData.ReadFile<RSDKv3_4.Animation>($"Data/Animations/{animimg.file}");
+							RSDKv3_4.Animation.AnimationEntry.Frame frame = anim.animations[animimg.anim].frames[animimg.frame];
+							bmp = LevelData.GetSpriteSheet(anim.spriteSheets[frame.sheet]);
+							sprite = new Sprite(bmp.GetSection(frame.sprX, frame.sprY, frame.width, frame.height), frame.pivotX + animimg.Offset.X, frame.pivotY + animimg.Offset.Y);
+							if (data.Priority) sprite.InvertPriority();
+							break;
 					}
 					images.Add(item.id, sprite);
 				}
-			if (xmldef.ImageSets != null && xmldef.ImageSets.Items != null)
-				foreach (XMLDef.ImageSet set in xmldef.ImageSets.Items)
+			if (xmldef.ImageSets != null)
+				foreach (XMLDef.ImageSet set in xmldef.ImageSets)
 					imagesets[set.id] = set.Images;
 			if (xmldef.Subtypes == null)
-				xmldef.Subtypes = new XMLDef.SubtypeList();
-			if (xmldef.Subtypes.Items == null)
-				xmldef.Subtypes.Items = new XMLDef.Subtype[0];
-			if (xmldef.Enums != null && xmldef.Enums.Items != null)
+				xmldef.Subtypes = new XMLDef.Subtype[0];
+			if (xmldef.Enums != null)
 			{
-				enums = new Dictionary<string, Dictionary<string, int>>(xmldef.Enums.Items.Length);
-				foreach (XMLDef.Enum item in xmldef.Enums.Items)
+				enums = new Dictionary<string, Dictionary<string, int>>(xmldef.Enums.Length);
+				foreach (XMLDef.Enum item in xmldef.Enums)
 				{
 					Dictionary<string, int> members = new Dictionary<string, int>(item.Items.Length);
 					int value = 0;
@@ -685,11 +746,11 @@ namespace SonicRetro.SonLVL.API
 			}
 			else
 				enums = new Dictionary<string, Dictionary<string, int>>();
-			if (xmldef.Properties != null && xmldef.Properties.Items != null)
+			if (xmldef.Properties != null)
 			{
-				List<PropertySpec> custprops = new List<PropertySpec>(xmldef.Properties.Items.Length);
-				Dictionary<string, PropertyInfo> propinf = new Dictionary<string, PropertyInfo>(xmldef.Properties.Items.Length);
-				foreach (XMLDef.Property property in xmldef.Properties.Items)
+				List<PropertySpec> custprops = new List<PropertySpec>(xmldef.Properties.Length);
+				Dictionary<string, PropertyInfo> propinf = new Dictionary<string, PropertyInfo>(xmldef.Properties.Length);
+				foreach (XMLDef.Property property in xmldef.Properties)
 				{
 					int mask = 0;
 					int prop_startbit = property.startbit;
@@ -781,12 +842,12 @@ namespace SonicRetro.SonLVL.API
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(Array.ConvertAll(xmldef.Subtypes.Items, (a) => a.subtype)); }
+			get { return new ReadOnlyCollection<byte>(Array.ConvertAll(xmldef.Subtypes, (a) => a.subtype)); }
 		}
 
 		public override string SubtypeName(byte subtype)
 		{
-			foreach (XMLDef.Subtype item in xmldef.Subtypes.Items)
+			foreach (XMLDef.Subtype item in xmldef.Subtypes)
 				if (item.subtype == subtype)
 					return item.name;
 			return string.Empty;
@@ -794,7 +855,7 @@ namespace SonicRetro.SonLVL.API
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			foreach (XMLDef.Subtype item in xmldef.Subtypes.Items)
+			foreach (XMLDef.Subtype item in xmldef.Subtypes)
 				if (item.subtype == subtype)
 					if (item.Images != null)
 						return ReadImageRefList(item);
@@ -820,9 +881,9 @@ namespace SonicRetro.SonLVL.API
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			if (xmldef.Display != null && xmldef.Display.DisplayOptions != null)
+			if (xmldef.Display != null)
 			{
-				foreach (XMLDef.DisplayOption option in xmldef.Display.DisplayOptions)
+				foreach (XMLDef.DisplayOption option in xmldef.Display)
 				{
 					if (!CheckConditions(obj, option))
 						continue;
@@ -830,14 +891,16 @@ namespace SonicRetro.SonLVL.API
 						return ReadImageRefList(option, obj);
 					else
 					{
-						Sprite spr = LevelData.UnknownSprite;
+						Sprite spr = new Sprite(LevelData.UnknownSprite);
+						if (obj is V4ObjectEntry obj4)
+							spr.Flip(obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX), obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY));
 						return spr;
 					}
 				}
 			}
-			else if (xmldef.Subtypes != null && xmldef.Subtypes.Items != null)
+			else if (xmldef.Subtypes != null)
 			{
-				foreach (XMLDef.Subtype item in xmldef.Subtypes.Items)
+				foreach (XMLDef.Subtype item in xmldef.Subtypes)
 				{
 					if (obj.PropertyValue == item.subtype)
 						if (item.Images != null)
@@ -845,11 +908,15 @@ namespace SonicRetro.SonLVL.API
 						else if (item.image != null)
 						{
 							Sprite spr = new Sprite(images[item.image]);
+							if (obj is V4ObjectEntry obj4)
+								spr.Flip(obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX), obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY));
 							return spr;
 						}
 						else
 						{
-							Sprite spr = LevelData.UnknownSprite;
+							Sprite spr = new Sprite(LevelData.UnknownSprite);
+							if (obj is V4ObjectEntry obj4)
+								spr.Flip(obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX), obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY));
 							return spr;
 						}
 				}
@@ -861,6 +928,8 @@ namespace SonicRetro.SonLVL.API
 				sprite = new Sprite(images[xmldef.Image]);
 			else
 				sprite = LevelData.UnknownSprite;
+			if (obj is V4ObjectEntry _obj4)
+				sprite.Flip(_obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX), _obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY));
 			return sprite;
 		}
 
@@ -875,11 +944,18 @@ namespace SonicRetro.SonLVL.API
 		private Sprite ReadImageRef(XMLDef.ImageRef img, ObjectEntry obj)
 		{
 			bool xflip = false, yflip = false;
+			if (obj is V4ObjectEntry obj4)
+			{
+				xflip = obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX);
+				yflip = obj4.Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY);
+			}
 			switch (img.xflip)
 			{
-				case XMLDef.FlipType.NormalFlip:
-					break;
 				case XMLDef.FlipType.ReverseFlip:
+					xflip = !xflip;
+					break;
+				case XMLDef.FlipType.NeverFlip:
+					xflip = false;
 					break;
 				case XMLDef.FlipType.AlwaysFlip:
 					xflip = true;
@@ -887,9 +963,11 @@ namespace SonicRetro.SonLVL.API
 			}
 			switch (img.yflip)
 			{
-				case XMLDef.FlipType.NormalFlip:
-					break;
 				case XMLDef.FlipType.ReverseFlip:
+					yflip = !yflip;
+					break;
+				case XMLDef.FlipType.NeverFlip:
+					yflip = false;
 					break;
 				case XMLDef.FlipType.AlwaysFlip:
 					yflip = true;

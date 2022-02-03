@@ -1259,7 +1259,7 @@ namespace SonicRetro.SonLVL.GUI
 				case Tab.Background:
 					lvlsize = LevelData.BGSize[bglayer];
 					layout = LevelData.Background.layers[bglayer].layout;
-					if (tabControl3.SelectedIndex == 2 && (scrollCamX.Value != 0 || scrollCamY.Value != 0 || scrollFrame.Value != 0))
+					if (tabControl3.SelectedIndex == 2 && (scrollCamX.Value != 0 || scrollCamY.Value != 0 || scrollFrame.Value != 0) && LevelData.BGWidth[bglayer] != 0 && LevelData.BGHeight[bglayer] != 0)
 					{
 						decimal layerscrollpos = LevelData.Background.layers[bglayer].scrollSpeed / 64m * scrollFrame.Value;
 						int widthpx = LevelData.BGWidth[bglayer] * 128;
@@ -3818,6 +3818,7 @@ namespace SonicRetro.SonLVL.GUI
 			rightAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].rWallAngle;
 			ceilingAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].roofAngle;
 			leftAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].lWallAngle;
+			colFlags.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flags;
 			DrawColPicture();
 		}
 
@@ -3905,6 +3906,12 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			if (byte.TryParse(floorAngle.Text, System.Globalization.NumberStyles.HexNumber, null, out byte value))
 				floorAngle.Value = value;
+		}
+
+		private void colFlags_ValueChanged(object sender, EventArgs e)
+		{
+			if (TileSelector.SelectedIndex == -1) return;
+			LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flags = (byte)colFlags.Value;
 		}
 
 		private void rotateTileRightButton_Click(object sender, EventArgs e)

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectLayoutMerge", "Object
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjDefGen", "ObjDefGen\ObjDefGen.csproj", "{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Object Definitions", "Object Definitions", "{FDF7F714-59B1-41E7-9196-8F3D0B69F474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCDObjectDefinitions", "SCDObjectDefinitions\SCDObjectDefinitions.csproj", "{77368D75-3F16-4907-971C-9772FAAB1E4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +49,16 @@ Global
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77368D75-3F16-4907-971C-9772FAAB1E4B} = {FDF7F714-59B1-41E7-9196-8F3D0B69F474}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5BB54B-0FB0-4194-B0CD-FA5F328CD910}

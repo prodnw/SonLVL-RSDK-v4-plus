@@ -307,7 +307,11 @@ namespace SonicRetro.SonLVL.GUI
 			ms.MenuItem = menuitem;
 			modMenuItems.Add(ms);
 			selectModToolStripMenuItem.DropDownItems.Add(menuitem);
-			string[] mods = ModInfo.GetModFiles(new DirectoryInfo("mods")).ToArray();
+			string[] mods;
+			if (Directory.Exists("mods"))
+				mods = ModInfo.GetModFiles(new DirectoryInfo("mods")).ToArray();
+			else
+				mods = new string[0];
 			ToolStripMenuItem parent = selectModToolStripMenuItem;
 			if (mods.Length > 10)
 				parent = (ToolStripMenuItem)selectModToolStripMenuItem.DropDownItems.Add("Set 1");

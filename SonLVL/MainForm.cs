@@ -346,6 +346,7 @@ namespace SonicRetro.SonLVL.GUI
 				default:
 					throw new NotImplementedException("Game type is not supported!");
 			}
+			buildAndRunToolStripMenuItem.Enabled = true;
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
 		}
 

@@ -9,9 +9,10 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SonicRetro.SonLVL.LevelConverter</RootNamespace>
-    <AssemblyName>LevelConverter</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <AssemblyName>RSDKLevelConverter</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +40,9 @@
   <ItemGroup>
     <Reference Include="RSDKv3_4">
       <HintPath>..\Dependencies\RSDKv3_4.dll</HintPath>
+    </Reference>
+    <Reference Include="RSDKv5">
+      <HintPath>..\Dependencies\RSDKv5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

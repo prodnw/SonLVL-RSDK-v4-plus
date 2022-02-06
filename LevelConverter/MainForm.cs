@@ -26,7 +26,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			File.WriteAllLines("LevelConverter.log", LogFile.ToArray());
 			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", true))
 			{
-				if (ed.ShowDialog(this) == System.Windows.Forms.DialogResult.Cancel)
+				if (ed.ShowDialog(this) == DialogResult.Cancel)
 					Close();
 			}
 		}
@@ -37,901 +37,1851 @@ namespace SonicRetro.SonLVL.LevelConverter
 		}
 
 		internal List<string> LogFile = new List<string>();
-		string Dir = Environment.CurrentDirectory;
-		bool ConvertKnownObjs = true;
-		bool DontChangeObjects;
-		List<string> Levels;
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			srcVersion.SelectedIndex = 0;
+			objectMode.SelectedIndex = 0;
+		}
+
+		private void CheckEnableConvert()
+		{
+			button1.Enabled = false;
+			if (!File.Exists(fileSelector1.FileName))
+				return;
+			if (dstVersion.SelectedIndex == -1 || dstVersion.SelectedIndex == srcVersion.SelectedIndex)
+				return;
+			switch (objectMode.SelectedIndex)
+			{
+				case 1:
+				case 2:
+					if (!File.Exists(srcGameConfig.FileName) || !File.Exists(dstGameConfig.FileName))
+						return;
+					break;
+				case 3:
+				case 4:
+					if (!File.Exists(srcGameConfig.FileName))
+						return;
+					break;
+				case 5:
+					if (dstVersion.SelectedIndex == 2 && !File.Exists(dstGameConfig.FileName))
+						return;
+					break;
+			}
+			button1.Enabled = true;
+		}
+
+		private void srcVersion_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			switch (srcVersion.SelectedIndex)
+			{
+				case 2: // v5
+					fileSelector1.Filter = "Scene Files|Scene*.bin";
+					break;
+				default:
+					fileSelector1.Filter = "Scene Files|Act*.bin";
+					break;
+			}
+		}
 
 		private void fileSelector1_FileNameChanged(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(fileSelector1.FileName)) return;
-			if (!File.Exists(fileSelector1.FileName)) return;
-			try
+			CheckEnableConvert();
+		}
+
+		private void dstVersion_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			CheckEnableConvert();
+		}
+
+		private void objectMode_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			CheckEnableConvert();
+			switch (objectMode.SelectedIndex)
 			{
-				LevelData.LoadGame(fileSelector1.FileName);
-			}
-			catch (ArgumentException)
-			{
-				return;
-			}
-			catch (IOException)
-			{
-				return;
-			}
-			catch (UnauthorizedAccessException)
-			{
-				return;
-			}
-			catch (NotSupportedException)
-			{
-				return;
-			}
-			catch (System.Security.SecurityException)
-			{
-				return;
-			}
-			comboBox1.Items.Clear();
-			Levels = new List<string>();
-			foreach (KeyValuePair<string, LevelInfo> item in LevelData.Game.Levels)
-			{
-				Levels.Add(item.Key);
-				comboBox1.Items.Add(LevelData.Game.GetLevelInfo(item.Key).DisplayName);
+				case 1:
+				case 2:
+					srcGCLabel.Visible = true;
+					srcGameConfig.Visible = true;
+					dstGCLabel.Visible = true;
+					dstGameConfig.Visible = true;
+					break;
+				case 3:
+				case 4:
+					srcGCLabel.Visible = true;
+					srcGameConfig.Visible = true;
+					dstGCLabel.Visible = false;
+					dstGameConfig.Visible = false;
+					break;
+				case 5:
+					if (dstVersion.SelectedIndex != 2)
+						goto default;
+					srcGCLabel.Visible = false;
+					srcGameConfig.Visible = false;
+					dstGCLabel.Visible = true;
+					dstGameConfig.Visible = true;
+					break;
+				default:
+					srcGCLabel.Visible = false;
+					srcGameConfig.Visible = false;
+					dstGCLabel.Visible = false;
+					dstGameConfig.Visible = false;
+					break;
 			}
 		}
 
-		private void comboBox_SelectedIndexChanged(object sender, EventArgs e)
+		private void srcGameConfig_FileNameChanged(object sender, EventArgs e)
 		{
-			if (comboBox1.SelectedIndex == -1 || comboBox2.SelectedIndex == -1)
-				button1.Enabled = false;
-			else
-				button1.Enabled = true;
-			button2.Enabled = File.Exists(fileSelector1.FileName) & comboBox2.SelectedIndex != -1;
+			CheckEnableConvert();
 		}
 
-		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		private void dstGameConfig_FileNameChanged(object sender, EventArgs e)
 		{
-			ConvertKnownObjs = checkBox1.Checked;
+			CheckEnableConvert();
 		}
 
-		private void checkBox2_CheckedChanged(object sender, EventArgs e)
+		static readonly Action<string, string, ObjectMode, string, string>[][] conversionFuncs =
 		{
-			DontChangeObjects = checkBox2.Checked;
-		}
+			new Action<string, string, ObjectMode, string, string>[] { null, ConvertV3ToV4, ConvertV3ToV5 },
+			new Action<string, string, ObjectMode, string, string>[] { ConvertV4ToV3, null, ConvertV4ToV5 },
+			new Action<string, string, ObjectMode, string, string>[] { ConvertV5ToV3, ConvertV5ToV4, null },
+		};
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			ConvertLevel();
-			string level = (string)comboBox1.SelectedItem;
-			string OutDir = Path.Combine(Dir, level);
-			System.Diagnostics.Process.Start(OutDir);
+			switch (dstVersion.SelectedIndex)
+			{
+				case 2: // v5
+					saveFileDialog1.Filter = "Scene Files|Scene*.bin";
+					saveFileDialog1.FileName = Path.GetFileName(fileSelector1.FileName).Replace("Act", "Scene");
+					break;
+				default:
+					saveFileDialog1.Filter = "Scene Files|Act*.bin";
+					saveFileDialog1.FileName = Path.GetFileName(fileSelector1.FileName).Replace("Scene", "Act");
+					break;
+			}
+			if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
+				conversionFuncs[srcVersion.SelectedIndex][dstVersion.SelectedIndex](fileSelector1.FileName, saveFileDialog1.FileName, (ObjectMode)objectMode.SelectedIndex, srcGameConfig.FileName, dstGameConfig.FileName);
 		}
 
-		private void ConvertLevel()
+		private static void ConvertV3ToV4(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
 		{
-			string level = (string)comboBox1.SelectedItem;
-			string OutDir = Path.Combine(Dir, level);
-			if (Directory.Exists(OutDir)) { Directory.Delete(OutDir, true); System.Threading.Thread.Sleep(100); }
-			Directory.CreateDirectory(OutDir);
-			EngineVersion OutFmt = EngineVersion.Invalid;
-			switch (comboBox2.SelectedIndex)
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			File.Copy(Path.Combine(srcFol, "128x128Tiles.bin"), Path.Combine(dstFol, "128x128Tiles.bin"), true);
+			File.Copy(Path.Combine(srcFol, "CollisionMasks.bin"), Path.Combine(dstFol, "CollisionMasks.bin"), true);
+			RSDKv3.Backgrounds srcBG = new RSDKv3.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
+			RSDKv4.Backgrounds dstBG = new RSDKv4.Backgrounds();
+			dstBG.hScroll = new List<RSDKv3_4.Backgrounds.ScrollInfo>(srcBG.hScroll.Select(a => new RSDKv4.Backgrounds.ScrollInfo() { deform = a.deform, parallaxFactor = a.parallaxFactor, scrollSpeed = a.scrollSpeed }));
+			dstBG.vScroll = new List<RSDKv3_4.Backgrounds.ScrollInfo>(srcBG.vScroll.Select(a => new RSDKv4.Backgrounds.ScrollInfo() { deform = a.deform, parallaxFactor = a.parallaxFactor, scrollSpeed = a.scrollSpeed }));
+			for (int i = 0; i < 8; i++)
 			{
-				case 0:
-					OutFmt = EngineVersion.V4;
-					break;
-				case 1:
-					OutFmt = EngineVersion.S2;
-					break;
-				case 2:
-					OutFmt = EngineVersion.S3K;
-					break;
-				case 3:
-					OutFmt = EngineVersion.SKC;
-					break;
-				case 4:
-					OutFmt = EngineVersion.SCDPC;
-					break;
-				case 5:
-					OutFmt = EngineVersion.S2NA;
-					break;
+				dstBG.layers[i].type = srcBG.layers[i].type;
+				dstBG.layers[i].parallaxFactor = srcBG.layers[i].parallaxFactor;
+				dstBG.layers[i].scrollSpeed = srcBG.layers[i].scrollSpeed;
+				dstBG.layers[i].lineScroll = srcBG.layers[i].lineScroll;
+				dstBG.layers[i].layout = srcBG.layers[i].layout;
+				dstBG.layers[i].width = srcBG.layers[i].width;
+				dstBG.layers[i].height = srcBG.layers[i].height;
 			}
-			LevelData.LoadLevel(Levels[comboBox1.SelectedIndex], false);
-			if (LevelData.Level.LayoutFormat == EngineVersion.S2 | LevelData.Level.LayoutFormat == EngineVersion.SCDPC)
+			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			RSDKv3.StageConfig srcConf = new RSDKv3.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv4.StageConfig dstConf = new RSDKv4.StageConfig
 			{
-				int xend = 0;
-				int yend = 0;
-				for (int y = 0; y < LevelData.FGHeight; y++)
-					for (int x = 0; x < LevelData.FGWidth; x++)
-						if (LevelData.Scene.layout[y][x] > 0)
-						{
-							xend = Math.Max(xend, x);
-							yend = Math.Max(yend, y);
-						}
-				xend++;
-				yend++;
-				ushort[,] tmp = new ushort[xend, yend];
-				for (int y = 0; y < yend; y++)
-					for (int x = 0; x < xend; x++)
-						tmp[x, y] = LevelData.Scene.layout[y][x];
-				LevelData.Layout.FGLayout = tmp;
-				xend = 0;
-				yend = 0;
-				for (int y = 0; y < LevelData.BGHeight; y++)
-					for (int x = 0; x < LevelData.BGWidth; x++)
-						if (LevelData.Background.layers[bglayer].layout[y][x] > 0)
-						{
-							xend = Math.Max(xend, x);
-							yend = Math.Max(yend, y);
-						}
-				xend++;
-				yend++;
-				tmp = new ushort[xend, yend];
-				for (int y = 0; y < yend; y++)
-					for (int x = 0; x < xend; x++)
-						tmp[x, y] = LevelData.Background.layers[bglayer].layout[y][x];
-				LevelData.Layout.BGLayout = tmp;
-			}
-			GameInfo Output = new GameInfo() { EngineVersion = OutFmt };
-			LevelInfo Level = new LevelInfo();
-			Output.Levels = new Dictionary<string, LevelInfo>() { { level, Level } };
-			bool LE = LevelData.littleendian;
-			LevelData.littleendian = false;
-			switch (OutFmt)
+				stagePalette = srcConf.stagePalette,
+				soundFX = srcConf.soundFX
+			};
+			RSDKv3.Scene srcScene = new RSDKv3.Scene(srcFile);
+			RSDKv4.Scene dstScene = new RSDKv4.Scene
 			{
-				case EngineVersion.SCDPC:
-				case EngineVersion.SKC:
-					LevelData.littleendian = true;
-					break;
-			}
-			CompressionType cmp = CompressionType.Uncompressed;
-			List<byte> tmp2 = new List<byte>();
-			if (OutFmt != EngineVersion.SCDPC)
+				title = srcScene.title,
+				layout = srcScene.layout,
+				width = srcScene.width,
+				height = srcScene.height,
+				activeLayer0 = srcScene.activeLayer0,
+				activeLayer1 = srcScene.activeLayer1,
+				activeLayer2 = srcScene.activeLayer2,
+				activeLayer3 = srcScene.activeLayer3,
+				layerMidpoint = srcScene.layerMidpoint
+			};
+			if (srcConf.loadGlobalObjects)
 			{
-				switch (OutFmt)
+				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv3.GameConfig(srcGCFile).objects;
+				List<RSDKv3_4.GameConfig.ObjectInfo> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv4.GameConfig(dstGCFile).objects;
+				switch (objMode)
 				{
-					case EngineVersion.V4:
-					case EngineVersion.S2NA:
-						cmp = CompressionType.Nemesis;
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i].name);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(srcObjs[i]);
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
+							else
+							{
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
+							}
+						}
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects);
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity((byte)objmap[a.type], a.propertyValue, a.xpos, a.ypos)));
 						break;
-					case EngineVersion.S2:
-						cmp = CompressionType.Kosinski;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i].name);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
+							else
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Where(a => objmap[a.type] != -1).Select(a => new RSDKv4.Scene.Entity((byte)objmap[a.type], a.propertyValue, a.xpos, a.ypos)));
 						break;
-					case EngineVersion.S3K:
-					case EngineVersion.SKC:
-						cmp = CompressionType.KosinskiM;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Where(a => a.type > srcObjs.Count).Select(a => new RSDKv4.Scene.Entity((byte)(a.type - srcObjs.Count), a.propertyValue, a.xpos, a.ypos)));
 						break;
-					default:
-						cmp = CompressionType.Uncompressed;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = new List<RSDKv3_4.GameConfig.ObjectInfo>(srcObjs.Concat(srcConf.objects));
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
 						break;
 				}
-				foreach (byte[] tile in LevelData.Tiles)
-					tmp2.AddRange(tile);
-				Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Tiles.bin"), cmp);
+			}
+			else if (objMode != ObjectMode.DontInclude)
+			{
+				dstConf.objects = srcConf.objects;
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
+			}
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+		}
+
+		private static void ConvertV3ToV5(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
+		{
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			RSDKv3_4.TileConfig srcTiles = new RSDKv3_4.TileConfig(Path.Combine(srcFol, "CollisionMasks.bin"));
+			RSDKv5.TileConfig dstTiles = new RSDKv5.TileConfig();
+			for (int i = 0; i < 2; i++)
+				dstTiles.collisionMasks[i] = srcTiles.collisionMasks[i].Select(a => new RSDKv5.TileConfig.CollisionMask()
+				{
+					flipY = a.flipY,
+					flags = a.flags,
+					floorAngle = a.floorAngle,
+					lWallAngle = a.lWallAngle,
+					rWallAngle = a.rWallAngle,
+					roofAngle = a.roofAngle,
+					heightMasks = a.heightMasks.Select(b => new RSDKv5.TileConfig.CollisionMask.HeightMask()
+					{
+						height = b.height,
+						solid = b.solid
+					}).ToArray()
+				}).ToArray();
+			dstTiles.write(Path.Combine(dstFol, "TileConfig.bin"));
+			RSDKv3.StageConfig srcConf = new RSDKv3.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv5.StageConfig dstConf = new RSDKv5.StageConfig
+			{
+				soundFX = srcConf.soundFX.Select(a => new RSDKv5.GameConfig.SoundInfo() { name = a.path }).ToList()
+			};
+			RSDKv3_4.Gif gif = new RSDKv3_4.Gif(Path.Combine(srcFol, "16x16Tiles.gif"));
+			bool[] blanktiles = new bool[0x400];
+			for (int i = 0; i < 0x400; i++)
+				blanktiles[i] = gif.pixels.FastArrayEqual(0, i * 256, 256) && srcTiles.collisionMasks[0][i].heightMasks.All(a => !a.solid) && srcTiles.collisionMasks[1][i].heightMasks.All(a => !a.solid);
+			for (int i = 0; i < 16; i++)
+				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
+			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
+			RSDKv3_4.Tiles128x128 srcChunks = new RSDKv3_4.Tiles128x128(Path.Combine(srcFol, "128x128Tiles.bin"));
+			RSDKv3.Scene srcScene = new RSDKv3.Scene(srcFile);
+			RSDKv3.Backgrounds srcBG = new RSDKv3.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
+			RSDKv5.Scene dstScene = new RSDKv5.Scene();
+			RSDKv5.SceneLayer fgLow = new RSDKv5.SceneLayer("FG Low", (ushort)(srcScene.width * 8), (ushort)(srcScene.height * 8))
+			{
+				drawOrder = 1
+			};
+			RSDKv5.SceneLayer fgHigh = new RSDKv5.SceneLayer("FG High", (ushort)(srcScene.width * 8), (ushort)(srcScene.height * 8))
+			{
+				drawOrder = 6
+			};
+			bool hightiles = false;
+			for (int y = 0; y < srcScene.height; y++)
+				for (int x = 0; x < srcScene.width; x++)
+					if (srcScene.layout[y][x] < srcChunks.chunkList.Length)
+					{
+						RSDKv3_4.Tiles128x128.Block block = srcChunks.chunkList[srcScene.layout[y][x]];
+						for (int by = 0; by < 8; by++)
+							for (int bx = 0; bx < 8; bx++)
+							{
+								RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
+								if (!blanktiles[srcTile.tileIndex])
+								{
+									RSDKv5.SceneLayer.Tile dstTile = null;
+									switch (srcTile.visualPlane)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+											dstTile = fgLow.layout[y * 8 + by][x * 8 + bx];
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+											dstTile = fgHigh.layout[y * 8 + by][x * 8 + bx];
+											hightiles = true;
+											break;
+									}
+									dstTile.tileIndex = srcTile.tileIndex;
+									dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+									switch (srcTile.solidityA)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+									switch (srcTile.solidityB)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+								}
+							}
+					}
+			dstScene.layers.Add(fgLow);
+			if (hightiles)
+				dstScene.layers.Add(fgHigh);
+			List<RSDKv3_4.Backgrounds.Layer> bglayers = new List<RSDKv3_4.Backgrounds.Layer>(8);
+			int midpoint = int.MaxValue;
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.BeforeLayer0)
+				midpoint = 0;
+			switch (srcScene.activeLayer0)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer0 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer0)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer1)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer1 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer1)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer2)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer2 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer2)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer3)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer3 - 1]);
+					break;
+			}
+			int activelayers = bglayers.Count;
+			bglayers.AddRange(srcBG.layers.Where(a => a.width > 0 && a.height > 0 && !bglayers.Contains(a)));
+			for (int i = 0; i < bglayers.Count; i++)
+			{
+				RSDKv3_4.Backgrounds.Layer srcLayer = bglayers[i];
+				RSDKv5.SceneLayer dstLayer = new RSDKv5.SceneLayer($"Background {i + 1}", (ushort)(srcLayer.width * 8), (ushort)(srcLayer.height * 8));
+				hightiles = false;
+				if (i < activelayers && i >= midpoint)
+				{
+					dstLayer.drawOrder = 7;
+					hightiles = true;
+				}
+				else if (i >= activelayers)
+					dstLayer.drawOrder = 16;
+				byte[] scrollinds = srcLayer.lineScroll.Distinct().ToArray();
+				switch (srcLayer.type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+						dstLayer.type = RSDKv5.SceneLayer.Types.HScroll;
+						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
+						{
+							deform = srcBG.hScroll[a].deform,
+							parallaxFactor = srcBG.hScroll[a].parallaxFactor,
+							scrollSpeed = (short)(srcBG.hScroll[a].scrollSpeed << 2)
+						}).ToList();
+						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						dstLayer.type = RSDKv5.SceneLayer.Types.VScroll;
+						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
+						{
+							deform = srcBG.vScroll[a].deform,
+							parallaxFactor = srcBG.vScroll[a].parallaxFactor,
+							scrollSpeed = (short)(srcBG.vScroll[a].scrollSpeed << 2)
+						}).ToList();
+						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.Sky3D:
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.Floor3D:
+						dstLayer.type = RSDKv5.SceneLayer.Types.RotoZoom;
+						break;
+				}
+				dstLayer.parallaxFactor = srcLayer.parallaxFactor;
+				dstLayer.scrollSpeed = (short)(srcLayer.scrollSpeed << 2);
+				bool blank = true;
+				for (int y = 0; y < srcLayer.height; y++)
+					for (int x = 0; x < srcLayer.width; x++)
+						if (srcLayer.layout[y][x] < srcChunks.chunkList.Length)
+						{
+							RSDKv3_4.Tiles128x128.Block block = srcChunks.chunkList[srcLayer.layout[y][x]];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+								{
+									RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
+									if (!blanktiles[srcTile.tileIndex])
+									{
+										if (i < activelayers)
+											switch (srcTile.visualPlane)
+											{
+												case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+													if (hightiles)
+														continue;
+													break;
+												case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+													if (!hightiles)
+														continue;
+													break;
+											}
+										blank = false;
+										RSDKv5.SceneLayer.Tile dstTile = dstLayer.layout[y * 8 + by][x * 8 + bx];
+										dstTile.tileIndex = srcTile.tileIndex;
+										dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										switch (srcTile.solidityA)
+										{
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+												break;
+										}
+										switch (srcTile.solidityB)
+										{
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+												break;
+										}
+									}
+								}
+						}
+				if (!blank)
+					dstScene.layers.Add(dstLayer);
+				if (dstScene.layers.Count == 8)
+					break;
+			}
+			if (srcConf.loadGlobalObjects)
+			{
+				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv3.GameConfig(srcGCFile).objects;
+				List<string> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv5.GameConfig(dstGCFile).objects;
+				switch (objMode)
+				{
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.IndexOf(srcObjs[i].name);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(srcObjs[i].name);
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
+							else
+							{
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
+							}
+						}
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects.Select(a => a.name));
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.IndexOf(srcObjs[i].name);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
+							else
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities.Where(a => a.type > srcObjs.Count))
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type - srcObjs.Count];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = srcObjs.Select(a => a.name).Concat(srcConf.objects.Select(a => a.name)).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+				}
+			}
+			else if (objMode != ObjectMode.DontInclude)
+			{
+				dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+				dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+				foreach (var obj in dstConf.objects)
+					dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+				foreach (var ent in srcScene.entities)
+				{
+					RSDKv5.SceneObject so = dstScene.objects[ent.type];
+					so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+				}
+			}
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+		}
+
+		private static void ConvertV4ToV3(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
+		{
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			File.Copy(Path.Combine(srcFol, "128x128Tiles.bin"), Path.Combine(dstFol, "128x128Tiles.bin"), true);
+			File.Copy(Path.Combine(srcFol, "CollisionMasks.bin"), Path.Combine(dstFol, "CollisionMasks.bin"), true);
+			RSDKv4.Backgrounds srcBG = new RSDKv4.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
+			RSDKv3.Backgrounds dstBG = new RSDKv3.Backgrounds();
+			dstBG.hScroll = new List<RSDKv3_4.Backgrounds.ScrollInfo>(srcBG.hScroll.Select(a => new RSDKv3.Backgrounds.ScrollInfo() { deform = a.deform, parallaxFactor = a.parallaxFactor, scrollSpeed = a.scrollSpeed }));
+			dstBG.vScroll = new List<RSDKv3_4.Backgrounds.ScrollInfo>(srcBG.vScroll.Select(a => new RSDKv3.Backgrounds.ScrollInfo() { deform = a.deform, parallaxFactor = a.parallaxFactor, scrollSpeed = a.scrollSpeed }));
+			for (int i = 0; i < 8; i++)
+			{
+				dstBG.layers[i].type = srcBG.layers[i].type;
+				dstBG.layers[i].parallaxFactor = srcBG.layers[i].parallaxFactor;
+				dstBG.layers[i].scrollSpeed = srcBG.layers[i].scrollSpeed;
+				dstBG.layers[i].lineScroll = srcBG.layers[i].lineScroll;
+				dstBG.layers[i].layout = srcBG.layers[i].layout;
+				dstBG.layers[i].width = srcBG.layers[i].width;
+				dstBG.layers[i].height = srcBG.layers[i].height;
+			}
+			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			RSDKv4.StageConfig srcConf = new RSDKv4.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv3.StageConfig dstConf = new RSDKv3.StageConfig
+			{
+				stagePalette = srcConf.stagePalette,
+				soundFX = srcConf.soundFX
+			};
+			RSDKv4.Scene srcScene = new RSDKv4.Scene(srcFile);
+			RSDKv3.Scene dstScene = new RSDKv3.Scene
+			{
+				title = srcScene.title,
+				layout = srcScene.layout,
+				width = srcScene.width,
+				height = srcScene.height,
+				activeLayer0 = srcScene.activeLayer0,
+				activeLayer1 = srcScene.activeLayer1,
+				activeLayer2 = srcScene.activeLayer2,
+				activeLayer3 = srcScene.activeLayer3,
+				layerMidpoint = srcScene.layerMidpoint
+			};
+			if (srcConf.loadGlobalObjects)
+			{
+				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv4.GameConfig(srcGCFile).objects;
+				List<RSDKv3_4.GameConfig.ObjectInfo> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv3.GameConfig(dstGCFile).objects;
+				switch (objMode)
+				{
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i].name);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(srcObjs[i]);
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
+							else
+							{
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
+							}
+						}
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects);
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity((byte)objmap[a.type], a.propertyValue, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i].name);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
+							else
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Where(a => objmap[a.type] != -1).Select(a => new RSDKv3.Scene.Entity((byte)objmap[a.type], a.propertyValue, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Where(a => a.type > srcObjs.Count).Select(a => new RSDKv3.Scene.Entity((byte)(a.type - srcObjs.Count), a.propertyValue, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = new List<RSDKv3_4.GameConfig.ObjectInfo>(srcObjs.Concat(srcConf.objects));
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects;
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
+						break;
+				}
+			}
+			else if (objMode != ObjectMode.DontInclude)
+			{
+				dstConf.objects = srcConf.objects;
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
+			}
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+		}
+
+		private static void ConvertV4ToV5(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
+		{
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			RSDKv3_4.TileConfig srcTiles = new RSDKv3_4.TileConfig(Path.Combine(srcFol, "CollisionMasks.bin"));
+			RSDKv5.TileConfig dstTiles = new RSDKv5.TileConfig();
+			for (int i = 0; i < 2; i++)
+				dstTiles.collisionMasks[i] = srcTiles.collisionMasks[i].Select(a => new RSDKv5.TileConfig.CollisionMask()
+				{
+					flipY = a.flipY,
+					flags = a.flags,
+					floorAngle = a.floorAngle,
+					lWallAngle = a.lWallAngle,
+					rWallAngle = a.rWallAngle,
+					roofAngle = a.roofAngle,
+					heightMasks = a.heightMasks.Select(b => new RSDKv5.TileConfig.CollisionMask.HeightMask()
+					{
+						height = b.height,
+						solid = b.solid
+					}).ToArray()
+				}).ToArray();
+			dstTiles.write(Path.Combine(dstFol, "TileConfig.bin"));
+			RSDKv4.StageConfig srcConf = new RSDKv4.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv5.StageConfig dstConf = new RSDKv5.StageConfig
+			{
+				soundFX = srcConf.soundFX.Select(a => new RSDKv5.GameConfig.SoundInfo() { name = a.path }).ToList()
+			};
+			RSDKv3_4.Gif gif = new RSDKv3_4.Gif(Path.Combine(srcFol, "16x16Tiles.gif"));
+			bool[] blanktiles = new bool[0x400];
+			for (int i = 0; i < 0x400; i++)
+				blanktiles[i] = gif.pixels.FastArrayEqual(0, i * 256, 256) && srcTiles.collisionMasks[0][i].heightMasks.All(a => !a.solid) && srcTiles.collisionMasks[1][i].heightMasks.All(a => !a.solid);
+			for (int i = 0; i < 16; i++)
+				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
+			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
+			RSDKv3_4.Tiles128x128 srcChunks = new RSDKv3_4.Tiles128x128(Path.Combine(srcFol, "128x128Tiles.bin"));
+			RSDKv4.Scene srcScene = new RSDKv4.Scene(srcFile);
+			RSDKv4.Backgrounds srcBG = new RSDKv4.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
+			RSDKv5.Scene dstScene = new RSDKv5.Scene();
+			RSDKv5.SceneLayer fgLow = new RSDKv5.SceneLayer("FG Low", (ushort)(srcScene.width * 8), (ushort)(srcScene.height * 8))
+			{
+				drawOrder = 1
+			};
+			RSDKv5.SceneLayer fgHigh = new RSDKv5.SceneLayer("FG High", (ushort)(srcScene.width * 8), (ushort)(srcScene.height * 8))
+			{
+				drawOrder = 6
+			};
+			bool hightiles = false;
+			for (int y = 0; y < srcScene.height; y++)
+				for (int x = 0; x < srcScene.width; x++)
+					if (srcScene.layout[y][x] < srcChunks.chunkList.Length)
+					{
+						RSDKv3_4.Tiles128x128.Block block = srcChunks.chunkList[srcScene.layout[y][x]];
+						for (int by = 0; by < 8; by++)
+							for (int bx = 0; bx < 8; bx++)
+							{
+								RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
+								if (!blanktiles[srcTile.tileIndex])
+								{
+									RSDKv5.SceneLayer.Tile dstTile = null;
+									switch (srcTile.visualPlane)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+											dstTile = fgLow.layout[y * 8 + by][x * 8 + bx];
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+											dstTile = fgHigh.layout[y * 8 + by][x * 8 + bx];
+											hightiles = true;
+											break;
+									}
+									dstTile.tileIndex = srcTile.tileIndex;
+									dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+									switch (srcTile.solidityA)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+											dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+									switch (srcTile.solidityB)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+								}
+							}
+					}
+			dstScene.layers.Add(fgLow);
+			if (hightiles)
+				dstScene.layers.Add(fgHigh);
+			List<RSDKv3_4.Backgrounds.Layer> bglayers = new List<RSDKv3_4.Backgrounds.Layer>(8);
+			int midpoint = int.MaxValue;
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.BeforeLayer0)
+				midpoint = 0;
+			switch (srcScene.activeLayer0)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer0 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer0)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer1)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer1 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer1)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer2)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer2 - 1]);
+					break;
+			}
+			if (srcScene.layerMidpoint == RSDKv3_4.Scene.LayerMidpoints.AfterLayer2)
+				midpoint = bglayers.Count;
+			switch (srcScene.activeLayer3)
+			{
+				case RSDKv3_4.Scene.ActiveLayers.Foreground:
+				case RSDKv3_4.Scene.ActiveLayers.None:
+					break;
+				default:
+					bglayers.Add(srcBG.layers[(int)srcScene.activeLayer3 - 1]);
+					break;
+			}
+			int activelayers = bglayers.Count;
+			bglayers.AddRange(srcBG.layers.Where(a => a.width > 0 && a.height > 0 && !bglayers.Contains(a)));
+			for (int i = 0; i < bglayers.Count; i++)
+			{
+				RSDKv3_4.Backgrounds.Layer srcLayer = bglayers[i];
+				RSDKv5.SceneLayer dstLayer = new RSDKv5.SceneLayer($"Background {i + 1}", (ushort)(srcLayer.width * 8), (ushort)(srcLayer.height * 8));
+				hightiles = false;
+				if (i < activelayers && i >= midpoint)
+				{
+					dstLayer.drawOrder = 7;
+					hightiles = true;
+				}
+				else if (i >= activelayers)
+					dstLayer.drawOrder = 16;
+				byte[] scrollinds = srcLayer.lineScroll.Distinct().ToArray();
+				switch (srcLayer.type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+						dstLayer.type = RSDKv5.SceneLayer.Types.HScroll;
+						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
+						{
+							deform = srcBG.hScroll[a].deform,
+							parallaxFactor = srcBG.hScroll[a].parallaxFactor,
+							scrollSpeed = (short)(srcBG.hScroll[a].scrollSpeed << 2)
+						}).ToList();
+						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						dstLayer.type = RSDKv5.SceneLayer.Types.VScroll;
+						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
+						{
+							deform = srcBG.vScroll[a].deform,
+							parallaxFactor = srcBG.vScroll[a].parallaxFactor,
+							scrollSpeed = (short)(srcBG.vScroll[a].scrollSpeed << 2)
+						}).ToList();
+						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
+						break;
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.Sky3D:
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.Floor3D:
+						dstLayer.type = RSDKv5.SceneLayer.Types.RotoZoom;
+						break;
+				}
+				dstLayer.parallaxFactor = srcLayer.parallaxFactor;
+				dstLayer.scrollSpeed = (short)(srcLayer.scrollSpeed << 2);
+				bool blank = true;
+				for (int y = 0; y < srcLayer.height; y++)
+					for (int x = 0; x < srcLayer.width; x++)
+						if (srcLayer.layout[y][x] < srcChunks.chunkList.Length)
+						{
+							RSDKv3_4.Tiles128x128.Block block = srcChunks.chunkList[srcLayer.layout[y][x]];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+								{
+									RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
+									if (!blanktiles[srcTile.tileIndex])
+									{
+										if (i < activelayers)
+											switch (srcTile.visualPlane)
+											{
+												case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+													if (hightiles)
+														continue;
+													break;
+												case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+													if (!hightiles)
+														continue;
+													break;
+											}
+										blank = false;
+										RSDKv5.SceneLayer.Tile dstTile = dstLayer.layout[y * 8 + by][x * 8 + bx];
+										dstTile.tileIndex = srcTile.tileIndex;
+										dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										switch (srcTile.solidityA)
+										{
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+												dstTile.solidityA = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+												break;
+										}
+										switch (srcTile.solidityB)
+										{
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAll;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop;
+												break;
+											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
+												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+												break;
+										}
+									}
+								}
+						}
+				if (!blank)
+					dstScene.layers.Add(dstLayer);
+				if (dstScene.layers.Count == 8)
+					break;
+			}
+			if (srcConf.loadGlobalObjects)
+			{
+				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv4.GameConfig(srcGCFile).objects;
+				List<string> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv5.GameConfig(dstGCFile).objects;
+				switch (objMode)
+				{
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.IndexOf(srcObjs[i].name);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(srcObjs[i].name);
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
+							else
+							{
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
+							}
+						}
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects.Select(a => a.name));
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.IndexOf(srcObjs[i].name);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
+							else
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities.Where(a => a.type > srcObjs.Count))
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type - srcObjs.Count];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = srcObjs.Select(a => a.name).Concat(srcConf.objects.Select(a => a.name)).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+						dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+						foreach (var obj in dstObjs)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var obj in dstConf.objects)
+							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+						foreach (var ent in srcScene.entities)
+						{
+							RSDKv5.SceneObject so = dstScene.objects[ent.type];
+							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+						}
+						break;
+				}
+			}
+			else if (objMode != ObjectMode.DontInclude)
+			{
+				dstConf.objects = srcConf.objects.Select(a => a.name).ToList();
+				dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+				foreach (var obj in dstConf.objects)
+					dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
+				foreach (var ent in srcScene.entities)
+				{
+					RSDKv5.SceneObject so = dstScene.objects[ent.type];
+					so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
+				}
+			}
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+		}
+
+		private static void ConvertV5ToV3(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
+		{
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			RSDKv5.TileConfig srcTiles = new RSDKv5.TileConfig(Path.Combine(srcFol, "TileConfig.bin"));
+			RSDKv3_4.TileConfig dstTiles = new RSDKv3_4.TileConfig();
+			for (int i = 0; i < 2; i++)
+				dstTiles.collisionMasks[i] = srcTiles.collisionMasks[i].Select(a => new RSDKv3_4.TileConfig.CollisionMask()
+				{
+					flipY = a.flipY,
+					flags = a.flags,
+					floorAngle = a.floorAngle,
+					lWallAngle = a.lWallAngle,
+					rWallAngle = a.rWallAngle,
+					roofAngle = a.roofAngle,
+					heightMasks = a.heightMasks.Select(b => new RSDKv3_4.TileConfig.CollisionMask.HeightMask()
+					{
+						height = b.height,
+						solid = b.solid
+					}).ToArray()
+				}).ToArray();
+			dstTiles.write(Path.Combine(dstFol, "CollisionMasks.bin"));
+			RSDKv5.StageConfig srcConf = new RSDKv5.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv3_4.StageConfig dstConf = new RSDKv3.StageConfig
+			{
+				soundFX = srcConf.soundFX.Select(a => new RSDKv3_4.GameConfig.SoundInfo() { name = Path.GetFileNameWithoutExtension(a.name), path = a.name }).ToList()
+			};
+			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.R, b.G, b.B)).ToArray()).ToArray();
+			RSDKv5.Scene srcScene = new RSDKv5.Scene(srcFile);
+			srcScene.layers = srcScene.layers.OrderBy(a => a.drawOrder).ToList();
+			RSDKv3_4.Scene dstScene = new RSDKv3.Scene();
+			RSDKv5.SceneLayer fgLayer = srcScene.layers.Find(a => a.name == "Playfield");
+			RSDKv5.SceneLayer fgHigh = null;
+			if (fgLayer == null)
+				fgLayer = srcScene.layers.Find(a => a.name == "FG Low");
+			if (fgLayer == null)
+				fgLayer = srcScene.layers.Find(a => a.name == "FG High");
+			else
+				fgHigh = srcScene.layers.Find(a => a.name == "FG High");
+			RSDKv3_4.Tiles128x128 dstChunk = new RSDKv3_4.Tiles128x128();
+			List<int[]> chunks = new List<int[]>(dstChunk.chunkList.Length) { new int[64] };
+			chunks[0].FastFill(ushort.MaxValue);
+			if (fgLayer != null)
+			{
+				int width = Math.DivRem(fgLayer.layout[0].Length, 8, out int rem);
+				if (rem != 0)
+					++width;
+				int height = Math.DivRem(fgLayer.layout.Length, 8, out rem);
+				if (rem != 0)
+					++height;
+				dstScene.resize((byte)width, (byte)height);
+				if (fgHigh != null)
+				{
+					bool blank = true;
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < fgLayer.layout.Length && (x * 8) + bx < fgLayer.layout[0].Length)
+									{
+										if (fgLayer.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+										{
+											if (fgHigh.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+												ch[by * 8 + bx] = ushort.MaxValue;
+											else
+											{
+												ch[by * 8 + bx] = fgHigh.layout[(y * 8) + by][(x * 8) + bx] | 0x10000;
+												fgHigh.layout[(y * 8) + by][(x * 8) + bx] = new RSDKv5.SceneLayer.Tile();
+											}
+										}
+										else
+										{
+											ch[by * 8 + bx] = fgLayer.layout[(y * 8) + by][(x * 8) + bx];
+											if (!fgHigh.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+												blank = false;
+										}
+									}
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								dstScene.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								dstScene.layout[y][x] = (ushort)cid;
+						}
+					if (blank)
+						srcScene.layers.Remove(fgHigh);
+				}
+				else
+				{
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < fgLayer.layout.Length && (x * 8) + bx < fgLayer.layout[0].Length)
+										ch[by * 8 + bx] = fgLayer.layout[(y * 8) + by][(x * 8) + bx];
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								dstScene.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								dstScene.layout[y][x] = (ushort)cid;
+						}
+				}
+			}
+			List<int> activeLayers = new List<int>(5);
+			List<RSDKv3_4.Backgrounds.Layer> bglayers = new List<RSDKv3_4.Backgrounds.Layer>(8);
+			int plane = 0;
+			RSDKv3_4.Backgrounds dstBG = new RSDKv3.Backgrounds();
+			foreach (var layer in srcScene.layers)
+			{
+				if (layer == fgLayer)
+				{
+					activeLayers.Add(0);
+					if (activeLayers.Count > 4)
+						activeLayers.RemoveAt(0);
+					if (fgHigh != null)
+					{
+						activeLayers.Add(0);
+						if (activeLayers.Count > 4)
+							activeLayers.RemoveAt(0);
+						plane = 0x10000;
+					}
+				}
+				else
+				{
+					int width = Math.DivRem(layer.layout[0].Length, 8, out int rem);
+					if (rem != 0)
+						++width;
+					int height = Math.DivRem(layer.layout.Length, 8, out rem);
+					if (rem != 0)
+						++height;
+					RSDKv3_4.Backgrounds.Layer bg = new RSDKv3.Backgrounds.Layer((byte)width, (byte)height)
+					{
+						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						parallaxFactor = layer.parallaxFactor,
+					};
+					switch (layer.type)
+					{
+						case RSDKv5.SceneLayer.Types.HScroll:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll;
+							bg.lineScroll = layer.lineScroll.Select(a => (byte)(a + dstBG.hScroll.Count)).ToArray();
+							dstBG.hScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv3.Backgrounds.ScrollInfo()
+							{
+								deform = a.deform,
+								parallaxFactor = a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+							}));
+							break;
+						case RSDKv5.SceneLayer.Types.VScroll:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll;
+							bg.lineScroll = layer.lineScroll.Select(a => (byte)(a + dstBG.vScroll.Count)).ToArray();
+							dstBG.vScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv3.Backgrounds.ScrollInfo()
+							{
+								deform = a.deform,
+								parallaxFactor = a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+							}));
+							break;
+						case RSDKv5.SceneLayer.Types.RotoZoom:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.Floor3D;
+							break;
+					}
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < layer.layout.Length && (x * 8) + bx < layer.layout[0].Length)
+									{
+										if (layer.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+											ch[by * 8 + bx] = ushort.MaxValue;
+										else
+											ch[by * 8 + bx] = layer.layout[(y * 8) + by][(x * 8) + bx] | plane;
+									}
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								bg.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								bg.layout[y][x] = (ushort)cid;
+						}
+					bglayers.Add(bg);
+					if (layer.drawOrder != 16 && (layer == fgHigh || activeLayers.Count < 4 || activeLayers[0] != 0))
+					{
+						activeLayers.Add(bglayers.Count);
+						if (activeLayers.Count > 4)
+							activeLayers.RemoveAt(0);
+					}
+				}
+			}
+			bglayers.CopyTo(dstBG.layers);
+			dstScene.activeLayer0 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[0];
+			if (activeLayers.Count > 1)
+			{
+				dstScene.activeLayer1 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[1];
+				if (activeLayers.Count > 2)
+				{
+					dstScene.activeLayer2 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[2];
+					if (activeLayers.Count > 3)
+						dstScene.activeLayer3 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[3];
+					else
+						dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
+				}
+				else
+				{
+					dstScene.activeLayer2 = RSDKv3_4.Scene.ActiveLayers.None;
+					dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
+				}
 			}
 			else
 			{
-				List<ushort>[] tilepals = new List<ushort>[4];
-				for (int i = 0; i < 4; i++)
-					tilepals[i] = new List<ushort>();
-				foreach (Block blk in LevelData.NewTiles)
-					for (int y = 0; y < 2; y++)
-						for (int x = 0; x < 2; x++)
-							if (!tilepals[blk.Tiles[x, y].Palette].Contains(blk.Tiles[x, y].Tile))
-								tilepals[blk.Tiles[x, y].Palette].Add(blk.Tiles[x, y].Tile);
-				foreach (Block blk in LevelData.NewTiles)
-					for (int y = 0; y < 2; y++)
-						for (int x = 0; x < 2; x++)
-						{
-							byte pal = blk.Tiles[x, y].Palette;
-							int c = 0;
-							for (int i = pal - 1; i >= 0; i--)
-								c += tilepals[i].Count;
-							blk.Tiles[x, y].Tile = (ushort)(tilepals[pal].IndexOf(blk.Tiles[x, y].Tile) + c);
-						}
-				List<byte[]> tiles = new List<byte[]>();
-				for (int p = 0; p < 4; p++)
-					foreach (ushort item in tilepals[p])
-						if (LevelData.Tiles[item] != null)
-							tiles.Add(LevelData.Tiles[item]);
-						else
-							tiles.Add(new byte[32]);
-				LevelData.Tiles.Clear();
-				LevelData.Tiles.AddFile(tiles, -1);
-				tmp2 = new List<byte> { 0x53, 0x43, 0x52, 0x4C };
-				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.NewTiles.Length * 4) + (LevelData.NewTiles.Length * 32)));
-				tmp2.AddRange(ByteConverter.GetBytes(LevelData.NewTiles.Length));
-				tmp2.AddRange(ByteConverter.GetBytes(0x18 + (LevelData.NewTiles.Length * 4)));
-				for (int i = 0; i < 4; i++)
-					tmp2.AddRange(ByteConverter.GetBytes((ushort)tilepals[i].Count));
-				for (int i = 0; i < LevelData.NewTiles.Length; i++)
-				{
-					tmp2.AddRange(ByteConverter.GetBytes((ushort)8));
-					tmp2.AddRange(ByteConverter.GetBytes((ushort)8));
-				}
-				foreach (byte[] tile in LevelData.Tiles)
-					tmp2.AddRange(tile);
-				Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Tiles.bin"), CompressionType.SZDD);
+				dstScene.activeLayer1 = RSDKv3_4.Scene.ActiveLayers.None;
+				dstScene.activeLayer2 = RSDKv3_4.Scene.ActiveLayers.None;
+				dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
 			}
-			Level.Tiles = new[] { new SonicRetro.SonLVL.API.FileInfo("Tiles.bin") };
-			tmp2 = new List<byte>();
-			if (OutFmt == EngineVersion.SKC)
-				LevelData.littleendian = false;
-			foreach (Block b in LevelData.NewTiles)
+			dstScene.layerMidpoint = (RSDKv3_4.Scene.LayerMidpoints)activeLayers.IndexOf(0) + 1;
+			if (chunks.Count > dstChunk.chunkList.Length)
+				MessageBox.Show(Instance, $"Chunk count exceeded limit by {chunks.Count - dstChunk.chunkList.Length}! Some layers will be missing chunks.", "Conversion Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			chunks.Take(dstChunk.chunkList.Length).Select(src =>
 			{
-				tmp2.AddRange(b.GetBytes());
-			}
-			if (OutFmt == EngineVersion.SKC)
-				LevelData.littleendian = true;
-			switch (OutFmt)
-			{
-				case EngineVersion.V4:
-					cmp = CompressionType.Enigma;
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					cmp = CompressionType.Kosinski;
-					break;
-				default:
-					cmp = CompressionType.Uncompressed;
-					break;
-			}
-			Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Blocks.bin"), cmp);
-			Level.Blocks = new[] { new SonicRetro.SonLVL.API.FileInfo("Blocks.bin") };
-			byte chunktypes = 0;
-			int chunksz = 16;
-			switch (LevelData.Level.ChunkFormat)
-			{
-				case EngineVersion.V4:
-				case EngineVersion.SCDPC:
-					chunktypes = 0;
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					chunktypes = 1;
-					break;
-			}
-			switch (OutFmt)
-			{
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					chunktypes |= 2;
-					chunksz = 8;
-					break;
-			}
-			LevelData.Level.ChunkFormat = OutFmt;
-			List<Chunk> tmpchnk = new List<Chunk>();
-			switch (chunktypes)
-			{
-				case 0: // S1 -> S1
-					tmpchnk = LevelData.Chunks.ToList();
-					tmpchnk.RemoveAt(0);
-					break;
-				case 1: // S2 -> S1
-					tmpchnk = new List<Chunk>() { new Chunk() };
-					List<int> chnks = new List<int>() { 0 };
-					int chnk;
-					ushort[,] newFG1 = new ushort[(int)Math.Ceiling(LevelData.FGWidth / 2d), (int)Math.Ceiling(LevelData.FGHeight / 2d)];
-					LevelData.Layout.FGLoop = new bool[newFG1.GetLength(0), newFG1.GetLength(1)];
-					for (int y = 0; y < LevelData.FGHeight; y += 2)
+				var newcnk = new RSDKv3_4.Tiles128x128.Block();
+				for (int by = 0; by < 8; by++)
+					for (int bx = 0; bx < 8; bx++)
 					{
-						for (int x = 0; x < LevelData.FGWidth; x += 2)
+						RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes p = (src[by * 8 + bx] & 0x10000) == 0x10000 ? RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High : RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low;
+						RSDKv5.SceneLayer.Tile v = src[by * 8 + bx];
+						RSDKv3_4.Tiles128x128.Block.Tile tile = new RSDKv3_4.Tiles128x128.Block.Tile();
+						tile.tileIndex = v.tileIndex;
+						if (!v.isBlank)
 						{
-							chnk = LevelData.Scene.layout[y][x];
-							chnk |= (x + 1 < LevelData.FGWidth ? LevelData.Scene.layout[y][x + 1] : 0) << 8;
-							chnk |= (y + 1 < LevelData.FGHeight ? LevelData.Scene.layout[y + 1][x] : 0) << 16;
-							chnk |= (x + 1 < LevelData.FGWidth & y + 1 < LevelData.FGHeight ? LevelData.Scene.layout[y + 1][x + 1] : 0) << 24;
-							if (chnks.IndexOf(chnk) > -1)
-								newFG1[x / 2, y / 2] = (byte)chnks.IndexOf(chnk);
-							else
+							tile.direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)v.direction;
+							switch (v.solidityA)
 							{
-								newFG1[x / 2, y / 2] = (byte)chnks.Count;
-								Chunk newchnk = new Chunk();
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j][i].tileIndex = LevelData.NewChunks.chunkList[chnk & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j + 8][i].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j + 8][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
-									}
-								}
-								tmpchnk.Add(newchnk);
-								chnks.Add(chnk);
-							}
-						}
-					}
-					LevelData.Layout.FGLayout = newFG1;
-					ushort[,] newBG1 = new ushort[(int)Math.Ceiling(LevelData.BGWidth / 2d), (int)Math.Ceiling(LevelData.BGHeight / 2d)];
-					LevelData.Layout.BGLoop = new bool[newBG1.GetLength(0), newBG1.GetLength(1)];
-					for (int y = 0; y < LevelData.BGHeight; y += 2)
-					{
-						for (int x = 0; x < LevelData.BGWidth; x += 2)
-						{
-							chnk = LevelData.Background.layers[bglayer].layout[y][x];
-							chnk |= (x + 1 < LevelData.BGWidth ? LevelData.Background.layers[bglayer].layout[y][x + 1] : 0) << 8;
-							chnk |= (y + 1 < LevelData.BGHeight ? LevelData.Background.layers[bglayer].layout[y + 1][x] : 0) << 16;
-							chnk |= (x + 1 < LevelData.BGWidth & y + 1 < LevelData.BGHeight ? LevelData.Background.layers[bglayer].layout[y + 1][x + 1] : 0) << 24;
-							if (chnks.IndexOf(chnk) > -1)
-								newBG1[x / 2, y / 2] = (byte)chnks.IndexOf(chnk);
-							else
-							{
-								newBG1[x / 2, y / 2] = (byte)chnks.Count;
-								Chunk newchnk = new Chunk();
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j][i].tileIndex = LevelData.NewChunks.chunkList[chnk & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[chnk & 0xFF][i].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j].XFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j].YFlip = LevelData.NewChunks.chunkList[(chnk >> 8) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j + 8][i].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 16) & 0xFF][i].tileIndexs[i, j].YFlip;
-									}
-								}
-								for (int i = 0; i < 8; i++)
-								{
-									for (int j = 0; j < 8; j++)
-									{
-										newchnk.tiles[j + 8][i + 8].tileIndex = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF].tiles[j][i].tileIndex;
-										newchnk.tiles[j + 8].Solid1 = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].Solid1;
-										newchnk.tiles[j + 8].XFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].XFlip;
-										newchnk.tiles[j + 8].YFlip = LevelData.NewChunks.chunkList[(chnk >> 24) & 0xFF][i + 8].tileIndexs[i, j].YFlip;
-									}
-								}
-								tmpchnk.Add(newchnk);
-								chnks.Add(chnk);
-							}
-						}
-					}
-					LevelData.Layout.BGLayout = newBG1;
-					tmpchnk.RemoveAt(0);
-					break;
-				case 2: // S1 -> S2
-					tmpchnk = new List<Chunk>() { new Chunk() };
-					Dictionary<ushort, ushort[]> cnkinds = new Dictionary<ushort, ushort[]>() { { 0, new ushort[4] } };
-					List<ushort> usedcnks =
-						LevelData.Layout.FGLayout.Cast<ushort>().Concat(LevelData.Layout.BGLayout.Cast<ushort>()).Distinct().ToList();
-					if (usedcnks.Contains(0))
-						usedcnks.Remove(0);
-					foreach (ushort usedcnk in usedcnks)
-					{
-						Chunk item = LevelData.NewChunks.chunkList[usedcnk];
-						Chunk[] newchnk = new Chunk[4];
-						for (int i = 0; i < 4; i++)
-							newchnk[i] = new Chunk();
-						for (int y = 0; y < chunksz; y++)
-							for (int x = 0; x < chunksz; x++)
-							{
-								S2ChunkBlock blk = (S2ChunkBlock)newchnk[0].tiles[y][x];
-								blk.Block = item.tiles[y][x].tileIndex;
-								blk.Solid1 = item.tiles[y][x].Solid1;
-								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.tiles[y][x].XFlip;
-								blk.YFlip = item.tiles[y][x].YFlip;
-								blk = (S2ChunkBlock)newchnk[1].tiles[y][x];
-								blk.Block = item.tiles[y][x + chunksz].tileIndex;
-								blk.Solid1 = item.tiles[y][x + chunksz].Solid1;
-								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.tiles[y][x + chunksz].XFlip;
-								blk.YFlip = item.tiles[y][x + chunksz].YFlip;
-								blk = (S2ChunkBlock)newchnk[2].tiles[y][x];
-								blk.Block = item.tiles[y + chunksz][x].tileIndex;
-								blk.Solid1 = item.tiles[y + chunksz][x].Solid1;
-								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.tiles[y + chunksz][x].XFlip;
-								blk.YFlip = item.tiles[y + chunksz][x].YFlip;
-								blk = (S2ChunkBlock)newchnk[3].tiles[y][x];
-								blk.Block = item.tiles[y + chunksz][x + chunksz].tileIndex;
-								blk.Solid1 = item.tiles[y + chunksz][x + chunksz].Solid1;
-								blk.Solid2 = blk.Solid1;
-								blk.XFlip = item.tiles[y + chunksz][x + chunksz].XFlip;
-								blk.YFlip = item.tiles[y + chunksz][x + chunksz].YFlip;
-							}
-						ushort[] ids = new ushort[4];
-						for (int i = 0; i < 4; i++)
-						{
-							byte[] b = newchnk[i].GetBytes();
-							int match = -1;
-							for (int c = 0; c < tmpchnk.Count; c++)
-								if (b.FastArrayEqual(tmpchnk[c].GetBytes()))
-								{
-									match = c;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidNone:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone;
 									break;
-								}
-							if (match != -1)
-								ids[i] = (ushort)match;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidTop:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAll:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll;
+									break;
+							}
+							switch (v.solidityB)
+							{
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidNone:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidTop:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAll:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll;
+									break;
+							}
+							tile.visualPlane = p;
+						}
+						newcnk.tiles[by][bx] = tile;
+					}
+				return newcnk;
+			}).ToArray().CopyTo(dstChunk.chunkList, 0);
+			dstChunk.write(Path.Combine(dstFol, "128x128Tiles.bin"));
+			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
+			if (srcConf.loadGlobalObjects)
+			{
+				List<string> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv5.GameConfig(srcGCFile).objects;
+				List<RSDKv3_4.GameConfig.ObjectInfo> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv3.GameConfig(dstGCFile).objects;
+				switch (objMode)
+				{
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i]);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(new RSDKv3_4.GameConfig.ObjectInfo() { name = srcObjs[i], script = srcObjs[i] + ".txt" });
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
 							else
 							{
-								ids[i] = (ushort)tmpchnk.Count;
-								tmpchnk.Add(newchnk[i]);
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
 							}
 						}
-						cnkinds.Add(usedcnk, ids);
-					}
-					ushort[,] newFG = new ushort[LevelData.FGWidth * 2, LevelData.FGHeight * 2];
-					for (int y = 0; y < LevelData.FGHeight; y++)
-						for (int x = 0; x < LevelData.FGWidth; x++)
-							if (LevelData.Scene.layout[y][x] != 0)
-							{
-								ushort[] ids = cnkinds[LevelData.Scene.layout[y][x]];
-								newFG[x * 2, y * 2] = ids[0];
-								newFG[(x * 2) + 1, y * 2] = ids[1];
-								newFG[x * 2, (y * 2) + 1] = ids[2];
-								newFG[(x * 2) + 1, (y * 2) + 1] = ids[3];
-							}
-					LevelData.Layout.FGLayout = newFG;
-					ushort[,] newBG = new ushort[LevelData.BGWidth * 2, LevelData.BGHeight * 2];
-					for (int y = 0; y < LevelData.BGHeight; y++)
-						for (int x = 0; x < LevelData.BGWidth; x++)
-							if (LevelData.Background.layers[bglayer].layout[y][x] != 0)
-							{
-								ushort[] ids = cnkinds[LevelData.Background.layers[bglayer].layout[y][x]];
-								newBG[x * 2, y * 2] = ids[0];
-								newBG[(x * 2) + 1, y * 2] = ids[1];
-								newBG[x * 2, (y * 2) + 1] = ids[2];
-								newBG[(x * 2) + 1, (y * 2) + 1] = ids[3];
-							}
-					LevelData.Layout.BGLayout = newBG;
-					break;
-				case 3: // S2 -> S2
-					tmpchnk = LevelData.Chunks.ToList();
-					break;
-			}
-			tmp2 = new List<byte>();
-			if (OutFmt == EngineVersion.SKC)
-				LevelData.littleendian = false;
-			foreach (Chunk c in tmpchnk)
-			{
-				tmp2.AddRange(c.GetBytes());
-			}
-			if (OutFmt == EngineVersion.SKC)
-				LevelData.littleendian = true;
-			switch (OutFmt)
-			{
-				case EngineVersion.V4:
-				case EngineVersion.S2:
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					cmp = CompressionType.Kosinski;
-					break;
-				default:
-					cmp = CompressionType.Uncompressed;
-					break;
-			}
-			Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Chunks.bin"), cmp);
-			Level.Chunks = new[] { new SonicRetro.SonLVL.API.FileInfo("Chunks.bin") };
-			ushort fgw = (ushort)LevelData.FGWidth;
-			ushort bgw = (ushort)LevelData.BGWidth;
-			ushort fgh = (ushort)LevelData.FGHeight;
-			ushort bgh = (ushort)LevelData.BGHeight;
-			switch (OutFmt)
-			{
-				case EngineVersion.V4:
-					tmp2 = new List<byte>
-					{
-						(byte)(LevelData.FGWidth - 1),
-						(byte)(LevelData.FGHeight - 1)
-					};
-					for (int lr = 0; lr < LevelData.FGHeight; lr++)
-						for (int lc = 0; lc < LevelData.FGWidth; lc++)
-							tmp2.Add((byte)(LevelData.Scene.layout[lr][lr][lc] | (LevelData.Layout.FGLoop?[lc] ?? false ? 0x80 : 0)));
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
-					Level.FGLayout = "FGLayout.bin";
-					tmp2 = new List<byte>
-					{
-						(byte)(LevelData.BGWidth - 1),
-						(byte)(LevelData.BGHeight - 1)
-					};
-					for (int lr = 0; lr < LevelData.BGHeight; lr++)
-						for (int lc = 0; lc < LevelData.BGWidth; lc++)
-							tmp2.Add((byte)(LevelData.Background.layers[bglayer].layout[lr][lr][lc] | (LevelData.Layout.BGLoop?[lc] ?? false ? 0x80 : 0)));
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
-					Level.BGLayout = "BGLayout.bin";
-					break;
-				case EngineVersion.S2NA:
-					tmp2 = new List<byte>
-					{
-						(byte)(LevelData.FGWidth - 1),
-						(byte)(LevelData.FGHeight - 1)
-					};
-					for (int lr = 0; lr < LevelData.FGHeight; lr++)
-						for (int lc = 0; lc < LevelData.FGWidth; lc++)
-							tmp2.Add((byte)LevelData.Scene.layout[lr][lc]);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
-					Level.FGLayout = "FGLayout.bin";
-					tmp2 = new List<byte>
-					{
-						(byte)(LevelData.BGWidth - 1),
-						(byte)(LevelData.BGHeight - 1)
-					};
-					for (int lr = 0; lr < LevelData.BGHeight; lr++)
-						for (int lc = 0; lc < LevelData.BGWidth; lc++)
-							tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[lr][lc]);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
-					Level.BGLayout = "BGLayout.bin";
-					break;
-				case EngineVersion.S2:
-					tmp2 = new List<byte>();
-					for (int la = 0; la < 16; la++)
-					{
-						if (LevelData.FGHeight > la)
-							for (int laf = 0; laf < 128; laf++)
-								if (LevelData.FGWidth > laf)
-									tmp2.Add((byte)LevelData.Scene.layout[la][laf]);
-								else
-									tmp2.Add(0);
-						else
-							tmp2.AddRange(new byte[128]);
-						if (LevelData.BGHeight > la)
-							for (int lab = 0; lab < 128; lab++)
-								if (LevelData.BGWidth > lab)
-									tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[la][lab]);
-								else
-									tmp2.Add(0);
-						else
-							tmp2.AddRange(new byte[128]);
-					}
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Layout.bin"), CompressionType.Kosinski);
-					Level.Layout = "Layout.bin";
-					break;
-				case EngineVersion.S3K:
-					tmp2 = new List<byte>();
-					tmp2.AddRange(ByteConverter.GetBytes(fgw));
-					tmp2.AddRange(ByteConverter.GetBytes(bgw));
-					tmp2.AddRange(ByteConverter.GetBytes(fgh));
-					tmp2.AddRange(ByteConverter.GetBytes(bgh));
-					for (int la = 0; la < 32; la++)
-					{
-						if (la < fgh)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)(0x8088 + (la * fgw))));
-						else
-							tmp2.AddRange(new byte[2]);
-						if (la < bgh)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)(0x8088 + (fgh * fgw) + (la * bgw))));
-						else
-							tmp2.AddRange(new byte[2]);
-					}
-					for (int y = 0; y < fgh; y++)
-						for (int x = 0; x < fgw; x++)
-							tmp2.Add((byte)LevelData.Scene.layout[y][x]);
-					for (int y = 0; y < bgh; y++)
-						for (int x = 0; x < bgw; x++)
-							tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[y][x]);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Layout.bin"), CompressionType.Uncompressed);
-					Level.Layout = "Layout.bin";
-					break;
-				case EngineVersion.SKC:
-					tmp2 = new List<byte>();
-					tmp2.AddRange(ByteConverter.GetBytes(fgw));
-					tmp2.AddRange(ByteConverter.GetBytes(bgw));
-					tmp2.AddRange(ByteConverter.GetBytes(fgh));
-					tmp2.AddRange(ByteConverter.GetBytes(bgh));
-					for (int la = 0; la < 32; la++)
-					{
-						if (la < fgh)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)(0x8088 + (la * fgw))));
-						else
-							tmp2.AddRange(new byte[2]);
-						if (la < bgh)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)(0x8088 + (fgh * fgw) + (la * bgw))));
-						else
-							tmp2.AddRange(new byte[2]);
-					}
-					List<byte> l = new List<byte>();
-					for (int y = 0; y < fgh; y++)
-						for (int x = 0; x < fgw; x++)
-							l.Add((byte)LevelData.Scene.layout[y][x]);
-					for (int y = 0; y < bgh; y++)
-						for (int x = 0; x < bgw; x++)
-							l.Add((byte)LevelData.Background.layers[bglayer].layout[y][x]);
-					for (int i = 0; i < l.Count; i++)
-						tmp2.Add(l[i ^ 1]);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Layout.bin"), CompressionType.Uncompressed);
-					Level.Layout = "Layout.bin";
-					break;
-				case EngineVersion.SCDPC:
-					tmp2 = new List<byte>();
-					for (int lr = 0; lr < 8; lr++)
-						for (int lc = 0; lc < 64; lc++)
-							if (lc < fgw & lr < fgh)
-								tmp2.Add((byte)LevelData.Scene.layout[lr][lc]);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }));
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity((byte)objmap[srcScene.objects.IndexOf(a.type)], 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i]);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
 							else
-								tmp2.Add(0);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "FGLayout.bin"), CompressionType.Uncompressed);
-					Level.FGLayout = "FGLayout.bin";
-					tmp2 = new List<byte>();
-					for (int lr = 0; lr < 8; lr++)
-						for (int lc = 0; lc < 64; lc++)
-							if (lc < bgw & lr < bgh)
-								tmp2.Add((byte)LevelData.Background.layers[bglayer].layout[lr][lc]);
-							else
-								tmp2.Add(0);
-					Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "BGLayout.bin"), CompressionType.Uncompressed);
-					Level.BGLayout = "BGLayout.bin";
-					break;
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Where(a => objmap[srcScene.objects.IndexOf(a.type)] != -1).Select(a => new RSDKv3.Scene.Entity((byte)objmap[srcScene.objects.IndexOf(a.type)], 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Where(a => srcScene.objects.IndexOf(a.type) > srcObjs.Count).Select(a => new RSDKv3.Scene.Entity((byte)(srcScene.objects.IndexOf(a.type) - srcObjs.Count), 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = srcObjs.Concat(srcConf.objects).Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstConf.objects = new List<RSDKv3_4.GameConfig.ObjectInfo>();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
+						break;
+				}
 			}
-			tmp2 = new List<byte>();
-			if (OutFmt != EngineVersion.SCDPC)
+			else if (objMode != ObjectMode.DontInclude)
 			{
-				for (int pl = 0; pl < 4; pl++)
-					for (int pi = 0; pi < 16; pi++)
-						tmp2.AddRange(ByteConverter.GetBytes(LevelData.Palette[0][pl, pi].MDColor));
+				dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
+			}
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+		}
+
+		private static void ConvertV5ToV4(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
+		{
+			string srcFol = Path.GetDirectoryName(srcFile);
+			string dstFol = Path.GetDirectoryName(dstFile);
+			File.Copy(Path.Combine(srcFol, "16x16Tiles.gif"), Path.Combine(dstFol, "16x16Tiles.gif"), true);
+			RSDKv5.TileConfig srcTiles = new RSDKv5.TileConfig(Path.Combine(srcFol, "TileConfig.bin"));
+			RSDKv3_4.TileConfig dstTiles = new RSDKv3_4.TileConfig();
+			for (int i = 0; i < 2; i++)
+				dstTiles.collisionMasks[i] = srcTiles.collisionMasks[i].Select(a => new RSDKv3_4.TileConfig.CollisionMask()
+				{
+					flipY = a.flipY,
+					flags = a.flags,
+					floorAngle = a.floorAngle,
+					lWallAngle = a.lWallAngle,
+					rWallAngle = a.rWallAngle,
+					roofAngle = a.roofAngle,
+					heightMasks = a.heightMasks.Select(b => new RSDKv3_4.TileConfig.CollisionMask.HeightMask()
+					{
+						height = b.height,
+						solid = b.solid
+					}).ToArray()
+				}).ToArray();
+			dstTiles.write(Path.Combine(dstFol, "CollisionMasks.bin"));
+			RSDKv5.StageConfig srcConf = new RSDKv5.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
+			RSDKv3_4.StageConfig dstConf = new RSDKv4.StageConfig
+			{
+				soundFX = srcConf.soundFX.Select(a => new RSDKv3_4.GameConfig.SoundInfo() { name = Path.GetFileNameWithoutExtension(a.name), path = a.name }).ToList()
+			};
+			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.R, b.G, b.B)).ToArray()).ToArray();
+			RSDKv5.Scene srcScene = new RSDKv5.Scene(srcFile);
+			srcScene.layers = srcScene.layers.OrderBy(a => a.drawOrder).ToList();
+			RSDKv3_4.Scene dstScene = new RSDKv4.Scene();
+			RSDKv5.SceneLayer fgLayer = srcScene.layers.Find(a => a.name == "Playfield");
+			RSDKv5.SceneLayer fgHigh = null;
+			if (fgLayer == null)
+				fgLayer = srcScene.layers.Find(a => a.name == "FG Low");
+			if (fgLayer == null)
+				fgLayer = srcScene.layers.Find(a => a.name == "FG High");
+			else
+				fgHigh = srcScene.layers.Find(a => a.name == "FG High");
+			RSDKv3_4.Tiles128x128 dstChunk = new RSDKv3_4.Tiles128x128();
+			List<int[]> chunks = new List<int[]>(dstChunk.chunkList.Length) { new int[64] };
+			chunks[0].FastFill(ushort.MaxValue);
+			if (fgLayer != null)
+			{
+				int width = Math.DivRem(fgLayer.layout[0].Length, 8, out int rem);
+				if (rem != 0)
+					++width;
+				int height = Math.DivRem(fgLayer.layout.Length, 8, out rem);
+				if (rem != 0)
+					++height;
+				dstScene.resize((byte)width, (byte)height);
+				if (fgHigh != null)
+				{
+					bool blank = true;
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < fgLayer.layout.Length && (x * 8) + bx < fgLayer.layout[0].Length)
+									{
+										if (fgLayer.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+										{
+											if (fgHigh.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+												ch[by * 8 + bx] = ushort.MaxValue;
+											else
+											{
+												ch[by * 8 + bx] = fgHigh.layout[(y * 8) + by][(x * 8) + bx] | 0x10000;
+												fgHigh.layout[(y * 8) + by][(x * 8) + bx] = new RSDKv5.SceneLayer.Tile();
+											}
+										}
+										else
+										{
+											ch[by * 8 + bx] = fgLayer.layout[(y * 8) + by][(x * 8) + bx];
+											if (!fgHigh.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+												blank = false;
+										}
+									}
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								dstScene.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								dstScene.layout[y][x] = (ushort)cid;
+						}
+					if (blank)
+						srcScene.layers.Remove(fgHigh);
+				}
+				else
+				{
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < fgLayer.layout.Length && (x * 8) + bx < fgLayer.layout[0].Length)
+										ch[by * 8 + bx] = fgLayer.layout[(y * 8) + by][(x * 8) + bx];
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								dstScene.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								dstScene.layout[y][x] = (ushort)cid;
+						}
+				}
+			}
+			List<int> activeLayers = new List<int>(5);
+			List<RSDKv3_4.Backgrounds.Layer> bglayers = new List<RSDKv3_4.Backgrounds.Layer>(8);
+			int plane = 0;
+			RSDKv3_4.Backgrounds dstBG = new RSDKv4.Backgrounds();
+			foreach (var layer in srcScene.layers)
+			{
+				if (layer == fgLayer)
+				{
+					activeLayers.Add(0);
+					if (activeLayers.Count > 4)
+						activeLayers.RemoveAt(0);
+					if (fgHigh != null)
+					{
+						activeLayers.Add(0);
+						if (activeLayers.Count > 4)
+							activeLayers.RemoveAt(0);
+						plane = 0x10000;
+					}
+				}
+				else
+				{
+					int width = Math.DivRem(layer.layout[0].Length, 8, out int rem);
+					if (rem != 0)
+						++width;
+					int height = Math.DivRem(layer.layout.Length, 8, out rem);
+					if (rem != 0)
+						++height;
+					RSDKv3_4.Backgrounds.Layer bg = new RSDKv4.Backgrounds.Layer((byte)width, (byte)height)
+					{
+						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						parallaxFactor = layer.parallaxFactor,
+					};
+					switch (layer.type)
+					{
+						case RSDKv5.SceneLayer.Types.HScroll:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll;
+							bg.lineScroll = layer.lineScroll.Select(a => (byte)(a + dstBG.hScroll.Count)).ToArray();
+							dstBG.hScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv4.Backgrounds.ScrollInfo()
+							{
+								deform = a.deform,
+								parallaxFactor = a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+							}));
+							break;
+						case RSDKv5.SceneLayer.Types.VScroll:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll;
+							bg.lineScroll = layer.lineScroll.Select(a => (byte)(a + dstBG.vScroll.Count)).ToArray();
+							dstBG.vScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv4.Backgrounds.ScrollInfo()
+							{
+								deform = a.deform,
+								parallaxFactor = a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+							}));
+							break;
+						case RSDKv5.SceneLayer.Types.RotoZoom:
+							bg.type = RSDKv3_4.Backgrounds.Layer.LayerTypes.Floor3D;
+							break;
+					}
+					for (int y = 0; y < height; y++)
+						for (int x = 0; x < width; x++)
+						{
+							int[] ch = new int[64];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+									if ((y * 8) + by < layer.layout.Length && (x * 8) + bx < layer.layout[0].Length)
+									{
+										if (layer.layout[(y * 8) + by][(x * 8) + bx].isBlank)
+											ch[by * 8 + bx] = ushort.MaxValue;
+										else
+											ch[by * 8 + bx] = layer.layout[(y * 8) + by][(x * 8) + bx] | plane;
+									}
+									else
+										ch[by * 8 + bx] = ushort.MaxValue;
+							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
+							if (cid == -1)
+							{
+								bg.layout[y][x] = (ushort)chunks.Count;
+								chunks.Add(ch);
+							}
+							else
+								bg.layout[y][x] = (ushort)cid;
+						}
+					bglayers.Add(bg);
+					if (layer.drawOrder != 16 && (layer == fgHigh || activeLayers.Count < 4 || activeLayers[0] != 0))
+					{
+						activeLayers.Add(bglayers.Count);
+						if (activeLayers.Count > 4)
+							activeLayers.RemoveAt(0);
+					}
+				}
+			}
+			bglayers.CopyTo(dstBG.layers);
+			dstScene.activeLayer0 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[0];
+			if (activeLayers.Count > 1)
+			{
+				dstScene.activeLayer1 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[1];
+				if (activeLayers.Count > 2)
+				{
+					dstScene.activeLayer2 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[2];
+					if (activeLayers.Count > 3)
+						dstScene.activeLayer3 = (RSDKv3_4.Scene.ActiveLayers)activeLayers[3];
+					else
+						dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
+				}
+				else
+				{
+					dstScene.activeLayer2 = RSDKv3_4.Scene.ActiveLayers.None;
+					dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
+				}
 			}
 			else
 			{
-				for (int pl = 0; pl < 4; pl++)
-					for (int pi = 0; pi < 16; pi++)
-					{
-						tmp2.Add(LevelData.Palette[0][pl, pi].R);
-						tmp2.Add(LevelData.Palette[0][pl, pi].G);
-						tmp2.Add(LevelData.Palette[0][pl, pi].B);
-						tmp2.Add((byte)1);
-					}
+				dstScene.activeLayer1 = RSDKv3_4.Scene.ActiveLayers.None;
+				dstScene.activeLayer2 = RSDKv3_4.Scene.ActiveLayers.None;
+				dstScene.activeLayer3 = RSDKv3_4.Scene.ActiveLayers.None;
 			}
-			Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Palette.bin"), CompressionType.Uncompressed);
-			Level.Palette = new PaletteList("Palette.bin:0:0:64");
-			switch (LevelData.Level.ObjectFormat)
+			dstScene.layerMidpoint = (RSDKv3_4.Scene.LayerMidpoints)activeLayers.IndexOf(0) + 1;
+			if (chunks.Count > dstChunk.chunkList.Length)
+				MessageBox.Show(Instance, $"Chunk count exceeded limit by {chunks.Count - dstChunk.chunkList.Length}! Some layers will be missing chunks.", "Conversion Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			chunks.Take(dstChunk.chunkList.Length).Select(src =>
 			{
-				case EngineVersion.V4:
-					switch (OutFmt)
+				var newcnk = new RSDKv3_4.Tiles128x128.Block();
+				for (int by = 0; by < 8; by++)
+					for (int bx = 0; bx < 8; bx++)
 					{
-						case EngineVersion.S2:
-						case EngineVersion.S2NA:
-							ObjS1ToS2();
-							break;
-						case EngineVersion.S3K:
-						case EngineVersion.SKC:
-							ObjS1ToS3K();
-							break;
-						case EngineVersion.SCDPC:
-							ObjS1ToSCD();
-							break;
-					}
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					switch (OutFmt)
-					{
-						case EngineVersion.V4:
-							ObjS2ToS1();
-							break;
-						case EngineVersion.S3K:
-						case EngineVersion.SKC:
-							ObjS2ToS3K();
-							break;
-						case EngineVersion.SCDPC:
-							ObjS2ToSCD();
-							break;
-					}
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					switch (OutFmt)
-					{
-						case EngineVersion.V4:
-							ObjS3KToS1();
-							break;
-						case EngineVersion.S2:
-						case EngineVersion.S2NA:
-							ObjS3KToS2();
-							break;
-						case EngineVersion.SCDPC:
-							ObjS3KToSCD();
-							break;
-					}
-					break;
-				case EngineVersion.SCDPC:
-					switch (OutFmt)
-					{
-						case EngineVersion.V4:
-							ObjSCDToS1();
-							break;
-						case EngineVersion.S2:
-						case EngineVersion.S2NA:
-							ObjSCDToS2();
-							break;
-						case EngineVersion.S3K:
-						case EngineVersion.SKC:
-							ObjSCDToS3K();
-							break;
-					}
-					break;
-			}
-			tmp2 = new List<byte>();
-			switch (OutFmt)
-			{
-				case EngineVersion.V4:
-					for (int oi = 0; oi < LevelData.Objects.Count; oi++)
-					{
-						tmp2.AddRange(((S1ObjectEntry)LevelData.Objects[oi]).GetBytes());
-					}
-					tmp2.AddRange(new byte[] { 0xFF, 0xFF });
-					while (tmp2.Count % S1ObjectEntry.Size > 0)
-					{
-						tmp2.Add(0);
-					}
-					break;
-				case EngineVersion.S2:
-				case EngineVersion.S2NA:
-					for (int oi = 0; oi < LevelData.Objects.Count; oi++)
-					{
-						tmp2.AddRange(((S2ObjectEntry)LevelData.Objects[oi]).GetBytes());
-					}
-					tmp2.AddRange(new byte[] { 0xFF, 0xFF });
-					while (tmp2.Count % S2ObjectEntry.Size > 0)
-					{
-						tmp2.Add(0);
-					}
-					break;
-				case EngineVersion.S3K:
-				case EngineVersion.SKC:
-					for (int oi = 0; oi < LevelData.Objects.Count; oi++)
-					{
-						tmp2.AddRange(((S3KObjectEntry)LevelData.Objects[oi]).GetBytes());
-					}
-					tmp2.AddRange(new byte[] { 0xFF, 0xFF });
-					while (tmp2.Count % S3KObjectEntry.Size > 0)
-					{
-						tmp2.Add(0);
-					}
-					break;
-				case EngineVersion.SCDPC:
-					for (int oi = 0; oi < LevelData.Objects.Count; oi++)
-					{
-						tmp2.AddRange(((SCDObjectEntry)LevelData.Objects[oi]).GetBytes());
-					}
-					tmp2.Add(0xFF);
-					while (tmp2.Count % SCDObjectEntry.Size > 0)
-					{
-						tmp2.Add(0xFF);
-					}
-					break;
-			}
-			Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Objects.bin"), CompressionType.Uncompressed);
-			Level.Objects = "Objects.bin";
-			if (LevelData.Rings != null)
-			{
-				switch (OutFmt)
-				{
-					case EngineVersion.S2:
-					case EngineVersion.S2NA:
-						new API.S2.Ring().WriteLayout(LevelData.Rings, Path.Combine(OutDir, "Rings.bin"));
-						Level.Rings = "Rings.bin";
-						break;
-					case EngineVersion.S3K:
-					case EngineVersion.SKC:
-						new API.S3K.Ring().WriteLayout(LevelData.Rings, Path.Combine(OutDir, "Rings.bin"));
-						Level.Rings = "Rings.bin";
-						break;
-				}
-			}
-			if (LevelData.ColInds1 != null)
-				switch (OutFmt)
-				{
-					case EngineVersion.V4:
-					case EngineVersion.V3:
-					case EngineVersion.SCDPC:
-						Compression.Compress(LevelData.ColInds1.ToArray(), Path.Combine(OutDir, "Indexes.bin"), CompressionType.Uncompressed);
-						Level.CollisionIndex = "Indexes.bin";
-						break;
-					case EngineVersion.S2:
-					case EngineVersion.S2NA:
-						Compression.Compress(LevelData.ColInds1.ToArray(), Path.Combine(OutDir, "Indexes1.bin"), CompressionType.Kosinski);
-						Level.CollisionIndex1 = "Indexes1.bin";
-						Compression.Compress(LevelData.ColInds2.ToArray(), Path.Combine(OutDir, "Indexes2.bin"), CompressionType.Kosinski);
-						Level.CollisionIndex2 = "Indexes2.bin";
-						break;
-					case EngineVersion.S3K:
-					case EngineVersion.SKC:
-						while (LevelData.ColInds1.Count < 0x300)
-							LevelData.ColInds1.Add(0);
-						while (LevelData.ColInds2.Count < 0x300)
-							LevelData.ColInds2.Add(0);
-						tmp2 = new List<byte>();
-						for (int i = 0; i < LevelData.ColInds1.Count; i++)
+						RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes p = (src[by * 8 + bx] & 0x10000) == 0x10000 ? RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High : RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low;
+						RSDKv5.SceneLayer.Tile v = src[by * 8 + bx];
+						RSDKv3_4.Tiles128x128.Block.Tile tile = new RSDKv3_4.Tiles128x128.Block.Tile();
+						tile.tileIndex = v.tileIndex;
+						if (!v.isBlank)
 						{
-							tmp2.Add(LevelData.ColInds1[i]);
-							tmp2.Add(LevelData.ColInds2[i]);
+							tile.direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)v.direction;
+							switch (v.solidityA)
+							{
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidNone:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidTop:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAll:
+									tile.solidityA = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll;
+									break;
+							}
+							switch (v.solidityB)
+							{
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidNone:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidTop:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAllButTop:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAllButTop;
+									break;
+								case RSDKv5.SceneLayer.Tile.Solidities.SolidAll:
+									tile.solidityB = RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll;
+									break;
+							}
+							tile.visualPlane = p;
 						}
-						Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "IndexesSK.bin"), CompressionType.Uncompressed);
-						tmp2 = new List<byte>();
-						foreach (byte item in LevelData.ColInds1)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)item));
-						foreach (byte item in LevelData.ColInds2)
-							tmp2.AddRange(ByteConverter.GetBytes((ushort)item));
-						Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "IndexesS3.bin"), CompressionType.Uncompressed);
-						Level.CollisionIndex = "IndexesSK.bin";
-						Level.CollisionIndexSize = 1;
+						newcnk.tiles[by][bx] = tile;
+					}
+				return newcnk;
+			}).ToArray().CopyTo(dstChunk.chunkList, 0);
+			dstChunk.write(Path.Combine(dstFol, "128x128Tiles.bin"));
+			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
+			if (srcConf.loadGlobalObjects)
+			{
+				List<string> srcObjs = null;
+				if (File.Exists(srcGCFile))
+					srcObjs = new RSDKv5.GameConfig(srcGCFile).objects;
+				List<RSDKv3_4.GameConfig.ObjectInfo> dstObjs = null;
+				if (File.Exists(dstGCFile))
+					dstObjs = new RSDKv4.GameConfig(dstGCFile).objects;
+				switch (objMode)
+				{
+					case ObjectMode.MatchGlobalsAddStage:
+						Dictionary<int, int> objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i]);
+							if (ind == -1)
+							{
+								dstConf.objects.Add(new RSDKv3_4.GameConfig.ObjectInfo() { name = srcObjs[i], script = srcObjs[i] + ".txt" });
+								objmap.Add(i + 1, dstObjs.Count + dstConf.objects.Count);
+							}
+							else
+							{
+								dstConf.loadGlobalObjects = true;
+								objmap.Add(i + 1, ind + 1);
+							}
+						}
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + dstConf.objects.Count + 1);
+						dstConf.objects.AddRange(srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }));
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity((byte)objmap[srcScene.objects.IndexOf(a.type)], 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.MatchGlobalsDelete:
+						objmap = new Dictionary<int, int>() { { 0, 0 } };
+						for (int i = 0; i < srcObjs.Count; i++)
+						{
+							int ind = dstObjs.FindIndex(a => a.name == srcObjs[i]);
+							if (ind == -1)
+								objmap.Add(i + 1, -1);
+							else
+								objmap.Add(i + 1, ind + 1);
+						}
+						dstConf.loadGlobalObjects = objmap.Values.Any(a => a != -1);
+						for (int i = 0; i < srcConf.objects.Count; i++)
+							objmap.Add(i + srcObjs.Count + 1, i + dstObjs.Count + 1);
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Where(a => objmap[srcScene.objects.IndexOf(a.type)] != -1).Select(a => new RSDKv4.Scene.Entity((byte)objmap[srcScene.objects.IndexOf(a.type)], 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.DeleteGlobal:
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Where(a => srcScene.objects.IndexOf(a.type) > srcObjs.Count).Select(a => new RSDKv4.Scene.Entity((byte)(srcScene.objects.IndexOf(a.type) - srcObjs.Count), 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AddGlobalStage:
+						dstConf.objects = srcObjs.Concat(srcConf.objects).Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstConf.objects = new List<RSDKv3_4.GameConfig.ObjectInfo>();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
+						break;
+					case ObjectMode.AsIs:
+						dstConf.loadGlobalObjects = true;
+						dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+						dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
 						break;
 				}
-			if (LevelData.ColArr1 != null)
-			{
-				tmp2 = new List<byte>();
-				for (int i = 0; i < 256; i++)
-					for (int j = 0; j < 16; j++)
-						tmp2.Add(unchecked((byte)LevelData.ColArr1[i][j]));
-				Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "Collision.bin"), CompressionType.Uncompressed);
-				Level.CollisionArray1 = "Collision.bin";
-				sbyte[][] rotcol = LevelData.GenerateRotatedCollision();
-				tmp2 = new List<byte>();
-				for (int i = 0; i < 256; i++)
-					for (int j = 0; j < 16; j++)
-						tmp2.Add(unchecked((byte)rotcol[i][j]));
-				Compression.Compress(tmp2.ToArray(), Path.Combine(OutDir, "CollisionR.bin"), CompressionType.Uncompressed);
-				Level.CollisionArray2 = "CollisionR.bin";
 			}
-			if (LevelData.Angles != null)
+			else if (objMode != ObjectMode.DontInclude)
 			{
-				Compression.Compress(LevelData.Angles, Path.Combine(OutDir, "Angles.bin"), CompressionType.Uncompressed);
-				Level.Angles = "Angles.bin";
+				dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
 			}
-			Output.Save(Path.Combine(OutDir, OutFmt.ToString() + "LVL.ini"));
-			LevelData.littleendian = LE;
+			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.write(dstFile);
+			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
 		}
+	}
 
-		private void button2_Click(object sender, EventArgs e)
-		{
-			for (int i = 0; i < comboBox1.Items.Count; i++)
-			{
-				comboBox1.SelectedIndex = i;
-				ConvertLevel();
-				Application.DoEvents();
-			}
-			System.Diagnostics.Process.Start(Dir);
-		}
+	enum ObjectMode
+	{
+		DontInclude,
+		MatchGlobalsAddStage,
+		MatchGlobalsDelete,
+		DeleteGlobal,
+		AddGlobalStage,
+		AsIs
 	}
 }

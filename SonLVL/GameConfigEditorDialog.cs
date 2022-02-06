@@ -395,6 +395,7 @@ namespace SonicRetro.SonLVL
 			stageAct.Enabled = false;
 			stageName.Enabled = false;
 			stageHighlight.Enabled = false;
+			stageBrowseButton.Enabled = false;
 		}
 
 		private void stageListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -407,6 +408,7 @@ namespace SonicRetro.SonLVL
 				stageAct.Enabled = false;
 				stageName.Enabled = false;
 				stageHighlight.Enabled = false;
+				stageBrowseButton.Enabled = false;
 			}
 			else
 			{
@@ -415,6 +417,7 @@ namespace SonicRetro.SonLVL
 				stageAct.Enabled = true;
 				stageName.Enabled = true;
 				stageHighlight.Enabled = true;
+				stageBrowseButton.Enabled = true;
 				loaded = false;
 				stageFolder.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].folder;
 				stageAct.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].id;

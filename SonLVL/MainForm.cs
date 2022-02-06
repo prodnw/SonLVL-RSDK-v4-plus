@@ -511,7 +511,7 @@ namespace SonicRetro.SonLVL.GUI
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 				{
 					loaded = false;
-					LoadMod(LevelData.ModFolder);
+					LoadMod(Path.Combine(LevelData.ModFolder, "mod.ini"));
 					if (LevelData.StageInfo != null)
 					{
 						LevelStuff stuff = levelMenuItems.FirstOrDefault(a => a.Stage.folder == LevelData.StageInfo.folder && a.Stage.actID == LevelData.StageInfo.actID);

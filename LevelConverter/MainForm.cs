@@ -335,19 +335,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 								RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
 								if (!blanktiles[srcTile.tileIndex])
 								{
-									RSDKv5.SceneLayer.Tile dstTile = null;
-									switch (srcTile.visualPlane)
+									RSDKv5.SceneLayer.Tile dstTile = new RSDKv5.SceneLayer.Tile
 									{
-										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
-											dstTile = fgLow.layout[y * 8 + by][x * 8 + bx];
-											break;
-										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
-											dstTile = fgHigh.layout[y * 8 + by][x * 8 + bx];
-											hightiles = true;
-											break;
-									}
-									dstTile.tileIndex = srcTile.tileIndex;
-									dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										tileIndex = srcTile.tileIndex,
+										direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction
+									};
 									switch (srcTile.solidityA)
 									{
 										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
@@ -376,6 +368,16 @@ namespace SonicRetro.SonLVL.LevelConverter
 											break;
 										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
 											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+									switch (srcTile.visualPlane)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+											fgLow.layout[y * 8 + by][x * 8 + bx] = dstTile;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+											fgHigh.layout[y * 8 + by][x * 8 + bx] = dstTile;
+											hightiles = true;
 											break;
 									}
 								}
@@ -499,9 +501,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 													break;
 											}
 										blank = false;
-										RSDKv5.SceneLayer.Tile dstTile = dstLayer.layout[y * 8 + by][x * 8 + bx];
-										dstTile.tileIndex = srcTile.tileIndex;
-										dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										RSDKv5.SceneLayer.Tile dstTile = new RSDKv5.SceneLayer.Tile
+										{
+											tileIndex = srcTile.tileIndex,
+											direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction
+										};
 										switch (srcTile.solidityA)
 										{
 											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
@@ -532,6 +536,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
 												break;
 										}
+										dstLayer.layout[y * 8 + by][x * 8 + bx] = dstTile;
 									}
 								}
 						}
@@ -830,19 +835,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 								RSDKv3_4.Tiles128x128.Block.Tile srcTile = block.tiles[by][bx];
 								if (!blanktiles[srcTile.tileIndex])
 								{
-									RSDKv5.SceneLayer.Tile dstTile = null;
-									switch (srcTile.visualPlane)
+									RSDKv5.SceneLayer.Tile dstTile = new RSDKv5.SceneLayer.Tile
 									{
-										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
-											dstTile = fgLow.layout[y * 8 + by][x * 8 + bx];
-											break;
-										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
-											dstTile = fgHigh.layout[y * 8 + by][x * 8 + bx];
-											hightiles = true;
-											break;
-									}
-									dstTile.tileIndex = srcTile.tileIndex;
-									dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										tileIndex = srcTile.tileIndex,
+										direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction
+									};
 									switch (srcTile.solidityA)
 									{
 										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
@@ -871,6 +868,16 @@ namespace SonicRetro.SonLVL.LevelConverter
 											break;
 										case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
 											dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
+											break;
+									}
+									switch (srcTile.visualPlane)
+									{
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.Low:
+											fgLow.layout[y * 8 + by][x * 8 + bx] = dstTile;
+											break;
+										case RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High:
+											fgHigh.layout[y * 8 + by][x * 8 + bx] = dstTile;
+											hightiles = true;
 											break;
 									}
 								}
@@ -994,9 +1001,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 													break;
 											}
 										blank = false;
-										RSDKv5.SceneLayer.Tile dstTile = dstLayer.layout[y * 8 + by][x * 8 + bx];
-										dstTile.tileIndex = srcTile.tileIndex;
-										dstTile.direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction;
+										RSDKv5.SceneLayer.Tile dstTile = new RSDKv5.SceneLayer.Tile
+										{
+											tileIndex = srcTile.tileIndex,
+											direction = (RSDKv5.SceneLayer.Tile.Directions)srcTile.direction
+										};
 										switch (srcTile.solidityA)
 										{
 											case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll:
@@ -1027,6 +1036,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 												dstTile.solidityB = RSDKv5.SceneLayer.Tile.Solidities.SolidNone;
 												break;
 										}
+										dstLayer.layout[y * 8 + by][x * 8 + bx] = dstTile;
 									}
 								}
 						}

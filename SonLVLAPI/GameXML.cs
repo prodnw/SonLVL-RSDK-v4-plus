@@ -203,12 +203,25 @@ namespace SonicRetro.SonLVL.API
 		{
 			if (other == null) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return name.Equals(other.name, StringComparison.Ordinal) && path.Equals(other.path, StringComparison.Ordinal);
+			if (name == null)
+			{
+				if (other.name != null)
+					return false;
+			}
+			else
+				if (!name.Equals(other.name, StringComparison.Ordinal))
+				return false;
+			return  path.Equals(other.path, StringComparison.Ordinal);
 		}
 
 		public override bool Equals(object obj) => Equals(obj as SoundFXXML);
 
-		public override int GetHashCode() => name.GetHashCode() ^ path.GetHashCode();
+		public override int GetHashCode()
+		{
+			if (name == null)
+				return path.GetHashCode();
+			return name.GetHashCode() ^ path.GetHashCode();
+		}
 
 		public static implicit operator SoundInfo(SoundFXXML item) => new SoundInfo() { name = item.name, path = item.path };
 

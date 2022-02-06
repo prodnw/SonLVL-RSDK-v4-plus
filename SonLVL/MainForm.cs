@@ -511,14 +511,17 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					loaded = false;
 					LoadMod(LevelData.ModFolder);
-					LevelStuff stuff = levelMenuItems.FirstOrDefault(a => a.Stage.folder == LevelData.StageInfo.folder && a.Stage.actID == LevelData.StageInfo.actID);
-					if (stuff != null)
+					if (LevelData.StageInfo != null)
 					{
-						stuff.MenuItem.Checked = true;
-						Enabled = false;
-						UseWaitCursor = true;
-						levelname = stuff.FullName;
-						LoadLevel(stuff);
+						LevelStuff stuff = levelMenuItems.FirstOrDefault(a => a.Stage.folder == LevelData.StageInfo.folder && a.Stage.actID == LevelData.StageInfo.actID);
+						if (stuff != null)
+						{
+							stuff.MenuItem.Checked = true;
+							Enabled = false;
+							UseWaitCursor = true;
+							levelname = stuff.FullName;
+							LoadLevel(stuff);
+						}
 					}
 				}
 		}
@@ -4501,6 +4504,7 @@ namespace SonicRetro.SonLVL.GUI
 								}
 					}
 				}
+				UpdateScrollBars();
 				DrawLevel();
 			}
 		}
@@ -4600,12 +4604,20 @@ namespace SonicRetro.SonLVL.GUI
 					if (CurrentTab == Tab.Background)
 					{
 						if (LevelData.BGHeight[bglayer] > selection.Height)
+						{
 							LevelData.ResizeBG(bglayer, LevelData.BGWidth[bglayer], LevelData.BGHeight[bglayer] - selection.Height);
+							UpdateScrollBars();
+							DrawLevel();
+						}
 					}
 					else
 					{
 						if (LevelData.FGHeight > selection.Height)
+						{
 							LevelData.ResizeFG(LevelData.FGWidth, LevelData.FGHeight - selection.Height);
+							UpdateScrollBars();
+							DrawLevel();
+						}
 					}
 				}
 				else if (dlg.entireColumn.Checked)
@@ -4634,12 +4646,20 @@ namespace SonicRetro.SonLVL.GUI
 					if (CurrentTab == Tab.Background)
 					{
 						if (LevelData.BGWidth[bglayer] > selection.Width)
+						{
 							LevelData.ResizeBG(bglayer, LevelData.BGWidth[bglayer] - selection.Width, LevelData.BGHeight[bglayer]);
+							UpdateScrollBars();
+							DrawLevel();
+						}
 					}
 					else
 					{
 						if (LevelData.FGWidth > selection.Width)
+						{
 							LevelData.ResizeFG(LevelData.FGWidth - selection.Width, LevelData.FGHeight);
+							UpdateScrollBars();
+							DrawLevel();
+						}
 					}
 				}
 			}

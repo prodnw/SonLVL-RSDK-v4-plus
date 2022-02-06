@@ -431,7 +431,7 @@ namespace SonicRetro.SonLVL
 		{
 			var info = new StageXML("STAGE", "Stage", "1", true);
 			stages[stageCategory.SelectedIndex].Add(info);
-			stageListBox.Items.Add(info);
+			stageListBox.Items.Add(info.name);
 			stageListBox.SelectedIndex = stageListBox.Items.Count - 1;
 			stageAddButton.Enabled = stages[stageCategory.SelectedIndex].Count < 255;
 		}

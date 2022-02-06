@@ -229,14 +229,23 @@ namespace SonicRetro.SonLVL.API
 				for (int c = 0; c < StageConfig.stagePalette.colors[l].Length; c++)
 					NewPalette[(l * 16) + c + 96] = Color.FromArgb(StageConfig.stagePalette.colors[l][c].R, StageConfig.stagePalette.colors[l][c].G, StageConfig.stagePalette.colors[l][c].B);
 			Gif tilebmp = ReadFile<Gif>(stgfol + "16x16Tiles.gif");
-			NewTiles = new BitmapBits[tilebmp.height / 16];
-			for (int i = 0; i < tilebmp.height / 16; i++)
+			if (tilebmp.width >= 16 && tilebmp.height >= 16)
 			{
-				NewTiles[i] = new BitmapBits(16, 16);
-				Array.Copy(tilebmp.pixels, i * 256, NewTiles[i].Bits, 0, 256);
+				NewTiles = new BitmapBits[tilebmp.height / 16];
+				for (int i = 0; i < tilebmp.height / 16; i++)
+				{
+					NewTiles[i] = new BitmapBits(16, 16);
+					Array.Copy(tilebmp.pixels, i * 256, NewTiles[i].Bits, 0, 256);
+				}
+				for (int i = 128; i < 256; i++)
+					NewPalette[i] = Color.FromArgb(tilebmp.palette[i].R, tilebmp.palette[i].G, tilebmp.palette[i].B);
 			}
-			for (int i = 128; i < 256; i++)
-				NewPalette[i] = Color.FromArgb(tilebmp.palette[i].R, tilebmp.palette[i].G, tilebmp.palette[i].B);
+			else
+			{
+				NewTiles = new BitmapBits[0x400];
+				for (int i = 0; i < 0x400; i++)
+					NewTiles[i] = new BitmapBits(16, 16);
+			}
 			NewChunks = ReadFile<Tiles128x128>(stgfol + "128x128Tiles.bin");
 			Collision = ReadFile<TileConfig>(stgfol + "CollisionMasks.bin");
 			AdditionalScenes = new List<AdditionalScene>();

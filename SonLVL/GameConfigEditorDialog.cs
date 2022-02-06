@@ -542,7 +542,6 @@ namespace SonicRetro.SonLVL
 				tmpobjects.RemoveAll(a => a.forceLoad);
 				tmpobjects.InsertRange(0, origConf.objects.Select(a => (ObjectXML)a));
 			}
-			tmpobjects.Insert(0, null);
 			if (!origobjs.SequenceEqual(tmpobjects))
 				switch (MessageBox.Show(this, "Object list has been edited!\n\nDo you want to adjust the entities in all stages that use global objects to match?", "Object List Edited", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 				{

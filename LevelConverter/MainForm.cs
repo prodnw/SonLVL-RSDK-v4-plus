@@ -1249,7 +1249,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								dstScene.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									dstScene.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else
@@ -1273,7 +1274,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								dstScene.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									dstScene.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else
@@ -1357,7 +1359,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								bg.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									bg.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else
@@ -1609,7 +1612,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								dstScene.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									dstScene.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else
@@ -1633,7 +1637,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								dstScene.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									dstScene.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else
@@ -1717,7 +1722,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							int cid = chunks.FindIndex(a => a.FastArrayEqual(ch));
 							if (cid == -1)
 							{
-								bg.layout[y][x] = (ushort)chunks.Count;
+								if (chunks.Count < dstChunk.chunkList.Length)
+									bg.layout[y][x] = (ushort)chunks.Count;
 								chunks.Add(ch);
 							}
 							else

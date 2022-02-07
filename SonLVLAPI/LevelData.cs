@@ -498,6 +498,7 @@ namespace SonicRetro.SonLVL.API
 									pal[v + 2] = NewPalette[i].B;
 									edit = true;
 								}
+								v += 3;
 							}
 							if (edit)
 							{

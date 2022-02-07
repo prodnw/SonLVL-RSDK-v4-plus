@@ -436,7 +436,7 @@ namespace SonicRetro.SonLVL.API
 				{
 					case EngineVersion.V3:
 						{
-							byte[] origpal = ReadFileRawNoMod("Data/Palettes/MasterPalette.act");
+							byte[] origpal = ReadFileRaw("Data/Palettes/MasterPalette.act");
 							int pallen = Math.Min(origpal.Length / 3, 96);
 							int v = 0;
 							for (int i = 0; i < pallen; i++)

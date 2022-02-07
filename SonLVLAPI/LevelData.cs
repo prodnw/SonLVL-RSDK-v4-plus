@@ -1022,7 +1022,7 @@ namespace SonicRetro.SonLVL.API
 					if (mask.heightMasks[x].solid)
 						if (mask.flipY)
 						{
-							for (int y = 0; y < mask.heightMasks[x].height; y++)
+							for (int y = 0; y <= mask.heightMasks[x].height; y++)
 								NewColBmpBits[block][i][x, y] = 1;
 						}
 						else

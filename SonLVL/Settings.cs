@@ -16,6 +16,9 @@ namespace SonicRetro.SonLVL
 		public bool ShowHUD { get; set; }
 		[IniCollection(IniCollectionMode.SingleLine, Format = "|")]
 		public List<string> MRUList { get; set; }
+		[IniName("RecentMod")]
+		[IniCollection(IniCollectionMode.NoSquareBrackets, StartIndex = 1)]
+		public List<MRUModItem> RecentMods { get; set; }
 		public bool ShowGrid { get; set; }
 		[IniIgnore]
 		public Color GridColor { get; set; }
@@ -95,6 +98,69 @@ namespace SonicRetro.SonLVL
 			IniSerializer.Serialize(this, filename);
 		}
 	}
+
+	[TypeConverter(typeof(MRUModItemConverter))]
+	public class MRUModItem
+	{
+		public string Name { get; set; }
+		public string EXEPath { get; set; }
+		public string ModPath { get; set; }
+
+		public MRUModItem(string name, string exepath, string modpath)
+		{
+			Name = name;
+			EXEPath = exepath;
+			ModPath = modpath;
+		}
+
+		public MRUModItem(string data)
+		{
+			string[] split = data.Split('|');
+			Name = split[0];
+			EXEPath = split[1];
+			if (split.Length > 2)
+				ModPath = split[2];
+		}
+
+		public override string ToString()
+		{
+			if (ModPath == null)
+				return $"{Name}|{EXEPath}";
+			return $"{Name}|{EXEPath}|{ModPath}";
+		}
+	}
+
+	public class MRUModItemConverter : TypeConverter
+	{
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+		{
+			if (destinationType == typeof(MRUModItem))
+				return true;
+			return base.CanConvertTo(context, destinationType);
+		}
+
+		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		{
+			if (destinationType == typeof(string) && value is MRUModItem sf)
+				return sf.ToString();
+			return base.ConvertTo(context, culture, value, destinationType);
+		}
+
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+		{
+			if (sourceType == typeof(string))
+				return true;
+			return base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		{
+			if (value is string st)
+				return new MRUModItem(st);
+			return base.ConvertFrom(context, culture, value);
+		}
+	}
+
 
 	public enum CollisionPath
 	{

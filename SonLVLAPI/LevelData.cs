@@ -1604,19 +1604,16 @@ namespace SonicRetro.SonLVL.API
 				{
 					if (!start.HasValue)
 						start = new Point(x, mask.heightMasks[x].height);
+					end = new Point(x, mask.heightMasks[x].height);
 					if (mask.flipY)
 					{
 						if (mask.heightMasks[x].height == 15 && start.Value.Y == 15)
 							start = new Point(x, 15);
-						if (!end.HasValue || end.Value.Y != 15)
-							end = new Point(x, mask.heightMasks[x].height);
 					}
 					else
 					{
 						if (mask.heightMasks[x].height == 0 && start.Value.Y == 0)
 							start = new Point(x, 0);
-						if (!end.HasValue || end.Value.Y != 0)
-							end = new Point(x, mask.heightMasks[x].height);
 					}
 				}
 			}

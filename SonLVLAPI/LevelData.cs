@@ -1624,7 +1624,7 @@ namespace SonicRetro.SonLVL.API
 				if (mask.flipY)
 				{
 					mask.roofAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)) + 0x80);
-					switch (mask.roofAngle.CompareTo(0x80))
+					switch (Math.Sign(mask.roofAngle.CompareTo(0x80)))
 					{
 						case -1:
 							mask.rWallAngle = mask.roofAngle;
@@ -1637,7 +1637,7 @@ namespace SonicRetro.SonLVL.API
 				else
 				{
 					mask.floorAngle = (byte)(Math.Atan2(end.Value.Y - start.Value.Y, end.Value.X - start.Value.X) * (256 / (2 * Math.PI)));
-					switch (mask.floorAngle.CompareTo(0x80))
+					switch (Math.Sign(mask.floorAngle.CompareTo(0x80)))
 					{
 						case -1:
 							mask.rWallAngle = mask.floorAngle;

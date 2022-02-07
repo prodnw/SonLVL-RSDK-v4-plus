@@ -5886,7 +5886,12 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void calculateAngleButton_Click(object sender, EventArgs e)
 		{
-			LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].CalcAngles();
+			RSDKv3_4.TileConfig.CollisionMask collisionMask = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile];
+			collisionMask.CalcAngles();
+			floorAngle.Value = collisionMask.floorAngle;
+			rightAngle.Value = collisionMask.rWallAngle;
+			ceilingAngle.Value = collisionMask.roofAngle;
+			leftAngle.Value = collisionMask.lWallAngle;
 		}
 
 		private void usageCountsToolStripMenuItem_Click(object sender, EventArgs e)

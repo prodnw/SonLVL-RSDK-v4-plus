@@ -604,7 +604,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
 						foreach (var obj in dstConf.objects)
 							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
-						foreach (var ent in srcScene.entities)
+						foreach (var ent in srcScene.entities.Where(a => objmap[a.type] != -1))
 						{
 							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
 							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
@@ -1104,7 +1104,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
 						foreach (var obj in dstConf.objects)
 							dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier(obj) });
-						foreach (var ent in srcScene.entities)
+						foreach (var ent in srcScene.entities.Where(a => objmap[a.type] != -1))
 						{
 							RSDKv5.SceneObject so = dstScene.objects[objmap[ent.type]];
 							so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });

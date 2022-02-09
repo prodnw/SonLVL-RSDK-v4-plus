@@ -594,7 +594,7 @@ namespace SonicRetro.SonLVL.API
 			Background.write(Path.Combine(stgfol, "Backgrounds.bin"));
 			Scene.write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
 			foreach (var astg in AdditionalScenes)
-				Scene.write(Path.Combine(stgfol, $"Act{astg.StageInfo.actID}.bin"));
+				astg.Scene.write(Path.Combine(stgfol, $"Act{astg.StageInfo.actID}.bin"));
 		}
 
 		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)

@@ -263,7 +263,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			scrollPreviewButton.Checked = false;
-			if (loaded)
+			if (loaded && LevelData.ModFolder != null)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -503,7 +503,7 @@ namespace SonicRetro.SonLVL.GUI
 		#region File Menu
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (loaded)
+			if (loaded && LevelData.ModFolder != null)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -530,7 +530,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void editGameConfigToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			fileToolStripMenuItem.DropDown.Hide();
-			if (loaded)
+			if (loaded && LevelData.ModFolder != null)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -563,7 +563,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LevelToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
-			if (loaded)
+			if (loaded && LevelData.ModFolder != null)
 			{
 				fileToolStripMenuItem.DropDown.Hide();
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
@@ -819,7 +819,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void buildAndRunToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (LevelData.Scene != null)
+			if (LevelData.Scene != null && LevelData.ModFolder != null)
 				saveToolStripMenuItem_Click(sender, e);
 			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.EXEFile) { WorkingDirectory = Path.GetDirectoryName(LevelData.EXEFile) });
 		}

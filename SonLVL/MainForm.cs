@@ -474,9 +474,17 @@ namespace SonicRetro.SonLVL.GUI
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
 			sfxFiles = new List<string>();
 			if (Directory.Exists("Data/SoundFX"))
+			{
 				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.wav"));
+				if (LevelData.RSDKVer == EngineVersion.V4)
+					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.ogg"));
+			}
 			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+			{
 				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
+				if (LevelData.RSDKVer == EngineVersion.V4)
+					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.ogg").Where(a => !sfxFiles.Contains(a)));
+			}
 			sfxFileBox.AutoCompleteCustomSource.Clear();
 			sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
 			if (Settings.RecentMods.Count == 0)

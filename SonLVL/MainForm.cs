@@ -1048,18 +1048,55 @@ namespace SonicRetro.SonLVL.GUI
 							bits = new BitmapBits(128, 128);
 							bits.DrawSprite(LevelData.ChunkSprites[i]);
 							bits.ToBitmap(pal).Save(pathBase + ".png");
-								bits = new BitmapBits(LevelData.ChunkColBmpBits[i][0]);
-								bits.UnfixUIColors();
-								bits.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
-								bits = new BitmapBits(LevelData.ChunkColBmpBits[i][1]);
-								bits.UnfixUIColors();
-								bits.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2.png");
-							bits = new BitmapBits(128, 128);
+							bits = new BitmapBits(LevelData.ChunkColBmpBits[i][0]);
+							bits.UnfixUIColors();
+							bits.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
+							bits = new BitmapBits(LevelData.ChunkColBmpBits[i][1]);
+							bits.UnfixUIColors();
+							bits.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2.png");
+							BitmapBits pri = new BitmapBits(128, 128);
+							BitmapBits fa1 = new BitmapBits(128, 128);
+							BitmapBits fa2 = new BitmapBits(128, 128);
+							BitmapBits la1 = new BitmapBits(128, 128);
+							BitmapBits la2 = new BitmapBits(128, 128);
+							BitmapBits ra1 = new BitmapBits(128, 128);
+							BitmapBits ra2 = new BitmapBits(128, 128);
+							BitmapBits ca1 = new BitmapBits(128, 128);
+							BitmapBits ca2 = new BitmapBits(128, 128);
+							BitmapBits f1 = new BitmapBits(128, 128);
+							BitmapBits f2 = new BitmapBits(128, 128);
 							for (int cy = 0; cy < 128 / 16; cy++)
 								for (int cx = 0; cx < 128 / 16; cx++)
+								{
 									if (LevelData.NewChunks.chunkList[i].tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
-										bits.FillRectangle(1, cx * 16, cy * 16, 16, 16);
-							bits.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri.png");
+										pri.FillRectangle(1, cx * 16, cy * 16, 16, 16);
+									if (LevelData.NewChunks.chunkList[i].tiles[cy][cx].tileIndex < LevelData.NewTiles.Length)
+									{
+										RSDKv3_4.TileConfig.CollisionMask cm1 = LevelData.Collision.collisionMasks[0][LevelData.NewChunks.chunkList[i].tiles[cy][cx].tileIndex];
+										RSDKv3_4.TileConfig.CollisionMask cm2 = LevelData.Collision.collisionMasks[1][LevelData.NewChunks.chunkList[i].tiles[cy][cx].tileIndex];
+										fa1.FillRectangle(cm1.floorAngle, cx * 16, cy * 16, 16, 16);
+										fa2.FillRectangle(cm2.floorAngle, cx * 16, cy * 16, 16, 16);
+										la1.FillRectangle(cm1.lWallAngle, cx * 16, cy * 16, 16, 16);
+										la2.FillRectangle(cm2.lWallAngle, cx * 16, cy * 16, 16, 16);
+										ra1.FillRectangle(cm1.rWallAngle, cx * 16, cy * 16, 16, 16);
+										ra2.FillRectangle(cm2.rWallAngle, cx * 16, cy * 16, 16, 16);
+										ca1.FillRectangle(cm1.roofAngle, cx * 16, cy * 16, 16, 16);
+										ca2.FillRectangle(cm2.roofAngle, cx * 16, cy * 16, 16, 16);
+										f1.FillRectangle(cm1.flags, cx * 16, cy * 16, 16, 16);
+										f2.FillRectangle(cm2.flags, cx * 16, cy * 16, 16, 16);
+									}
+								}
+							pri.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri.png");
+							fa1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa1.png");
+							fa2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa2.png");
+							la1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la1.png");
+							la2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la2.png");
+							ra1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra1.png");
+							ra2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra2.png");
+							ca1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca1.png");
+							ca2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca2.png");
+							f1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f1.png");
+							f2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f2.png");
 						}
 						else
 						{
@@ -1121,7 +1158,17 @@ namespace SonicRetro.SonLVL.GUI
 						bmp = LevelData.DrawForeground(null, false, false, false, false, false, true);
 						bmp.UnfixUIColors();
 						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
-						bmp.Clear();
+						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits la1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits la2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ra1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ra2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ca1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ca2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits f1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits f2 = new BitmapBits(bmp.Width, bmp.Height);
 						for (int ly = 0; ly < LevelData.FGHeight; ly++)
 							for (int lx = 0; lx < LevelData.FGWidth; lx++)
 							{
@@ -1129,10 +1176,37 @@ namespace SonicRetro.SonLVL.GUI
 								RSDKv3_4.Tiles128x128.Block cnk = LevelData.NewChunks.chunkList[LevelData.Scene.layout[ly][lx]];
 								for (int cy = 0; cy < 8; cy++)
 									for (int cx = 0; cx < 8; cx++)
+									{
 										if (cnk.tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
-											bmp.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											pri.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+										if (cnk.tiles[cy][cx].tileIndex < LevelData.NewTiles.Length)
+										{
+											RSDKv3_4.TileConfig.CollisionMask cm1 = LevelData.Collision.collisionMasks[0][cnk.tiles[cy][cx].tileIndex];
+											RSDKv3_4.TileConfig.CollisionMask cm2 = LevelData.Collision.collisionMasks[1][cnk.tiles[cy][cx].tileIndex];
+											fa1.FillRectangle(cm1.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											fa2.FillRectangle(cm2.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											la1.FillRectangle(cm1.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											la2.FillRectangle(cm2.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ra1.FillRectangle(cm1.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ra2.FillRectangle(cm2.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ca1.FillRectangle(cm1.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ca2.FillRectangle(cm2.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											f1.FillRectangle(cm1.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											f2.FillRectangle(cm2.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+										}
+									}
 							}
-						bmp.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
+						pri.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
+						fa1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa1" + pathExt);
+						fa2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa2" + pathExt);
+						la1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la1" + pathExt);
+						la2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la2" + pathExt);
+						ra1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra1" + pathExt);
+						ra2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra2" + pathExt);
+						ca1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca1" + pathExt);
+						ca2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca2" + pathExt);
+						f1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f1" + pathExt);
+						f2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f2" + pathExt);
 					}
 					else
 					{
@@ -1171,7 +1245,17 @@ namespace SonicRetro.SonLVL.GUI
 						bmp = LevelData.DrawBackground(bglayer, null, false, false, false, true);
 						bmp.UnfixUIColors();
 						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
-						bmp.Clear();
+						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits la1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits la2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ra1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ra2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ca1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits ca2 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits f1 = new BitmapBits(bmp.Width, bmp.Height);
+						BitmapBits f2 = new BitmapBits(bmp.Width, bmp.Height);
 						for (int ly = 0; ly < LevelData.BGHeight[bglayer]; ly++)
 							for (int lx = 0; lx < LevelData.BGWidth[bglayer]; lx++)
 							{
@@ -1179,10 +1263,37 @@ namespace SonicRetro.SonLVL.GUI
 								RSDKv3_4.Tiles128x128.Block cnk = LevelData.NewChunks.chunkList[LevelData.Background.layers[bglayer].layout[ly][lx]];
 								for (int cy = 0; cy < 8; cy++)
 									for (int cx = 0; cx < 8; cx++)
+									{
 										if (cnk.tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
-											bmp.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											pri.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+										if (cnk.tiles[cy][cx].tileIndex < LevelData.NewTiles.Length)
+										{
+											RSDKv3_4.TileConfig.CollisionMask cm1 = LevelData.Collision.collisionMasks[0][cnk.tiles[cy][cx].tileIndex];
+											RSDKv3_4.TileConfig.CollisionMask cm2 = LevelData.Collision.collisionMasks[1][cnk.tiles[cy][cx].tileIndex];
+											fa1.FillRectangle(cm1.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											fa2.FillRectangle(cm2.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											la1.FillRectangle(cm1.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											la2.FillRectangle(cm2.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ra1.FillRectangle(cm1.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ra2.FillRectangle(cm2.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ca1.FillRectangle(cm1.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											ca2.FillRectangle(cm2.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											f1.FillRectangle(cm1.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+											f2.FillRectangle(cm2.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
+										}
+									}
 							}
-						bmp.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
+						pri.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
+						fa1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa1" + pathExt);
+						fa2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa2" + pathExt);
+						la1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la1" + pathExt);
+						la2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la2" + pathExt);
+						ra1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra1" + pathExt);
+						ra2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra2" + pathExt);
+						ca1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca1" + pathExt);
+						ca2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca2" + pathExt);
+						f1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f1" + pathExt);
+						f2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f2" + pathExt);
 					}
 					else
 					{

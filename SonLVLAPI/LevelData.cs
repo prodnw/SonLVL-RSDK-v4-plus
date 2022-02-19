@@ -1,10 +1,7 @@
 using RSDKv3_4;
 using System;
 using System.CodeDom.Compiler;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -58,6 +55,7 @@ namespace SonicRetro.SonLVL.API
 		internal static readonly bool IsMonoRuntime = Type.GetType("Mono.Runtime") != null;
 		internal static readonly bool IsWindows = !(Environment.OSVersion.Platform == PlatformID.MacOSX | Environment.OSVersion.Platform == PlatformID.Unix | Environment.OSVersion.Platform == PlatformID.Xbox);
 		private static readonly BitmapBits InvalidTile = new BitmapBits(16, 16);
+		public static readonly Color[] GrayscalePalette = new Color[256];
 		public const int ColorTransparent = 0;
 		public const int ColorWhite = 252;
 		public const int ColorYellow = 253;
@@ -71,6 +69,8 @@ namespace SonicRetro.SonLVL.API
 			InvalidTile.DrawLine(15, 15, 15, 15, 0);
 			InvalidTile.DrawLine(15, 0, 0, 15, 15);
 			InvalidTile.DrawLine(15, 0, 15, 15, 0);
+			for (int i = 0; i < 256; i++)
+				GrayscalePalette[i] = Color.FromArgb(i, i, i);
 		}
 
 		public static void LoadGame(string filename)

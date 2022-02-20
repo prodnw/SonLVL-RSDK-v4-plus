@@ -1090,7 +1090,7 @@ namespace SonicRetro.SonLVL.API
 							}
 						}
 						BitmapBits tilev = new BitmapBits(tile);
-						tileh.Flip(false, true);
+						tilev.Flip(false, true);
 						TileConfig.CollisionMask mask1v = null;
 						TileConfig.CollisionMask mask2v = null;
 						if (mask1 != null)
@@ -1104,7 +1104,7 @@ namespace SonicRetro.SonLVL.API
 							}
 						}
 						BitmapBits tilehv = new BitmapBits(tilev);
-						tileh.Flip(true, false);
+						tilehv.Flip(true, false);
 						TileConfig.CollisionMask mask1hv = null;
 						TileConfig.CollisionMask mask2hv = null;
 						if (mask1v != null)

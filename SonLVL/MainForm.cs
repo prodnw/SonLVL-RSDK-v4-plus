@@ -6795,7 +6795,7 @@ namespace SonicRetro.SonLVL.GUI
 			else
 				max = LevelData.BGScroll[bglayer][scrollList.SelectedIndex + 1].StartPos - 1;
 			if (LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos != max - 1)
-				max = (max - LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos) / 2;
+				max = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos + ((max - LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos) / 2);
 			LevelData.BGScroll[bglayer].Insert(scrollList.SelectedIndex + 1, new ScrollData((ushort)max));
 			scrollList.Items.Insert(scrollList.SelectedIndex + 1, max.ToString("X4"));
 			scrollList.SelectedIndex++;

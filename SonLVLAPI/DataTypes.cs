@@ -295,6 +295,12 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
+		[ReadOnly(true)]
+		[ParenthesizePropertyName(true)]
+		[Category("Meta")]
+		[Description("The object's position in the object list.")]
+		public int EntityPos => LevelData.Objects.IndexOf(this) + 32;
+
 		public static ObjectEntry Create(Scene.Entity entity)
 		{
 			switch (entity)

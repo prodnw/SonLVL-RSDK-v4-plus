@@ -1563,7 +1563,8 @@ namespace SonicRetro.SonLVL.GUI
 									if (blk.tileIndex >= LevelData.NewTiles.Length) continue;
 									RSDKv3_4.Tiles128x128.Block.Tile.Solidities solid = path2ToolStripMenuItem.Checked ? blk.solidityB : blk.solidityA;
 									if (solid == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone) continue;
-									byte angle = LevelData.Collision.collisionMasks[path2ToolStripMenuItem.Checked ? 1 : 0][blk.tileIndex].floorAngle;
+									RSDKv3_4.TileConfig.CollisionMask mask = LevelData.Collision.collisionMasks[path2ToolStripMenuItem.Checked ? 1 : 0][blk.tileIndex];
+									byte angle = mask.flipY ? mask.roofAngle : mask.floorAngle;
 									if (angle != 0xFF)
 									{
 										switch (blk.direction)

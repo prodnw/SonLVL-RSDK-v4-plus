@@ -4454,7 +4454,11 @@ namespace SonicRetro.SonLVL.GUI
 				if (dg.ShowDialog(this) == DialogResult.OK)
 				{
 					if (CurrentTab == Tab.Background)
+					{
 						LevelData.ResizeBG(bglayer, (int)dg.levelWidth.Value, (int)dg.levelHeight.Value);
+						if (LevelData.BGScroll[bglayer].Count == 0)
+							LevelData.BGScroll[bglayer].Add(new ScrollData());
+					}
 					else
 						LevelData.ResizeFG((int)dg.levelWidth.Value, (int)dg.levelHeight.Value);
 					loaded = false;

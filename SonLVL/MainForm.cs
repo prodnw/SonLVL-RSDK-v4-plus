@@ -5850,7 +5850,7 @@ namespace SonicRetro.SonLVL.GUI
 					LevelData.RedrawChunk(SelectedChunk);
 					break;
 				case ArtTab.Tiles:
-					LevelData.NewTiles[SelectedTile] = new BitmapBits((BitmapBits)Clipboard.GetData("SonLVLRSDKTile"));
+					((byte[])Clipboard.GetData("SonLVLRSDKTile")).CopyTo(LevelData.NewTiles[SelectedTile].Bits, 0);
 					LevelData.RedrawBlock(SelectedTile, true);
 					chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 					break;

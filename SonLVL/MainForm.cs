@@ -315,6 +315,7 @@ namespace SonicRetro.SonLVL.GUI
 			catch (Exception ex)
 			{
 				fileToolStripMenuItem.HideDropDown();
+				Log(ex.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 				using (LoadErrorDialog ed = new LoadErrorDialog(false, ex.GetType().Name + ": " + ex.Message))
 					ed.ShowDialog(this);
 				return;
@@ -409,6 +410,8 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			catch (Exception ex)
 			{
+				fileToolStripMenuItem.HideDropDown();
+				Log(ex.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 				using (LoadErrorDialog ed = new LoadErrorDialog(false, ex.GetType().Name + ": " + ex.Message))
 					ed.ShowDialog(this);
 				return;

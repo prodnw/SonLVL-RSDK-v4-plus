@@ -6811,8 +6811,8 @@ namespace SonicRetro.SonLVL.GUI
 		private void deleteScrollButton_Click(object sender, EventArgs e)
 		{
 			int ind = scrollList.SelectedIndex;
-			LevelData.BGScroll[bglayer].RemoveAt(scrollList.SelectedIndex + 1);
-			scrollList.Items.RemoveAt(scrollList.SelectedIndex + 1);
+			LevelData.BGScroll[bglayer].RemoveAt(ind);
+			scrollList.Items.RemoveAt(ind);
 			if (ind == scrollList.Items.Count)
 				--ind;
 			scrollList.SelectedIndex = ind;

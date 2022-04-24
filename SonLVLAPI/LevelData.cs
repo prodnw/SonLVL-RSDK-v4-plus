@@ -1161,9 +1161,15 @@ namespace SonicRetro.SonLVL.API
 						tiles.Add(tile);
 						result.Art.Add(tile);
 						if (mask1 != null)
+						{
+							cols[0].Add(mask1);
 							result.Collision1.Add(mask1);
+						}
 						if (mask2 != null)
+						{
+							cols[1].Add(mask2);
 							result.Collision2.Add(mask2);
+						}
 						map.tileIndex = (ushort)(tiles.Count - 1);
 					}
 					result.Mappings[x, y] = map;

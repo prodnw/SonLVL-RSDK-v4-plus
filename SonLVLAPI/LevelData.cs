@@ -83,7 +83,13 @@ namespace SonicRetro.SonLVL.API
 				RSDKVer = EngineVersion.V3;
 			else if (fn.StartsWith("soniccd", StringComparison.OrdinalIgnoreCase))
 				RSDKVer = EngineVersion.V3;
+			else if (fn.StartsWith("restored", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V3;
 			else if (fn.StartsWith("RSDKv4", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V4;
+			else if (fn.StartsWith("SonicForever", StringComparison.OrdinalIgnoreCase))
+				RSDKVer = EngineVersion.V4;
+			else if (fn.StartsWith("Sonic2Absolute", StringComparison.OrdinalIgnoreCase))
 				RSDKVer = EngineVersion.V4;
 			else
 				throw new NotImplementedException("Unrecognized game!");

@@ -428,6 +428,8 @@ namespace SonicRetro.SonLVL.GUI
 						curgrp = new List<RSDKv3_4.GameConfig.StageList.StageInfo>() { item };
 						groups[i].Add(curgrp);
 					}
+					else if (curgrp == null)
+						groups[i].Add(new List<RSDKv3_4.GameConfig.StageList.StageInfo>() { item });
 					else
 						curgrp.Add(item);
 			}

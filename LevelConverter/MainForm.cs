@@ -185,7 +185,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstBG.layers[i].width = srcBG.layers[i].width;
 				dstBG.layers[i].height = srcBG.layers[i].height;
 			}
-			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			dstBG.Write(Path.Combine(dstFol, "Backgrounds.bin"));
 			RSDKv3.StageConfig srcConf = new RSDKv3.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv4.StageConfig dstConf = new RSDKv4.StageConfig
 			{
@@ -272,8 +272,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstConf.objects = srcConf.objects;
 				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
 		}
 
 		private static void ConvertV3ToV5(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
@@ -298,7 +298,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						solid = b.solid
 					}).ToArray()
 				}).ToArray();
-			dstTiles.write(Path.Combine(dstFol, "TileConfig.bin"));
+			dstTiles.Write(Path.Combine(dstFol, "TileConfig.bin"));
 			RSDKv3.StageConfig srcConf = new RSDKv3.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv5.StageConfig dstConf = new RSDKv5.StageConfig
 			{
@@ -309,8 +309,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 			for (int i = 0; i < 0x400; i++)
 				blanktiles[i] = gif.pixels.FastArrayEqual(0, i * 256, 256) && srcTiles.collisionMasks[0][i].heightMasks.All(a => !a.solid) && srcTiles.collisionMasks[1][i].heightMasks.All(a => !a.solid);
 			for (int i = 0; i < 16; i++)
-				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
-			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
+				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.r, b.g, b.b)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
+			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.r, b.g, b.b)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
 			RSDKv3_4.Tiles128x128 srcChunks = new RSDKv3_4.Tiles128x128(Path.Combine(srcFol, "128x128Tiles.bin"));
 			RSDKv3.Scene srcScene = new RSDKv3.Scene(srcFile);
 			RSDKv3.Backgrounds srcBG = new RSDKv3.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
@@ -660,8 +660,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 					so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
 				}
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
 		}
 
 		private static void ConvertV4ToV3(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
@@ -685,7 +685,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstBG.layers[i].width = srcBG.layers[i].width;
 				dstBG.layers[i].height = srcBG.layers[i].height;
 			}
-			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			dstBG.Write(Path.Combine(dstFol, "Backgrounds.bin"));
 			RSDKv4.StageConfig srcConf = new RSDKv4.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv3.StageConfig dstConf = new RSDKv3.StageConfig
 			{
@@ -772,8 +772,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstConf.objects = srcConf.objects;
 				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity(a.type, a.propertyValue, a.xpos, a.ypos)));
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
 		}
 
 		private static void ConvertV4ToV5(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
@@ -798,7 +798,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						solid = b.solid
 					}).ToArray()
 				}).ToArray();
-			dstTiles.write(Path.Combine(dstFol, "TileConfig.bin"));
+			dstTiles.Write(Path.Combine(dstFol, "TileConfig.bin"));
 			RSDKv4.StageConfig srcConf = new RSDKv4.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv5.StageConfig dstConf = new RSDKv5.StageConfig
 			{
@@ -809,8 +809,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 			for (int i = 0; i < 0x400; i++)
 				blanktiles[i] = gif.pixels.FastArrayEqual(0, i * 256, 256) && srcTiles.collisionMasks[0][i].heightMasks.All(a => !a.solid) && srcTiles.collisionMasks[1][i].heightMasks.All(a => !a.solid);
 			for (int i = 0; i < 16; i++)
-				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
-			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.R, b.G, b.B)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
+				gif.palette.Skip(i * 16).Take(16).Select(b => new RSDKv5.Color(b.r, b.g, b.b)).ToArray().CopyTo(dstConf.palettes[0].colors[i], 0);
+			srcConf.stagePalette.colors.Select(a => a.Select(b => new RSDKv5.Color(b.r, b.g, b.b)).ToArray()).ToArray().CopyTo(dstConf.palettes[0].colors, 6);
 			RSDKv3_4.Tiles128x128 srcChunks = new RSDKv3_4.Tiles128x128(Path.Combine(srcFol, "128x128Tiles.bin"));
 			RSDKv4.Scene srcScene = new RSDKv4.Scene(srcFile);
 			RSDKv4.Backgrounds srcBG = new RSDKv4.Backgrounds(Path.Combine(srcFol, "Backgrounds.bin"));
@@ -1160,8 +1160,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 					so.entities.Add(new RSDKv5.SceneEntity(so, (ushort)srcScene.entities.IndexOf(ent)) { xpos = ent.xpos, ypos = ent.ypos });
 				}
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
 		}
 
 		private static void ConvertV5ToV3(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
@@ -1186,13 +1186,13 @@ namespace SonicRetro.SonLVL.LevelConverter
 						solid = b.solid
 					}).ToArray()
 				}).ToArray();
-			dstTiles.write(Path.Combine(dstFol, "CollisionMasks.bin"));
+			dstTiles.Write(Path.Combine(dstFol, "CollisionMasks.bin"));
 			RSDKv5.StageConfig srcConf = new RSDKv5.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv3_4.StageConfig dstConf = new RSDKv3.StageConfig
 			{
 				soundFX = srcConf.soundFX.Select(a => new RSDKv3_4.GameConfig.SoundInfo() { name = Path.GetFileNameWithoutExtension(a.name), path = a.name }).ToList()
 			};
-			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.R, b.G, b.B)).ToArray()).ToArray();
+			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.r, b.g, b.b)).ToArray()).ToArray();
 			RSDKv5.Scene srcScene = new RSDKv5.Scene(srcFile);
 			srcScene.layers = srcScene.layers.OrderBy(a => a.drawOrder).ToList();
 			RSDKv3_4.Scene dstScene = new RSDKv3.Scene();
@@ -1452,7 +1452,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					}
 				return newcnk;
 			}).ToArray().CopyTo(dstChunk.chunkList, 0);
-			dstChunk.write(Path.Combine(dstFol, "128x128Tiles.bin"));
+			dstChunk.Write(Path.Combine(dstFol, "128x128Tiles.bin"));
 			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
 			if (srcConf.loadGlobalObjects)
 			{
@@ -1522,9 +1522,9 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
 				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
-			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
+			dstBG.Write(Path.Combine(dstFol, "Backgrounds.bin"));
 		}
 
 		private static void ConvertV5ToV4(string srcFile, string dstFile, ObjectMode objMode, string srcGCFile, string dstGCFile)
@@ -1549,13 +1549,13 @@ namespace SonicRetro.SonLVL.LevelConverter
 						solid = b.solid
 					}).ToArray()
 				}).ToArray();
-			dstTiles.write(Path.Combine(dstFol, "CollisionMasks.bin"));
+			dstTiles.Write(Path.Combine(dstFol, "CollisionMasks.bin"));
 			RSDKv5.StageConfig srcConf = new RSDKv5.StageConfig(Path.Combine(srcFol, "StageConfig.bin"));
 			RSDKv3_4.StageConfig dstConf = new RSDKv4.StageConfig
 			{
 				soundFX = srcConf.soundFX.Select(a => new RSDKv3_4.GameConfig.SoundInfo() { name = Path.GetFileNameWithoutExtension(a.name), path = a.name }).ToList()
 			};
-			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.R, b.G, b.B)).ToArray()).ToArray();
+			dstConf.stagePalette.colors = srcConf.palettes[0].colors.Skip(6).Take(2).Select(a => a.Select(b => new RSDKv3_4.Palette.Color(b.r, b.g, b.b)).ToArray()).ToArray();
 			RSDKv5.Scene srcScene = new RSDKv5.Scene(srcFile);
 			srcScene.layers = srcScene.layers.OrderBy(a => a.drawOrder).ToList();
 			RSDKv3_4.Scene dstScene = new RSDKv4.Scene();
@@ -1815,7 +1815,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 					}
 				return newcnk;
 			}).ToArray().CopyTo(dstChunk.chunkList, 0);
-			dstChunk.write(Path.Combine(dstFol, "128x128Tiles.bin"));
+			dstChunk.Write(Path.Combine(dstFol, "128x128Tiles.bin"));
 			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
 			if (srcConf.loadGlobalObjects)
 			{
@@ -1885,9 +1885,9 @@ namespace SonicRetro.SonLVL.LevelConverter
 				dstConf.objects = srcConf.objects.Select(a => new RSDKv3_4.GameConfig.ObjectInfo() { name = a, script = a + ".txt" }).ToList();
 				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity((byte)srcScene.objects.IndexOf(a.type), 0, a.xpos, a.ypos)));
 			}
-			dstConf.write(Path.Combine(dstFol, "StageConfig.bin"));
-			dstScene.write(dstFile);
-			dstBG.write(Path.Combine(dstFol, "Backgrounds.bin"));
+			dstConf.Write(Path.Combine(dstFol, "StageConfig.bin"));
+			dstScene.Write(dstFile);
+			dstBG.Write(Path.Combine(dstFol, "Backgrounds.bin"));
 		}
 	}
 

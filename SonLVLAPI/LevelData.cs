@@ -16,7 +16,7 @@ namespace SonicRetro.SonLVL.API
 	{
 		public static string EXEFile;
 		public static EngineVersion RSDKVer;
-		public static IDataFile DataFile;
+		public static IDataPack DataFile;
 		public static string ModFolder;
 		public static GameConfig GameConfig;
 		public static GameXML GameXML;
@@ -101,10 +101,10 @@ namespace SonicRetro.SonLVL.API
 				switch (RSDKVer)
 				{
 					case EngineVersion.V4:
-						DataFile = new RSDKv4.DataFile("Data.rsdk");
+						DataFile = new RSDKv4.DataPack("Data.rsdk");
 						break;
 					case EngineVersion.V3:
-						DataFile = new RSDKv3.DataFile("Data.rsdk");
+						DataFile = new RSDKv3.DataPack("Data.rsdk");
 						break;
 				}
 			}
@@ -131,9 +131,9 @@ namespace SonicRetro.SonLVL.API
 					GameConfig = ReadFile<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
 					var pal = ((RSDKv4.GameConfig)GameConfig).masterPalette;
 					for (int l = 0; l < pal.colors.Length; l++)
-						for (int c = 0; c < pal.COLORS_PER_ROW; c++)
-							if ((l * pal.COLORS_PER_ROW) + c < 256)
-								NewPalette[(l * pal.COLORS_PER_ROW) + c] = Color.FromArgb(pal.colors[l][c].R, pal.colors[l][c].G, pal.colors[l][c].B);
+						for (int c = 0; c < pal.colors[l].Length; c++)
+							if ((l * pal.colors[l].Length) + c < 256)
+								NewPalette[(l * pal.colors[l].Length) + c] = pal.colors[l][c].ToSystemColor();
 					break;
 				case EngineVersion.V3:
 					GameConfig = ReadFile<RSDKv3.GameConfig>("Data/Game/GameConfig.bin");
@@ -233,7 +233,7 @@ namespace SonicRetro.SonLVL.API
 			}
 			for (int l = 0; l < StageConfig.stagePalette.colors.Length; l++)
 				for (int c = 0; c < StageConfig.stagePalette.colors[l].Length; c++)
-					NewPalette[(l * 16) + c + 96] = Color.FromArgb(StageConfig.stagePalette.colors[l][c].R, StageConfig.stagePalette.colors[l][c].G, StageConfig.stagePalette.colors[l][c].B);
+					NewPalette[(l * 16) + c + 96] = StageConfig.stagePalette.colors[l][c].ToSystemColor();
 			Gif tilebmp = ReadFile<Gif>(stgfol + "16x16Tiles.gif");
 			if (tilebmp.width >= 16 && tilebmp.height >= 16)
 			{
@@ -244,7 +244,7 @@ namespace SonicRetro.SonLVL.API
 					Array.Copy(tilebmp.pixels, i * 256, NewTiles[i].Bits, 0, 256);
 				}
 				for (int i = 128; i < 256; i++)
-					NewPalette[i] = Color.FromArgb(tilebmp.palette[i].R, tilebmp.palette[i].G, tilebmp.palette[i].B);
+					NewPalette[i] = tilebmp.palette[i].ToSystemColor();
 			}
 			else
 			{
@@ -376,7 +376,7 @@ namespace SonicRetro.SonLVL.API
 			}
 			for (int l = 0; l < StageConfig.stagePalette.colors.Length; l++)
 				for (int c = 0; c < StageConfig.stagePalette.colors[l].Length; c++)
-					NewPalette[(l * 16) + c + 96] = Color.FromArgb(StageConfig.stagePalette.colors[l][c].R, StageConfig.stagePalette.colors[l][c].G, StageConfig.stagePalette.colors[l][c].B);
+					NewPalette[(l * 16) + c + 96] = StageConfig.stagePalette.colors[l][c].ToSystemColor();
 			foreach (var item in NewTiles)
 				item.Clear();
 			NewPalette.Fill(Color.Black, 128, 128);
@@ -458,10 +458,10 @@ namespace SonicRetro.SonLVL.API
 							var origpal = ((RSDKv4.GameConfig)GameConfig).masterPalette;
 							int i = 0;
 							for (int l = 0; l < origpal.colors.Length; l++)
-								for (int c = 0; c < origpal.COLORS_PER_ROW; c++)
+								for (int c = 0; c < origpal.colors[l].Length; c++)
 								{
 									if (i == 96) break;
-									if (origpal.colors[l][c].R != NewPalette[i].R || origpal.colors[l][c].G != NewPalette[i].G || origpal.colors[l][c].B != NewPalette[i].B)
+									if (origpal.colors[l][c].r != NewPalette[i].R || origpal.colors[l][c].g != NewPalette[i].G || origpal.colors[l][c].b != NewPalette[i].B)
 										GameXML.palette.Add(new ColorXML(0, (byte)i, NewPalette[i]));
 									++i;
 								}
@@ -519,10 +519,10 @@ namespace SonicRetro.SonLVL.API
 							int i = 0;
 							bool edit = false;
 							for (int l = 0; l < pal.colors.Length; l++)
-								for (int c = 0; c < pal.COLORS_PER_ROW; c++)
+								for (int c = 0; c < pal.colors[l].Length; c++)
 								{
 									if (i == 96) break;
-									if (pal.colors[l][c].R != NewPalette[i].R || pal.colors[l][c].G != NewPalette[i].G || pal.colors[l][c].B != NewPalette[i].B)
+									if (pal.colors[l][c].r != NewPalette[i].R || pal.colors[l][c].g != NewPalette[i].G || pal.colors[l][c].b != NewPalette[i].B)
 									{
 										pal.colors[l][c] = new Palette.Color(NewPalette[i].R, NewPalette[i].G, NewPalette[i].B);
 										edit = true;
@@ -532,7 +532,7 @@ namespace SonicRetro.SonLVL.API
 							if (edit)
 							{
 								Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Game"));
-								GameConfig.write(Path.Combine(ModFolder, "Data/Game/GameConfig.bin"));
+								GameConfig.Write(Path.Combine(ModFolder, "Data/Game/GameConfig.bin"));
 							}
 						}
 						break;
@@ -541,15 +541,15 @@ namespace SonicRetro.SonLVL.API
 			string stgfol = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder);
 			Directory.CreateDirectory(stgfol);
 			for (int i = 0; i < 32; i++)
-				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.COLORS_PER_ROW][i % StageConfig.stagePalette.COLORS_PER_ROW] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
-			StageConfig.write(Path.Combine(stgfol, "StageConfig.bin"));
+				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.colors[0].Length][i % StageConfig.stagePalette.colors[0].Length] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
+			StageConfig.Write(Path.Combine(stgfol, "StageConfig.bin"));
 			BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
 			for (int i = 0; i < NewTiles.Length; i++)
 				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
 			using (Bitmap bmp = tiles.ToBitmap(NewPalette))
 				bmp.Save(Path.Combine(stgfol, "16x16Tiles.gif"), ImageFormat.Gif);
-			NewChunks.write(Path.Combine(stgfol, "128x128Tiles.bin"));
-			Collision.write(Path.Combine(stgfol, "CollisionMasks.bin"));
+			NewChunks.Write(Path.Combine(stgfol, "128x128Tiles.bin"));
+			Collision.Write(Path.Combine(stgfol, "CollisionMasks.bin"));
 			Background.hScroll.Clear();
 			Background.vScroll.Clear();
 			for (int i = 0; i < 8; i++)
@@ -597,10 +597,10 @@ namespace SonicRetro.SonLVL.API
 					Background.layers[i].lineScroll[y] = scrind;
 				}
 			}
-			Background.write(Path.Combine(stgfol, "Backgrounds.bin"));
-			Scene.write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
+			Background.Write(Path.Combine(stgfol, "Backgrounds.bin"));
+			Scene.Write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
 			foreach (var astg in AdditionalScenes)
-				astg.Scene.write(Path.Combine(stgfol, $"Act{astg.StageInfo.actID}.bin"));
+				astg.Scene.Write(Path.Combine(stgfol, $"Act{astg.StageInfo.actID}.bin"));
 		}
 
 		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)

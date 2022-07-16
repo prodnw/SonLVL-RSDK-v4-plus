@@ -7055,6 +7055,7 @@ namespace SonicRetro.SonLVL.GUI
 						loaded = true;
 						return;
 				}
+				LevelData.StageConfig.loadGlobalObjects = loadGlobalObjects.Checked;
 				LevelData.ObjTypes.RemoveRange(1, LevelData.GlobalObjects.Count);
 				InitObjectTypes();
 				if (reload)

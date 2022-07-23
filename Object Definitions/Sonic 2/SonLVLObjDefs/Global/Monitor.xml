@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="monitor">
+  <Images>
+    <ImageFromSheet id="monitor" sheet="Global/Items.gif" sourcex="18" sourcey="1" width="32" height="32">
+      <Offset X="-16" Y="-16" />
+    </ImageFromSheet>
+	<ImageFromSheet id="rings" sheet="Global/Items.gif" sourcex="18" sourcey="66" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="shield" sheet="Global/Items.gif" sourcex="35" sourcey="66" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="invincibility" sheet="Global/Items.gif" sourcex="18" sourcey="81" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="shoes" sheet="Global/Items.gif" sourcex="35" sourcey="81" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="sonic" sheet="Global/Items.gif" sourcex="18" sourcey="96" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="tails" sheet="Global/Items.gif" sourcex="35" sourcey="96" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="knux" sheet="Global/Items.gif" sourcex="18" sourcey="111" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="super" sheet="Global/Items.gif" sourcex="35" sourcey="111" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="bubble" sheet="Global/Items.gif" sourcex="18" sourcey="141" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="flame" sheet="Global/Items.gif" sourcex="35" sourcey="126" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="lightning" sheet="Global/Items.gif" sourcex="18" sourcey="126" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="robotnik" sheet="Global/Items.gif" sourcex="35" sourcey="141" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="teleport" sheet="Global/Items.gif" sourcex="18" sourcey="156" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="random" sheet="Global/Items.gif" sourcex="35" sourcey="156" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+	<ImageFromSheet id="toggle" sheet="Global/Items.gif" sourcex="18" sourcey="171" width="16" height="14">
+      <Offset X="-8" Y="-9" />
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="none">
+	  <ImageRef image="monitor" />
+	</ImageSet>
+	
+	<ImageSet id="rings">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="rings" />
+	</ImageSet>
+	
+	<ImageSet id="shield">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="shield" />
+	</ImageSet>
+	
+	<ImageSet id="invincibility">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="invincibility" />
+	</ImageSet>
+	
+	<ImageSet id="shoes">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="shoes" />
+	</ImageSet>
+	
+	<ImageSet id="sonic">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="sonic" />
+	</ImageSet>
+	
+	<ImageSet id="tails">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="tails" />
+	</ImageSet>
+	
+	<ImageSet id="knux">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="knux" />
+	</ImageSet>
+	
+	<ImageSet id="super">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="super" />
+	</ImageSet>
+	
+	<ImageSet id="bubble">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="bubble" />
+	</ImageSet>
+	
+	<ImageSet id="flame">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="flame" />
+	</ImageSet>
+	
+	<ImageSet id="lightning">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="lightning" />
+	</ImageSet>
+	
+	<ImageSet id="robotnik">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="robotnik" />
+	</ImageSet>
+	
+	<ImageSet id="teleport">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="teleport" />
+	</ImageSet>
+	
+	<ImageSet id="random">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="random" />
+	</ImageSet>
+	
+	<ImageSet id="toggle">
+	  <ImageRef image="monitor" />
+	  <ImageRef image="toggle" />
+	</ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="none" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="None" image="none" />
+    <Subtype id="01" name="Rings" image="rings" />
+    <Subtype id="02" name="Blue Shield" image="shield" />
+    <Subtype id="03" name="Invincibility" image="invincibility" />
+    <Subtype id="04" name="Speed Shoes" image="shoes" />
+    <Subtype id="05" name="Sonic 1UP" image="sonic" />
+	<Subtype id="06" name="Tails 1UP" image="tails" />
+	<Subtype id="07" name="Knux 1UP" image="knux" />
+	<Subtype id="08" name="Super" image="super" />
+	<Subtype id="09" name="Bubble Shield" image="bubble" />
+	<Subtype id="10" name="Flame Shield" image="flame" />
+	<Subtype id="11" name="Lightning Shield" image="lightning" />
+	<Subtype id="12" name="Robotnik" image="robotnik" />
+	<Subtype id="13" name="Teleport" image="teleport" />
+	<Subtype id="14" name="Random" image="random" />
+	<Subtype id="15" name="Shield Toggle" image="toggle" />
+  </Subtypes>
+  <Properties>
+    <Property name="Contents" type="Contents" startbit="0" length="4" />
+	<Property name="AltContents" type="AltContents" startbit="4" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="MonitorType">
+      <EnumMember name="Blank" />
+      <EnumMember name="Rings" />
+      <EnumMember name="Shield" />
+      <EnumMember name="Invincibility" />
+      <EnumMember name="Shoes" />
+      <EnumMember name="Sonic" />
+      <EnumMember name="Clock" />
+      <EnumMember name="Tails" />
+      <EnumMember name="Super" />
+      <EnumMember name="Static" />
+    </Enum>
+  </Enums>
+</ObjDef>

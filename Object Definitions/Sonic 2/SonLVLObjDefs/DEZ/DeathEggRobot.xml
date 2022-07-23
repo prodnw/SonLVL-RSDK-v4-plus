@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="sprite">
+  <Images>
+    <ImageFromSheet id="sprite" sheet="DEZ/Objects.gif" sourcex="399" sourcey="183" width="112" height="72">
+      <Offset X="-44" Y="-36"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Start Cutscene After Defeat" image="sprite" />
+	<Subtype id="01" name="No Cutscene After Defeat" image="sprite" />
+  </Subtypes>
+</ObjDef>

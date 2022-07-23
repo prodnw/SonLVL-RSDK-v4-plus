@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="sprite">
+  <Images>
+    <ImageFromSheet id="sprite" sheet="Global/Items2.gif" sourcex="34" sourcey="100" width="48" height="48">
+      <Offset X="-24" Y="-24"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Normal" image="sprite" />
+	<Subtype id="01" name="VS Only (Y Bounds)" image="sprite" />
+	<Subtype id="02" name="VS Only (No Y Bounds)" image="sprite" />
+  </Subtypes>
+</ObjDef>

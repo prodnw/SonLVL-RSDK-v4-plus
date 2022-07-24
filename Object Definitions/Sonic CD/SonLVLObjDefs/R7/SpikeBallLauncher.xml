@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="up">
+  <Images>
+    <ImageFromSheet id="up" sheet="R7/Objects.gif" sourcex="133" sourcey="1" width="32" height="16">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="down" sheet="R7/Objects.gif" sourcex="166" sourcey="1" width="32" height="16">
+      <Offset X="-16" Y="0"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="left" sheet="R7/Objects.gif" sourcex="1" sourcey="166" width="16" height="32">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="right" sheet="R7/Objects.gif" sourcex="17" sourcey="166" width="16" height="32">
+      <Offset X="0" Y="-16"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="ball" sheet="R7/Objects.gif" sourcex="1" sourcey="199" width="32" height="32">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="up">
+	  <ImageRef image="ball">
+	    <Offset Y="-16" />
+	  </ImageRef>
+	  <ImageRef image="up" />
+	</ImageSet>
+	<ImageSet id="down">
+	  <ImageRef image="ball">
+	    <Offset Y="16" />
+	  </ImageRef>
+	  <ImageRef image="down" />
+	</ImageSet>
+	<ImageSet id="left">
+	  <ImageRef image="ball">
+	    <Offset X="-16" />
+	  </ImageRef>
+	  <ImageRef image="left" />
+	</ImageSet>
+	<ImageSet id="right">
+	  <ImageRef image="ball">
+	    <Offset X="16" />
+	  </ImageRef>
+	  <ImageRef image="right" />
+	</ImageSet>
+  </ImageSets>
+  <Subtypes>
+    <Subtype id="00" name="Facing Up">
+	  <ImageSetRef set="up" />
+	</Subtype>
+	<Subtype id="01" name="Facing Down">
+	  <ImageSetRef set="down" />
+	</Subtype>
+	<Subtype id="02" name="Facing Left">
+	  <ImageSetRef set="left" />
+	</Subtype>
+	<Subtype id="03" name="Facing Right">
+	  <ImageSetRef set="right" />
+	</Subtype>
+  </Subtypes>
+</ObjDef>

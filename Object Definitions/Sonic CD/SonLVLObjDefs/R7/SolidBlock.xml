@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="block">
+  <Images>
+    <ImageFromSheet id="block" sheet="R7/Objects.gif" sourcex="1" sourcey="1" width="32" height="32">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="single">
+	  <ImageRef image="block" />
+	</ImageSet>
+	
+	<ImageSet id="twoH">
+	  <ImageRef image="block">
+	    <Offset X="-16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset X="16" />
+      </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="threeH">
+	  <ImageRef image="block">
+	    <Offset X="-32" />
+      </ImageRef>
+	  <ImageRef image="block" />
+	  <ImageRef image="block">
+	    <Offset X="32" />
+      </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="fourH">
+	  <ImageRef image="block">
+	    <Offset X="-48" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset X="-16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset X="16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset X="48" />
+      </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="twoV">
+	  <ImageRef image="block">
+	    <Offset Y="-16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset Y="16" />
+      </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="threeV">
+	  <ImageRef image="block">
+	    <Offset Y="-32" />
+      </ImageRef>
+	  <ImageRef image="block" />
+	  <ImageRef image="block">
+	    <Offset Y="32" />
+      </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="fourV">
+	  <ImageRef image="block">
+	    <Offset Y="-48" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset Y="-16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset Y="16" />
+      </ImageRef>
+	  <ImageRef image="block">
+	    <Offset Y="48" />
+      </ImageRef>
+	</ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="single" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Single Block">
+	  <ImageSetRef set="single" />
+	</Subtype>
+	<Subtype id="01" name="Two Blocks (Horizontal)">
+	  <ImageSetRef set="twoH" />
+	</Subtype>
+	<Subtype id="02" name="Thre Blocks (Horizontal)">
+	  <ImageSetRef set="threeH" />
+	</Subtype>
+	<Subtype id="03" name="Four Blocks (Horizontal)">
+	  <ImageSetRef set="fourH" />
+	</Subtype>
+	<Subtype id="04" name="Two Blocks (Vertical)">
+	  <ImageSetRef set="twoV" />
+	</Subtype>
+	<Subtype id="05" name="Three Blocks (Vertical)">
+	  <ImageSetRef set="threeV" />
+	</Subtype>
+	<Subtype id="06" name="Four Blocks (Vertical)">
+	  <ImageSetRef set="fourV" />
+	</Subtype>
+	<Subtype id="07" name="Invisible Block">
+	  <ImageSetRef set="single" />
+	</Subtype>
+  </Subtypes>
+</ObjDef>

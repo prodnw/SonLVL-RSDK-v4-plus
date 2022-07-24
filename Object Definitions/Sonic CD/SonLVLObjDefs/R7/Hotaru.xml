@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="good">
+  <Images>
+    <ImageFromSheet id="good" sheet="R7/Objects.gif" sourcex="182" sourcey="121" width="40" height="24">
+      <Offset X="-20" Y="-12"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="bad" sheet="R7/Objects.gif" sourcex="182" sourcey="146" width="40" height="24">
+      <Offset X="-20" Y="-12"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="formAG">
+	  <ImageRef image="good">
+		<Offset X="-32" Y="-35" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="good">
+		<Offset X="32" Y="35" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formAB">
+	  <ImageRef image="bad">
+		<Offset X="-32" Y="-35" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="bad">
+		<Offset X="32" Y="35" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formBG">
+	  <ImageRef image="good">
+		<Offset X="-50" Y="-68" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="good">
+		<Offset X="50" Y="68" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formBB">
+	  <ImageRef image="bad">
+		<Offset X="-50" Y="-68" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="bad">
+		<Offset X="50" Y="68" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formCG">
+	  <ImageRef image="good">
+		<Offset X="-70" Y="-56" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="good">
+		<Offset X="70" Y="56" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formCB">
+	  <ImageRef image="bad">
+		<Offset X="-70" Y="-56" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="bad">
+		<Offset X="70" Y="56" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	
+	<ImageSet id="formDG">
+	  <ImageRef image="good">
+		<Offset X="-96" Y="-18" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="good">
+		<Offset X="96" Y="18" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+	  
+	<ImageSet id="formDB">
+	  <ImageRef image="bad">
+		<Offset X="-96" Y="-18" xflip="NeverFlip"/>
+	  </ImageRef>
+	  <ImageRef image="bad">
+		<Offset X="96" Y="18" xflip="AlwaysFlip"/>
+	  </ImageRef>
+	</ImageSet>
+  </ImageSets>
+  
+  <DefaultImage>
+    <ImageSetRef set="formAG" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Formation A, Good">
+	  <ImageSetRef set="formAG" />
+	</Subtype>
+	<Subtype id="01" name="Formation A, Bad">
+	  <ImageSetRef set="formAB" />
+	</Subtype>
+	
+	<Subtype id="04" name="Formation B, Good">
+	  <ImageSetRef set="formBG" />
+	</Subtype>
+	<Subtype id="05" name="Formation B, Bad">
+	  <ImageSetRef set="formBB" />
+	</Subtype>
+	
+	<Subtype id="08" name="Formation C, Good">
+	  <ImageSetRef set="formCG" />
+	</Subtype>
+	<Subtype id="09" name="Formation C, Bad">
+	  <ImageSetRef set="formCB" />
+	</Subtype>
+	
+	<Subtype id="0C" name="Formation D, Good">
+	  <ImageSetRef set="formDG" />
+	</Subtype>
+	<Subtype id="0D" name="Formation D, Bad">
+	  <ImageSetRef set="formDB" />
+	</Subtype>
+  </Subtypes>
+</ObjDef>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="spikeball">
+  <Images>
+    <ImageFromSheet id="spikeball" sheet="R7/Objects.gif" sourcex="1" sourcey="199" width="32" height="32">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Horizontal Movement" image="spikeball" />
+	<Subtype id="01" name="Vertical Movement" image="spikeball" />
+  </Subtypes>
+</ObjDef>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="signpost">
+  <Images>
+    <ImageFromSheet id="signpost" sheet="Global/Items2.gif" sourcex="34" sourcey="182" width="48" height="48">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Normal" image="signpost" />
+    <Subtype id="03" name="Follow Bounds" image="signpost" />
+  </Subtypes>
+</ObjDef>

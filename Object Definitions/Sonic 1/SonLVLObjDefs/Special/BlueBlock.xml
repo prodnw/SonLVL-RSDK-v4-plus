@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org">
+  <Images>
+    <ImageFromSheet id="spr1" sheet="Special/Objects.gif" sourcex="126" sourcey="76" width="24" height="24">
+      <Offset X="-12" Y="-12"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spr2" sheet="Special/Objects.gif" sourcex="151" sourcey="76" width="20" height="16">
+      <Offset X="-10" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spr3" sheet="Special/Objects.gif" sourcex="1" sourcey="1" width="24" height="24">
+      <Offset X="-12" Y="-12"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+	<Property name="Colour Change Offset" type="changeoffset" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="changeoffset">
+      <EnumMember name="Frame 0" />
+	  <EnumMember name="Frame 1" />
+	  <EnumMember name="Frame 2" />
+	  <EnumMember name="Frame 3" />
+	  <EnumMember name="Frame 4" />
+	  <EnumMember name="Frame 5" />
+	  <EnumMember name="Frame 6" />
+	  <EnumMember name="Frame 7" />
+    </Enum>
+  </Enums>
+  <ImageSets>
+    <ImageSet id="frame">
+      <ImageRef image="spr1" />
+	  <ImageRef image="spr2" />
+	  <ImageRef image="spr3" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="frame" />
+  </DefaultImage>
+</ObjDef>

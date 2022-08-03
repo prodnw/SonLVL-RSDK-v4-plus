@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="spikes">
+  <Images>
+    <ImageFromSheet id="spikes" sheet="R5/Objects.gif" sourcex="34" sourcey="150" width="32" height="40">
+      <Offset X="-16" Y="-24"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="noSpikes" sheet="R5/Objects.gif" sourcex="66" sourcey="117" width="32" height="32">
+      <Offset X="-16" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Spiked" image="spikes" />
+    <Subtype id="01" name="No Spikes" image="noSpikes" />
+  </Subtypes>
+</ObjDef>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="head">
+  <Images>
+    <ImageFromSheet id="head" sheet="R5/Objects.gif" sourcex="125" sourcey="50" width="16" height="24">
+      <Offset X="-8" Y="-16"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="Bspike" sheet="R5/Objects.gif" sourcex="67" sourcey="150" width="16" height="24">
+      <Offset X="-8" Y="-16"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="Bnspike" sheet="R5/Objects.gif" sourcex="52" sourcey="1" width="16" height="16">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="spikes">
+	  <ImageRef image="Bspike" >
+		<Offset X="36" />
+	  </ImageRef>
+	  <ImageRef image="Bspike" >
+		<Offset X="24" />
+	  </ImageRef>
+	  <ImageRef image="Bspike" >
+		<Offset X="12" />
+	  </ImageRef>
+	  <ImageRef image="head" />
+	</ImageSet>
+	<ImageSet id="noSpikes">
+	  <ImageRef image="Bnspike" >
+		<Offset X="36" />
+	  </ImageRef>
+	  <ImageRef image="Bnspike" >
+		<Offset X="24" />
+	  </ImageRef>
+	  <ImageRef image="Bnspike" >
+		<Offset X="12" />
+	  </ImageRef>
+	  <ImageRef image="head" />
+	</ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="spikes" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Spiked">
+	  <ImageSetRef set="spikes" />
+	</Subtype>
+	<Subtype id="01" name="No Spikes">
+	  <ImageSetRef set="noSpikes" />
+	</Subtype>
+  </Subtypes>
+</ObjDef>

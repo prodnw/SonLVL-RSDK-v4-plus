@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="good">
+  <Images>
+    <ImageFromSheet id="good" sheet="R5/Objects.gif" sourcex="199" sourcey="1" width="56" height="36">
+      <Offset X="-28" Y="-20"/>
+    </ImageFromSheet>
+	<ImageFromSheet id="bad" sheet="R5/Objects.gif" sourcex="199" sourcey="71" width="56" height="36">
+      <Offset X="-28" Y="-20"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Good Condition" image="good" />
+    <Subtype id="01" name="Bad Condition" image="bad" />
+  </Subtypes>
+</ObjDef>

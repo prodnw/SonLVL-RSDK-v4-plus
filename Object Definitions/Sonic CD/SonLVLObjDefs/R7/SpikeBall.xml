@@ -7,6 +7,6 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Horizontal Movement" image="spikeball" />
-	<Subtype id="01" name="Vertical Movement" image="spikeball" />
+    <Subtype id="01" name="Vertical Movement" image="spikeball" />
   </Subtypes>
 </ObjDef>

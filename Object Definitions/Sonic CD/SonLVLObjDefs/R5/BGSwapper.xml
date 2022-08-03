@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="trigger">
+  <Images>
+    <ImageFromSheet id="trigger" sheet="Global/Display.gif" sourcex="173" sourcey="67" width="16" height="16">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Inside on Left, Outside on Right" image="trigger" />
+    <Subtype id="01" name="Outside on Left, Inside on Right" image="trigger" />
+  </Subtypes>
+</ObjDef>

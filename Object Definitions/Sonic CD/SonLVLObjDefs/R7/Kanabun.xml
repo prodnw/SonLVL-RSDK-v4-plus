@@ -11,6 +11,6 @@
   <Subtypes>
     <Subtype id="00" name="Good Condition" image="good" />
     <Subtype id="01" name="Bad Condition" image="bad" />
-	<Subtype id="02" name="Good Condition (Return to High Layer)" image="good" />
+    <Subtype id="02" name="Good Condition (Return to High Layer)" image="good" />
   </Subtypes>
 </ObjDef>

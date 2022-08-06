@@ -4,12 +4,27 @@
     <ImageFromSheet id="good" sheet="R7/Objects.gif" sourcex="116" sourcey="121" width="32" height="24">
       <Offset X="-16" Y="-7"/>
     </ImageFromSheet>
-	<ImageFromSheet id="bad" sheet="R7/Objects.gif" sourcex="116" sourcey="146" width="32" height="24">
+    <ImageFromSheet id="bad" sheet="R7/Objects.gif" sourcex="116" sourcey="146" width="32" height="24">
       <Offset X="-16" Y="-7"/>
     </ImageFromSheet>
   </Images>
-  <Subtypes>
-    <Subtype id="00" name="Good Condition" image="good" />
-    <Subtype id="01" name="Bad Condition" image="bad" />
-  </Subtypes>
+  <Properties>
+    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="BadnikConditions">
+	  <EnumMember name="Good" />
+	  <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Condition" value="Good" />
+      <ImageRef image="good" />
+    </DisplayOption>
+	<DisplayOption>
+      <Condition property="Condition" value="Bad" />
+      <ImageRef image="bad" />
+    </DisplayOption>
+  </Display>
 </ObjDef>

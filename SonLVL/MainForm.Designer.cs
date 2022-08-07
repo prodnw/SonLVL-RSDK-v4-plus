@@ -2788,10 +2788,15 @@ namespace SonicRetro.SonLVL.GUI
             65536});
 			this.scrollScrollSpeed.Location = new System.Drawing.Point(118, 316);
 			this.scrollScrollSpeed.Maximum = new decimal(new int[] {
-            3984375,
+            1984375,
             0,
             0,
             393216});
+			this.scrollScrollSpeed.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            -2147483648});
 			this.scrollScrollSpeed.Name = "scrollScrollSpeed";
 			this.scrollScrollSpeed.Size = new System.Drawing.Size(81, 20);
 			this.scrollScrollSpeed.TabIndex = 11;
@@ -2891,10 +2896,15 @@ namespace SonicRetro.SonLVL.GUI
             65536});
 			this.layerScrollSpeed.Location = new System.Drawing.Point(118, 29);
 			this.layerScrollSpeed.Maximum = new decimal(new int[] {
-            3984375,
+            1984375,
             0,
             0,
             393216});
+			this.layerScrollSpeed.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            -2147483648});
 			this.layerScrollSpeed.Name = "layerScrollSpeed";
 			this.layerScrollSpeed.Size = new System.Drawing.Size(81, 20);
 			this.layerScrollSpeed.TabIndex = 3;

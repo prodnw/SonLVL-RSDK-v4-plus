@@ -308,10 +308,13 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LoadINI(string filename)
 		{
+#if !DEBUG
 			try
+#endif
 			{
 				LevelData.LoadGame(filename);
 			}
+#if !DEBUG
 			catch (Exception ex)
 			{
 				fileToolStripMenuItem.HideDropDown();
@@ -320,6 +323,7 @@ namespace SonicRetro.SonLVL.GUI
 					ed.ShowDialog(this);
 				return;
 			}
+#endif
 			modMenuItems = new List<ModStuff>();
 			selectModToolStripMenuItem.DropDownItems.Clear();
 			ModStuff ms = new ModStuff();
@@ -512,8 +516,8 @@ namespace SonicRetro.SonLVL.GUI
 
 		private IEnumerable<string> GetFilesRelative(string folder, string pattern) => Directory.EnumerateFiles(folder, pattern, SearchOption.AllDirectories).Select(a => a.Substring(folder.Length + 1).Replace(Path.DirectorySeparatorChar, '/'));
 
-		#region Main Menu
-		#region File Menu
+#region Main Menu
+#region File Menu
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (loaded && LevelData.ModFolder != null)
@@ -857,12 +861,12 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Close();
 		}
-		#endregion
+#endregion
 
-		#region Edit Menu
-		#endregion
+#region Edit Menu
+#endregion
 
-		#region View Menu
+#region View Menu
 		private void includeObjectsWithFGToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			Settings.IncludeObjectsFG = includeobjectsWithFGToolStripMenuItem.Checked;
@@ -971,9 +975,9 @@ namespace SonicRetro.SonLVL.GUI
 			LogWindow.Show(this);
 			logToolStripMenuItem.Enabled = false;
 		}
-		#endregion
+#endregion
 
-		#region Export Menu
+#region Export Menu
 		private void pNGToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "png", Filter = "PNG Files|*.png", RestoreDirectory = true })
@@ -1323,9 +1327,9 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Settings.ExportArtCollisionPriority = exportArtcollisionpriorityToolStripMenuItem.Checked;
 		}
-		#endregion
+#endregion
 
-		#region Help Menu
+#region Help Menu
 		private void viewReadmeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "readme.txt"));
@@ -1336,8 +1340,8 @@ namespace SonicRetro.SonLVL.GUI
 			using (BugReportDialog err = new BugReportDialog("SonLVL-RSDK", string.Join(Environment.NewLine, LogFile.ToArray())))
 				err.ShowDialog();
 		}
-		#endregion
-		#endregion
+#endregion
+#endregion
 
 		void ObjectSelect_listView2_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -6742,7 +6746,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void layerScrollSpeed_ValueChanged(object sender, EventArgs e)
 		{
-			LevelData.Background.layers[bglayer].scrollSpeed = (byte)(layerScrollSpeed.Value * 64m);
+			LevelData.Background.layers[bglayer].scrollSpeed = (sbyte)(layerScrollSpeed.Value * 64m);
 			if (scrollFrame.Value > 0)
 				DrawLevel();
 		}

@@ -1312,7 +1312,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						++height;
 					RSDKv3_4.Backgrounds.Layer bg = new RSDKv3.Backgrounds.Layer((byte)width, (byte)height)
 					{
-						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						scrollSpeed = (sbyte)(layer.scrollSpeed >> 2),
 						parallaxFactor = layer.parallaxFactor,
 					};
 					switch (layer.type)
@@ -1324,7 +1324,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							{
 								deform = a.deform,
 								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.VScroll:
@@ -1334,7 +1334,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							{
 								deform = a.deform,
 								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.RotoZoom:
@@ -1675,7 +1675,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						++height;
 					RSDKv3_4.Backgrounds.Layer bg = new RSDKv4.Backgrounds.Layer((byte)width, (byte)height)
 					{
-						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						scrollSpeed = (sbyte)(layer.scrollSpeed >> 2),
 						parallaxFactor = layer.parallaxFactor,
 					};
 					switch (layer.type)
@@ -1687,7 +1687,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							{
 								deform = a.deform,
 								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.VScroll:
@@ -1697,7 +1697,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 							{
 								deform = a.deform,
 								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (byte)(a.scrollSpeed >> 2)
+								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.RotoZoom:

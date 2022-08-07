@@ -691,9 +691,9 @@ namespace SonicRetro.SonLVL.API
 			ScrollSpeed = info.scrollSpeed / 64m;
 		}
 
-		public RSDKv3.Backgrounds.ScrollInfo GetInfoV3() => new RSDKv3.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (byte)(ScrollSpeed * 64) };
+		public RSDKv3.Backgrounds.ScrollInfo GetInfoV3() => new RSDKv3.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (sbyte)(ScrollSpeed * 64) };
 
-		public RSDKv4.Backgrounds.ScrollInfo GetInfoV4() => new RSDKv4.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (byte)(ScrollSpeed * 64) };
+		public RSDKv4.Backgrounds.ScrollInfo GetInfoV4() => new RSDKv4.Backgrounds.ScrollInfo() { deform = Deform, parallaxFactor = (short)(ParallaxFactor * 256), scrollSpeed = (sbyte)(ScrollSpeed * 64) };
 	}
 
 	public class ModInfo

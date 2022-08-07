@@ -2,68 +2,68 @@
 <ObjDef xmlns="http://www.sonicretro.org" Image="plats">
   <Images>
     <ImageFromSheet id="plats" sheet="R5/Objects.gif" sourcex="1" sourcey="51" width="32" height="32">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
-	<ImageFromSheet id="platm" sheet="R5/Objects.gif" sourcex="34" sourcey="51" width="64" height="32">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
-	<ImageFromSheet id="platl" sheet="R5/Objects.gif" sourcex="1" sourcey="84" width="96" height="32">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
-	<ImageFromSheet id="convs" sheet="R5/Objects.gif" sourcex="65" sourcey="208" width="32" height="16">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
-	<ImageFromSheet id="convm" sheet="R5/Objects.gif" sourcex="1" sourcey="208" width="64" height="16">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
-	<ImageFromSheet id="convl" sheet="R5/Objects.gif" sourcex="1" sourcey="191" width="96" height="16">
-	  <Offset X="-24" Y="-16"/>
-	</ImageFromSheet>
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="platm" sheet="R5/Objects.gif" sourcex="34" sourcey="51" width="64" height="32">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="platl" sheet="R5/Objects.gif" sourcex="1" sourcey="84" width="96" height="32">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="convs" sheet="R5/Objects.gif" sourcex="65" sourcey="208" width="32" height="16">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="convm" sheet="R5/Objects.gif" sourcex="1" sourcey="208" width="64" height="16">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="convl" sheet="R5/Objects.gif" sourcex="1" sourcey="191" width="96" height="16">
+      <Offset X="-24" Y="-16"/>
+    </ImageFromSheet>
   </Images>
   <ImageSets>
     <ImageSet id="small">
-	  <ImageRef image="plats" />
-	</ImageSet>
-	<ImageSet id="medium">
-	  <ImageRef image="platm" />
-	</ImageSet>
-	<ImageSet id="large">
-	  <ImageRef image="platl" />
-	</ImageSet>
-	<ImageSet id="smallcv">
-	  <ImageRef image="plats" />
-	  <ImageRef image="convs" />
-	</ImageSet>
-	<ImageSet id="mediumcv">
-	  <ImageRef image="platm" />
-	  <ImageRef image="convm" />
-	</ImageSet>
-	<ImageSet id="largecv">
-	  <ImageRef image="platl" />
-	  <ImageRef image="convl" />
-	</ImageSet>
+      <ImageRef image="plats" />
+    </ImageSet>
+    <ImageSet id="medium">
+      <ImageRef image="platm" />
+    </ImageSet>
+    <ImageSet id="large">
+      <ImageRef image="platl" />
+    </ImageSet>
+    <ImageSet id="smallcv">
+      <ImageRef image="plats" />
+      <ImageRef image="convs" />
+    </ImageSet>
+    <ImageSet id="mediumcv">
+      <ImageRef image="platm" />
+      <ImageRef image="convm" />
+    </ImageSet>
+    <ImageSet id="largecv">
+      <ImageRef image="platl" />
+      <ImageRef image="convl" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="small" />
   </DefaultImage>
   <Subtypes>
     <Subtype id="00" name="Small Platform">
-	  <ImageSetRef set="small" />
-	</Subtype>
-	<Subtype id="01" name="Medium Platform">
-	  <ImageSetRef set="medium" />
-	</Subtype>
-	<Subtype id="02" name="Large Platform">
-	  <ImageSetRef set="large" />
-	</Subtype>
-	<Subtype id="03" name="Small Conveyor Platform">
-	  <ImageSetRef set="smallcv" />
-	</Subtype>
-	<Subtype id="04" name="Medium Conveyor Platform">
-	  <ImageSetRef set="mediumcv" />
-	</Subtype>
-	<Subtype id="05" name="Large Conveyor Platform">
-	  <ImageSetRef set="largecv" />
-	</Subtype>
+      <ImageSetRef set="small" />
+    </Subtype>
+    <Subtype id="01" name="Medium Platform">
+      <ImageSetRef set="medium" />
+    </Subtype>
+    <Subtype id="02" name="Large Platform">
+      <ImageSetRef set="large" />
+    </Subtype>
+    <Subtype id="03" name="Small Conveyor Platform">
+      <ImageSetRef set="smallcv" />
+    </Subtype>
+    <Subtype id="04" name="Medium Conveyor Platform">
+      <ImageSetRef set="mediumcv" />
+    </Subtype>
+    <Subtype id="05" name="Large Conveyor Platform">
+      <ImageSetRef set="largecv" />
+    </Subtype>
   </Subtypes>
 </ObjDef>

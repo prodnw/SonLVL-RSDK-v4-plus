@@ -4,48 +4,48 @@
     <ImageFromSheet id="head" sheet="R5/Objects.gif" sourcex="125" sourcey="50" width="16" height="24">
       <Offset X="-8" Y="-16"/>
     </ImageFromSheet>
-	<ImageFromSheet id="Bspike" sheet="R5/Objects.gif" sourcex="67" sourcey="150" width="16" height="24">
+	<ImageFromSheet id="good" sheet="R5/Objects.gif" sourcex="67" sourcey="150" width="16" height="24">
       <Offset X="-8" Y="-16"/>
     </ImageFromSheet>
-	<ImageFromSheet id="Bnspike" sheet="R5/Objects.gif" sourcex="52" sourcey="1" width="16" height="16">
+	<ImageFromSheet id="bad" sheet="R5/Objects.gif" sourcex="52" sourcey="1" width="16" height="16">
       <Offset X="-8" Y="-8"/>
     </ImageFromSheet>
   </Images>
-  <ImageSets>
-    <ImageSet id="spikes">
-	  <ImageRef image="Bspike" >
+  <Properties>
+    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="BadnikConditions">
+	  <EnumMember name="Good" />
+	  <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Condition" value="Good" />
+      <ImageRef image="good" >
 		<Offset X="36" />
 	  </ImageRef>
-	  <ImageRef image="Bspike" >
+	  <ImageRef image="good" >
 		<Offset X="24" />
 	  </ImageRef>
-	  <ImageRef image="Bspike" >
+	  <ImageRef image="good" >
 		<Offset X="12" />
 	  </ImageRef>
 	  <ImageRef image="head" />
-	</ImageSet>
-	<ImageSet id="noSpikes">
-	  <ImageRef image="Bnspike" >
+    </DisplayOption>
+	<DisplayOption>
+      <Condition property="Condition" value="Bad" />
+      <ImageRef image="bad" >
 		<Offset X="36" />
 	  </ImageRef>
-	  <ImageRef image="Bnspike" >
+	  <ImageRef image="bad" >
 		<Offset X="24" />
 	  </ImageRef>
-	  <ImageRef image="Bnspike" >
+	  <ImageRef image="bad" >
 		<Offset X="12" />
 	  </ImageRef>
 	  <ImageRef image="head" />
-	</ImageSet>
-  </ImageSets>
-  <DefaultImage>
-    <ImageSetRef set="spikes" />
-  </DefaultImage>
-  <Subtypes>
-    <Subtype id="00" name="Spiked">
-	  <ImageSetRef set="spikes" />
-	</Subtype>
-	<Subtype id="01" name="No Spikes">
-	  <ImageSetRef set="noSpikes" />
-	</Subtype>
-  </Subtypes>
+    </DisplayOption>
+  </Display>
 </ObjDef>

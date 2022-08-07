@@ -13,10 +13,10 @@
   </Images>
   <ImageSets>
     <ImageSet id="top">
-	  <ImageRef image="spr1" />
-	  <ImageRef image="spr2" />
-	  <ImageRef image="spr3" />
-	</ImageSet>
+      <ImageRef image="spr1" />
+      <ImageRef image="spr2" />
+      <ImageRef image="spr3" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="top" />

@@ -19,12 +19,12 @@
   </Images>
   <ImageSets>
     <ImageSet id="img">
-	  <ImageRef image="projector" />
-	  <ImageRef image="light" />
-	  <ImageRef image="metal" />
-	  <ImageRef image="squirrel" />
-	  <ImageRef image="bluebird" />
-	</ImageSet>
+      <ImageRef image="projector" />
+      <ImageRef image="light" />
+      <ImageRef image="metal" />
+      <ImageRef image="squirrel" />
+      <ImageRef image="bluebird" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="img" />

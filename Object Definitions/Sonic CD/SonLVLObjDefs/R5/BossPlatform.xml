@@ -10,9 +10,9 @@
   </Images>
   <ImageSets>
     <ImageSet id="platform">
-	  <ImageRef image="plat" />
-	  <ImageRef image="bottom" />
-	</ImageSet>
+      <ImageRef image="plat" />
+      <ImageRef image="bottom" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="platform" />

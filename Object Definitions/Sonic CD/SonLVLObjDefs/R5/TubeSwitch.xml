@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="icon" Debug="true" >
+  <Images>
+    <ImageFromSheet id="icon" sheet="Global/Display.gif" sourcex="173" sourcey="67" width="16" height="16">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+	<ImageSet id="tubeswitch">
+	  <ImageRef image="icon">
+	    <Offset X="-8" Y="-8" />
+      </ImageRef>
+	  <ImageRef image="icon">
+	    <Offset X="-8" Y="8" />
+      </ImageRef>
+	  <ImageRef image="icon">
+	    <Offset X="8" Y="-8" />
+      </ImageRef>
+	  <ImageRef image="icon">
+	    <Offset X="8" Y="8" />
+      </ImageRef>
+	</ImageSet>
+  </ImageSets>
+  <Properties>
+    <Property name="Type" type="AutoSpinTypes" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="AutoSpinTypes">
+      <EnumMember name="Left Enterance, Right Exit" />
+	  <EnumMember name="Right Enterance, Left Exit" />
+	  <EnumMember name="Wall Unstick" />
+	  <EnumMember name="Downwards Conveyor" />
+	  <EnumMember name="Upwards Conveyor" />
+	  <EnumMember name="Upwards Normal" />
+	  <EnumMember name="Downwards Normal" />
+	  <EnumMember name="Conveyor Tunnel Middle" />
+	  <EnumMember name="Conveyor Tunnel Endpoints" />
+    </Enum>
+  </Enums>
+  <DefaultImage>
+    <ImageSetRef set="tubeswitch" />
+  </DefaultImage>
+</ObjDef>

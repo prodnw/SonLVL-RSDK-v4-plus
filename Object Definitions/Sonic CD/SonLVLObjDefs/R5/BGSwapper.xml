@@ -5,8 +5,13 @@
       <Offset X="-8" Y="-8"/>
     </ImageFromSheet>
   </Images>
-  <Subtypes>
-    <Subtype id="00" name="Inside on Left, Outside on Right" image="trigger" />
-    <Subtype id="01" name="Outside on Left, Inside on Right" image="trigger" />
-  </Subtypes>
+  <Properties>
+    <Property name="Type" type="switchtypes" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="switchtypes">
+      <EnumMember name="Inside on Left, Outside on Right" />
+      <EnumMember name="Outside on Left, Inside on Right" />
+    </Enum>
+  </Enums>
 </ObjDef>

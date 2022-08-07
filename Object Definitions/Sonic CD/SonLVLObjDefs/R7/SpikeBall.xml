@@ -5,8 +5,18 @@
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
   </Images>
-  <Subtypes>
-    <Subtype id="00" name="Horizontal Movement" image="spikeball" />
-    <Subtype id="01" name="Vertical Movement" image="spikeball" />
-  </Subtypes>
+  <Properties>
+    <Property name="Movement" type="Axis" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="Directions">
+	  <EnumMember name="Vertical" />
+	  <EnumMember name="Horizontal" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+	  <ImageRef image="spikeball" />
+    </DisplayOption>
+  </Display>
 </ObjDef>

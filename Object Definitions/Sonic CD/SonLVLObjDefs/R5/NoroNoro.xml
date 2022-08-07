@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="spikes">
+<ObjDef xmlns="http://www.sonicretro.org" Image="good">
   <Images>
-    <ImageFromSheet id="spikes" sheet="R5/Objects.gif" sourcex="34" sourcey="150" width="32" height="40">
+    <ImageFromSheet id="good" sheet="R5/Objects.gif" sourcex="34" sourcey="150" width="32" height="40">
       <Offset X="-16" Y="-24"/>
     </ImageFromSheet>
-	<ImageFromSheet id="noSpikes" sheet="R5/Objects.gif" sourcex="66" sourcey="117" width="32" height="32">
+    <ImageFromSheet id="bad" sheet="R5/Objects.gif" sourcex="66" sourcey="117" width="32" height="32">
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
   </Images>
-  <Subtypes>
-    <Subtype id="00" name="Spiked" image="spikes" />
-    <Subtype id="01" name="No Spikes" image="noSpikes" />
-  </Subtypes>
+  <Properties>
+    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="BadnikConditions">
+	  <EnumMember name="Good" />
+	  <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Condition" value="Good" />
+      <ImageRef image="good" />
+    </DisplayOption>
+	<DisplayOption>
+      <Condition property="Condition" value="Bad" />
+      <ImageRef image="bad" />
+    </DisplayOption>
+  </Display>
 </ObjDef>

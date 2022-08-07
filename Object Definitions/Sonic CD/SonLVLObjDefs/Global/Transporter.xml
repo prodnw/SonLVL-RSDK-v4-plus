@@ -17,35 +17,35 @@
   </Images>
   <ImageSets>
     <ImageSet id="active">
-	  <ImageRef image="activebase" />
-	  <ImageRef image="activebase" yflip="ReverseFlip" />
-	  <ImageRef image="electricity">
-	    <Offset X="-6" Y="-8" />
-	  </ImageRef>
-	  <ImageRef image="electricity">
-	    <Offset X="-22" Y="-8" />
-	  </ImageRef>
-	  <ImageRef image="electricity">
-	    <Offset X="10" Y="-8" />
-	  </ImageRef>
-	</ImageSet>
+      <ImageRef image="activebase" />
+      <ImageRef image="activebase" yflip="ReverseFlip" />
+      <ImageRef image="electricity">
+        <Offset X="-6" Y="-8" />
+      </ImageRef>
+      <ImageRef image="electricity">
+        <Offset X="-22" Y="-8" />
+      </ImageRef>
+      <ImageRef image="electricity">
+        <Offset X="10" Y="-8" />
+      </ImageRef>
+    </ImageSet>
     <ImageSet id="inactive">
-	  <ImageRef image="inactivebase" />
-	  <ImageRef image="inactivebase" yflip="ReverseFlip" />
-	</ImageSet>
+      <ImageRef image="inactivebase" />
+      <ImageRef image="inactivebase" yflip="ReverseFlip" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="active" />
   </DefaultImage>
   <Subtypes>
     <Subtype id="00" name="Active">
-	  <ImageSetRef set="active" />
-	</Subtype>
+      <ImageSetRef set="active" />
+    </Subtype>
     <Subtype id="01" name="Inactive">
-	  <ImageSetRef set="inactive" />
-	</Subtype>
-	<Subtype id="02" name="Active, Destroyed" image="activedestroyed" />
-	<Subtype id="03" name="Inactive, Destroyed" image="inactivedestroyed" />
+      <ImageSetRef set="inactive" />
+    </Subtype>
+    <Subtype id="02" name="Active, Destroyed" image="activedestroyed" />
+    <Subtype id="03" name="Inactive, Destroyed" image="inactivedestroyed" />
   </Subtypes>
   <Properties>
     <Property name="Inactive" type="bool" startbit="0" length="1" />

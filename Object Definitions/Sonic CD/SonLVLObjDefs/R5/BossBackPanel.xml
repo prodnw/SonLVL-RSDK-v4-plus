@@ -10,9 +10,9 @@
   </Images>
   <ImageSets>
     <ImageSet id="backpanel">
-	  <ImageRef image="spr1" />
-	  <ImageRef image="spr2" />
-	</ImageSet>
+      <ImageRef image="spr1" />
+      <ImageRef image="spr2" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="backpanel" />

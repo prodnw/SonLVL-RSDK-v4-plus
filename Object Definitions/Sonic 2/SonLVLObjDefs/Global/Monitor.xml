@@ -129,7 +129,7 @@
     <DisplayOption>
       <Condition property="Contents" value="Bubble Shield" />
       <ImageRef image="base" />
-      <ImageRef image="Bubble" />
+      <ImageRef image="bubble" />
     </DisplayOption>
     <DisplayOption>
       <Condition property="Contents" value="Lightning Shield" />

@@ -7120,7 +7120,7 @@ namespace SonicRetro.SonLVL.GUI
 				case DialogResult.Yes:
 					List<ObjectEntry> todelete = new List<ObjectEntry>();
 					foreach (var item in LevelData.Objects)
-						switch (item.Type.CompareTo(idx))
+						switch (Math.Sign(item.Type.CompareTo(idx)))
 						{
 							case 1:
 								item.Type--;
@@ -7136,7 +7136,7 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					foreach (var astg in LevelData.AdditionalScenes)
 						for (int i = 0; i < astg.Scene.entities.Count; i++)
-							switch (astg.Scene.entities[i].type.CompareTo(idx))
+							switch (Math.Sign(astg.Scene.entities[i].type.CompareTo(idx)))
 							{
 								case 1:
 									astg.Scene.entities[i].type--;

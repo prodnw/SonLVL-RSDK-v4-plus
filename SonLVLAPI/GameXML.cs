@@ -101,9 +101,9 @@ namespace SonicRetro.SonLVL.API
 		{
 			this.bank = bank;
 			this.index = index;
-			r = color.R;
-			g = color.G;
-			b = color.B;
+			r = color.r;
+			g = color.g;
+			b = color.b;
 		}
 
 		public static explicit operator System.Drawing.Color(ColorXML item) => System.Drawing.Color.FromArgb(item.r, item.g, item.b);

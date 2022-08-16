@@ -608,7 +608,7 @@ namespace SonicRetro.SonLVL
 							if (edit)
 							{
 								Directory.CreateDirectory(Path.Combine(LevelData.ModFolder, $"Data/Stages/{stginf.folder}"));
-								scene.write(Path.Combine(LevelData.ModFolder, $"Data/Stages/{stginf.folder}/Act{stginf.id}.bin"));
+								scene.Write(Path.Combine(LevelData.ModFolder, $"Data/Stages/{stginf.folder}/Act{stginf.id}.bin"));
 							}
 						}
 						break;
@@ -651,10 +651,10 @@ namespace SonicRetro.SonLVL
 								var origpal = ((RSDKv4.GameConfig)origConf).masterPalette;
 								int i = 0;
 								for (int l = 0; l < modpal.colors.Length; l++)
-									for (int c = 0; c < modpal.COLORS_PER_ROW; c++)
+									for (int c = 0; c < modpal.colors[l].Length; c++)
 									{
 										if (i == 256) break;
-										if (origpal.colors[l][c].R != modpal.colors[l][c].R || origpal.colors[l][c].G != modpal.colors[l][c].G || origpal.colors[l][c].B != modpal.colors[l][c].B)
+										if (origpal.colors[l][c].r != modpal.colors[l][c].r || origpal.colors[l][c].g != modpal.colors[l][c].g || origpal.colors[l][c].b != modpal.colors[l][c].b)
 											LevelData.GameXML.palette.Add(new ColorXML(0, (byte)i, modpal.colors[l][c]));
 										++i;
 									}
@@ -701,7 +701,7 @@ namespace SonicRetro.SonLVL
 									var pal = ((RSDKv4.GameConfig)LevelData.GameConfig).masterPalette;
 									foreach (var item in LevelData.GameXML.palette.Where(a => a.bank == 0))
 									{
-										int l = Math.DivRem(item.index, pal.COLORS_PER_ROW, out int c);
+										int l = Math.DivRem(item.index, pal.colors[0].Length, out int c);
 										pal.colors[l][c] = new RSDKv3_4.Palette.Color(item.r, item.g, item.b);
 									}
 								}
@@ -724,7 +724,7 @@ namespace SonicRetro.SonLVL
 				LevelData.GameConfig.players = players;
 				for (int i = 0; i < 4; i++)
 					LevelData.GameConfig.stageLists[i].list = stages[i].Select(a => (RSDKv3_4.GameConfig.StageList.StageInfo)a).ToList();
-				LevelData.GameConfig.write(Path.Combine(LevelData.ModFolder, "Data/Game/GameConfig.bin"));
+				LevelData.GameConfig.Write(Path.Combine(LevelData.ModFolder, "Data/Game/GameConfig.bin"));
 			}
 			Close();
 		}

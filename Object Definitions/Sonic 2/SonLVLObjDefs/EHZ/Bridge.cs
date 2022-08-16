@@ -1,23 +1,22 @@
 using SonicRetro.SonLVL.API;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace SCDObjectDefinitions.Mission
+namespace S2ObjectDefinitions.EHZ
 {
-	class MissionBlock : ObjectDefinition
+	class Bridge : ObjectDefinition
 	{
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
+			img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(82, 78, 16, 16), -8, -8);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 8, 10, 12, 14, 16 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -27,7 +26,7 @@ namespace SCDObjectDefinitions.Mission
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype) + " blocks";
+			return (subtype) + " logs";
 		}
 
 		public override Sprite Image
@@ -42,11 +41,12 @@ namespace SCDObjectDefinitions.Mission
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
+			int st = -(((obj.PropertyValue) * 16) / 2) + 8;
 			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
+			for (int i = 0; i < (obj.PropertyValue); i++)
 			{
 				Sprite tmp = new Sprite(img);
-				tmp.Offset(i * 32, 0);
+				tmp.Offset(st + (i * 16), 0);
 				sprs.Add(tmp);
 			}
 			return new Sprite(sprs.ToArray());

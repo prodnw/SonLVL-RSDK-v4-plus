@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="horiz">
+  <Images>
+    <ImageFromSheet id="horiz" sheet="R1/Objects.gif" sourcex="117" sourcey="34" width="48" height="8">
+      <Offset X="-24" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="vert" sheet="R1/Objects.gif" sourcex="176" sourcey="43" width="8" height="48">
+      <Offset X="-4" Y="-24"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Orientation" type="Orientations" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="Orientations">
+	  <EnumMember name="Horizontal" />
+	  <EnumMember name="Vertical" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Orientation" value="Horizontal" />
+      <ImageRef image="horiz" />
+    </DisplayOption>
+	<DisplayOption>
+      <Condition property="Orientation" value="Vertical" />
+      <ImageRef image="vert" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

@@ -7,53 +7,55 @@ namespace SCDObjectDefinitions.R7
 {
 	class SolidBlock : ObjectDefinition
 	{
+		private PropertySpec[] properties;
 		private Sprite img;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }); }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("C"))
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(117, 219, 32, 28), -16, -16);
+				img = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(117, 219, 32, 32), -16, -16);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(1, 1, 32, 28), -16, -16);
+				img = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
 			}
+			
+			properties = new PropertySpec[1];
+			properties[0] = new PropertySpec("Formation", typeof(int), "Extended",
+				"The formation of the blocks.", null, new Dictionary<string, int>
+				{
+					{ "Single Block", 0},
+					{ "Two Blocks (Horizontal)", 1},
+					{ "Three Blocks (Horizontal)", 2},
+					{ "Four Blocks (Horizontal)", 3},
+					{ "Two Blocks (Vertical)", 4},
+					{ "Three Blocks (Vertical)", 5},
+					{ "Four Blocks (Vertical)", 6},
+					{ "Invisible Block", 7}
+				},
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype
 		{
 			get { return 0; }
 		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Single Block";
-				case 1:
-					return "Two Blocks (Horizontal)";
-				case 2:
-					return "Three Blocks (Horizontal)";
-				case 3:
-					return "Four Blocks (Horizontal)";
-				case 4:
-					return "Two Blocks (Vertical)";
-				case 5:
-					return "Three Blocks (Vertical)";
-				case 6:
-					return "Four Blocks (Vertical)";
-				case 7:
-					return "Invisible Block";
-				default:
-					return "Unknown";
-			}
+			return null;
 		}
 
 		public override Sprite Image
@@ -69,11 +71,10 @@ namespace SCDObjectDefinitions.R7
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			List<Sprite> blocks = new List<Sprite>();
-			Sprite block = new Sprite(img);
+			Sprite block;
 			switch (obj.PropertyValue)
 			{
 				case 0:
-				case 7:
 				default:
 					block = new Sprite(img);
 					blocks.Add(block);
@@ -142,8 +143,30 @@ namespace SCDObjectDefinitions.R7
 					block.Offset(0, 48);
 					blocks.Add(block);
 					break;
+				case 7:
+					break;
 			}
 			return new Sprite(blocks.ToArray());
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			if (obj.PropertyValue == 7)
+				return new Rectangle(obj.X - 16, obj.Y - 16, 32, 32);
+				
+			return Rectangle.Empty;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			if (obj.PropertyValue == 7)
+			{
+				var bitmap = new BitmapBits(33, 33);
+				bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 32, 32);
+				return new Sprite(bitmap, -16, -16);
+			}
+			
+			return null;
 		}
 	}
 }

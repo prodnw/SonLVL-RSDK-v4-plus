@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="anton_g">
+  <Images>
+    <ImageFromSheet id="anton_g" sheet="R1/Objects.gif" sourcex="1" sourcey="1" width="24" height="32">
+      <Offset X="-12" Y="-19"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="anton_b" sheet="R1/Objects.gif" sourcex="26" sourcey="1" width="24" height="32">
+      <Offset X="-12" Y="-19"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="wheel_g" sheet="R1/Objects.gif" sourcex="1" sourcey="34" width="16" height="16">
+      <Offset X="-8" Y="4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="wheel_b" sheet="R1/Objects.gif" sourcex="18" sourcey="34" width="16" height="16">
+      <Offset X="-8" Y="4"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="BadnikConditions">
+	  <EnumMember name="Good" />
+	  <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Condition" value="Good" />
+      <ImageRef image="anton_g" />
+	  <ImageRef image="wheel_g" />
+    </DisplayOption>
+	<DisplayOption>
+      <Condition property="Condition" value="Bad" />
+      <ImageRef image="anton_b" />
+	  <ImageRef image="wheel_b" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

@@ -90,6 +90,7 @@ namespace SCDObjectDefinitions.R7
 					break;
 				}
 			}
+			
 			return sprite;
 		}
 	}

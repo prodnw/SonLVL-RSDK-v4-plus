@@ -72,8 +72,8 @@
       <EnumMember name="Knuckles" />
       <EnumMember name="Super" />
       <EnumMember name="Bubble Shield" />
-      <EnumMember name="Lightning Shield" />
       <EnumMember name="Fire Shield" />
+      <EnumMember name="Lightning Shield" />
       <EnumMember name="Eggman" />
       <EnumMember name="Teleport" />
       <EnumMember name="Random" />
@@ -129,17 +129,17 @@
     <DisplayOption>
       <Condition property="Contents" value="Bubble Shield" />
       <ImageRef image="base" />
-      <ImageRef image="Bubble" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Contents" value="Lightning Shield" />
-      <ImageRef image="base" />
-      <ImageRef image="lightning" />
+      <ImageRef image="bubble" />
     </DisplayOption>
     <DisplayOption>
       <Condition property="Contents" value="Fire Shield" />
       <ImageRef image="base" />
       <ImageRef image="fire" />
+    </DisplayOption>
+    <DisplayOption>
+      <Condition property="Contents" value="Lightning Shield" />
+      <ImageRef image="base" />
+      <ImageRef image="lightning" />
     </DisplayOption>
     <DisplayOption>
       <Condition property="Contents" value="Eggman" />

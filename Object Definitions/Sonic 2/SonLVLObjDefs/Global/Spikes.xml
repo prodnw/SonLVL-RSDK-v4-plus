@@ -45,7 +45,7 @@
     </DisplayOption>
     <DisplayOption>
       <Condition property="Direction" value="Down" />
-      <ImageRef image="up" />
+      <ImageRef image="down" />
     </DisplayOption>
   </Display>
 </ObjDef>

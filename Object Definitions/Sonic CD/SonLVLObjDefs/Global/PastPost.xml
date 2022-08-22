@@ -10,9 +10,9 @@
   </Images>
   <ImageSets>
     <ImageSet id="img">
-	  <ImageRef image="post" />
-	  <ImageRef image="past" />
-	</ImageSet>
+      <ImageRef image="post" />
+      <ImageRef image="past" />
+    </ImageSet>
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="img" />

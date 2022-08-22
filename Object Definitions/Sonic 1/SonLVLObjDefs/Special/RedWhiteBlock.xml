@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="frame">
+  <Images>
+    <ImageFromSheet id="frame" sheet="Special/Objects.gif" sourcex="276" sourcey="76" width="24" height="24">
+      <Offset X="-12" Y="-12"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="framet" sheet="Special/Objects.gif" sourcex="401" sourcey="176" width="24" height="24">
+      <Offset X="-12" Y="-12"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Solid" image="frame" />
+    <Subtype id="01" name="Transparent (Enter from Top)" image="framet" />
+    <Subtype id="02" name="Transparent (Enter from Right)" image="framet" />
+    <Subtype id="03" name="Transparent (Enter from Left)" image="framet" />
+    <Subtype id="04" name="Transparent (Enter from Bottom)" image="framet" />
+    <Subtype id="05" name="Transparent (Enter from Right, Small)" image="framet" />
+  </Subtypes>
+</ObjDef>

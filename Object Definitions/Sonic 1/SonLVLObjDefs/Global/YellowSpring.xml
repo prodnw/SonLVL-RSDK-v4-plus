@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="up1">
+  <Images>
+    <ImageFromSheet id="up1" sheet="Global/Items.gif" sourcex="84" sourcey="9" width="32" height="8">
+      <Offset X="-16" Y="0"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="up2" sheet="Global/Items.gif" sourcex="84" sourcey="18" width="32" height="8">
+      <Offset X="-16" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="right1" sheet="Global/Items.gif" sourcex="141" sourcey="26" width="8" height="32">
+      <Offset X="-8" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="right2" sheet="Global/Items.gif" sourcex="133" sourcey="26" width="8" height="32">
+      <Offset X="0" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="left1" sheet="Global/Items.gif" sourcex="141" sourcey="59" width="8" height="32">
+      <Offset X="0" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="left2" sheet="Global/Items.gif" sourcex="149" sourcey="59" width="8" height="32">
+      <Offset X="-8" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="down1" sheet="Global/Items.gif" sourcex="150" sourcey="101" width="32" height="8">
+      <Offset X="-16" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="down2" sheet="Global/Items.gif" sourcex="150" sourcey="92" width="32" height="8">
+      <Offset X="-16" Y="0"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="upwards">
+      <ImageRef image="up1" />
+      <ImageRef image="up2" />
+    </ImageSet>
+    <ImageSet id="right">
+      <ImageRef image="right1" />
+      <ImageRef image="right2" />
+    </ImageSet>
+    <ImageSet id="left">
+      <ImageRef image="left1" />
+      <ImageRef image="left2" />
+    </ImageSet>
+    <ImageSet id="downwards">
+      <ImageRef image="down1" />
+      <ImageRef image="down2" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="upwards" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Upwards">
+      <ImageSetRef set="upwards" />
+    </Subtype>
+    <Subtype id="01" name="Right">
+      <ImageSetRef set="right" />
+    </Subtype>
+    <Subtype id="02" name="Left">
+      <ImageSetRef set="left" />
+    </Subtype>
+    <Subtype id="03" name="Down">
+      <ImageSetRef set="downwards" />
+    </Subtype>
+    <Subtype id="05" name="Upwards (Stronger)">
+      <ImageSetRef set="upwards" />
+    </Subtype>
+  </Subtypes>
+</ObjDef>

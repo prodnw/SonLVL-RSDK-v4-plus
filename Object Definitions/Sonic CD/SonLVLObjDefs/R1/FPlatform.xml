@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="frame">
+  <Images>
+    <ImageFromSheet id="frame" sheet="R1/Objects.gif" sourcex="101" sourcey="109" width="64" height="32">
+      <Offset X="-32" Y="-16"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Falling" type="bool" startbit="0" length="1" />
+  </Properties>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="frame" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

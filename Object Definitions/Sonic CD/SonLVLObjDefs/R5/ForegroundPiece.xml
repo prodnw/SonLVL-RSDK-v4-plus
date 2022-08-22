@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="sprite1">
+  <Images>
+    <ImageFromSheet id="sprite1" sheet="R5/Objects3.gif" sourcex="165" sourcey="1" width="52" height="8">
+      <Offset X="-26" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite2" sheet="R5/Objects3.gif" sourcex="218" sourcey="1" width="8" height="52">
+      <Offset X="-4" Y="-26"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite3" sheet="R5/Objects3.gif" sourcex="165" sourcey="10" width="32" height="8">
+      <Offset X="-16" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite4" sheet="R5/Objects3.gif" sourcex="165" sourcey="10" width="16" height="8">
+      <Offset X="-8" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite5" sheet="R5/Objects3.gif" sourcex="227" sourcey="1" width="8" height="32">
+      <Offset X="-4" Y="-16"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite6" sheet="R5/Objects3.gif" sourcex="227" sourcey="1" width="8" height="16">
+      <Offset X="-4" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite7" sheet="R5/Objects3.gif" sourcex="165" sourcey="19" width="40" height="8">
+      <Offset X="-20" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite8" sheet="R5/Objects3.gif" sourcex="165" sourcey="28" width="40" height="8">
+      <Offset X="-20" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprite9" sheet="R5/Objects3.gif" sourcex="236" sourcey="1" width="8" height="40">
+      <Offset X="-4" Y="-20"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spritea" sheet="R5/Objects3.gif" sourcex="245" sourcey="1" width="8" height="40">
+      <Offset X="-4" Y="-20"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spriteb" sheet="R5/Objects3.gif" sourcex="165" sourcey="37" width="40" height="8">
+      <Offset X="-20" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spritec" sheet="R5/Objects3.gif" sourcex="165" sourcey="46" width="40" height="8">
+      <Offset X="-20" Y="-4"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="sprited" sheet="R5/Objects3.gif" sourcex="236" sourcey="42" width="8" height="40">
+      <Offset X="-4" Y="-20"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="spritee" sheet="R5/Objects3.gif" sourcex="245" sourcey="42" width="8" height="40">
+      <Offset X="-4" Y="-20"/>
+    </ImageFromSheet>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Sprite 1" image="sprite1" />
+    <Subtype id="01" name="Sprite 2" image="sprite2" />
+    <Subtype id="02" name="Sprite 3" image="sprite3" />
+    <Subtype id="03" name="Sprite 4" image="sprite4" />
+    <Subtype id="04" name="Sprite 5" image="sprite5" />
+    <Subtype id="05" name="Sprite 6" image="sprite6" />
+    <Subtype id="06" name="Sprite 7" image="sprite7" />
+    <Subtype id="07" name="Sprite 8" image="sprite8" />
+    <Subtype id="08" name="Sprite 9" image="sprite9" />
+    <Subtype id="09" name="Sprite 10" image="spritea" />
+    <Subtype id="0a" name="Sprite 11" image="spriteb" />
+    <Subtype id="0b" name="Sprite 12" image="spritec" />
+    <Subtype id="0c" name="Sprite 13" image="sprited" />
+    <Subtype id="0d" name="Sprite 14" image="spritee" />
+  </Subtypes>
+</ObjDef>

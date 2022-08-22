@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="body">
+  <Images>
+    <ImageFromSheet id="body" sheet="R7/Objects.gif" sourcex="116" sourcey="100" width="16" height="16">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="wings" sheet="R7/Objects.gif" sourcex="243" sourcey="101" width="8" height="8">
+      <Offset X="-8" Y="-6"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Condition" type="Conditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="Condition">
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="body" />
+      <ImageRef image="wings" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

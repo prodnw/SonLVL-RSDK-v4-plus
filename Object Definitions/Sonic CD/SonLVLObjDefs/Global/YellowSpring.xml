@@ -28,10 +28,10 @@
     <Subtype id="04" name="Diagonal Up-Right" image="diagright" />
     <Subtype id="05" name="Diagonal Up-Left" image="diagleft" />
     <Subtype id="06" name="Diagonal Down-Right">
-	  <ImageRef image="diagright" yflip="ReverseFlip" />
-	</Subtype>
+        <ImageRef image="diagright" yflip="ReverseFlip" />
+    </Subtype>
     <Subtype id="07" name="Diagonal Down-Left">
-	  <ImageRef image="diagleft" yflip="ReverseFlip" />
-	</Subtype>
+      <ImageRef image="diagleft" yflip="ReverseFlip" />
+    </Subtype>
   </Subtypes>
 </ObjDef>

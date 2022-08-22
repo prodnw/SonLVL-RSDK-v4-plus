@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="arm">
+  <Images>
+    <ImageFromSheet id="arm" sheet="R7/Objects.gif" sourcex="34" sourcey="121" width="24" height="64">
+      <Offset X="-28" Y="-56"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="pivot" sheet="R7/Objects.gif" sourcex="90" sourcey="52" width="16" height="16">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <ImageSets>
+    <ImageSet id="springcage">
+      <ImageRef image="arm" />
+      <ImageRef image="arm" xflip="AlwaysFlip" >
+        <Offset Y="48" />
+      </ImageRef>
+      <ImageRef image="pivot" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="springcage" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Rotating" >
+      <ImageSetRef set="springcage" />
+    </Subtype>
+    <Subtype id="01" name="Static" >
+      <ImageSetRef set="springcage" />
+    </Subtype>
+  </Subtypes>
+</ObjDef>

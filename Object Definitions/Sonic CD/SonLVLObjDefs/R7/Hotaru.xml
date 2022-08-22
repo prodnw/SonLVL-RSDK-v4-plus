@@ -10,24 +10,24 @@
   </Images>
   <Properties>
     <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
-	<Property name="Formation" type="Formations" startbit="2" length="2" />
+    <Property name="Formation" type="Formations" startbit="2" length="2" />
   </Properties>
   <Enums>
     <Enum name="BadnikConditions">
-	  <EnumMember name="Good" />
-	  <EnumMember name="Bad" />
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
     </Enum>
-	<Enum name="Formations">
-	  <EnumMember name="Formation A" />
-	  <EnumMember name="Formation B" />
-	  <EnumMember name="Formation C" />
-	  <EnumMember name="Formation D" />
+    <Enum name="Formations">
+      <EnumMember name="Formation A" />
+      <EnumMember name="Formation B" />
+      <EnumMember name="Formation C" />
+      <EnumMember name="Formation D" />
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
       <Condition property="Condition" value="Good" />
-	  <Condition property="Formation" value="Formation A" />
+      <Condition property="Formation" value="Formation A" />
       <ImageRef image="good" xflip="NeverFlip" >
         <Offset X="32" Y="-35" />
       </ImageRef>
@@ -35,9 +35,9 @@
         <Offset X="32" Y="35" />
       </ImageRef>
     </DisplayOption>
-	 <DisplayOption>
+     <DisplayOption>
       <Condition property="Condition" value="Bad" />
-	  <Condition property="Formation" value="Formation A" />
+      <Condition property="Formation" value="Formation A" />
       <ImageRef image="bad" xflip="NeverFlip" >
         <Offset X="32" Y="-35" />
       </ImageRef>
@@ -45,29 +45,29 @@
         <Offset X="32" Y="35" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Good" />
-	  <Condition property="Formation" value="Formation B" />
+      <Condition property="Formation" value="Formation B" />
       <ImageRef image="good" xflip="NeverFlip" >
-    	<Offset X="50" Y="-68" />
+        <Offset X="50" Y="-68" />
       </ImageRef>
       <ImageRef image="good" xflip="AlwaysFlip" >
         <Offset X="50" Y="68" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Bad" />
-	  <Condition property="Formation" value="Formation B" />
+      <Condition property="Formation" value="Formation B" />
       <ImageRef image="bad" xflip="NeverFlip" >
-    	<Offset X="50" Y="-68" />
+        <Offset X="50" Y="-68" />
       </ImageRef>
       <ImageRef image="bad" xflip="AlwaysFlip" >
         <Offset X="50" Y="68" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Good" />
-	  <Condition property="Formation" value="Formation C" />
+      <Condition property="Formation" value="Formation C" />
       <ImageRef image="good" xflip="NeverFlip" >
         <Offset X="70" Y="-56" />
       </ImageRef>
@@ -75,9 +75,9 @@
         <Offset X="70" Y="56" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Bad" />
-	  <Condition property="Formation" value="Formation C" />
+      <Condition property="Formation" value="Formation C" />
       <ImageRef image="bad" xflip="NeverFlip" >
         <Offset X="70" Y="-56" />
       </ImageRef>
@@ -85,9 +85,9 @@
         <Offset X="70" Y="56" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Good" />
-	  <Condition property="Formation" value="Formation D" />
+      <Condition property="Formation" value="Formation D" />
       <ImageRef image="good" xflip="NeverFlip" >
         <Offset X="96" Y="-18" />
       </ImageRef>
@@ -95,9 +95,9 @@
         <Offset X="96" Y="18" />
       </ImageRef>
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Bad" />
-	  <Condition property="Formation" value="Formation D" />
+      <Condition property="Formation" value="Formation D" />
       <ImageRef image="bad" xflip="NeverFlip" >
         <Offset X="96" Y="-18" />
       </ImageRef>

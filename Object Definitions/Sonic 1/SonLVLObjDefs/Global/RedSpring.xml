@@ -33,9 +33,9 @@
   <Enums>
     <Enum name="directions">
       <EnumMember name="Up" />
-	  <EnumMember name="Right" />
-	  <EnumMember name="Left" />
-	  <EnumMember name="Down" />
+      <EnumMember name="Right" />
+      <EnumMember name="Left" />
+      <EnumMember name="Down" />
     </Enum>
     <Enum name="falsetrue">
       <EnumMember name="False" />
@@ -48,17 +48,17 @@
       <ImageRef image="up1" />
       <ImageRef image="up2" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Right" />
       <ImageRef image="right1" />
       <ImageRef image="right2" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Left" />
       <ImageRef image="left1" />
       <ImageRef image="left2" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Down" />
       <ImageRef image="down1" />
       <ImageRef image="down2" />

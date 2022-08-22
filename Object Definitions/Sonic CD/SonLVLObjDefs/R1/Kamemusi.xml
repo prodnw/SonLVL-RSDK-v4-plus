@@ -13,8 +13,8 @@
   </Properties>
   <Enums>
     <Enum name="BadnikConditions">
-	  <EnumMember name="Good" />
-	  <EnumMember name="Bad" />
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
     </Enum>
   </Enums>
   <Display>
@@ -22,9 +22,9 @@
       <Condition property="Condition" value="Good" />
       <ImageRef image="good" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Bad" />
-	  <ImageRef image="bad" />
+      <ImageRef image="bad" />
     </DisplayOption>
   </Display>
 </ObjDef>

@@ -13,9 +13,9 @@
   </Properties>
   <Enums>
     <Enum name="BadnikConditions">
-	  <EnumMember name="Good" />
-	  <EnumMember name="Bad" />
-	  <EnumMember name="Good (High Layer)" />
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
+      <EnumMember name="Good (High Layer)" />
     </Enum>
   </Enums>
   <Display>
@@ -23,11 +23,11 @@
       <Condition property="Condition" value="Good" />
       <ImageRef image="good" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Good (High Layer)" />
       <ImageRef image="good" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Condition" value="Bad" />
       <ImageRef image="bad" />
     </DisplayOption>

@@ -7,6 +7,6 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Start Cutscene After Defeat" image="sprite" />
-	<Subtype id="01" name="No Cutscene After Defeat" image="sprite" />
+    <Subtype id="01" name="No Cutscene After Defeat" image="sprite" />
   </Subtypes>
 </ObjDef>

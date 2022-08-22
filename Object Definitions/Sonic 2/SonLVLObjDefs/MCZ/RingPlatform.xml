@@ -11,38 +11,38 @@
   </Subtypes>
   <DefaultImage>
     <ImageRef image="ring" />
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-16"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-32"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-48"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-64"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-80"/>
     </ImageRef>
   </DefaultImage>
   <Display>
     <DisplayOption>
     <ImageRef image="ring" />
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-16"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-32"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-48"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-64"/>
     </ImageRef>
-	<ImageRef image="ring">
+    <ImageRef image="ring">
       <Offset X="-80"/>
     </ImageRef>
     </DisplayOption>

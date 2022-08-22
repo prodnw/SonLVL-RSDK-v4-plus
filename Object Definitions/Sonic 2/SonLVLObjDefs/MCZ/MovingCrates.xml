@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="sprite">
+<ObjDef xmlns="http://www.sonicretro.org" Image="crate">
   <Images>
     <ImageFromSheet id="crate" sheet="MCZ/Objects.gif" sourcex="136" sourcey="1" width="64" height="64">
       <Offset X="-32" Y="-32"/>
@@ -11,10 +11,10 @@
   </Subtypes>
   <DefaultImage>
     <ImageRef image="crate" />
-	<ImageRef image="crate">
+    <ImageRef image="crate">
       <Offset X="64" Y="64" />
     </ImageRef>
-	<ImageRef image="crate">
+    <ImageRef image="crate">
       <Offset X="-64" Y="64" />
     </ImageRef>
   </DefaultImage>
@@ -23,10 +23,10 @@
     <ImageRef image="crate">
       <Offset X="0" Y="0" />
     </ImageRef>
-	<ImageRef image="crate">
+    <ImageRef image="crate">
       <Offset X="64" Y="64" />
     </ImageRef>
-	<ImageRef image="crate">
+    <ImageRef image="crate">
       <Offset X="-64" Y="64" />
     </ImageRef>
     </DisplayOption>

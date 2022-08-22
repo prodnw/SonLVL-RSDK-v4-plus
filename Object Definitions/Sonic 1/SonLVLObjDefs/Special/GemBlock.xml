@@ -16,8 +16,8 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Blue" image="blue" />
-	<Subtype id="01" name="Green" image="green" />
-	<Subtype id="02" name="Yellow" image="yellow" />
-	<Subtype id="03" name="Pink" image="pink" />
+    <Subtype id="01" name="Green" image="green" />
+    <Subtype id="02" name="Yellow" image="yellow" />
+    <Subtype id="03" name="Pink" image="pink" />
   </Subtypes>
 </ObjDef>

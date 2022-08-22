@@ -10,15 +10,15 @@
   </Properties>
   <Enums>
     <Enum name="RampTypes">
-	  <EnumMember name="Ramp Run" />
-	  <EnumMember name="Unused Ramp Exit" />
-	  <EnumMember name="Ramp Exit" />
-	  <EnumMember name="Set Bounds (Upper)" />
-	  <EnumMember name="Ramp Enterance" />
-	  <EnumMember name="Ramp Drop" />
-	  <EnumMember name="Set Bounds (Lower)" />
-	  <EnumMember name="Ramp Run From Top" />
-	  <EnumMember name="Ramp Exit Boost" />
+      <EnumMember name="Ramp Run" />
+      <EnumMember name="Unused Ramp Exit" />
+      <EnumMember name="Ramp Exit" />
+      <EnumMember name="Set Bounds (Upper)" />
+      <EnumMember name="Ramp Enterance" />
+      <EnumMember name="Ramp Drop" />
+      <EnumMember name="Set Bounds (Lower)" />
+      <EnumMember name="Ramp Run From Top" />
+      <EnumMember name="Ramp Exit Boost" />
     </Enum>
   </Enums>
   <Display>

@@ -16,7 +16,7 @@
   </Images>
   <Properties>
     <Property name="Direction" type="directions" startbit="0" length="2" />
-    <Property name="Moving" type="falsetrue" startbit="2" length="1" />
+    <Property name="Moving" type="bool" startbit="2" length="1" />
   </Properties>
   <Enums>
     <Enum name="directions">
@@ -24,10 +24,6 @@
       <EnumMember name="Right" />
       <EnumMember name="Left" />
       <EnumMember name="Down" />
-    </Enum>
-    <Enum name="falsetrue">
-      <EnumMember name="False" />
-      <EnumMember name="True" />
     </Enum>
   </Enums>
   <Display>
@@ -46,7 +42,7 @@
     <DisplayOption>
       <Condition property="Direction" value="Down" />
 	  <!-- Intentional, S2 gives downwards facing spikes the FLIP_Y attr too
-		   TODO: May just migrate this obj def to C# to avoid this weird overlap -->
+		   May just migrate this obj def to C# to avoid this weird overlap -->
       <ImageRef image="up" />
     </DisplayOption>
   </Display>

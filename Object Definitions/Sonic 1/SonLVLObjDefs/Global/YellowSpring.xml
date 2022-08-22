@@ -48,7 +48,7 @@
     <ImageSetRef set="upwards" />
   </DefaultImage>
   <Subtypes>
-	<Subtype id="00" name="Upwards">
+    <Subtype id="00" name="Upwards">
       <ImageSetRef set="upwards" />
     </Subtype>
     <Subtype id="01" name="Right">

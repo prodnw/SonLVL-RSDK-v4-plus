@@ -6,17 +6,17 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Movement" type="Axis" startbit="0" length="1" />
+    <Property name="Movement" type="Directions" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="Directions">
-	  <EnumMember name="Vertical" />
-	  <EnumMember name="Horizontal" />
+      <EnumMember name="Vertical" />
+      <EnumMember name="Horizontal" />
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
-	  <ImageRef image="spikeball" />
+      <ImageRef image="spikeball" />
     </DisplayOption>
   </Display>
 </ObjDef>

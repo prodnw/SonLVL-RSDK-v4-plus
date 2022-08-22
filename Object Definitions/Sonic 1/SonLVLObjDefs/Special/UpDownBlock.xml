@@ -10,6 +10,6 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Speed Up" image="speedup" />
-	<Subtype id="01" name="Slow Down" image="slowdown" />
+    <Subtype id="01" name="Slow Down" image="slowdown" />
   </Subtypes>
 </ObjDef>

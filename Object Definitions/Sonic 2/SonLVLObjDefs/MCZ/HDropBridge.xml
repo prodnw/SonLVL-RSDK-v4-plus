@@ -9,26 +9,25 @@
     <ImageRef image="log">
       <Offset X="-8" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-24" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-40" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-56" />
     </ImageRef>
-	
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="8" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="24" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="40" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="56" />
     </ImageRef>
   </DefaultImage>
@@ -37,26 +36,25 @@
     <ImageRef image="log">
       <Offset X="-8" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-24" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-40" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="-56" />
     </ImageRef>
-	
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="8" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="24" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="40" />
     </ImageRef>
-	<ImageRef image="log">
+    <ImageRef image="log">
       <Offset X="56" />
     </ImageRef>
     </DisplayOption>

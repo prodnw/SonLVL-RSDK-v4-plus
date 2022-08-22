@@ -4,10 +4,10 @@
     <ImageFromSheet id="spr1" sheet="R5/Objects2.gif" sourcex="1" sourcey="1" width="64" height="48">
       <Offset X="-32" Y="-24" />
     </ImageFromSheet>
-	<ImageFromSheet id="spr2" sheet="R5/Objects2.gif" sourcex="66" sourcey="1" width="8" height="88">
+    <ImageFromSheet id="spr2" sheet="R5/Objects2.gif" sourcex="66" sourcey="1" width="8" height="88">
       <Offset X="20" Y="24" />
     </ImageFromSheet>
-	<ImageFromSheet id="spr3" sheet="R5/Objects2.gif" sourcex="66" sourcey="1" width="8" height="88">
+    <ImageFromSheet id="spr3" sheet="R5/Objects2.gif" sourcex="66" sourcey="1" width="8" height="88">
       <Offset X="-28" Y="24" />
     </ImageFromSheet>
   </Images>

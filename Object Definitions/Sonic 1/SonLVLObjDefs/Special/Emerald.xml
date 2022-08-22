@@ -25,11 +25,11 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Emerald 1" image="emerald1" />
-	<Subtype id="01" name="Emerald 2" image="emerald2" />
-	<Subtype id="02" name="Emerald 3" image="emerald3" />
-	<Subtype id="03" name="Emerald 4" image="emerald4" />
-	<Subtype id="04" name="Emerald 5" image="emerald5" />
-	<Subtype id="05" name="Emerald 6" image="emerald6" />
-	<Subtype id="06" name="Emerald 7" image="emerald7" />
+    <Subtype id="01" name="Emerald 2" image="emerald2" />
+    <Subtype id="02" name="Emerald 3" image="emerald3" />
+    <Subtype id="03" name="Emerald 4" image="emerald4" />
+    <Subtype id="04" name="Emerald 5" image="emerald5" />
+    <Subtype id="05" name="Emerald 6" image="emerald6" />
+    <Subtype id="06" name="Emerald 7" image="emerald7" />
   </Subtypes>
 </ObjDef>

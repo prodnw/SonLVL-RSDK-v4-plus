@@ -6,20 +6,20 @@
     </ImageFromSheet>
   </Images>
   <ImageSets>
-	<ImageSet id="tubeswitch">
-	  <ImageRef image="icon">
-	    <Offset X="-8" Y="-8" />
+    <ImageSet id="tubeswitch">
+      <ImageRef image="icon">
+        <Offset X="-8" Y="-8" />
       </ImageRef>
-	  <ImageRef image="icon">
-	    <Offset X="-8" Y="8" />
+      <ImageRef image="icon">
+        <Offset X="-8" Y="8" />
       </ImageRef>
-	  <ImageRef image="icon">
-	    <Offset X="8" Y="-8" />
+      <ImageRef image="icon">
+        <Offset X="8" Y="-8" />
       </ImageRef>
-	  <ImageRef image="icon">
-	    <Offset X="8" Y="8" />
+      <ImageRef image="icon">
+        <Offset X="8" Y="8" />
       </ImageRef>
-	</ImageSet>
+    </ImageSet>
   </ImageSets>
   <Properties>
     <Property name="Type" type="AutoSpinTypes" startbit="0" length="4" />
@@ -27,13 +27,13 @@
   <Enums>
     <Enum name="AutoSpinTypes">
       <EnumMember name="Enterance (Fast)" />
-	  <EnumMember name="Mid-Tube" />
-	  <EnumMember name="Turn" />
-	  <EnumMember name="Roof Unstick (Normal)" />
-	  <EnumMember name="Enterance (Slower)" />
-	  <EnumMember name="Curve Below" />
-	  <EnumMember name="Position Snap" />
-	  <EnumMember name="Roof Unstick (Flipped)" />
+      <EnumMember name="Mid-Tube" />
+      <EnumMember name="Turn" />
+      <EnumMember name="Roof Unstick (Normal)" />
+      <EnumMember name="Enterance (Slower)" />
+      <EnumMember name="Curve Below" />
+      <EnumMember name="Position Snap" />
+      <EnumMember name="Roof Unstick (Flipped)" />
     </Enum>
   </Enums>
   <DefaultImage>

@@ -9,16 +9,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Types" type="Types" startbit="0" length="1" />
+    <Property name="Condition" type="Conditions" startbit="0" length="1" />
   </Properties>
   <Enums>
-    <Enum name="Types">
-	  <EnumMember name="Attacking" />
-	  <EnumMember name="Peaceful" />
+    <Enum name="Condition">
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
     </Enum>
   </Enums>
   <Display>
-	<DisplayOption>
+    <DisplayOption>
       <ImageRef image="body" />
       <ImageRef image="wings" />
     </DisplayOption>

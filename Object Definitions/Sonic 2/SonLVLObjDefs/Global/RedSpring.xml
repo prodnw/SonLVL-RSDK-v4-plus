@@ -22,8 +22,8 @@
   </Images>
   <Properties>
     <Property name="Direction" type="directions" startbit="0" length="3" />
-	<Property name="Enabled In Air" type="falsetrue" startbit="3" length="1" />
-	<Property name="Use Twirl Anim" type="falsetrue" startbit="7" length="1" />
+    <Property name="Enabled In Air" type="bool" startbit="3" length="1" />
+    <Property name="Use Twirl Anim" type="bool" startbit="7" length="1" />
   </Properties>
   <Enums>
     <Enum name="directions">
@@ -31,14 +31,10 @@
       <EnumMember name="Right" />
       <EnumMember name="Left" />
       <EnumMember name="Down" />
-	  <EnumMember name="Up Right" />
-	  <EnumMember name="Up Left" />
-	  <EnumMember name="Down Right" />
-	  <EnumMember name="Down Left" />
-    </Enum>
-    <Enum name="falsetrue">
-      <EnumMember name="False" />
-      <EnumMember name="True" />
+      <EnumMember name="Up Right" />
+      <EnumMember name="Up Left" />
+      <EnumMember name="Down Right" />
+      <EnumMember name="Down Left" />
     </Enum>
   </Enums>
   <Display>
@@ -58,19 +54,19 @@
       <Condition property="Direction" value="Down" />
       <ImageRef image="down" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Up Right" />
       <ImageRef image="upr" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Up Left" />
       <ImageRef image="upl" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Down Right" />
       <ImageRef image="upr" yflip="AlwaysFlip" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Direction" value="Down Left" />
       <ImageRef image="upl" yflip="AlwaysFlip" />
     </DisplayOption>

@@ -46,7 +46,6 @@ namespace SCDObjectDefinitions.R5
 			return img;
 		}
 
-
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return img;

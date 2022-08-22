@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="good">
+  <Images>
+    <ImageFromSheet id="good" sheet="R1/Objects.gif" sourcex="223" sourcey="154" width="32" height="44">
+      <Offset X="-16" Y="-22"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="bad" sheet="R1/Objects.gif" sourcex="223" sourcey="154" width="32" height="44">
+      <Offset X="-16" Y="-22"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="BadnikConditions">
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Display>
+    <DisplayOption>
+      <Condition property="Condition" value="Good" />
+      <ImageRef image="good" />
+    </DisplayOption>
+    <DisplayOption>
+      <Condition property="Condition" value="Bad" />
+      <ImageRef image="bad" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

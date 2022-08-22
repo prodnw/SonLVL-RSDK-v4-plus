@@ -8,21 +8,33 @@ namespace SCDObjectDefinitions.Mission
 {
 	class MissionBlock : ObjectDefinition
 	{
+		private PropertySpec[] properties;
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
+			
+			properties = new PropertySpec[1];
+			properties[0] = new PropertySpec("Count", typeof(int), "Extended",
+                "How many Mission Blocks there should be.", null,
+                (obj) => Math.Max(1, (int)obj.PropertyValue),
+                (obj, value) => obj.PropertyValue = (byte)(((int)value) <= 1 ? 0 : (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-		
+
 		public override byte DefaultSubtype
 		{
-			get { return 8; }
+			get { return 0; }
+		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
 		}
 
 		public override string SubtypeName(byte subtype)

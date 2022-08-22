@@ -25,11 +25,11 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Zone 1" image="zone1" />
-	<Subtype id="01" name="Zone 2" image="zone2" />
-	<Subtype id="02" name="Zone 3" image="zone3" />
-	<Subtype id="03" name="Zone 4" image="zone4" />
-	<Subtype id="04" name="Zone 5" image="zone5" />
-	<Subtype id="05" name="Zone 6" image="zone6" />
-	<Subtype id="06" name="Zone 7" image="zone7" />
+    <Subtype id="01" name="Zone 2" image="zone2" />
+    <Subtype id="02" name="Zone 3" image="zone3" />
+    <Subtype id="03" name="Zone 4" image="zone4" />
+    <Subtype id="04" name="Zone 5" image="zone5" />
+    <Subtype id="05" name="Zone 6" image="zone6" />
+    <Subtype id="06" name="Zone 7" image="zone7" />
   </Subtypes>
 </ObjDef>

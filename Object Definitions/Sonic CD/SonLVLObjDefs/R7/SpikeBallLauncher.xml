@@ -4,16 +4,16 @@
     <ImageFromSheet id="up" sheet="R7/Objects.gif" sourcex="133" sourcey="1" width="32" height="16">
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
-	<ImageFromSheet id="down" sheet="R7/Objects.gif" sourcex="166" sourcey="1" width="32" height="16">
+    <ImageFromSheet id="down" sheet="R7/Objects.gif" sourcex="166" sourcey="1" width="32" height="16">
       <Offset X="-16" Y="0"/>
     </ImageFromSheet>
-	<ImageFromSheet id="left" sheet="R7/Objects.gif" sourcex="1" sourcey="166" width="16" height="32">
+    <ImageFromSheet id="left" sheet="R7/Objects.gif" sourcex="1" sourcey="166" width="16" height="32">
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
-	<ImageFromSheet id="right" sheet="R7/Objects.gif" sourcex="17" sourcey="166" width="16" height="32">
+    <ImageFromSheet id="right" sheet="R7/Objects.gif" sourcex="17" sourcey="166" width="16" height="32">
       <Offset X="0" Y="-16"/>
     </ImageFromSheet>
-	<ImageFromSheet id="ball" sheet="R7/Objects.gif" sourcex="1" sourcey="199" width="32" height="32">
+    <ImageFromSheet id="ball" sheet="R7/Objects.gif" sourcex="1" sourcey="199" width="32" height="32">
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
   </Images>
@@ -22,40 +22,40 @@
   </Properties>
   <Enums>
     <Enum name="Directions">
-	  <EnumMember name="Up" />
-	  <EnumMember name="Down" />
-	  <EnumMember name="Left" />
-	  <EnumMember name="Right" />
+      <EnumMember name="Up" />
+      <EnumMember name="Down" />
+      <EnumMember name="Left" />
+      <EnumMember name="Right" />
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
       <Condition property="Direction" value="Up" />
       <ImageRef image="ball">
-	    <Offset Y="-16" />
-	  </ImageRef>
-	  <ImageRef image="up" />
+        <Offset Y="-16" />
+      </ImageRef>
+      <ImageRef image="up" />
     </DisplayOption>
-	 <DisplayOption>
+     <DisplayOption>
       <Condition property="Direction" value="Down" />
       <ImageRef image="ball">
-	    <Offset Y="16" />
-	  </ImageRef>
-	  <ImageRef image="up" />
+        <Offset Y="16" />
+      </ImageRef>
+      <ImageRef image="up" />
     </DisplayOption>
-	 <DisplayOption>
+     <DisplayOption>
       <Condition property="Direction" value="Left" />
       <ImageRef image="ball">
-	    <Offset X="-16" />
-	  </ImageRef>
-	  <ImageRef image="up" />
+        <Offset X="-16" />
+      </ImageRef>
+      <ImageRef image="up" />
     </DisplayOption>
-	 <DisplayOption>
+     <DisplayOption>
       <Condition property="Direction" value="Right" />
       <ImageRef image="ball">
-	    <Offset X="16" />
-	  </ImageRef>
-	  <ImageRef image="up" />
+        <Offset X="16" />
+      </ImageRef>
+      <ImageRef image="up" />
     </DisplayOption>
   </Display>
 </ObjDef>

@@ -31,14 +31,14 @@
   </Properties>
   <Enums>
     <Enum name="Variants">
-	  <EnumMember name="A, Single" />
-	  <EnumMember name="A, Left" />
-	  <EnumMember name="A, Middle" />
-	  <EnumMember name="A, Right" />
-	  <EnumMember name="B, Single" />
-	  <EnumMember name="B, Left" />
-	  <EnumMember name="B, Middle" />
-	  <EnumMember name="B, Right" />
+      <EnumMember name="A, Single" />
+      <EnumMember name="A, Left" />
+      <EnumMember name="A, Middle" />
+      <EnumMember name="A, Right" />
+      <EnumMember name="B, Single" />
+      <EnumMember name="B, Left" />
+      <EnumMember name="B, Middle" />
+      <EnumMember name="B, Right" />
     </Enum>
   </Enums>
   <Display>
@@ -46,31 +46,31 @@
       <Condition property="Variant" value="A, Single" />
       <ImageRef image="a_s" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="A, Left" />
       <ImageRef image="a_l" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="A, Middle" />
       <ImageRef image="a_m" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="A, Right" />
       <ImageRef image="a_r" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="B, Single" />
       <ImageRef image="b_s" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="B, Left" />
       <ImageRef image="b_l" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="B, Middle" />
       <ImageRef image="b_m" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Variant" value="B, Right" />
       <ImageRef image="b_r" />
     </DisplayOption>

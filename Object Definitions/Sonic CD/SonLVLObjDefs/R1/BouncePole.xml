@@ -10,18 +10,18 @@
   </Properties>
   <Enums>
     <Enum name="Directions">
-	  <EnumMember name="Right" />
-	  <EnumMember name="Left" />
+      <EnumMember name="Left" />
+      <EnumMember name="Right" />
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Directions" value="Right" />
+      <Condition property="Direction" value="Left" />
       <ImageRef image="frame" />
     </DisplayOption>
-	<DisplayOption>
-      <Condition property="Directions" value="Left" />
-	  <ImageRef image="frame" xflip="AlwaysFlip" />
+    <DisplayOption>
+      <Condition property="Direction" value="Right" />
+      <ImageRef image="frame" xflip="AlwaysFlip" />
     </DisplayOption>
   </Display>
 </ObjDef>

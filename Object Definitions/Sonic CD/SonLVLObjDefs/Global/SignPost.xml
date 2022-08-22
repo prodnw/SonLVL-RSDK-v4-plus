@@ -8,6 +8,17 @@
       <Offset X="-24" Y="-44" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Behaviour" type="Behaviours" startbit="0" length="2" />
+  </Properties>
+  <Enums>
+    <Enum name="Behaviours">
+      <EnumMember name="Expand Stage - Normal" />
+	  <EnumMember name="Expand Stage - Wider" />
+	  <EnumMember name="Normal" />
+	  <EnumMember name="Normal (Handles Multiple Signposts)" />
+    </Enum>
+  </Enums>
   <ImageSets>
     <ImageSet id="img">
       <ImageRef image="post" />

@@ -718,6 +718,8 @@ namespace SonicRetro.SonLVL.GUI
 			levelNameBox.Text = levnam[0];
 			if (levnam.Length > 1)
 				levelNameBox2.Text = levnam[1];
+			else
+				levelNameBox2.Text = string.Empty;
 			levelNameBox.MaxLength = 255 - LevelData.Scene.title.Length;
 			levelNameBox2.MaxLength = 255 - LevelData.Scene.title.Length;
 			midpointBox.SelectedIndex = (int)LevelData.Scene.layerMidpoint;

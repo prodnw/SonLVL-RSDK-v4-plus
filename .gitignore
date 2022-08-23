@@ -215,3 +215,9 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
+*.dll
+
+Object Definitions/Sonic 1/Data/
+Object Definitions/Sonic 1/Bytecode/
+Object Definitions/Sonic 1/RSDKv4.exe
+Object Definitions/Sonic 1/RSDKVer.txt

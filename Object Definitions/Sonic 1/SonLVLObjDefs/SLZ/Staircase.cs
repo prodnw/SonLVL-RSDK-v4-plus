@@ -16,13 +16,13 @@ namespace S1ObjectDefinitions.SLZ
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Activate From", typeof(int), "Extended",
-                "Where the Staircase should be activated from.", null, new Dictionary<string, int>
+				"Where the Staircase should be activated from.", null, new Dictionary<string, int>
 				{
 					{ "Top", 0 },
 					{ "Bottom", 2 }
 				},
-                (obj) => obj.PropertyValue & 3,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

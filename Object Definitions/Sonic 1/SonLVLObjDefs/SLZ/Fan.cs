@@ -18,31 +18,31 @@ namespace S1ObjectDefinitions.SLZ
 			
 			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Wind Direction", typeof(int), "Extended",
-                "Where the wind blows.", null, new Dictionary<string, int>
+				"Where the wind blows.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
-                (obj) => obj.PropertyValue & 1,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Always Powered", typeof(int), "Extended",
-                "If the Fan should always be active.", null, new Dictionary<string, int>
+				"If the Fan should always be active.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
 					{ "True", 2 }
 				},
-                (obj) => obj.PropertyValue & 2,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 2,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Range", typeof(int), "Extended",
-                "The range of the Fan's push.", null, new Dictionary<string, int>
+				"The range of the Fan's push.", null, new Dictionary<string, int>
 				{
 					{ "Short", 0 },
 					{ "Long", 4 }
 				},
-                (obj) => obj.PropertyValue & 4,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 251) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 4,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 251) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

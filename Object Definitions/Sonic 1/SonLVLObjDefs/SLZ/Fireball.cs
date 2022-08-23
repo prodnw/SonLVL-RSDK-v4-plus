@@ -18,7 +18,7 @@ namespace S1ObjectDefinitions.SLZ
 			
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Pattern", typeof(int), "Extended",
-                "The pattern this Fireball is to follow.", null, new Dictionary<string, int>
+				"The pattern this Fireball is to follow.", null, new Dictionary<string, int>
 				{
 					{ "Eject Up - Slowest", 0 },
 					{ "Eject Up - Slow", 1 },
@@ -29,11 +29,11 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Travel Left", 6 },
 					{ "Travel Right", 7 }
 				},
-                (obj) => obj.PropertyValue & 7,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 248) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 7,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 248) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
-                "The timings this Fireball is to be based off.", null, new Dictionary<string, int>
+				"The timings this Fireball is to be based off.", null, new Dictionary<string, int>
 				{
 					{ "30 Frames", 0x00 },
 					{ "60 Frames", 0x10 },
@@ -52,8 +52,8 @@ namespace S1ObjectDefinitions.SLZ
 					{ "450 Frames", 0xe0 },
 					{ "480 Frames", 0xf0 },
 				},
-                (obj) => obj.PropertyValue & 240,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 240,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

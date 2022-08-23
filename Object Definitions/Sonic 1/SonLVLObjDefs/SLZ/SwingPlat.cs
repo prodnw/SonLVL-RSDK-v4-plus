@@ -24,9 +24,9 @@ namespace S1ObjectDefinitions.SLZ
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-                "How many chains the Platform should hang off of.", null,
-                (obj) => obj.PropertyValue,
-                (obj, value) => obj.PropertyValue = (byte)((int)value));
+				"How many chains the Platform should hang off of.", null,
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype

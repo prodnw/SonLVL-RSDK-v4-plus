@@ -12,7 +12,7 @@
     <ImageSet id="hasorb">
       <ImageRef image="seesaw" />
       <ImageRef image="orb" >
-	    <Offset X="40" Y="-8" />
+        <Offset X="40" Y="-8" />
       </ImageRef>
     </ImageSet>
     <ImageSet id="noorb">

@@ -16,7 +16,7 @@ namespace S1ObjectDefinitions.SLZ
 
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Movement", typeof(int), "Extended",
-                "The pattern the Rising Platform will follow for moving.", null, new Dictionary<string, int>
+				"The pattern the Rising Platform will follow for moving.", null, new Dictionary<string, int>
 				{
 					{ "Up - Slow", 0 },
 					{ "Up - Medium", 1 },
@@ -33,13 +33,13 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Up-Right", 12 },
 					{ "Down-Left", 13 }
 				},
-                (obj) => ((obj.PropertyValue & 128) != 0) ? (obj.PropertyValue & 15) : 0,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)((int)value)));
+				(obj) => ((obj.PropertyValue & 128) != 0) ? (obj.PropertyValue & 15) : 0,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
-                "The timings of the Platform. Based on 6 (ie 6, 12, 18, 24...).", null,
-                (obj) => obj.PropertyValue & 127,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)(System.Math.Max((int)value, 1))));
+				"The timings of the Platform. Based on 6 (ie 6, 12, 18, 24...).", null,
+				(obj) => obj.PropertyValue & 127,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)(System.Math.Max((int)value, 1))));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

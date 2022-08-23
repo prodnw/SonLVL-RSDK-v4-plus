@@ -13,7 +13,7 @@
   </Images>
   <Subtypes>
     <Subtype id="00" name="Left" image="left" />
-      <Subtype id="01" name="Middle" image="middle" />
-      <Subtype id="02" name="Right" image="right" />
+    <Subtype id="01" name="Middle" image="middle" />
+    <Subtype id="02" name="Right" image="right" />
   </Subtypes>
 </ObjDef>

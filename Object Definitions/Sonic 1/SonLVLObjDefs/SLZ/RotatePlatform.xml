@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="frame">
+  <Images>
+    <ImageFromSheet id="frame" sheet="SLZ/Objects.gif" sourcex="1" sourcey="196" width="48" height="16">
+      <Offset X="-24" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Flip Move X" type="bool" startbit="0" length="1" />
+	<Property name="Flip Move Y" type="bool" startbit="1" length="1" />
+	<Property name="Flip Move XY" type="bool" startbit="2" length="1" />
+  </Properties>
+</ObjDef>

@@ -53,6 +53,30 @@
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Contents" type="Contents" startbit="0" length="5" />
+  </Properties>
+  <Enums>
+    <Enum name="Contents">
+      <EnumMember name="Blank" />
+      <EnumMember name="Rings" />
+      <EnumMember name="Classic Shield" />
+      <EnumMember name="Invincibility" />
+      <EnumMember name="Speed Shoes" />
+      <EnumMember name="Sonic 1UP" />
+      <EnumMember name="Tails 1UP" />
+      <EnumMember name="Knuckles 1UP" />
+      <EnumMember name="Super" />
+      <EnumMember name="Bubble Shield" />
+      <EnumMember name="Fire Shield" />
+      <EnumMember name="Lightning Shield" />
+      <EnumMember name="Robotnik" />
+      <EnumMember name="Goggles" />
+      <EnumMember name="Debug Spikes" />
+      <EnumMember name="Debug Shields" />
+      <EnumMember name="Debug Emeralds" />
+    </Enum>
+  </Enums>
   <ImageSets>
     <ImageSet id="blank">
       <ImageRef image="monitor" />

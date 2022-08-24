@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class BombShrapnel : ObjectDefinition
+	class BallHogBomb : ObjectDefinition
 	{
 		private Sprite img;
 
@@ -13,15 +13,12 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '5':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 170, 8, 8), -4, -4);
-					break;
 				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(66, 79, 8, 8), -4, -4);
+				default:
+					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(82, 126, 14, 14), -7, -7);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(67, 367, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(165, 248, 14, 14), -7, -7);
 					break;
 			}
 		}

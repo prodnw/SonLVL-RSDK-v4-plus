@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class BombShrapnel : ObjectDefinition
+	class Batbrain : ObjectDefinition
 	{
 		private Sprite img;
 
@@ -13,15 +13,14 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '5':
+				case '2': // Normally, Batbrains are only used in just this folder
+				case '1': // However, since there are more Origins Mission Zones use this object, we gotta expand a bit
+				case '3':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 170, 8, 8), -4, -4);
-					break;
-				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(66, 79, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("MZ/Objects.gif").GetSection(37, 98, 14, 24), -7, -12);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(67, 367, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(52, 68, 14, 24), -7, -12);
 					break;
 			}
 		}

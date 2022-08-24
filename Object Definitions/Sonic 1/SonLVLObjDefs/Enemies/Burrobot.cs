@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class BombShrapnel : ObjectDefinition
+	class Burrobot : ObjectDefinition
 	{
 		private Sprite img;
 
@@ -13,15 +13,13 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '5':
+				case '4':
+				case '6': // DLC_Zone06, from Origins
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 170, 8, 8), -4, -4);
-					break;
-				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(66, 79, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(92, 68, 24, 46), -12, -24);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(67, 367, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(88, 217, 24, 46), -12, -24);
 					break;
 			}
 		}

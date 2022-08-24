@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class Orbinaut : ObjectDefinition
+	class BuzzBomber : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties;
@@ -14,32 +14,33 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '4':
+				case '1':
+				case 'M': // Origins test mission
 				default:
-					BitmapBits sheet = LevelData.GetSpriteSheet("LZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(50, 105, 20, 20), -10, -10);
-					sprites[1] = new Sprite(sheet.GetSection(107, 1, 16, 16), -8, -8);
+					BitmapBits sheet = LevelData.GetSpriteSheet("GHZ/Objects.gif");
+					sprites[0] = new Sprite(sheet.GetSection(98, 74, 45, 19), -23, -9);
+					sprites[1] = new Sprite(sheet.GetSection(144, 79, 35, 8), -17, -15);
 					break;
-				case '5':
-					sheet = LevelData.GetSpriteSheet("SLZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(51, 1, 20, 20), -10, -10);
-					sprites[1] = new Sprite(sheet.GetSection(114, 1, 16, 16), -8, -8);
+				case '2':
+					sheet = LevelData.GetSpriteSheet("MZ/Objects.gif");
+					sprites[0] = new Sprite(sheet.GetSection(1, 127, 45, 19), -23, -9);
+					sprites[1] = new Sprite(sheet.GetSection(38, 147, 35, 8), -17, -15);
 					break;
-				case '6':
-					sheet = LevelData.GetSpriteSheet("SBZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(1, 138, 20, 20), -10, -10);
-					sprites[1] = new Sprite(sheet.GetSection(64, 142, 16, 16), -8, -8);
+				case '3':
+					sheet = LevelData.GetSpriteSheet("SYZ/Objects.gif");
+					sprites[0] = new Sprite(sheet.GetSection(1, 81, 45, 19), -23, -9);
+					sprites[1] = new Sprite(sheet.GetSection(38, 101, 35, 8), -17, -15);
 					break;
-				case '7':
+				case '4':
 					sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(119, 114, 20, 20), -10, -10);
-					sprites[1] = new Sprite(sheet.GetSection(140, 135, 16, 16), -8, -8);
+					sprites[0] = new Sprite(sheet.GetSection(1, 1, 45, 19), -23, -9);
+					sprites[1] = new Sprite(sheet.GetSection(38, 21, 35, 8), -17, -15);
 					break;
 			}
 
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"The direction the Orbinaut is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+				"The direction the Buzz Bomber is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
@@ -47,12 +48,11 @@ namespace S1ObjectDefinitions.Enemies
 				(obj) => obj.PropertyValue & 1,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
 			
-			// Don't mind this, just a little something
-			properties[1] = new PropertySpec("Fire Orbs", typeof(int), "Extended",
-				"If the Orbinaut should fire its orbs or not.", null, new Dictionary<string, int>
+			properties[1] = new PropertySpec("Range", typeof(int), "Extended",
+				"The range of the Buzz Bomber's activation trigger.", null, new Dictionary<string, int>
 				{
-					{ "True", 0 },
-					{ "False", 2 }
+					{ "Large", 0 },
+					{ "Small", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
@@ -87,16 +87,10 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			List<Sprite> sprs = new List<Sprite>();
 			
-			Sprite sprite = new Sprite(sprites[0]);
-			sprite.Flip((subtype & 1) != 0, false);
-			sprs.Add(sprite);
-
-			int[] posoffsets = {-18, 0, 0, -18, 18, 0, 0, 18 };
-			
-			for (int i = 0; i < 8; i += 2)
+			for (int i = 0; i < 2; i++)
 			{
-				Sprite tmp = new Sprite(sprites[1]);
-				tmp.Offset(posoffsets[i], posoffsets[i+1]);
+				Sprite tmp = new Sprite(sprites[i]);
+				tmp.Flip((subtype & 1) != 0, false);
 				sprs.Add(tmp);
 			}
 			

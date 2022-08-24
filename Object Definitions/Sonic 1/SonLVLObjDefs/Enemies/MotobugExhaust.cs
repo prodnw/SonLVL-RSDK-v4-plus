@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class BombShrapnel : ObjectDefinition
+	class MotobugExhaust : ObjectDefinition
 	{
 		private Sprite img;
 
@@ -13,15 +13,11 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '5':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 170, 8, 8), -4, -4);
-					break;
-				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(66, 79, 8, 8), -4, -4);
+				default: // Origins uses Motobugs everywhere, keep this the default
+					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(143, 235, 4, 4), -2, -2);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(67, 367, 8, 8), -4, -4);
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(211, 220, 4, 4), -2, -2);
 					break;
 			}
 		}

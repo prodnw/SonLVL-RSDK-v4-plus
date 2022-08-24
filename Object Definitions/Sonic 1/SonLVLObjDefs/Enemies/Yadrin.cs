@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S1ObjectDefinitions.Enemies
 {
-	class Bomb : ObjectDefinition
+	class Yadrin : ObjectDefinition
 	{
 		private Sprite img;
 		private PropertySpec[] properties;
@@ -14,30 +14,27 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '5':
+				case '1':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(53, 131, 20, 37), -10, -21);
+					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(1, 2, 40, 38), -20, -20);
 					break;
-				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(52, 40, 20, 37), -10, -21);
+				case '3':
+					img = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(1, 2, 40, 38), -20, -20);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(53, 328, 20, 37), -10, -21);
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(138, 2, 40, 38), -20, -20);
 					break;
 			}
 
 			properties = new PropertySpec[1];
 			
-			// The ideal name would be "Direction" but that's already in use...
-			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
-				"Where the Bomb is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
+				"Where the Yadrin is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
-					{ "Right", 1 },
-					{ "Left - Roof", 2 },
-					{ "Right - Roof", 3 }
+					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 3,
+				(obj) => obj.PropertyValue & 1,
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -58,14 +55,6 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0: return "Left";
-				case 1: return "Right";
-				case 2: return "Left - Roof";
-				case 3: return "Right - Roof";
-				default: return "Unknown";
-			}
 			return subtype + "";
 		}
 
@@ -77,7 +66,7 @@ namespace S1ObjectDefinitions.Enemies
 		public override Sprite SubtypeImage(byte subtype)
 		{
 			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) != 0, (subtype & 2) != 0); // Do pardon the odd syntax...
+			sprite.Flip((subtype & 1) != 0, false);
 			return sprite;
 		}
 

@@ -15,9 +15,9 @@ namespace SonicRetro.SonLVL.API
 	{
 		[NonSerialized]
 		private readonly Entry ent;
-		private ushort x, y;
+		private short x, y;
 		[Description("The horizontal component of the position.")]
-		public ushort X
+		public short X
 		{
 			get
 			{
@@ -34,7 +34,7 @@ namespace SonicRetro.SonLVL.API
 		}
 
 		[Description("The vertical component of the position.")]
-		public ushort Y
+		public short Y
 		{
 			get
 			{
@@ -62,11 +62,11 @@ namespace SonicRetro.SonLVL.API
 		public Position(string data)
 		{
 			string[] a = data.Split(',');
-			X = ushort.Parse(a[0]);
-			Y = ushort.Parse(a[1]);
+			X = short.Parse(a[0]);
+			Y = short.Parse(a[1]);
 		}
 
-		public Position(ushort x, ushort y)
+		public Position(short x, short y)
 		{
 			X = x;
 			Y = y;
@@ -77,15 +77,12 @@ namespace SonicRetro.SonLVL.API
 			return X + ", " + Y;
 		}
 
-		public ushort[] ToArray()
+		public short[] ToArray()
 		{
-			ushort[] result = new ushort[2];
-			result[0] = X;
-			result[1] = Y;
-			return result;
+			return new[] { X, Y };
 		}
 
-		public ushort this[int index]
+		public short this[int index]
 		{
 			get
 			{
@@ -151,7 +148,7 @@ namespace SonicRetro.SonLVL.API
 	public abstract class Entry : IComparable<Entry>
 	{
 		[Browsable(false)]
-		public virtual ushort X { get; set; }
+		public virtual short X { get; set; }
 		[NonSerialized]
 		protected Position pos;
 		[NonSerialized]
@@ -175,7 +172,7 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 		[Browsable(false)]
-		public virtual ushort Y { get; set; }
+		public virtual short Y { get; set; }
 
 		[Browsable(false)]
 		public Sprite Sprite => _sprite;
@@ -238,15 +235,15 @@ namespace SonicRetro.SonLVL.API
 			set => Entity.propertyValue = value;
 		}
 
-		public override ushort X
+		public override short X
 		{
-			get => (ushort)(Entity.xpos >> 16);
+			get => (short)(Entity.xpos >> 16);
 			set => Entity.xpos = value << 16;
 		}
 
-		public override ushort Y
+		public override short Y
 		{
-			get => (ushort)(Entity.ypos >> 16);
+			get => (short)(Entity.ypos >> 16);
 			set => Entity.ypos = value << 16;
 		}
 

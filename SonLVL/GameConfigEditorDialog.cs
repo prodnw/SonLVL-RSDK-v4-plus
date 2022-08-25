@@ -549,7 +549,7 @@ namespace SonicRetro.SonLVL
 						int offset = tmpobjects.Count - origobjs.Count;
 						int[] objmap = new int[origobjs.Count + 1];
 						for (int i = 0; i < origobjs.Count; i++)
-							objmap[i + 1] = tmpobjects.IndexOf(origobjs[i]);
+							objmap[i + 1] = tmpobjects.IndexOf(origobjs[i]) + 1;
 						IEnumerable<StageXML> allstg = stages.SelectMany(a => a);
 						if (isxml)
 							allstg = allstg.Concat(origConf.stageLists.SelectMany(a => a.list).Select(a => (StageXML)a));
@@ -591,7 +591,7 @@ namespace SonicRetro.SonLVL
 								else if (ent.type > 0)
 								{
 									int t2 = objmap[ent.type];
-									if (t2 == -1)
+									if (t2 == 0)
 										del.Add(ent);
 									else if (t2 != ent.type)
 									{

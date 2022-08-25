@@ -14,9 +14,9 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
-				case '1':
+				case '2':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(1, 2, 40, 38), -20, -20);
+					img = new Sprite(LevelData.GetSpriteSheet("MZ/Objects.gif").GetSection(1, 2, 40, 38), -20, -20);
 					break;
 				case '3':
 					img = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(1, 2, 40, 38), -20, -20);
@@ -40,7 +40,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -55,7 +55,15 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			switch (subtype)
+			{
+				case 0:
+					return "Facing Left";
+				case 1:
+					return "Facing Right";
+				default:
+					return "Unknown";
+			}
 		}
 
 		public override Sprite Image

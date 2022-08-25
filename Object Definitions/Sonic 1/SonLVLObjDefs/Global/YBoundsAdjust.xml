@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Type" type="adjusttypes" startbit="0" length="1" />
+    <Property name="Mode" type="adjusttypes" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="adjusttypes">

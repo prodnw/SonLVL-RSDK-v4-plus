@@ -18,7 +18,7 @@ namespace S1ObjectDefinitions.Enemies
 				default:
 					img = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(1, 105, 48, 24), -16, -12);
 					break;
-				case "Zone07":
+				case '7':
 					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 264, 48, 24), -16, -12);
 					break;
 			}

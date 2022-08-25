@@ -12,20 +12,8 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Colour Change Offset" type="changeoffset" startbit="0" length="4" />
+    <Property name="Colour Change Offset" type="int" startbit="0" length="2" />
   </Properties>
-  <Enums>
-    <Enum name="changeoffset">
-      <EnumMember name="Frame 0" />
-      <EnumMember name="Frame 1" />
-      <EnumMember name="Frame 2" />
-      <EnumMember name="Frame 3" />
-      <EnumMember name="Frame 4" />
-      <EnumMember name="Frame 5" />
-      <EnumMember name="Frame 6" />
-      <EnumMember name="Frame 7" />
-    </Enum>
-  </Enums>
   <ImageSets>
     <ImageSet id="frame">
       <ImageRef image="spr1" />

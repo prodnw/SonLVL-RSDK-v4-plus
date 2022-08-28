@@ -70,7 +70,7 @@ namespace S1ObjectDefinitions.SLZ
 				bitmap.DrawRectangle(LevelData.ColorWhite, i, i, 32, 32);
 			}
 			bitmap.Flip(!(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)), (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY)));
-			return new Sprite(bitmap, -16, 16);
+			return new Sprite(bitmap, -16 - ((!(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX))) ? 1 : 0), 16);
 		}
 	}
 }

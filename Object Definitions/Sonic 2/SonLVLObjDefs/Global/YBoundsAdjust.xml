@@ -5,8 +5,13 @@
       <Offset X="-8" Y="-8"/>
     </ImageFromSheet>
   </Images>
-  <Subtypes>
-    <Subtype id="00" name="Regular Adjust" image="sprite" />
-    <Subtype id="01" name="Box Adjust" image="sprite" />
-  </Subtypes>
+  <Properties>
+    <Property name="Mode" type="adjusttypes" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="adjusttypes">
+      <EnumMember name="Regular Adjust" />
+      <EnumMember name="Box Adjust" />
+    </Enum>
+  </Enums>
 </ObjDef>

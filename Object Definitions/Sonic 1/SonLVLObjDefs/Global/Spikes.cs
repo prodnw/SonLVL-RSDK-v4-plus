@@ -30,35 +30,35 @@ namespace S1ObjectDefinitions.Global
 			
 			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Count", typeof(int), "Extended",
-                "How many Spikes there will be.", null, new Dictionary<string, int>
+				"How many Spikes there will be.", null, new Dictionary<string, int>
 				{
 					{ "3 Spikes", 0 },
 					{ "1 Spike", 4 },
 					{ "3 Spikes - Spaced", 8 },
 					{ "6 Spikes - Spaced", 12 }
 				},
-                (obj) => obj.PropertyValue & 12,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 243) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 12,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 243) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Orientation", typeof(int), "Extended",
-                "Which way the Spikes are facing.", null, new Dictionary<string, int>
+				"Which way the Spikes are facing.", null, new Dictionary<string, int>
 				{
 					{ "Up", 0 },
 					{ "Right", 1 },
 					{ "Left", 2 },
 					{ "Down", 3 }
 				},
-                (obj) => obj.PropertyValue & 3,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Moving", typeof(int), "Extended",
-                "If the Spikes should peek in and out.", null, new Dictionary<string, int>
+				"If the Spikes should peek in and out.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
 					{ "True", 128 }
 				},
-                (obj) => obj.PropertyValue & 128,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 128,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
 		}
 		
 		public override byte DefaultSubtype

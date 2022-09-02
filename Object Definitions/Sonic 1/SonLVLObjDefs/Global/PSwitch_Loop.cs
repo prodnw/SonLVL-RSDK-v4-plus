@@ -22,15 +22,15 @@ namespace S1ObjectDefinitions.Global
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-                "How tall the Plane Switch will be.", null, new Dictionary<string, int>
+				"How tall the Plane Switch will be.", null, new Dictionary<string, int>
 				{
 					{ "4 Nodes", 0 },
 					{ "8 Nodes", 1 },
 					{ "16 Nodes", 2 },
 					{ "32 Nodes", 3 }
 				},
-                (obj) => obj.PropertyValue,
-                (obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype

@@ -35,7 +35,7 @@
       <EnumMember name="Right" />
       <EnumMember name="Left" />
       <EnumMember name="Down" />
-	  <EnumMember name="Up (Stronger)" />
+      <EnumMember name="Up (Stronger)" />
     </Enum>
   </Enums>
   <ImageSets>

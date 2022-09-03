@@ -20,6 +20,21 @@
       <Offset X="-16" Y="-16" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Orientation" type="directions" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="directions">
+      <EnumMember name="Up" />
+      <EnumMember name="Right" />
+      <EnumMember name="Left" />
+      <EnumMember name="Down" />
+      <EnumMember name="Diagonal Up-Right" />
+      <EnumMember name="Diagonal Up-Left" />
+      <EnumMember name="Diagonal Down-Right" />
+      <EnumMember name="Diagonal Down-Left" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Up" image="up" />
     <Subtype id="01" name="Right" image="right" />

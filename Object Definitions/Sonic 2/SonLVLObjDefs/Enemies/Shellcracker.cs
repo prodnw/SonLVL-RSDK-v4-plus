@@ -5,32 +5,30 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class Aquis : ObjectDefinition
+	class Shellcracker : ObjectDefinition
 	{
 		private Sprite img;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
-			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
 			{
-				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
-					break;
-				case 'M':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
-					break;
+				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(199, 30, 56, 31), -24, -19);
+			}
+			else
+			{
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(132, 377, 56, 31), -24, -19); // using fixed frame
 			}
 
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"Where the Aquis is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+				"Where the Shellcracker is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue & 1),
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -70,7 +68,7 @@ namespace S2ObjectDefinitions.Enemies
 		public override Sprite SubtypeImage(byte subtype)
 		{
 			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) != 0, false);
+			sprite.Flip((subtype & 1) == 0, false);
 			return sprite;
 		}
 

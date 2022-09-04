@@ -5,27 +5,27 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class Aquis : ObjectDefinition
+	class Octus : ObjectDefinition
 	{
 		private Sprite img;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
-			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
 			{
-				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
-					break;
-				case 'M':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
-					break;
+				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 49, 42, 25), -21, -12);
+			}
+			else
+			{
+				// (SCZ mission ends up here too)
+				
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(667, 256, 42, 25), -21, -12);
 			}
 
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"Where the Aquis is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+				"Where the Octus is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }

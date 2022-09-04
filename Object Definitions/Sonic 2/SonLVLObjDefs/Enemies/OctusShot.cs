@@ -5,21 +5,21 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class AsteronSpike : ObjectDefinition
+	class OctusShot : ObjectDefinition
 	{
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(182, 1, 7, 14), -4, -8);
+				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(92, 32, 6, 6), -3, -3);
 			}
 			else
 			{
 				// (SCZ mission ends up here too)
 				
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(968, 322, 7, 14), -4, -8);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(910, 332, 6, 6), -3, -3);
 			}
 		}
 

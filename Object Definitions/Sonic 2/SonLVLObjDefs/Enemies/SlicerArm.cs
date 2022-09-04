@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class AsteronSpike : ObjectDefinition
+	class SlicerArm : ObjectDefinition
 	{
 		private Sprite img;
 
@@ -13,13 +13,11 @@ namespace S2ObjectDefinitions.Enemies
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(182, 1, 7, 14), -4, -8);
+				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(75, 51, 16, 16), 0, -16);
 			}
 			else
 			{
-				// (SCZ mission ends up here too)
-				
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(968, 322, 7, 14), -4, -8);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(926, 306, 16, 16), 0, -16);
 			}
 		}
 

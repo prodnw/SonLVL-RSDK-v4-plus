@@ -11,6 +11,16 @@
       <Offset X="-16" Y="-32"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Side" type="sides" startbit="0" length="2" />
+  </Properties>
+  <Enums>
+    <Enum name="sides">
+      <EnumMember name="Left" />
+      <EnumMember name="Middle" />
+      <EnumMember name="Right" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Left" image="left" />
     <Subtype id="01" name="Middle" image="middle" />

@@ -1,4 +1,5 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -8,7 +9,7 @@ namespace S2ObjectDefinitions.Global
 	class InvisibleBlock : ObjectDefinition
 	{
 		private PropertySpec[] properties;
-		private Sprite img;
+		private readonly Sprite[] sprites = new Sprite[3];
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -17,23 +18,36 @@ namespace S2ObjectDefinitions.Global
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 176, 16, 14), -8, -7);
+			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Display.gif");
+			sprites[0] = new Sprite(sheet.GetSection(1, 176, 16, 14), -8, -7);
+			sprites[1] = new Sprite(sheet.GetSection(17, 176, 16, 14), -8, -7);
+			sprites[2] = new Sprite(sheet.GetSection(1, 190, 16, 14), -8, -7);
 			
-			properties = new PropertySpec[2];
+			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Width", typeof(int), "Extended",
-				"How wide the block will .", null,
-				(obj) => (obj.PropertyValue & 15) + 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | ((int)value & 15) - 1));
+				"How wide the Invisible Block will be.", null,
+				(obj) => obj.PropertyValue >> 4,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((((int)value) & 15) << 4)));
 			
 			properties[1] = new PropertySpec("Height", typeof(int), "Extended",
-				"How tall the block will .", null,
-				(obj) => ((obj.PropertyValue & 240) >> 4) + 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (((int)value & 240) << 4) - 1));
+				"How tall the Invisible Block will be.", null,
+				(obj) => obj.PropertyValue & 15,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(((int)value) & 15)));
+			
+			properties[2] = new PropertySpec("Mode", typeof(int), "Extended",
+				"Which behaviour the Invisible Block will assume.", null, new Dictionary<string, int>
+				{
+					{ "Solid", 0 },
+					{ "Eject Left", 1 },
+					{ "Eject Right", 2 }
+				},
+				(obj) => ((V4ObjectEntry)obj).State,
+				(obj, value) => ((V4ObjectEntry)obj).State = ((int)value));
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0; }
+			get { return 17; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,32 +62,31 @@ namespace S2ObjectDefinitions.Global
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			// TODO: broken :(
-			// i'm not quite sure how this object works
+			int width = obj.PropertyValue >> 4;
+			int height = obj.PropertyValue & 15;
+			width += 1; height += 1;
 			
-			int width = (obj.PropertyValue & 15) + 1;
-			int height = ((obj.PropertyValue & 240) >> 4) + 1;
-			
-			int sx = -((width * 16) / 2) - 8;
-			int sy = -((height * 14) / 2) + 22;
+			int sx = (obj.PropertyValue & 240) << 15;
+			int sy = (obj.PropertyValue & 15) << 19;
+			sx >>= 16; sy >>= 16;
 			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					Sprite tmp = new Sprite(img);
-					tmp.Offset(sx + (i * 16), sy + (j * 14));
+					Sprite tmp = new Sprite(sprites[Math.Min(((V4ObjectEntry)obj).State, 2)]);
+					tmp.Offset(-sx + (j * 16), -sy + (i * 16));
 					sprs.Add(tmp);
 				}
 			}

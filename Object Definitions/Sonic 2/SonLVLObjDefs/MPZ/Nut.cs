@@ -10,11 +10,6 @@ namespace S2ObjectDefinitions.MPZ
 	{
 		private PropertySpec[] properties;
 		private Sprite img;
-		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
 
 		public override void Init(ObjectData data)
 		{
@@ -35,12 +30,17 @@ namespace S2ObjectDefinitions.MPZ
 				(obj) => (obj.PropertyValue & 127),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)(((int)value) & 127)));
 		}
-		
+
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
+
 		public override byte DefaultSubtype
 		{
 			get { return 0; }
 		}
-		
+
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			return img;
 		}
-		
+
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			if (obj.PropertyValue > 127)

@@ -98,8 +98,8 @@ namespace S2ObjectDefinitions.MPZ
 					tmp.Offset(-32, 0);
 					break;
 			}
-			sprs.Add(tmp);
 			
+			sprs.Add(tmp);
 			sprs.Add(sprites[4]);
 			
 			return new Sprite(sprs.ToArray());

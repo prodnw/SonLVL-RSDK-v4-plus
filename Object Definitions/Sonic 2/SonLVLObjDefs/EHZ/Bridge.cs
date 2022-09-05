@@ -11,7 +11,14 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(82, 78, 16, 16), -8, -8);
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			{
+				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(82, 78, 16, 16), -8, -8);
+			}
+			else
+			{
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(137, 313, 16, 16), -8, -8);
+			}
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

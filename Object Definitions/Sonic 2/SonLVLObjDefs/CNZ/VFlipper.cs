@@ -5,27 +5,19 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.CNZ
 {
-	class Bumper : ObjectDefinition
+	class VFlipper : ObjectDefinition
 	{
-		// We're using the name "Bumper" here, as opposed to what Origins calls it ("OBJECT NAME")
-		// "Bumper" rolls better off the tongue, I feel
-		
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
 			{
-				case '4':
-					img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(148, 100, 32, 32), -16, -16);
-					break;
-				case '9':
-					img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects2.gif").GetSection(1, 1, 32, 32), -16, -16);
-					break;
-				case 'M':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(511, 339, 32, 32), -16, -16);
-					break;
+				img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(101, 157, 16, 48), -8, -24);
+			}
+			else
+			{
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(321, 338, 16, 48), -8, -24);
 			}
 		}
 

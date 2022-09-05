@@ -5,19 +5,19 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class AquisShot : ObjectDefinition
+	class BuzzerShot : ObjectDefinition
 	{
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(99, 18, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 50, 8, 10), -12, -3);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(933, 323, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(66, 302, 8, 10), -12, -3);
 			}
 		}
 

@@ -5,19 +5,23 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class AquisShot : ObjectDefinition
+	class Coconuts : ObjectDefinition
 	{
 		private Sprite img;
 
+		// Coconuts' subtype is normally 30, but this value isn't used in any proper way
+		// (property value is supposed to be direction, but it gets reset to face the player in-game and a subtype of 30 doesn't exactly sound like a direction either)
+		// MBZ Coconuts don't have anything in their prop val either anyways, so let's just gloss over it here
+
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(99, 18, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 63, 26, 45), -8, -14);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(933, 323, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(50, 256, 26, 45), -8, -14);
 			}
 		}
 

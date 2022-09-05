@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.Enemies
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(29, 1, 47, 32), -16, -16);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(880, 256, 47, 32), -16, -16);
 			}
 
 			properties = new PropertySpec[2];
@@ -34,8 +34,8 @@ namespace S2ObjectDefinitions.Enemies
 			properties[1] = new PropertySpec("On Roof", typeof(int), "Extended",
 				"If the Slicer is on a roof or not.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 2 }
+					{ "False", 0 },
+					{ "True", 2 }
 				},
 				(obj) => (obj.PropertyValue & 2),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));

@@ -12,19 +12,18 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '0')
 			{
-				case '0':
-					img = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(1, 34, 64, 34), -36, -20);
-					break;
-				case 'M':
-				default:
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(588, 306, 64, 34), -36, -20);
-					break;
+				img = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(1, 34, 64, 34), -36, -20);
 			}
-
-			properties = new PropertySpec[1];
+			else
+			{
+				// (SCZ mission ends up here too)
+				
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(588, 306, 64, 34), -36, -20);
+			}
 			
+			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Speed", typeof(int), "Extended",
 				"How fast the Balkiry will be.", null, new Dictionary<string, int>
 				{

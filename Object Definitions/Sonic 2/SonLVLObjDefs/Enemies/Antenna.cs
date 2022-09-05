@@ -5,19 +5,24 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class AquisShot : ObjectDefinition
+	class Antenna : ObjectDefinition
 	{
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			// The Antenna normally just loads SCZ sprites regardless of zone, but for consistency with other enemies
+			// let's use its MBZ sprites if needed anyways
+			
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(99, 18, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(195, 159, 8, 30), -4, -16);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(933, 323, 8, 8), -4, -4);
+				// (SCZ mission ends up here too)
+				
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(630, 345, 8, 30), -4, -16);
 			}
 		}
 

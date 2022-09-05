@@ -5,20 +5,20 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class Aquis : ObjectDefinition
+	class ChopChop : ObjectDefinition
 	{
 		private Sprite img;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '3')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
+				img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(18, 78, 31, 24), -15, -12);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(209, 313, 31, 24), -15, -12);
 			}
 			
 			properties = new PropertySpec[1];

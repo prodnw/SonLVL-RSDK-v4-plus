@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="pocky">
+  <Images>
+    <ImageFromSheet id="pocky" sheet="Global/Items.gif" sourcex="183" sourcey="1" width="16" height="24">
+      <Offset X="-7" Y="-12"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Behaviour" description="How this Pocky will act." type="behaviours" startbit="0" length="2" />
+  </Properties>
+  <Enums>
+    <Enum name="behaviours">
+      <EnumMember name="Bounce Around (No Bounds)" />
+      <EnumMember name="Swap Direction Each Bounce" />
+      <EnumMember name="Follow Player" />
+      <EnumMember name="Bounce Around (Bounds)" />
+    </Enum>
+  </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Bounce Around (No Bounds)" image="pocky" />
+    <Subtype id="01" name="Bounce Around (Hover)" image="pocky" />
+    <Subtype id="02" name="Follow Player" image="pocky" />
+    <Subtype id="03" name="Bounce Around (Bounds)" image="pocky" />
+  </Subtypes>
+</ObjDef>

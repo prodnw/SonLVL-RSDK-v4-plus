@@ -8,11 +8,24 @@
       <Offset X="-12" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Behaviour" description="How this Block will act, and where it should be activated from if needed." type="behaviours" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="behaviours">
+      <EnumMember name="Solid" />
+	  <EnumMember name="Transparent (Enter from Top)" />
+	  <EnumMember name="Transparent (Enter from Left)" />
+	  <EnumMember name="Transparent (Enter from Right)" />
+	  <EnumMember name="Transparent (Enter from Bottom)" />
+	  <EnumMember name="Transparent (Enter from Right, Small)" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Solid" image="frame" />
     <Subtype id="01" name="Transparent (Enter from Top)" image="framet" />
-    <Subtype id="02" name="Transparent (Enter from Right)" image="framet" />
-    <Subtype id="03" name="Transparent (Enter from Left)" image="framet" />
+    <Subtype id="02" name="Transparent (Enter from Left)" image="framet" />
+    <Subtype id="03" name="Transparent (Enter from Right)" image="framet" />
     <Subtype id="04" name="Transparent (Enter from Bottom)" image="framet" />
     <Subtype id="05" name="Transparent (Enter from Right, Small)" image="framet" />
   </Subtypes>

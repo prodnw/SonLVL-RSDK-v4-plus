@@ -14,6 +14,17 @@
       <Offset X="-12" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Colour" description="The Colour of this Block." type="colours" startbit="0" length="2" />
+  </Properties>
+  <Enums>
+    <Enum name="colours">
+      <EnumMember name="Blue" />
+      <EnumMember name="Green" />
+      <EnumMember name="Yellow" />
+      <EnumMember name="Pink" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Blue" image="blue" />
     <Subtype id="01" name="Green" image="green" />

@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Colour Change Offset" type="int" startbit="0" length="2" />
+    <Property name="Colour Change Offset" description="The delay this Block will use, for changing colours." type="int" startbit="0" length="4" />
   </Properties>
   <ImageSets>
     <ImageSet id="frame">

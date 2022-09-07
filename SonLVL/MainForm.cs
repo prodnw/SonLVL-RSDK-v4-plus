@@ -477,8 +477,21 @@ namespace SonicRetro.SonLVL.GUI
 			scriptFiles = new List<string>();
 			if (Directory.Exists("Scripts"))
 				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Scripts"), "*.txt"));
-			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
-				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			if (LevelData.ModFolder != null)
+			{
+				string modscr = null;
+				switch (LevelData.RSDKVer)
+				{
+					case EngineVersion.V3:
+						modscr = Path.Combine(LevelData.ModFolder, "Data/Scripts");
+						break;
+					case EngineVersion.V4:
+						modscr = Path.Combine(LevelData.ModFolder, "Scripts");
+						break;
+				}
+				if (Directory.Exists(modscr))
+					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), modscr), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			}
 			objectScriptBox.AutoCompleteCustomSource.Clear();
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
 			sfxFiles = new List<string>();

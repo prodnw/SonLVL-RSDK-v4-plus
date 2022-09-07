@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="hplat">
+  <Images>
+    <ImageFromSheet id="hplat" sheet="HTZ/Objects.gif" sourcex="191" sourcey="223" width="64" height="32">
+      <Offset X="-32" Y="-12"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Start Direction" description="Which way the HPlatform will go initially." type="stardirs" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="stardirs">
+      <EnumMember name="Left" />
+      <EnumMember name="Right" />
+    </Enum>
+  </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Start Left" image="hplat" />
+    <Subtype id="01" name="Start Right" image="hplat" />
+  </Subtypes>
+</ObjDef>

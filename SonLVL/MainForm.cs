@@ -3702,6 +3702,10 @@ namespace SonicRetro.SonLVL.GUI
 		private void DeleteChunk()
 		{
 			LevelData.NewChunks.chunkList[SelectedChunk] = new RSDKv3_4.Tiles128x128.Block();
+			LevelData.RedrawChunk(SelectedChunk);
+			ChunkSelector.Invalidate();
+			DrawChunkPicture();
+			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 		}
 
 		private void DeleteTile()

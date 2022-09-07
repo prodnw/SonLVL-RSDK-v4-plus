@@ -419,10 +419,12 @@ namespace SonicRetro.SonLVL.API
 	public class V4ObjectEntry : ObjectEntry
 	{
 		private readonly RSDKv4.Scene.Entity entity;
+		private readonly V4ExtraData extra;
 
 		public V4ObjectEntry(RSDKv4.Scene.Entity entity)
 		{
 			this.entity = entity;
+			extra = new V4ExtraData(entity);
 			pos = new Position(this);
 		}
 
@@ -432,6 +434,205 @@ namespace SonicRetro.SonLVL.API
 		{
 			return new V4ObjectEntry(entity.Clone());
 		}
+
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[DisplayName("Advanced Properties")]
+		[Description("Additional properties associated with this object.")]
+		public V4ExtraData ExtraData => extra;
+
+		[Browsable(false)]
+		public int State
+		{
+			get => entity.state ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.state = null;
+				else
+					entity.state = value;
+			}
+		}
+
+		[Browsable(false)]
+		public Tiles128x128.Block.Tile.Directions Direction
+		{
+			get => entity.direction ?? Tiles128x128.Block.Tile.Directions.FlipNone;
+			set
+			{
+				if (value == 0)
+					entity.direction = null;
+				else
+					entity.direction = value;
+			}
+		}
+
+		[Browsable(false)]
+		public decimal Scale
+		{
+			get => (entity.scale ?? 0x200) / 512m;
+			set
+			{
+				if (value == 1)
+					entity.scale = null;
+				else
+					entity.scale = (int)(value * 512);
+			}
+		}
+
+		[Browsable(false)]
+		public decimal Rotation
+		{
+			get => entity.rotation ?? 0 / 1.4222222222222222222222222222222m;
+			set
+			{
+				if (value == 0)
+					entity.rotation = null;
+				else
+					entity.rotation = (int)(value * 1.4222222222222222222222222222222m);
+			}
+		}
+
+		[Browsable(false)]
+		public byte DrawOrder
+		{
+			get => entity.drawOrder ?? 3;
+			set
+			{
+				if (value == 3)
+					entity.drawOrder = null;
+				else
+					entity.drawOrder = value;
+			}
+		}
+
+		[Browsable(false)]
+		public RSDKv4.Scene.Entity.Priorities Priority
+		{
+			get => entity.priority ?? RSDKv4.Scene.Entity.Priorities.ActiveBounds;
+			set
+			{
+				if (value == 0)
+					entity.priority = null;
+				else
+					entity.priority = value;
+			}
+		}
+
+		[Browsable(false)]
+		public byte Alpha
+		{
+			get => entity.alpha ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.alpha = null;
+				else
+					entity.alpha = value;
+			}
+		}
+
+		[Browsable(false)]
+		public int AnimationSpeed
+		{
+			get => entity.animationSpeed ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.animationSpeed = null;
+				else
+					entity.animationSpeed = value;
+			}
+		}
+
+		[Browsable(false)]
+		public byte Frame
+		{
+			get => entity.frame ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.frame = null;
+				else
+					entity.frame = value;
+			}
+		}
+
+		[Browsable(false)]
+		public RSDKv4.Scene.Entity.InkEffects InkEffect
+		{
+			get => entity.inkEffect ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.inkEffect = null;
+				else
+					entity.inkEffect = value;
+			}
+		}
+
+		[Browsable(false)]
+		public int Value0
+		{
+			get => entity.value0 ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.value0 = null;
+				else
+					entity.value0 = value;
+			}
+		}
+
+		[Browsable(false)]
+		public int Value1
+		{
+			get => entity.value1 ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.value1 = null;
+				else
+					entity.value1 = value;
+			}
+		}
+
+		[Browsable(false)]
+		public int Value2
+		{
+			get => entity.value2 ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.value2 = null;
+				else
+					entity.value2 = value;
+			}
+		}
+
+		[Browsable(false)]
+		public int Value3
+		{
+			get => entity.value3 ?? 0;
+			set
+			{
+				if (value == 0)
+					entity.value3 = null;
+				else
+					entity.value3 = value;
+			}
+		}
+	}
+
+	public class V4ExtraData
+	{
+		private readonly RSDKv4.Scene.Entity entity;
+
+		public V4ExtraData(RSDKv4.Scene.Entity entity)
+		{
+			this.entity = entity;
+		}
+
+		public override string ToString() => string.Empty;
 
 		[DefaultValue(0)]
 		[Description("The object’s state. Can be used any way the object needs.")]

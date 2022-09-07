@@ -30,6 +30,8 @@ namespace SonicRetro.SonLVL.API
 		public byte DefaultSubtype;
 		[IniName("debug")]
 		public bool Debug;
+		[IniName("hidden")]
+		public bool Hidden;
 		[IniName("subtypes")]
 		[IniCollection(IniCollectionMode.SingleLine, Format = ",", ValueConverter = typeof(ByteHexConverter))]
 		public byte[] Subtypes;
@@ -161,6 +163,7 @@ namespace SonicRetro.SonLVL.API
 		public virtual Rectangle GetBounds(ObjectEntry obj) { return Rectangle.Empty; }
 		public virtual Sprite GetDebugOverlay(ObjectEntry obj) { return null; }
 		public virtual bool Debug { get { return false; } }
+		public virtual bool Hidden { get { return false; } }
 		static readonly PropertySpec[] specs = new PropertySpec[0];
 		public virtual PropertySpec[] CustomProperties => specs;
 	}
@@ -551,6 +554,7 @@ namespace SonicRetro.SonLVL.API
 		private byte defsub;
 		private List<byte> subtypes = new List<byte>();
 		bool debug = false;
+		bool hidden = false;
 
 		public override void Init(ObjectData data)
 		{
@@ -592,6 +596,7 @@ namespace SonicRetro.SonLVL.API
 			spr[3].Flip(false, true);
 			defsub = data.DefaultSubtype;
 			debug |= data.Debug;
+			hidden = data.Hidden;
 			if (data.Subtypes != null)
 				subtypes.AddRange(data.Subtypes);
 		}
@@ -614,6 +619,8 @@ namespace SonicRetro.SonLVL.API
 		}
 
 		public override bool Debug { get { return debug; } }
+
+		public override bool Hidden { get { return hidden; } }
 	}
 
 	public class XMLObjectDefinition : ObjectDefinition
@@ -1035,6 +1042,11 @@ namespace SonicRetro.SonLVL.API
 		public override bool Debug
 		{
 			get { return xmldef.Debug; }
+		}
+
+		public override bool Hidden
+		{
+			get { return xmldef.Hidden; }
 		}
 
 		public override byte DefaultSubtype

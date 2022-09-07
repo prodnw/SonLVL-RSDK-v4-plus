@@ -92,6 +92,11 @@ namespace S1ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 128,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
 		}
+
+		public override bool Debug
+		{
+			get { return true; }
+		}
 		
 		public override byte DefaultSubtype
 		{

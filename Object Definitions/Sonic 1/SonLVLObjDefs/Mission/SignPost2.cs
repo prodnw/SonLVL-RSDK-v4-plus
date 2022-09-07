@@ -15,7 +15,6 @@ namespace S1ObjectDefinitions.Mission
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Items2.gif").GetSection(34, 182, 48, 48), -24, -16);
 
 			properties = new PropertySpec[3];
-			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How the Signpost should act.", null, new Dictionary<string, int>
 				{

@@ -32,6 +32,11 @@ namespace S1ObjectDefinitions.Global
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
+
+		public override bool Debug
+		{
+			get { return true; }
+		}
 		
 		public override byte DefaultSubtype
 		{

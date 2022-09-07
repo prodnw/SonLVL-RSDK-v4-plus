@@ -15,7 +15,6 @@ namespace S1ObjectDefinitions.Mission
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
 
 			properties = new PropertySpec[1];
-			
 			properties[0] = new PropertySpec("Ring Count", typeof(int), "Extended",
 				"How many rings the player will start with.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0,

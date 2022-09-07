@@ -15,7 +15,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Mode" type="Modes" startbit="0" length="2" />
+    <Property name="Mode" description="Used to differentiate multiplayer Signposts from regular Signposts." type="Modes" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="Modes">

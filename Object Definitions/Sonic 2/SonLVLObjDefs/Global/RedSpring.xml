@@ -21,9 +21,9 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orientation" type="directions" startbit="0" length="3" />
-    <Property name="Enabled In Air" type="bool" startbit="3" length="1" />
-    <Property name="Use Twirl Anim" type="bool" startbit="7" length="1" />
+    <Property name="Orientation" description="Where the Spring will be facing." type="directions" startbit="0" length="3" />
+    <Property name="Enabled In Air" description="If the Spring should only be usable when the player is in the air already." type="bool" startbit="3" length="1" />
+    <Property name="Use Twirl Anim" description="If this Spring should trigger the Twirling animation, upon launch." type="bool" startbit="7" length="1" />
   </Properties>
   <Enums>
     <Enum name="directions">

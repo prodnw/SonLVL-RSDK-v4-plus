@@ -32,6 +32,10 @@ namespace SonicRetro.SonLVL.API.XMLDef
 		[XmlIgnore]
 		public bool DebugSpecified { get { return !Debug; } set { } }
 		[XmlAttribute]
+		public bool Hidden { get; set; }
+		[XmlIgnore]
+		public bool HiddenSpecified { get { return !Hidden; } set { } }
+		[XmlAttribute]
 		public int Depth { get; set; }
 		[XmlIgnore]
 		public bool DepthSpecified { get; set; }

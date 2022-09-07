@@ -809,9 +809,12 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				Bitmap image = LevelData.ObjTypes[i].Image.GetBitmap().ToBitmap(LevelData.BmpPal);
 				ObjectSelect.imageList1.Images.Add(image.Resize(ObjectSelect.imageList1.ImageSize));
-				ObjectSelect.listView1.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, ObjectSelect.imageList1.Images.Count - 1));
 				objectTypeImages.Images.Add(image.Resize(objectTypeImages.ImageSize));
-				objectTypeList.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, objectTypeImages.Images.Count - 1));
+				if (!LevelData.ObjTypes[i].Hidden)
+				{
+					ObjectSelect.listView1.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, ObjectSelect.imageList1.Images.Count - 1) { Tag = (byte)i });
+					objectTypeList.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, objectTypeImages.Images.Count - 1) { Tag = (byte)i });
+				}
 			}
 			ObjectSelect.listView1.EndUpdate();
 			objectTypeList.EndUpdate();
@@ -1370,7 +1373,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			if (ObjectSelect.listView1.SelectedIndices.Count == 0) return;
-			byte ID = (byte)(ObjectSelect.listView1.SelectedIndices[0] + 1);
+			byte ID = (byte)ObjectSelect.listView1.SelectedItems[0].Tag;
 			ObjectSelect.numericUpDown1.Value = ID;
 			ObjectSelect.numericUpDown2.Value = LevelData.ObjTypes[ID].DefaultSubtype;
 			ObjectSelect.listView2.Items.Clear();
@@ -4500,7 +4503,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void objectTypeList_ItemDrag(object sender, ItemDragEventArgs e)
 		{
-			objectTypeList.DoDragDrop(new DataObject("SonicRetro.SonLVLRSDK.GUI.ObjectDrop", (byte)(objectTypeList.Items.IndexOf((ListViewItem)e.Item) + 1)), DragDropEffects.Copy);
+			objectTypeList.DoDragDrop(new DataObject("SonicRetro.SonLVLRSDK.GUI.ObjectDrop", (byte)((ListViewItem)e.Item).Tag), DragDropEffects.Copy);
 		}
 
 		private void objectPanel_DragEnter(object sender, DragEventArgs e)

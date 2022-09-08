@@ -26,19 +26,24 @@ namespace S1ObjectDefinitions.Enemies
 					break;
 			}
 
-			properties = new PropertySpec[1];
-			
-			// The ideal name would be "Direction" but that's already in use...
-			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
-				"Where the Bomb is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties = new PropertySpec[2];
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way the Bomb is facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
-					{ "Right", 1 },
-					{ "Left - Roof", 2 },
-					{ "Right - Roof", 3 }
+					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj) => obj.PropertyValue & 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+			
+			properties[1] = new PropertySpec("On Roof", typeof(int), "Extended",
+				"If the Bomb is on a roof or not.", null, new Dictionary<string, int>
+				{
+					{ "False", 0 },
+					{ "True", 2 }
+				},
+				(obj) => obj.PropertyValue & 2,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

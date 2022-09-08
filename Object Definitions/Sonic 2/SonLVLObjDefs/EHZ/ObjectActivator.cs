@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.CNZ
+namespace S2ObjectDefinitions.EHZ
 {
-	class ConveyorBelt : ObjectDefinition
+	class ObjectActivator : ObjectDefinition
 	{
 		private PropertySpec[] properties;
 		private Sprite img;
@@ -21,15 +21,15 @@ namespace S2ObjectDefinitions.CNZ
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-				"How large the Conveyor Belt is.", null,
+			properties[0] = new PropertySpec("Activate Offset", typeof(int), "Extended",
+				"The Entity Pos offset of the Object to be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)(value));
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0; }
+			get { return 1; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -59,10 +59,21 @@ namespace S2ObjectDefinitions.CNZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			int width = ((Math.Max((int)obj.PropertyValue, 1)) << 4);
-			var bitmap = new BitmapBits(width + 1, 21);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, width, 20);
-			return new Sprite(bitmap, -(width / 2), -20);
+			if (obj.PropertyValue == 0)
+				return null;
+			
+			int index = LevelData.Objects.IndexOf(obj) + obj.PropertyValue;
+			
+			ushort xmin = Math.Min(obj.X, LevelData.Objects[index].X);
+			ushort ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
+			ushort xmax = Math.Max(obj.X, LevelData.Objects[index].X);
+			ushort ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
+			
+			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			
+			bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
+			
+			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}
 	}
 }

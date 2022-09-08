@@ -22,8 +22,8 @@ namespace S2ObjectDefinitions.CNZ
 			}
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"Where the Flipper is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Where the Flipper is facing.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }

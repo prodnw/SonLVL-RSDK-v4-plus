@@ -30,8 +30,8 @@ namespace S1ObjectDefinitions.Enemies
 				(obj) => obj.PropertyValue & 127,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value) & 127));
 
-			properties[1] = new PropertySpec("PDir", typeof(int), "Extended",
-				"The direction the Ball Hog will be facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way the Ball Hog will be facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 128 }

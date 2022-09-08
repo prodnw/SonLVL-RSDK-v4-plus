@@ -22,8 +22,8 @@ namespace S2ObjectDefinitions.Enemies
 			}
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"Where the Aquis is facing (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way the Aquis is facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }

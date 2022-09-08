@@ -26,8 +26,8 @@ namespace S2ObjectDefinitions.Enemies
 			}
 
 			properties = new PropertySpec[2];
-			properties[0] = new PropertySpec("PDir", typeof(int), "Extended",
-				"The direction the Buzzer will be facing initially (not to be confused with object.direction).", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"The direction the Buzzer will be facing initially.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }

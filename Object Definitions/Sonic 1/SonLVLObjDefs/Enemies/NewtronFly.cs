@@ -22,6 +22,10 @@ namespace S1ObjectDefinitions.Enemies
 					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 124, 39, 39), -20, -20);
 					break;
 			}
+			
+			// Despite them being set in the scene, prop val & val1 are unused
+			// It may just be an oversight and they were intended to be used, as Newtron Shoots have *do* use it
+			// It seemginly would've had both x and y checks too, in contrast to Shoots who only have x
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

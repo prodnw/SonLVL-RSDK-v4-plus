@@ -19,7 +19,7 @@ namespace S1ObjectDefinitions.Enemies
 					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(160, 111, 12, 12), -6, -6);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(35, 51, 16, 16), -8, -8); // Inaccurate to how it is in official S1 RSDK probably, but load the correct sheet anyways
+					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(35, 51, 16, 16), -8, -8); // Inaccurate to how it is in official S1 RSDK editor probably, but load the correct sheet anyways
 					break;
 			}
 		}
@@ -28,7 +28,12 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-		
+
+		public override bool Hidden
+		{
+			get { return true; }
+		}
+
 		public override byte DefaultSubtype
 		{
 			get { return 0; }

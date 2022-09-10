@@ -22,7 +22,7 @@ namespace S1ObjectDefinitions.Mission
 					{ "Follow Bounds", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			properties[1] = new PropertySpec("Center Offset", typeof(int), "Extended",
 				"How offset the Signpost's camera will be. X-wise. Measured in pixels, to every 16th pixel", null,

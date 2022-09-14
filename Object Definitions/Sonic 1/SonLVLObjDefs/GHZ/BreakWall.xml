@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Side" type="sides" startbit="0" length="2" />
+    <Property name="Side" description="Which side this Breakable Wall is facing." type="sides" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="sides">

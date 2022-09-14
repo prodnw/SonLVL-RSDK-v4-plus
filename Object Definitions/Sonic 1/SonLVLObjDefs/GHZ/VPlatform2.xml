@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Start Direction" type="stardirs" startbit="0" length="1" />
+    <Property name="Start Direction" description="The starting direction of this Platform." type="stardirs" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="stardirs">

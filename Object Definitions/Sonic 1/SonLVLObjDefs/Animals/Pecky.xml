@@ -10,16 +10,16 @@
   </Properties>
   <Enums>
     <Enum name="behaviours">
-      <EnumMember name="Bounce Around (No Bounds)" />
-      <EnumMember name="Swap Direction Each Bounce" />
-      <EnumMember name="Follow Player" />
-      <EnumMember name="Bounce Around (Bounds)" />
+      <EnumMember name="Placed" />
+      <EnumMember name="Fixed" />
+      <EnumMember name="Follow" />
+      <EnumMember name="Free" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Bounce Around (No Bounds)" image="pecky" />
-    <Subtype id="01" name="Bounce Around (Hover)" image="pecky" />
-    <Subtype id="02" name="Follow Player" image="pecky" />
-    <Subtype id="03" name="Bounce Around (Bounds)" image="pecky" />
+    <Subtype id="00" name="Placed" image="pecky" />
+    <Subtype id="01" name="Fixed" image="pecky" />
+    <Subtype id="02" name="Follow" image="pecky" />
+    <Subtype id="03" name="Free" image="pecky" />
   </Subtypes>
 </ObjDef>

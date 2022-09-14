@@ -419,6 +419,7 @@ namespace SonicRetro.SonLVL.API
 	public class V4ObjectEntry : ObjectEntry
 	{
 		private readonly RSDKv4.Scene.Entity entity;
+		[NonSerialized]
 		private readonly V4ExtraData extra;
 
 		public V4ObjectEntry(RSDKv4.Scene.Entity entity)

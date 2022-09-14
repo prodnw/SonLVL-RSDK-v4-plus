@@ -25,7 +25,12 @@ namespace S2ObjectDefinitions.HTZ
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-		
+
+		public override bool Hidden
+		{
+			get { return true; }
+		}
+
 		public override byte DefaultSubtype
 		{
 			get { return 0; }

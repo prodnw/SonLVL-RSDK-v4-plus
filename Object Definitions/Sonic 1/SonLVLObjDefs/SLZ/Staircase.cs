@@ -14,7 +14,7 @@ namespace S1ObjectDefinitions.SLZ
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 26, 128, 32), -16, -16);
 			
-			properties = new PropertySpec[1];
+			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Activate From", typeof(int), "Extended",
 				"Where the Staircase should be activated from.", null, new Dictionary<string, int>
 				{
@@ -23,6 +23,15 @@ namespace S1ObjectDefinitions.SLZ
 				},
 				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+			
+			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way the Staircase will expand.", null, new Dictionary<string, int>
+				{
+					{ "Left", 0 },
+					{ "Right", 1 }
+				},
+				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

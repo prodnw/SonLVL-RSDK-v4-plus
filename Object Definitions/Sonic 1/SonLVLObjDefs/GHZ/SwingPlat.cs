@@ -22,11 +22,20 @@ namespace S1ObjectDefinitions.GHZ
 			sprites[1] = new Sprite(sheet.GetSection(101, 1, 16, 16), -8, -8);
 			sprites[2] = new Sprite(sheet.GetSection(118, 1, 48, 16), -24, -8);
 			
-			properties = new PropertySpec[1];
+			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
+			
+			properties[1] = new PropertySpec("Inverted", typeof(int), "Extended",
+				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null, new Dictionary<string, int>
+				{
+					{ "False", 0 },
+					{ "True", 1 }
+				},
+				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 		
 		public override byte DefaultSubtype

@@ -64,10 +64,10 @@ namespace S2ObjectDefinitions.EHZ
 			
 			int index = LevelData.Objects.IndexOf(obj) + obj.PropertyValue;
 			
-			ushort xmin = Math.Min(obj.X, LevelData.Objects[index].X);
-			ushort ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
-			ushort xmax = Math.Max(obj.X, LevelData.Objects[index].X);
-			ushort ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
+			short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
+			short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
+			short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
+			short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
 			
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			

@@ -20,7 +20,7 @@ namespace S1ObjectDefinitions.Mission
 			properties[0] = new PropertySpec("Can Crush", typeof(bool), "Extended",
 				"If this Mission Block can crush the player.", null,
 				(obj) => obj.PropertyValue == 0,
-				(obj, value) => obj.PropertyValue = ((bool)value == false ? 1 : 0));
+				(obj, value) => obj.PropertyValue = (byte)((bool)value == false ? 1 : 0));
 			
 			properties[1] = new PropertySpec("Climbable", typeof(bool), "Extended", // TODO: prolly could name this better, Knuckles can climb all blocks but this value is if he can pull himself up or not
 				"If Knuckles is able to pull himself up on this Mission Block. Only the topmost Block in a pillar should have this set.", null,

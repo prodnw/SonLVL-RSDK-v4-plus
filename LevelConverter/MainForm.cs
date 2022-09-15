@@ -205,7 +205,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 				activeLayer3 = srcScene.activeLayer3,
 				layerMidpoint = srcScene.layerMidpoint
 			};
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv4.Scene.Entity(0, 0, a.xpos, a.ypos)));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -545,7 +549,12 @@ namespace SonicRetro.SonLVL.LevelConverter
 				if (dstScene.layers.Count == 8)
 					break;
 			}
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+				dstScene.objects[0].entities = new List<RSDKv5.SceneEntity>(srcScene.entities.Select(a => new RSDKv5.SceneEntity(dstScene.objects[0], (ushort)srcScene.entities.IndexOf(a)) { xpos = a.xpos, ypos = a.ypos }));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -705,7 +714,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 				activeLayer3 = srcScene.activeLayer3,
 				layerMidpoint = srcScene.layerMidpoint
 			};
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(srcScene.entities.Select(a => new RSDKv3.Scene.Entity(0, 0, a.xpos, a.ypos)));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -1045,7 +1058,12 @@ namespace SonicRetro.SonLVL.LevelConverter
 				if (dstScene.layers.Count == 8)
 					break;
 			}
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.objects.Add(new RSDKv5.SceneObject() { name = new RSDKv5.NameIdentifier("Blank Object") });
+				dstScene.objects[0].entities = new List<RSDKv5.SceneEntity>(srcScene.entities.Select(a => new RSDKv5.SceneEntity(dstScene.objects[0], (ushort)srcScene.entities.IndexOf(a)) { xpos = a.xpos, ypos = a.ypos }));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<RSDKv3_4.GameConfig.ObjectInfo> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -1454,7 +1472,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 			}).ToArray().CopyTo(dstChunk.chunkList, 0);
 			dstChunk.Write(Path.Combine(dstFol, "128x128Tiles.bin"));
 			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv3.Scene.Entity(0, 0, a.xpos, a.ypos)));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<string> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -1817,7 +1839,11 @@ namespace SonicRetro.SonLVL.LevelConverter
 			}).ToArray().CopyTo(dstChunk.chunkList, 0);
 			dstChunk.Write(Path.Combine(dstFol, "128x128Tiles.bin"));
 			IOrderedEnumerable<RSDKv5.SceneEntity> sceneEntities = srcScene.objects.SelectMany(a => a.entities).OrderBy(a => a.slotID);
-			if (srcConf.loadGlobalObjects)
+			if (objMode == ObjectMode.ConvertAllToBlank)
+			{
+				dstScene.entities = new List<RSDKv3_4.Scene.Entity>(sceneEntities.Select(a => new RSDKv4.Scene.Entity(0, 0, a.xpos, a.ypos)));
+			}
+			else if (srcConf.loadGlobalObjects)
 			{
 				List<string> srcObjs = null;
 				if (File.Exists(srcGCFile))
@@ -1894,6 +1920,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 	enum ObjectMode
 	{
 		DontInclude,
+		ConvertAllToBlank,
 		MatchGlobalsAddStage,
 		MatchGlobalsDelete,
 		DeleteGlobal,

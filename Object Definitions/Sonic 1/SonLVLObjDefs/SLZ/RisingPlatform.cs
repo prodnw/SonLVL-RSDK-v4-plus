@@ -14,32 +14,31 @@ namespace S1ObjectDefinitions.SLZ
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(84, 188, 80, 32), -40, -8);
 
-			properties = new PropertySpec[2];
+			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Movement", typeof(int), "Extended",
-				"The pattern the Rising Platform will follow for moving.", null, new Dictionary<string, int>
+				"The Platform's movement.", null, new Dictionary<string, int>
 				{
-					{ "Up - Slow", 0 },
-					{ "Up - Medium", 1 },
-					{ "Up - Fast", 2 },
-					{ "Down - Slow", 3 },
-					{ "Down - Medium", 4 },
-					{ "Down - Fast", 5 },
-					{ "Up - Slow, Faster", 6 },
-					{ "Up - Medium, Faster", 7 },
-					{ "Up - Fast, Faster", 8 },
-					{ "Down - Slow, Faster", 9 },
-					{ "Down - Medium, Faster", 10 },
-					{ "Down - Fast, Faster", 11 },
+					{ "Up (128px)", 0 },
+					{ "Up (256px)", 1 },
+					{ "Up (416px)", 2 },
+					
+					{ "Down (128px)", 3 },
+					{ "Down (256px)", 4 },
+					{ "Down (416px)", 5 },
+					
+					{ "Up (160px)", 6 },
+					{ "Up (288px)", 7 },
+					{ "Up (352px)", 8 },
+					
+					{ "Down (160px)", 9 },
+					{ "Down (288px)", 10 },
+					{ "Down (352px)", 11 },
+					
 					{ "Up-Right", 12 },
 					{ "Down-Left", 13 }
 				},
-				(obj) => ((obj.PropertyValue & 128) != 0) ? (obj.PropertyValue & 15) : 0,
+				(obj) => (obj.PropertyValue & 15),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)((int)value)));
-			
-			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
-				"The timings of the Platform. Based on 6 (ie 6, 12, 18, 24...).", null,
-				(obj) => obj.PropertyValue & 127,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)(System.Math.Max((int)value, 1))));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -75,6 +74,29 @@ namespace S1ObjectDefinitions.SLZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return img;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			// The default values from RisingPlatform_table28 in the object's script
+			// If you've modified these you can simply copy them over.
+			int[] lolol = new int[15] {0x400000, 0x800000, 0xD00000, 0x400000, 0x800000, 0xD00000, 0x500000, 0x900000, 0xB00000, 0x500000, 0x900000, 0xB00000, 0x800000, 0x800000, 0xC00000};
+			var overlay = new BitmapBits(80, 32);
+			overlay.DrawRectangle(LevelData.ColorWhite, 0, 0, 80 - 1, 32 - 1);
+			if (obj.PropertyValue < 14)
+			{
+				if (obj.PropertyValue < 12)
+				{
+					int sign = (obj.PropertyValue % 6 < 3) ? -1 : 1;
+					return new Sprite(overlay, - 40, sign * (lolol[obj.PropertyValue] / 0x10000 * 2) - 8);
+				}
+				else
+				{
+					int sign = (obj.PropertyValue == 13) ? -1 : 1;
+					return new Sprite(overlay, sign * (lolol[obj.PropertyValue] / 0x10000 * 2) - 40, -sign * (lolol[obj.PropertyValue] / 0x10000) - 8);
+				}
+			}
+			return new Sprite(overlay, - 40, - 8);
 		}
 	}
 }

@@ -190,6 +190,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 			this.objectMode.FormattingEnabled = true;
 			this.objectMode.Items.AddRange(new object[] {
             "Don\'t Include Objects",
+            "Convert All To Blank",
             "Match Globals By Name, Add Rest to Stage List",
             "Match Globals By Name, Delete Rest",
             "Delete Global Objects From Scene",

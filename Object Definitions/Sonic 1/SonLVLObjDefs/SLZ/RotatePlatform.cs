@@ -21,7 +21,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Left", 0 },
 					{ "Right", 1 },
 					{ "Down", 2 },
-					{ "Up", 3 },
+					{ "Up", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
@@ -29,7 +29,7 @@ namespace S1ObjectDefinitions.SLZ
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
 				{
-					{ "Anti-clockwise", 0 },
+					{ "Counter-clockwise", 0 },
 					{ "Clockwise", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
@@ -71,19 +71,19 @@ namespace S1ObjectDefinitions.SLZ
 			Sprite sprite = new Sprite(img);
 			int radius = ((obj.PropertyValue & 4) != 0) ? -80 : 80;
 			
-			if (obj.PropertyValue % 4 == 0)
+			if ((obj.PropertyValue & 3) == 0)
 			{
 				sprite.Offset(-radius, 0);
 			}
-			else if (obj.PropertyValue % 4 == 1)
+			else if ((obj.PropertyValue & 3) == 1)
 			{
 				sprite.Offset(radius, 0);
 			}
-			else if (obj.PropertyValue % 4 == 2)
+			else if ((obj.PropertyValue & 3) == 2)
 			{
 				sprite.Offset(0, radius);
 			}
-			else if (obj.PropertyValue % 4 == 3)
+			else if ((obj.PropertyValue & 3) == 3)
 			{
 				sprite.Offset(0, -radius);
 			}

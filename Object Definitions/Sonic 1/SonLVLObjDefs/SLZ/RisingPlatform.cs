@@ -80,7 +80,7 @@ namespace S1ObjectDefinitions.SLZ
 		{
 			// The default values from RisingPlatform_table28 in the object's script
 			// If you've modified these you can simply copy them over.
-			int[] lolol = new int[15] {0x400000, 0x800000, 0xD00000, 0x400000, 0x800000, 0xD00000, 0x500000, 0x900000, 0xB00000, 0x500000, 0x900000, 0xB00000, 0x800000, 0x800000, 0xC00000};
+			int[] RisingPlatform_table28 = new int[15] {0x400000, 0x800000, 0xD00000, 0x400000, 0x800000, 0xD00000, 0x500000, 0x900000, 0xB00000, 0x500000, 0x900000, 0xB00000, 0x800000, 0x800000, 0xC00000};
 			var overlay = new BitmapBits(80, 32);
 			overlay.DrawRectangle(LevelData.ColorWhite, 0, 0, 80 - 1, 32 - 1);
 			if (obj.PropertyValue < 14)
@@ -88,15 +88,15 @@ namespace S1ObjectDefinitions.SLZ
 				if (obj.PropertyValue < 12)
 				{
 					int sign = (obj.PropertyValue % 6 < 3) ? -1 : 1;
-					return new Sprite(overlay, - 40, sign * (lolol[obj.PropertyValue] / 0x10000 * 2) - 8);
+					return new Sprite(overlay, -40, sign * (RisingPlatform_table28[obj.PropertyValue] / 0x10000 * 2) - 8);
 				}
 				else
 				{
 					int sign = (obj.PropertyValue == 13) ? -1 : 1;
-					return new Sprite(overlay, sign * (lolol[obj.PropertyValue] / 0x10000 * 2) - 40, -sign * (lolol[obj.PropertyValue] / 0x10000) - 8);
+					return new Sprite(overlay, sign * (RisingPlatform_table28[obj.PropertyValue] / 0x10000 * 2) - 40, -sign * (RisingPlatform_table28[obj.PropertyValue] / 0x10000) - 8);
 				}
 			}
-			return new Sprite(overlay, - 40, - 8);
+			return new Sprite(overlay, -40, -8);
 		}
 	}
 }

@@ -972,6 +972,7 @@ namespace SonicRetro.SonLVL.API
 					default:
 						return null;
 				}
+				ent.propertyValue = GetObjectDefinition(ID).DefaultSubtype;
 				Scene.entities.Add(ent);
 				ObjectEntry obj = ObjectEntry.Create(ent);
 				Objects.Add(obj);

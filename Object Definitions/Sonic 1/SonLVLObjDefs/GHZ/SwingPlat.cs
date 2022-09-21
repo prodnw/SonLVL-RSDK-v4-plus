@@ -36,6 +36,8 @@ namespace S1ObjectDefinitions.GHZ
 				},
 				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+			
+			// State is set in an Origins mission but that doesn't appear to mean anything
 		}
 		
 		public override byte DefaultSubtype

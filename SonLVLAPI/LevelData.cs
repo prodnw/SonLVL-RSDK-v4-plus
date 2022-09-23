@@ -538,18 +538,20 @@ namespace SonicRetro.SonLVL.API
 						break;
 				}
 			}
-			string stgfol = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder);
-			Directory.CreateDirectory(stgfol);
+			Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Stages", StageInfo.folder));
 			for (int i = 0; i < 32; i++)
 				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.colors[0].Length][i % StageConfig.stagePalette.colors[0].Length] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
-			StageConfig.Write(Path.Combine(stgfol, "StageConfig.bin"));
+			SaveFile("StageConfig.bin", fn => StageConfig.Write(fn));
 			BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
 			for (int i = 0; i < NewTiles.Length; i++)
 				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
-			using (Bitmap bmp = tiles.ToBitmap(NewPalette))
-				bmp.Save(Path.Combine(stgfol, "16x16Tiles.gif"), ImageFormat.Gif);
-			NewChunks.Write(Path.Combine(stgfol, "128x128Tiles.bin"));
-			Collision.Write(Path.Combine(stgfol, "CollisionMasks.bin"));
+			SaveFile("16x16Tiles.gif", fn =>
+			{
+				using (Bitmap bmp = tiles.ToBitmap(NewPalette))
+					bmp.Save(fn, ImageFormat.Gif);
+			});
+			SaveFile("128x128Tiles.bin", fn => NewChunks.Write(fn));
+			SaveFile("CollisionMasks.bin", fn => Collision.Write(fn));
 			Background.hScroll.Clear();
 			Background.vScroll.Clear();
 			for (int i = 0; i < 8; i++)
@@ -597,10 +599,19 @@ namespace SonicRetro.SonLVL.API
 					Background.layers[i].lineScroll[y] = scrind;
 				}
 			}
-			Background.Write(Path.Combine(stgfol, "Backgrounds.bin"));
-			Scene.Write(Path.Combine(stgfol, $"Act{StageInfo.actID}.bin"));
+			SaveFile("Backgrounds.bin", fn => Background.Write(fn));
+			SaveFile($"Act{StageInfo.actID}.bin", fn => Scene.Write(fn));
 			foreach (var astg in AdditionalScenes)
-				astg.Scene.Write(Path.Combine(stgfol, $"Act{astg.StageInfo.actID}.bin"));
+				SaveFile($"Act{astg.StageInfo.actID}.bin", fn => astg.Scene.Write(fn));
+		}
+
+		private static void SaveFile(string name, Action<string> action)
+		{
+			string fullpath = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder, name);
+			bool isnew = !File.Exists(fullpath);
+			action(fullpath);
+			if (isnew && ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}").FastArrayEqual(File.ReadAllBytes(fullpath)))
+				File.Delete(fullpath);
 		}
 
 		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)

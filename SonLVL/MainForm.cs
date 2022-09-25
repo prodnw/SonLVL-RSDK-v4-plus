@@ -6761,14 +6761,14 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void layerParallaxFactor_ValueChanged(object sender, EventArgs e)
 		{
-			LevelData.Background.layers[bglayer].parallaxFactor = (short)(layerParallaxFactor.Value * 256);
+			LevelData.Background.layers[bglayer].parallaxFactor = (ushort)(layerParallaxFactor.Value * 256);
 			if (scrollCamX.Value > 0 || scrollCamY.Value > 0)
 				DrawLevel();
 		}
 
 		private void layerScrollSpeed_ValueChanged(object sender, EventArgs e)
 		{
-			LevelData.Background.layers[bglayer].scrollSpeed = (sbyte)(layerScrollSpeed.Value * 64m);
+			LevelData.Background.layers[bglayer].scrollSpeed = (byte)(layerScrollSpeed.Value * 64m);
 			if (scrollFrame.Value > 0)
 				DrawLevel();
 		}

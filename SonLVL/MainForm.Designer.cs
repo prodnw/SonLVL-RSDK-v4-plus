@@ -2788,15 +2788,10 @@ namespace SonicRetro.SonLVL.GUI
             65536});
 			this.scrollScrollSpeed.Location = new System.Drawing.Point(118, 316);
 			this.scrollScrollSpeed.Maximum = new decimal(new int[] {
-            1984375,
+            3984375,
             0,
             0,
             393216});
-			this.scrollScrollSpeed.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            -2147483648});
 			this.scrollScrollSpeed.Name = "scrollScrollSpeed";
 			this.scrollScrollSpeed.Size = new System.Drawing.Size(81, 20);
 			this.scrollScrollSpeed.TabIndex = 11;
@@ -2821,15 +2816,10 @@ namespace SonicRetro.SonLVL.GUI
             196608});
 			this.scrollParallaxFactor.Location = new System.Drawing.Point(118, 290);
 			this.scrollParallaxFactor.Maximum = new decimal(new int[] {
-            -85292513,
-            2,
+            -170194401,
+            5,
             0,
             524288});
-			this.scrollParallaxFactor.Minimum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            -2147483648});
 			this.scrollParallaxFactor.Name = "scrollParallaxFactor";
 			this.scrollParallaxFactor.Size = new System.Drawing.Size(81, 20);
 			this.scrollParallaxFactor.TabIndex = 9;
@@ -2896,15 +2886,10 @@ namespace SonicRetro.SonLVL.GUI
             65536});
 			this.layerScrollSpeed.Location = new System.Drawing.Point(118, 29);
 			this.layerScrollSpeed.Maximum = new decimal(new int[] {
-            1984375,
+            3984375,
             0,
             0,
             393216});
-			this.layerScrollSpeed.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            -2147483648});
 			this.layerScrollSpeed.Name = "layerScrollSpeed";
 			this.layerScrollSpeed.Size = new System.Drawing.Size(81, 20);
 			this.layerScrollSpeed.TabIndex = 3;
@@ -2929,15 +2914,10 @@ namespace SonicRetro.SonLVL.GUI
             196608});
 			this.layerParallaxFactor.Location = new System.Drawing.Point(118, 3);
 			this.layerParallaxFactor.Maximum = new decimal(new int[] {
-            -85292513,
-            2,
+            -170194401,
+            5,
             0,
             524288});
-			this.layerParallaxFactor.Minimum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            -2147483648});
 			this.layerParallaxFactor.Name = "layerParallaxFactor";
 			this.layerParallaxFactor.Size = new System.Drawing.Size(81, 20);
 			this.layerParallaxFactor.TabIndex = 1;

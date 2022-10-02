@@ -16,7 +16,7 @@ namespace S1ObjectDefinitions.Mission
 
 			properties = new PropertySpec[2];
 			
-			// Flipped because this sounds cleaner
+			// Technically should *not* crush, but flipped because this sounds cleaner
 			properties[0] = new PropertySpec("Can Crush", typeof(bool), "Extended",
 				"If this Mission Block can crush the player.", null,
 				(obj) => obj.PropertyValue == 0,

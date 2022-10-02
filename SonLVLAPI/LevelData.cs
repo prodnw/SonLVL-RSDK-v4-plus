@@ -47,6 +47,7 @@ namespace SonicRetro.SonLVL.API
 		private static Dictionary<string, BitmapBits> spriteSheets;
 		public static BitmapBits[][] ChunkColBmpBits;
 		public static Bitmap[][] ChunkColBmps;
+		public static Sprite[][] ChunkColSprites;
 		public static Bitmap UnknownImg;
 		public static Sprite UnknownSprite;
 		public delegate void LogEventHandler(params string[] message);
@@ -57,9 +58,9 @@ namespace SonicRetro.SonLVL.API
 		private static readonly BitmapBits InvalidTile = new BitmapBits(16, 16);
 		public static readonly Color[] GrayscalePalette = new Color[256];
 		public const int ColorTransparent = 0;
-		public const int ColorWhite = 252;
-		public const int ColorYellow = 253;
-		public const int ColorBlack = 254;
+		public const int ColorWhite = 1;
+		public const int ColorYellow = 2;
+		public const int ColorBlack = 3;
 
 		static LevelData()
 		{
@@ -305,9 +306,6 @@ namespace SonicRetro.SonLVL.API
 				BmpPal = palbmp.Palette;
 			NewPalette.CopyTo(BmpPal.Entries, 0);
 			BmpPal.Entries[ColorTransparent] = Color.Transparent;
-			BmpPal.Entries[ColorWhite] = Color.White;
-			BmpPal.Entries[ColorYellow] = Color.Yellow;
-			BmpPal.Entries[ColorBlack] = Color.Black;
 			UnknownImg.Palette = BmpPal;
 			unkobj = new DefaultObjectDefinition();
 			INIObjDefs = new Dictionary<string, ObjectData>();
@@ -351,11 +349,13 @@ namespace SonicRetro.SonLVL.API
 			CompChunkBmps = new Bitmap[NewChunks.chunkList.Length];
 			ChunkColBmpBits = new BitmapBits[NewChunks.chunkList.Length][];
 			ChunkColBmps = new Bitmap[NewChunks.chunkList.Length][];
+			ChunkColSprites = new Sprite[NewChunks.chunkList.Length][];
 			for (int i = 0; i < NewChunks.chunkList.Length; i++)
 			{
 				ChunkBmps[i] = new Bitmap[2];
 				ChunkColBmpBits[i] = new BitmapBits[2];
 				ChunkColBmps[i] = new Bitmap[2];
+				ChunkColSprites[i] = new Sprite[2];
 				RedrawChunk(i);
 			}
 			stopwatch.Stop();
@@ -423,11 +423,13 @@ namespace SonicRetro.SonLVL.API
 			CompChunkBmps = new Bitmap[NewChunks.chunkList.Length];
 			ChunkColBmpBits = new BitmapBits[NewChunks.chunkList.Length][];
 			ChunkColBmps = new Bitmap[NewChunks.chunkList.Length][];
+			ChunkColSprites = new Sprite[NewChunks.chunkList.Length][];
 			for (int i = 0; i < NewChunks.chunkList.Length; i++)
 			{
 				ChunkBmps[i] = new Bitmap[2];
 				ChunkColBmpBits[i] = new BitmapBits[2];
 				ChunkColBmps[i] = new Bitmap[2];
+				ChunkColSprites[i] = new Sprite[2];
 				RedrawChunk(i);
 			}
 		}
@@ -676,6 +678,164 @@ namespace SonicRetro.SonLVL.API
 			return LevelImg8bpp;
 		}
 
+		public static BitmapBits32 DrawForeground32(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
+			BitmapBits32 LevelImg8bpp = new BitmapBits32(bounds.Size);
+			NewPalette.CopyTo(LevelImg8bpp.Palette, 0);
+			LevelImg8bpp.Clear(NewPalette[160]);
+			objectsAboveHighPlane |= !includeObjects;
+			int colpath = -1;
+			if (collisionPath1)
+				colpath = 0;
+			else if (collisionPath2)
+				colpath = 1;
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
+			for (int y = ct; y <= cb; y++)
+				for (int x = cl; x <= cr; x++)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+					{
+						if (objectsAboveHighPlane && lowPlane && highPlane)
+						{
+							LevelImg8bpp.DrawSprite(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+							if (colpath != -1)
+							{
+								LevelImg8bpp.Palette[ColorWhite] = Color.White;
+								LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
+								LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+								LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
+								Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+							}
+						}
+						else
+						{
+							if (lowPlane)
+								LevelImg8bpp.DrawSpriteLow(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+							if (!includeObjects || objectsAboveHighPlane)
+							{
+								if (highPlane)
+									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+								if (colpath != -1)
+								{
+									LevelImg8bpp.Palette[ColorWhite] = Color.White;
+									LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
+									LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+									LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
+									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+								}
+							}
+						}
+					}
+			if (includeObjects)
+			{
+				foreach (Entry item in Objects)
+					LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
+				if (!objectsAboveHighPlane)
+					for (int y = ct; y <= cb; y++)
+						for (int x = cl; x <= cr; x++)
+							if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+							{
+								if (highPlane)
+									LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+								if (colpath != -1)
+								{
+									LevelImg8bpp.Palette[ColorWhite] = Color.White;
+									LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
+									LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+									LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
+									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+								}
+							}
+				foreach (ObjectEntry item in Objects)
+					if (item.DebugOverlay != null)
+						LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
+			}
+			return LevelImg8bpp;
+		}
+
+		public static BitmapBits DrawForegroundLayout(Rectangle? section)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
+			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
+			for (int y = ct; y <= cb; y++)
+				for (int x = cl; x <= cr; x++)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+						LevelImg8bpp.DrawSprite(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+			return LevelImg8bpp;
+		}
+
+		public static BitmapBits DrawForegroundLayoutLow(Rectangle? section)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
+			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
+			for (int y = ct; y <= cb; y++)
+				for (int x = cl; x <= cr; x++)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+						LevelImg8bpp.DrawSpriteLow(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+			return LevelImg8bpp;
+		}
+
+		public static BitmapBits DrawForegroundLayoutHigh(Rectangle? section)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
+			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
+			for (int y = ct; y <= cb; y++)
+				for (int x = cl; x <= cr; x++)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+						LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Scene.layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+			return LevelImg8bpp;
+		}
+
+		public static BitmapBits DrawForegroundCollision(Rectangle? section, int colpath)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
+			BitmapBits LevelImg8bpp = new BitmapBits(bounds.Size);
+			int cl = Math.Max(bounds.X / 128, 0);
+			int ct = Math.Max(bounds.Y / 128, 0);
+			int cr = Math.Min((bounds.Right - 1) / 128, FGWidth - 1);
+			int cb = Math.Min((bounds.Bottom - 1) / 128, FGHeight - 1);
+			for (int y = ct; y <= cb; y++)
+				for (int x = cl; x <= cr; x++)
+					if (Scene.layout[y][x] < NewChunks.chunkList.Length)
+						LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
+			return LevelImg8bpp;
+		}
+
 		public static BitmapBits DrawBackground(int layer, Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
@@ -698,6 +858,43 @@ namespace SonicRetro.SonLVL.API
 							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (collisionPath2)
 							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
+					}
+			return LevelImg8bpp;
+		}
+
+		public static BitmapBits32 DrawBackground32(int layer, Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		{
+			Rectangle bounds;
+			if (section.HasValue)
+				bounds = section.Value;
+			else
+				bounds = new Rectangle(0, 0, BGWidth[layer] * 128, BGHeight[layer] * 128);
+			BitmapBits32 LevelImg8bpp = new BitmapBits32(bounds.Size);
+			NewPalette.CopyTo(LevelImg8bpp.Palette, 0);
+			LevelImg8bpp.Clear(NewPalette[160]);
+			int colpath = -1;
+			if (collisionPath1)
+				colpath = 0;
+			else if (collisionPath2)
+				colpath = 1;
+			for (int y = Math.Max(bounds.Y / 128, 0); y <= Math.Min((bounds.Bottom - 1) / 128, BGHeight[layer] - 1); y++)
+				for (int x = Math.Max(bounds.X / 128, 0); x <= Math.Min((bounds.Right - 1) / 128, BGWidth[layer] - 1); x++)
+					if (Background.layers[layer].layout[y][x] < NewChunks.chunkList.Length)
+					{
+						if (lowPlane && highPlane)
+							LevelImg8bpp.DrawSprite(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+						else if (lowPlane)
+							LevelImg8bpp.DrawSpriteLow(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+						else if (highPlane)
+							LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
+						if (colpath != -1)
+						{
+							LevelImg8bpp.Palette[ColorWhite] = Color.White;
+							LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
+							LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+							LevelImg8bpp.DrawSprite(ChunkColSprites[Background.layers[layer].layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
+							Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+						}
 					}
 			return LevelImg8bpp;
 		}
@@ -951,10 +1148,10 @@ namespace SonicRetro.SonLVL.API
 			ChunkSprites[chunk] = new Sprite(tmplow, tmphigh);
 			ChunkBmps[chunk][0] = tmplow.ToBitmap(BmpPal);
 			ChunkBmps[chunk][1] = tmphigh.ToBitmap(BmpPal);
+			ChunkColSprites[chunk][0] = new Sprite(ChunkColBmpBits[chunk][0]);
+			ChunkColSprites[chunk][1] = new Sprite(ChunkColBmpBits[chunk][1]);
 			ChunkColBmps[chunk][0] = ChunkColBmpBits[chunk][0].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black);
 			ChunkColBmps[chunk][1] = ChunkColBmpBits[chunk][1].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black);
-			ChunkColBmpBits[chunk][0].FixUIColors();
-			ChunkColBmpBits[chunk][1].FixUIColors();
 			tmplow.DrawBitmapComposited(tmphigh, 0, 0);
 			CompChunkBmps[chunk] = tmplow.ToBitmap(BmpPal);
 		}

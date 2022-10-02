@@ -32,40 +32,6 @@ namespace SonicRetro.SonLVL.API
 				if (bmp.Bits[i] > 0) bmp.Bits[i] = (byte)(bmp.Bits[i] + amount);
 		}
 
-		public static void FixUIColors(this BitmapBits bmp)
-		{
-			for (int i = 0; i < bmp.Bits.Length; i++)
-				switch (bmp.Bits[i])
-				{
-					case 1:
-						bmp.Bits[i] = LevelData.ColorWhite;
-						break;
-					case 2:
-						bmp.Bits[i] = LevelData.ColorYellow;
-						break;
-					case 3:
-						bmp.Bits[i] = LevelData.ColorBlack;
-						break;
-				}
-		}
-
-		public static void UnfixUIColors(this BitmapBits bmp)
-		{
-			for (int i = 0; i < bmp.Bits.Length; i++)
-				switch (bmp.Bits[i])
-				{
-					case LevelData.ColorWhite:
-						bmp.Bits[i] = 1;
-						break;
-					case LevelData.ColorYellow:
-						bmp.Bits[i] = 2;
-						break;
-					case LevelData.ColorBlack:
-						bmp.Bits[i] = 3;
-						break;
-				}
-		}
-
 		public static Bitmap To32bpp(this Bitmap bmp)
 		{
 			if (LevelData.IsWindows) return bmp.Clone(new Rectangle(Point.Empty, bmp.Size), PixelFormat.Format32bppArgb);
@@ -97,6 +63,17 @@ namespace SonicRetro.SonLVL.API
 				}
 			}
 			return ind;
+		}
+
+		public static Color AlphaBlend(this Color color, Color dstcol)
+		{
+			int dsta = dstcol.A * (255 - color.A);
+			int a = color.A + dsta;
+			int r = (color.R * color.A + dstcol.R * dsta) / a;
+			int g = (color.G * color.A + dstcol.G * dsta) / a;
+			int b = (color.B * color.A + dstcol.B * dsta) / a;
+			Color result = Color.FromArgb(Math.Min(255, a), Math.Min(255, r), Math.Min(255, g), Math.Min(255, b));
+			return result;
 		}
 
 		/// <summary>

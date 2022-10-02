@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapBits.cs" />
+    <Compile Include="BitmapBits32.cs" />
     <Compile Include="BlockSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>

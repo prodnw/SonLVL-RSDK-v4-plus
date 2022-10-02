@@ -53,9 +53,9 @@ namespace SCDObjectDefinitions.R1
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-                "How large the Tile Trigger will be.", null,
-                (obj) => obj.PropertyValue,
-                (obj, value) => obj.PropertyValue = (byte)((int)value));
+				"How large the Tile Trigger will be.", null,
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype

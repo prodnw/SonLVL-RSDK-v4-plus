@@ -54,7 +54,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Contents" type="Contents" startbit="0" length="5" />
+    <Property name="Contents" description="The contents of this Monitor." type="Contents" startbit="0" length="5" />
   </Properties>
   <Enums>
     <Enum name="Contents">

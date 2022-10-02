@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Part" type="type" startbit="0" length="2" />
+    <Property name="Part" description="Which piece of the Eggmobile this object is." type="type" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="type">

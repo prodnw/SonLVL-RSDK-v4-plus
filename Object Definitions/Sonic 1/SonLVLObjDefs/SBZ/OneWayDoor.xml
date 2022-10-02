@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Open From" type="directions" startbit="0" length="2" />
+    <Property name="Open From" description="Which end the Door should open from." type="directions" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="directions">

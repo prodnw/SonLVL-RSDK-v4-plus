@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="tease">
+<ObjDef xmlns="http://www.sonicretro.org" Image="juggling">
   <Images>
-    <ImageFromSheet id="tease" sheet="Ending/Credits.gif" sourcex="1" sourcey="1" width="60" height="50">
+    <ImageFromSheet id="juggling" sheet="Ending/Credits.gif" sourcex="1" sourcey="1" width="60" height="50">
       <Offset X="-29" Y="-23" />
     </ImageFromSheet>
-    <ImageFromSheet id="angry" sheet="Ending/Credits.gif" sourcex="1" sourcey="53" width="58" height="55">
+    <ImageFromSheet id="tantrum" sheet="Ending/Credits.gif" sourcex="1" sourcey="53" width="58" height="55">
       <Offset X="-29" Y="-19" />
     </ImageFromSheet>
     <ImageFromSheet id="emerald1" sheet="Ending/Credits.gif" sourcex="14" sourcey="109" width="12" height="12">
@@ -30,12 +30,12 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Frame ID" type="frameids" startbit="0" length="4" />
+    <Property name="Frame ID" description="Which sprite this object will use." type="frameids" startbit="0" length="4" />
   </Properties>
   <Enums>
     <Enum name="frameids">
-      <EnumMember name="Eggman - Tease" />
-      <EnumMember name="Eggman - Angry" />
+      <EnumMember name="Eggman - Juggling" />
+      <EnumMember name="Eggman - Tantrum" />
       <EnumMember name="Emerald 1" />
       <EnumMember name="Emerald 2" />
       <EnumMember name="Emerald 3" />
@@ -47,12 +47,12 @@
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Frame ID" value="Eggman - Tease" />
-      <ImageRef image="tease" />
+      <Condition property="Frame ID" value="Eggman - Juggling" />
+      <ImageRef image="juggling" />
     </DisplayOption>
 	<DisplayOption>
-      <Condition property="Frame ID" value="Eggman - Angry" />
-      <ImageRef image="angry" />
+      <Condition property="Frame ID" value="Eggman - Tantrum" />
+      <ImageRef image="tantrum" />
     </DisplayOption>
 	<DisplayOption>
       <Condition property="Frame ID" value="Emerald 1" />

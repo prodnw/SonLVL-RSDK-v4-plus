@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Player ID" description="Which player this Spotlight is focusing on." type="int" startbit="0" length="1" />
+    <Property name="Player ID" description="Which player this Spotlight is focused on." type="int" startbit="0" length="1" />
   </Properties>
   <Subtypes>
     <Subtype id="00" name="Player 1" image="frame" />

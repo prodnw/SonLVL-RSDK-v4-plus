@@ -6,6 +6,6 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="GHZ Achievement" type="bool" startbit="0" length="1" />
+    <Property name="GHZ Achievement" description="If this ring should count towards the Green Hill Zone achievement tally." type="bool" startbit="0" length="1" />
   </Properties>
 </ObjDef>

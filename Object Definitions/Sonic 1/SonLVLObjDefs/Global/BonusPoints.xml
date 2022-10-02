@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Point Reward" type="rewards" startbit="0" length="2" />
+    <Property name="Point Reward" description="How many points this object will award upon contact." type="rewards" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="rewards">

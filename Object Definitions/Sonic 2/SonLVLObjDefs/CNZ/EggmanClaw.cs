@@ -1,7 +1,5 @@
 using SonicRetro.SonLVL.API;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
+using System;
 
 namespace S2ObjectDefinitions.CNZ
 {

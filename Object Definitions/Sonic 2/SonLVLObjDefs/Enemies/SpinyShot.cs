@@ -1,21 +1,23 @@
 using SonicRetro.SonLVL.API;
-using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 
-namespace S2ObjectDefinitions.CNZ
+namespace S2ObjectDefinitions.Enemies
 {
-	class EggmanBomb : ObjectDefinition
+	class SpinyShot : ObjectDefinition
 	{
 		private Sprite img;
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(145, 172, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(73, 25, 8, 8), -4, -4);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(224, 130, 8, 8), -4, -4);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(84, 302, 8, 8), -4, -4);
 			}
 		}
 

@@ -64,10 +64,10 @@ namespace S2ObjectDefinitions.HTZ
 			
 			// Do pardon the dust, this isn't particularly good but I'm not too proficient at this sort of stuff
 			
-			ushort xmin = obj.X;
-			ushort ymin = obj.Y;
-			ushort xmax = obj.X;
-			ushort ymax = obj.Y;
+			short xmin = obj.X;
+			short ymin = obj.Y;
+			short xmax = obj.X;
+			short ymax = obj.Y;
 			
 			for (int i = 1; i < obj.PropertyValue + 1; i++)
 			{

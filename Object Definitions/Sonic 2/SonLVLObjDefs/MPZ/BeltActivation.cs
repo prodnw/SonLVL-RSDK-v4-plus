@@ -66,10 +66,10 @@ namespace S2ObjectDefinitions.MPZ
 			// its activator's count, so now a random invis block across the level is activated by this object too in that mission
 			// This isn't this render breaking, just how it has to be :(
 			
-			ushort xmin = obj.X;
-			ushort ymin = obj.Y;
-			ushort xmax = obj.X;
-			ushort ymax = obj.Y;
+			int xmin = obj.X;
+			int ymin = obj.Y;
+			int xmax = obj.X;
+			int ymax = obj.Y;
 			
 			for (int i = 1; i < obj.PropertyValue + 1; i++)
 			{

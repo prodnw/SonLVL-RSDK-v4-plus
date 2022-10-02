@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Hidden" description="If the zone preview should be hidden or not." type="bool" startbit="0" length="1" />
+    <Property name="Hidden" description="If the zone preview should be hidden or not. The background will be animated regardless of what this value is set to." type="bool" startbit="0" length="1" />
   </Properties>
   <ImageSets>
     <ImageSet id="sonicm">

@@ -67,10 +67,10 @@ namespace S2ObjectDefinitions.SCZ
 			// Activators pointing to activators pointing to activators, it ain't anything pretty i tell you
 			// Not much we can do from here, unfortunately
 			
-			ushort xmin = obj.X;
-			ushort ymin = obj.Y;
-			ushort xmax = obj.X;
-			ushort ymax = obj.Y;
+			int xmin = obj.X;
+			int ymin = obj.Y;
+			int xmax = obj.X;
+			int ymax = obj.Y;
 			
 			for (int i = 1; i < obj.PropertyValue + 1; i++)
 			{

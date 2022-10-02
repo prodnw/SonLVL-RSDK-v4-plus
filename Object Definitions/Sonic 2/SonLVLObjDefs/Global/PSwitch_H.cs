@@ -105,7 +105,7 @@ namespace S2ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 128,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
 		}
-		
+
 		public override byte DefaultSubtype
 		{
 			get { return 0; }

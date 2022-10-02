@@ -58,7 +58,7 @@ namespace SCDObjectDefinitions.R5
 		{
 			int st = -(((obj.PropertyValue) * 16) / 2) + 8;
 			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < (obj.PropertyValue); i++)
+			for (int i = 0; i < System.Math.Max((int)obj.PropertyValue, 1); i++)
 			{
 				Sprite tmp = new Sprite(img);
 				tmp.Offset(st + (i * 16), 0);

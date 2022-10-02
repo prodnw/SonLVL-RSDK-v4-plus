@@ -42,7 +42,7 @@ namespace SCDObjectDefinitions.TAttack
 					{ "Total Time", 7 }
 				},
                 (obj) => obj.PropertyValue & 15,
-                (obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 2) | (byte)((int)value)));
+                (obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

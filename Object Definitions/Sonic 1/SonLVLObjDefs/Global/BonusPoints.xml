@@ -11,6 +11,17 @@
       <Offset X="-16" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Point Reward" description="How many points this object will award upon contact." type="rewards" startbit="0" length="2" />
+  </Properties>
+  <Enums>
+    <Enum name="rewards">
+      <EnumMember name="None" />
+      <EnumMember name="10000" />
+      <EnumMember name="1000" />
+      <EnumMember name="100" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="No Points" image="10000" />
     <Subtype id="01" name="10000 Points" image="10000" />

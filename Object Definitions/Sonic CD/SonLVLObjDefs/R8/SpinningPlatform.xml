@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="plat">
+  <Images>
+    <ImageFromSheet id="plat" sheet="R1/Objects.gif" sourcex="107" sourcey="98" width="32" height="16">
+      <Offset X="-16" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Spin Offset" type="int" startbit="0" length="8" />
+  </Properties>
+</ObjDef>

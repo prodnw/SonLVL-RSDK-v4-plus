@@ -26,6 +26,18 @@
       <Offset X="-16" Y="0"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Orientation" description="Where the Spring will be facing." type="directions" startbit="0" length="3" />
+  </Properties>
+  <Enums>
+    <Enum name="directions">
+      <EnumMember name="Up" />
+      <EnumMember name="Right" />
+      <EnumMember name="Left" />
+      <EnumMember name="Down" />
+      <EnumMember name="Up (Stronger)" />
+    </Enum>
+  </Enums>
   <ImageSets>
     <ImageSet id="upwards">
       <ImageRef image="up1" />

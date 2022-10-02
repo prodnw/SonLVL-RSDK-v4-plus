@@ -31,10 +31,10 @@ namespace SCDObjectDefinitions.Special
 			List<ObjectEntry> nodes = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj) + 1).TakeWhile(a => a.Name == "UFO Node").ToList();
 			if (nodes.Count == 0)
 				return null;
-			ushort xmin = Math.Min(obj.X, nodes.Min(a => a.X));
-			ushort ymin = Math.Min(obj.Y, nodes.Min(a => a.Y));
-			ushort xmax = Math.Max(obj.X, nodes.Max(a => a.X));
-			ushort ymax = Math.Max(obj.Y, nodes.Max(a => a.Y));
+			short xmin = Math.Min(obj.X, nodes.Min(a => a.X));
+			short ymin = Math.Min(obj.Y, nodes.Min(a => a.Y));
+			short xmax = Math.Max(obj.X, nodes.Max(a => a.X));
+			short ymax = Math.Max(obj.Y, nodes.Max(a => a.Y));
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			if (obj.X != nodes[0].X || obj.Y != nodes[0].Y)
 				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);

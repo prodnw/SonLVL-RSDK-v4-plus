@@ -30,16 +30,16 @@ namespace SCDObjectDefinitions.R7
 			properties[0] = new PropertySpec("Formation", typeof(int), "Extended",
 				"The formation of the blocks.", null, new Dictionary<string, int>
 				{
-					{ "Single Block", 0},
-					{ "Two Blocks (Horizontal)", 1},
-					{ "Three Blocks (Horizontal)", 2},
-					{ "Four Blocks (Horizontal)", 3},
-					{ "Two Blocks (Vertical)", 4},
-					{ "Three Blocks (Vertical)", 5},
-					{ "Four Blocks (Vertical)", 6},
-					{ "Invisible Block", 7}
+					{ "Single Block", 0 },
+					{ "Two Blocks (Horizontal)", 1 },
+					{ "Three Blocks (Horizontal)", 2 },
+					{ "Four Blocks (Horizontal)", 3 },
+					{ "Two Blocks (Vertical)", 4 },
+					{ "Three Blocks (Vertical)", 5 },
+					{ "Four Blocks (Vertical)", 6 },
+					{ "Invisible Block", 7 }
 				},
-				(obj) => obj.PropertyValue,
+				(obj) => obj.PropertyValue & 7,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		

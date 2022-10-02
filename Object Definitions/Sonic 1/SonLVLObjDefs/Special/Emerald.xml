@@ -23,6 +23,20 @@
       <Offset X="-12" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Emerald ID" description="The Emerald type to be displayed. Named after order ID rather than colour for clarity." type="emeralds" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="emeralds">
+      <EnumMember name="Emerald 1" />
+	  <EnumMember name="Emerald 2" />
+	  <EnumMember name="Emerald 3" />
+	  <EnumMember name="Emerald 4" />
+	  <EnumMember name="Emerald 5" />
+	  <EnumMember name="Emerald 6" />
+	  <EnumMember name="Emerald 7" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Emerald 1" image="emerald1" />
     <Subtype id="01" name="Emerald 2" image="emerald2" />

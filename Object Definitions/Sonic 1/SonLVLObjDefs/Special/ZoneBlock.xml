@@ -23,6 +23,20 @@
       <Offset X="-12" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Zone ID" description="The Zone number to be displayed on the Block." type="zones" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="zones">
+      <EnumMember name="Zone 1" />
+	  <EnumMember name="Zone 2" />
+	  <EnumMember name="Zone 3" />
+	  <EnumMember name="Zone 4" />
+	  <EnumMember name="Zone 5" />
+	  <EnumMember name="Zone 6" />
+	  <EnumMember name="Zone 7" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Zone 1" image="zone1" />
     <Subtype id="01" name="Zone 2" image="zone2" />

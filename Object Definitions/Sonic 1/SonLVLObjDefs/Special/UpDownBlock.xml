@@ -8,6 +8,15 @@
       <Offset X="-12" Y="-12"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Mode" description="The Change this Block will apply upon contact." type="modes" startbit="0" length="1" />
+  </Properties>
+  <Enums>
+    <Enum name="modes">
+      <EnumMember name="Speed Up" />
+      <EnumMember name="Slow Down" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Speed Up" image="speedup" />
     <Subtype id="01" name="Slow Down" image="slowdown" />

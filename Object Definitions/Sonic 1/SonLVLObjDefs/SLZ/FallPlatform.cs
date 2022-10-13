@@ -9,7 +9,6 @@ namespace S1ObjectDefinitions.SLZ
 	{
 		private Sprite img;
 		private Sprite debug;
-		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
@@ -31,11 +30,6 @@ namespace S1ObjectDefinitions.SLZ
 		public override byte DefaultSubtype
 		{
 			get { return 0; }
-		}
-		
-		public override PropertySpec[] CustomProperties
-		{
-			get { return properties; }
 		}
 
 		public override string SubtypeName(byte subtype)

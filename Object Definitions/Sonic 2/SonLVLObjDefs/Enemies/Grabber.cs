@@ -15,15 +15,17 @@ namespace S2ObjectDefinitions.Enemies
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(5, 74, 40, 32), -27, -8);
-				sprites[1] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(5, 140, 23, 16), -6, 8);
-				sprites[2] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(46, 74, 8, 8), -4, -16);
+				BitmapBits sheet = LevelData.GetSpriteSheet("CPZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(5, 74, 40, 32), -27, -8);
+				sprites[1] = new Sprite(sheet.GetSection(46, 74, 8, 8), -4, -4);
+				sprites[2] = new Sprite(sheet.GetSection(5, 140, 23, 16), -6, 8);
 			}
 			else
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(131, 280, 40, 32), -27, -8);
-				sprites[1] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(154, 313, 23, 16), -6, 8);
-				sprites[2] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(145, 334, 8, 8), -4, -16);
+				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(131, 280, 40, 32), -27, -8);
+				sprites[1] = new Sprite(sheet.GetSection(145, 334, 8, 8), -4, -4);
+				sprites[2] = new Sprite(sheet.GetSection(178, 313, 30, 15), -6, 8);
 			}
 
 			properties = new PropertySpec[1];
@@ -73,7 +75,7 @@ namespace S2ObjectDefinitions.Enemies
 		public override Sprite SubtypeImage(byte subtype)
 		{
 			Sprite sprite = new Sprite(sprites);
-			sprite.Flip((subtype & 1) != 0, false);
+			sprite.Flip((subtype & 1) == 1, false);
 			return sprite;
 		}
 

@@ -61,7 +61,14 @@ namespace S1ObjectDefinitions.SLZ
 			{
 				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
 				Sprite sprite = new Sprite(sprites[frame]);
-				sprite.Offset(0, (i * 16));
+				if (i == (obj.PropertyValue + 1))
+				{
+					sprite.Offset(0, (i * 16) - 8);
+				}
+				else
+				{
+					sprite.Offset(0, (i * 16));
+				}
 				sprs.Add(sprite);
 			}
 			return new Sprite(sprs.ToArray());
@@ -70,8 +77,13 @@ namespace S1ObjectDefinitions.SLZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
-			overlay.DrawCircle(LevelData.ColorWhite, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 24);
+			overlay.DrawCircle(LevelData.ColorWhite, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 8);
 			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), 0);
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			return new Rectangle(obj.X - 44, obj.Y - 24 + ((obj.PropertyValue + 1) * 16), 88, 48);
 		}
 	}
 }

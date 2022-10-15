@@ -13,8 +13,18 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override void Init(ObjectData data)
 		{
-			sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(136, 155, 64, 27), -32, -16);
-			sprites[1] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(136, 183, 48, 26), -24, -16);
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			{
+				BitmapBits sheet = LevelData.GetSpriteSheet("CPZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(136, 155, 64, 27), -32, -16);
+				sprites[1] = new Sprite(sheet.GetSection(136, 183, 48, 26), -24, -16);
+			}
+			else
+			{
+				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(464, 971, 64, 27), -32, -16);
+				sprites[1] = new Sprite(sheet.GetSection(529, 971, 48, 26), -24, -16);
+			}
 
 			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",

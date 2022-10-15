@@ -17,14 +17,14 @@ namespace S2ObjectDefinitions.Enemies
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("CPZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(5, 74, 40, 32), -27, -8);
-				sprites[1] = new Sprite(sheet.GetSection(46, 74, 8, 8), -4, -4);
+				sprites[1] = new Sprite(sheet.GetSection(46, 74, 8, 8), -4, -16);
 				sprites[2] = new Sprite(sheet.GetSection(5, 140, 23, 16), -6, 8);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(131, 280, 40, 32), -27, -8);
-				sprites[1] = new Sprite(sheet.GetSection(145, 334, 8, 8), -4, -4);
+				sprites[1] = new Sprite(sheet.GetSection(145, 334, 8, 8), -4, -16);
 				sprites[2] = new Sprite(sheet.GetSection(178, 313, 30, 15), -6, 8);
 			}
 

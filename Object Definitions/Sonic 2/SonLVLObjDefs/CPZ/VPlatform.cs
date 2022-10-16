@@ -3,37 +3,35 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.Enemies
+namespace S2ObjectDefinitions.CPZ
 {
-	class Grabber : ObjectDefinition
+	class VPlatform : ObjectDefinition
 	{
 		private PropertySpec[] properties;
 
-		private readonly Sprite[] sprites = new Sprite[3];
+		private readonly Sprite[] sprites = new Sprite[2];
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("CPZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(5, 74, 40, 32), -27, -8);
-				sprites[1] = new Sprite(sheet.GetSection(46, 74, 8, 8), -4, -16);
-				sprites[2] = new Sprite(sheet.GetSection(5, 140, 23, 16), -6, 8);
+				sprites[0] = new Sprite(sheet.GetSection(136, 155, 64, 27), -32, -16);
+				sprites[1] = new Sprite(sheet.GetSection(136, 183, 48, 26), -24, -16);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(131, 280, 40, 32), -27, -8);
-				sprites[1] = new Sprite(sheet.GetSection(145, 334, 8, 8), -4, -16);
-				sprites[2] = new Sprite(sheet.GetSection(178, 313, 30, 15), -6, 8);
+				sprites[0] = new Sprite(sheet.GetSection(464, 971, 64, 27), -32, -16);
+				sprites[1] = new Sprite(sheet.GetSection(529, 971, 48, 26), -24, -16);
 			}
 
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which way the Spiny will move.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
+				"The size of the platform.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Large", 0 },
+					{ "Small", 1 }
 				},
 				(obj) => (obj.PropertyValue & 1),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
@@ -56,12 +54,12 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
+			switch ((subtype == 0) ? 0 : 1)
 			{
 				case 0:
-					return "Facing Left";
+					return "Large";
 				case 1:
-					return "Facing Right";
+					return "Small";
 				default:
 					return "Unknown";
 			}
@@ -69,19 +67,30 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return new Sprite(sprites); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(sprites);
-			sprite.Flip((subtype & 1) == 1, false);
-			return sprite;
+			return sprites[(subtype == 0) ? 0 : 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			var sprite = new Sprite(SubtypeImage(obj.PropertyValue));
+			// Flip XY doesn't work..
+			if (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX))
+			{
+				sprite.Offset(0, -128);
+			}
+			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			var overlay = new BitmapBits(1, 128);
+			overlay.DrawLine(LevelData.ColorWhite, 0, 0x00, 0, 128);
+			return new Sprite(overlay, 0, -128);
 		}
 	}
 }

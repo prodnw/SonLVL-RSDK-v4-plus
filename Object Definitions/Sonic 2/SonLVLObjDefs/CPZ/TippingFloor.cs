@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.CPZ
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(34, 692, 32, 32), -16, -16);
+				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(34, 692, 32, 32), -16, -16);
 			}
 
 			properties = new PropertySpec[2];

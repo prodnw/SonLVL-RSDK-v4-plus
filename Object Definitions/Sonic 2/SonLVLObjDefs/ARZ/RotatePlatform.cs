@@ -14,20 +14,10 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '3')
-			{
-				BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(160, 235, 30, 20), -15, -12);
-				sprites[1] = new Sprite(sheet.GetSection(174, 218, 16, 16), -8, -8);
-				sprites[2] = new Sprite(sheet.GetSection(126, 191, 64, 16), -32, -8);
-			}
-			else
-			{
-				BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(160, 235, 30, 20), -15, -10);
-				sprites[1] = new Sprite(sheet.GetSection(174, 218, 16, 16), -8, -8);
-				sprites[2] = new Sprite(sheet.GetSection(126, 191, 64, 16), -32, -8);
-			}
+			BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
+			sprites[0] = new Sprite(sheet.GetSection(160, 235, 30, 20), -15, -12);
+			sprites[1] = new Sprite(sheet.GetSection(174, 218, 16, 16), -8, -8);
+			sprites[2] = new Sprite(sheet.GetSection(126, 191, 64, 16), -32, -8);
 
 			int radius = 64;
 			var overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);

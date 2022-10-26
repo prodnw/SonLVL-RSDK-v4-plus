@@ -494,7 +494,7 @@ namespace SonicRetro.SonLVL.GUI
 				if (LevelData.Game.RSDKVer == EngineVersion.V4)
 					sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.ogg"));
 			}
-`			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
 			{
 				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
 				if (LevelData.Game.RSDKVer == EngineVersion.V4)

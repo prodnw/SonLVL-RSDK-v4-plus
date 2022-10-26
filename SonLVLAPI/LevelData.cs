@@ -14,9 +14,10 @@ namespace SonicRetro.SonLVL.API
 {
 	public static class LevelData
 	{
-		public static string EXEFile;
-		public static EngineVersion RSDKVer;
+		public static GameInfo Game;
+		public static string GamePath;
 		public static IDataPack DataFile;
+		public static string EXEFolder;
 		public static string ModFolder;
 		public static GameConfig GameConfig;
 		public static GameXML GameXML;
@@ -77,42 +78,33 @@ namespace SonicRetro.SonLVL.API
 		public static void LoadGame(string filename)
 		{
 			Log($"Opening game \"{filename}\"...");
-			EXEFile = Path.GetFullPath(filename);
-			Environment.CurrentDirectory = Path.GetDirectoryName(EXEFile);
-			string fn = Path.GetFileName(EXEFile);
-			if (fn.StartsWith("RSDKv3", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V3;
-			else if (fn.StartsWith("soniccd", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V3;
-			else if (fn.StartsWith("restored", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V3;
-			else if (fn.StartsWith("RSDKv4", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V4;
-			else if (fn.StartsWith("SonicForever", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V4;
-			else if (fn.StartsWith("Sonic2Absolute", StringComparison.OrdinalIgnoreCase))
-				RSDKVer = EngineVersion.V4;
-			else
-				throw new NotImplementedException("Unrecognized game!");
+			GamePath = Path.GetFullPath(filename);
+			Game = IniSerializer.Deserialize<GameInfo>(filename);
+			Directory.SetCurrentDirectory(Path.GetDirectoryName(GamePath));
+			EXEFolder = Path.GetDirectoryName(Path.GetFullPath(Game.EXEFile));
 			UnknownImg = Properties.Resources.UnknownImg.Copy();
 			UnknownSprite = new Sprite(new BitmapBits(UnknownImg), true, -8, -7);
-			Log("Game type is " + RSDKVer + ".");
-			if (File.Exists("Data.rsdk"))
+			Log("Game type is " + Game.RSDKVer + ".");
+			string dataFile = Path.Combine(EXEFolder, Game.DataFile);
+			if (File.Exists(dataFile))
 			{
-				switch (RSDKVer)
-				{
-					case EngineVersion.V4:
-						DataFile = new RSDKv4.DataPack("Data.rsdk");
-						break;
-					case EngineVersion.V3:
-						DataFile = new RSDKv3.DataPack("Data.rsdk");
-						break;
-				}
+				if (Game.IsV5U)
+					DataFile = new RSDKv5.DataPack(dataFile);
+				else
+					switch (Game.RSDKVer)
+					{
+						case EngineVersion.V4:
+							DataFile = new RSDKv4.DataPack(dataFile);
+							break;
+						case EngineVersion.V3:
+							DataFile = new RSDKv3.DataPack(dataFile);
+							break;
+					}
 			}
 			else
-				DataFile = null;
+				DataFile = new DataFolder(EXEFolder);
 			ModFolder = null;
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					GameConfig = ReadFile<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
@@ -126,7 +118,7 @@ namespace SonicRetro.SonLVL.API
 		public static void LoadMod(string path)
 		{
 			ModFolder = path;
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					GameConfig = ReadFile<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
@@ -223,7 +215,7 @@ namespace SonicRetro.SonLVL.API
 			Log("Loading " + stage.name + "...");
 			StageInfo = stage;
 			string stgfol = $"Data/Stages/{stage.folder}/";
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					StageConfig = ReadFile<RSDKv4.StageConfig>(stgfol + "StageConfig.bin");
@@ -256,7 +248,7 @@ namespace SonicRetro.SonLVL.API
 			NewChunks = ReadFile<Tiles128x128>(stgfol + "128x128Tiles.bin");
 			Collision = ReadFile<TileConfig>(stgfol + "CollisionMasks.bin");
 			AdditionalScenes = new List<AdditionalScene>();
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					Background = ReadFile<RSDKv4.Backgrounds>(stgfol + "Backgrounds.bin");
@@ -365,7 +357,7 @@ namespace SonicRetro.SonLVL.API
 		public static void ClearLevel()
 		{
 			Log("Clearing level...");
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					StageConfig = new RSDKv4.StageConfig();
@@ -382,7 +374,7 @@ namespace SonicRetro.SonLVL.API
 			NewPalette.Fill(Color.Black, 128, 128);
 			NewChunks = new Tiles128x128();
 			Collision = new TileConfig();
-			switch (RSDKVer)
+			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					Background = new RSDKv4.Backgrounds();
@@ -440,7 +432,7 @@ namespace SonicRetro.SonLVL.API
 			if (GameXML != null)
 			{
 				GameXML.palette.RemoveAll(a => a.bank == 0 && a.index < 96);
-				switch (RSDKVer)
+				switch (Game.RSDKVer)
 				{
 					case EngineVersion.V3:
 						{
@@ -481,7 +473,7 @@ namespace SonicRetro.SonLVL.API
 			}
 			else
 			{
-				switch (RSDKVer)
+				switch (Game.RSDKVer)
 				{
 					case EngineVersion.V3:
 						{
@@ -581,7 +573,7 @@ namespace SonicRetro.SonLVL.API
 					if (datind < BGScroll[i].Count && BGScroll[i][datind].StartPos == y)
 					{
 						Backgrounds.ScrollInfo si = null;
-						switch (RSDKVer)
+						switch (Game.RSDKVer)
 						{
 							case EngineVersion.V3:
 								si = BGScroll[i][datind++].GetInfoV3();
@@ -1169,7 +1161,7 @@ namespace SonicRetro.SonLVL.API
 			if (Scene.entities.Count < Scene.ENTITY_LIST_SIZE)
 			{
 				Scene.Entity ent;
-				switch (RSDKVer)
+				switch (Game.RSDKVer)
 				{
 					case EngineVersion.V4:
 						ent = new RSDKv4.Scene.Entity() { type = ID };

@@ -103,13 +103,13 @@ namespace SonicRetro.SonLVL
 	public class MRUModItem
 	{
 		public string Name { get; set; }
-		public string EXEPath { get; set; }
+		public string INIPath { get; set; }
 		public string ModPath { get; set; }
 
 		public MRUModItem(string name, string exepath, string modpath)
 		{
 			Name = name;
-			EXEPath = exepath;
+			INIPath = exepath;
 			ModPath = modpath;
 		}
 
@@ -117,7 +117,7 @@ namespace SonicRetro.SonLVL
 		{
 			string[] split = data.Split('|');
 			Name = split[0];
-			EXEPath = split[1];
+			INIPath = split[1];
 			if (split.Length > 2)
 				ModPath = split[2];
 		}
@@ -125,8 +125,8 @@ namespace SonicRetro.SonLVL
 		public override string ToString()
 		{
 			if (ModPath == null)
-				return $"{Name}|{EXEPath}";
-			return $"{Name}|{EXEPath}|{ModPath}";
+				return $"{Name}|{INIPath}";
+			return $"{Name}|{INIPath}|{ModPath}";
 		}
 	}
 

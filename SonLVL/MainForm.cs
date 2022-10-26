@@ -215,7 +215,7 @@ namespace SonicRetro.SonLVL.GUI
 				List<string> mru = new List<string>();
 				foreach (string item in Settings.MRUList)
 				{
-					if (File.Exists(item))
+					if (File.Exists(item) && !item.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
 					{
 						mru.Add(item);
 						recentProjectsToolStripMenuItem.DropDownItems.Add(item.Replace("&", "&&"));
@@ -231,7 +231,7 @@ namespace SonicRetro.SonLVL.GUI
 				List<MRUModItem> mru = new List<MRUModItem>();
 				foreach (MRUModItem item in Settings.RecentMods)
 				{
-					if (File.Exists(item.EXEPath) && (item.ModPath == null || File.Exists(item.ModPath)))
+					if (File.Exists(item.INIPath) && !item.INIPath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && (item.ModPath == null || File.Exists(item.ModPath)))
 					{
 						mru.Add(item);
 						recentModsToolStripMenuItem.DropDownItems.Add(item.Name.Replace("&", "&&"));
@@ -324,8 +324,9 @@ namespace SonicRetro.SonLVL.GUI
 			modMenuItems.Add(ms);
 			selectModToolStripMenuItem.DropDownItems.Add(menuitem);
 			string[] mods;
-			if (Directory.Exists("mods"))
-				mods = ModInfo.GetModFiles(new DirectoryInfo("mods")).ToArray();
+			string modpath = Path.Combine(LevelData.EXEFolder, "mods");
+			if (Directory.Exists(modpath))
+				mods = ModInfo.GetModFiles(new DirectoryInfo(modpath)).ToArray();
 			else
 				mods = new string[0];
 			ToolStripMenuItem parent = selectModToolStripMenuItem;
@@ -351,7 +352,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			Settings.MRUList.Insert(0, filename);
 			recentProjectsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(filename));
-			switch (LevelData.RSDKVer)
+			switch (LevelData.Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					Icon = Properties.Resources.Tailsmon2;
@@ -467,12 +468,12 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 			scriptFiles = new List<string>();
-			if (Directory.Exists("Scripts"))
-				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Scripts"), "*.txt"));
+			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
 			if (LevelData.ModFolder != null)
 			{
 				string modscr = null;
-				switch (LevelData.RSDKVer)
+				switch (LevelData.Game.RSDKVer)
 				{
 					case EngineVersion.V3:
 						modscr = Path.Combine(LevelData.ModFolder, "Data/Scripts");
@@ -487,23 +488,23 @@ namespace SonicRetro.SonLVL.GUI
 			objectScriptBox.AutoCompleteCustomSource.Clear();
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
 			sfxFiles = new List<string>();
-			if (Directory.Exists("Data/SoundFX"))
+			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/SoundFX")))
 			{
-				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.wav"));
-				if (LevelData.RSDKVer == EngineVersion.V4)
-					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/SoundFX"), "*.ogg"));
+				sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.wav"));
+				if (LevelData.Game.RSDKVer == EngineVersion.V4)
+					sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.ogg"));
 			}
-			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+`			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
 			{
 				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
-				if (LevelData.RSDKVer == EngineVersion.V4)
+				if (LevelData.Game.RSDKVer == EngineVersion.V4)
 					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.ogg").Where(a => !sfxFiles.Contains(a)));
 			}
 			sfxFileBox.AutoCompleteCustomSource.Clear();
 			sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
 			if (Settings.RecentMods.Count == 0)
 				recentModsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem);
-			int ind = Settings.RecentMods.FindIndex(a => a.EXEPath == LevelData.EXEFile && a.ModPath == path);
+			int ind = Settings.RecentMods.FindIndex(a => a.INIPath == LevelData.GamePath && a.ModPath == path);
 			if (ind != -1)
 			{
 				recentModsToolStripMenuItem.DropDownItems.RemoveAt(ind);
@@ -514,7 +515,7 @@ namespace SonicRetro.SonLVL.GUI
 				modname = $"No Mod ({LevelData.GameConfig.gameTitle})";
 			else
 				modname = $"{IniSerializer.Deserialize<ModInfo>(path).Name ?? "Unknown Mod"} ({LevelData.GameConfig.gameTitle})";
-			Settings.RecentMods.Insert(0, new MRUModItem(modname, LevelData.EXEFile, path));
+			Settings.RecentMods.Insert(0, new MRUModItem(modname, LevelData.GamePath, path));
 			recentModsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(modname));
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
 		}
@@ -538,9 +539,8 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			using (OpenFileDialog a = new OpenFileDialog()
 			{
-				DefaultExt = "exe",
-				Filter = "EXE Files|*.exe|All Files|*.*",
-				Title = "Select your game's EXE"
+				DefaultExt = "ini",
+				Filter = "INI Files|*.ini|All Files|*.*"
 			})
 				if (a.ShowDialog(this) == DialogResult.OK)
 				{
@@ -848,7 +848,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (LevelData.Scene != null && LevelData.ModFolder != null)
 				saveToolStripMenuItem_Click(sender, e);
-			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.EXEFile) { WorkingDirectory = Path.GetDirectoryName(LevelData.EXEFile) });
+			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.Game.EXEFile) { WorkingDirectory = LevelData.EXEFolder });
 		}
 
 		private void recentProjectsToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -861,7 +861,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			loaded = false;
 			MRUModItem item = Settings.RecentMods[recentModsToolStripMenuItem.DropDownItems.IndexOf(e.ClickedItem)];
-			LoadINI(item.EXEPath);
+			LoadINI(item.INIPath);
 			foreach (var mmi in modMenuItems)
 				mmi.MenuItem.Checked = mmi.Path == item.ModPath;
 			LoadMod(item.ModPath);
@@ -7221,7 +7221,7 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				sfxDeleteButton.Enabled = true;
-				sfxNameBox.Enabled = LevelData.RSDKVer == EngineVersion.V4;
+				sfxNameBox.Enabled = LevelData.Game.RSDKVer == EngineVersion.V4;
 				sfxFileBox.Enabled = true;
 				sfxBrowseButton.Enabled = true;
 				loaded = false;
@@ -7260,7 +7260,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			LevelData.StageConfig.soundFX[sfxListBox.SelectedIndex].path = sfxFileBox.Text;
-			if (LevelData.RSDKVer != EngineVersion.V4)
+			if (LevelData.Game.RSDKVer != EngineVersion.V4)
 				sfxNameBox.Text = Path.GetFileNameWithoutExtension(sfxFileBox.Text);
 		}
 

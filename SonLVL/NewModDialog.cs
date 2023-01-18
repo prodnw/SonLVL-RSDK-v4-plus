@@ -10,7 +10,7 @@ namespace SonicRetro.SonLVL.GUI
 		public NewModDialog()
 		{
 			InitializeComponent();
-			switch (LevelData.RSDKVer)
+			switch (LevelData.Game.RSDKVer)
 			{
 				case EngineVersion.V3:
 					checkBox1.Text = "Disable Save INI Override";
@@ -59,7 +59,7 @@ namespace SonicRetro.SonLVL.GUI
 					RedirectSaveRAM   = redirectSave.Checked
 				};
 
-				switch (LevelData.RSDKVer)
+				switch (LevelData.Game.RSDKVer)
 				{
 					case EngineVersion.V3:
 						newMod.DisableSaveIniOverride = checkBox1.Checked;

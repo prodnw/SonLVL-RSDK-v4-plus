@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Object Definitions", "Objec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCDObjectDefinitions", "SCDObjectDefinitions\SCDObjectDefinitions.csproj", "{77368D75-3F16-4907-971C-9772FAAB1E4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "v5ImageImport", "v5ImageImport\v5ImageImport.csproj", "{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

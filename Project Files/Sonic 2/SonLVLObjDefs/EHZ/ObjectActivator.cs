@@ -59,10 +59,10 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
-				return null;
-			
 			int index = LevelData.Objects.IndexOf(obj) + obj.PropertyValue;
+			
+			if ((index > LevelData.Objects.Count) || (obj.PropertyValue == 0))
+				return null;
 			
 			short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
 			short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);

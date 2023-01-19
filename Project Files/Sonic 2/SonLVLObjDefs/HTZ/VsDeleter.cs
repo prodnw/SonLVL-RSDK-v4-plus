@@ -1,8 +1,8 @@
 using SonicRetro.SonLVL.API;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 
 namespace S2ObjectDefinitions.HTZ
 {
@@ -62,25 +62,18 @@ namespace S2ObjectDefinitions.HTZ
 			if (obj.PropertyValue == 0)
 				return null;
 			
-			// Do pardon the dust, this isn't particularly good but I'm not too proficient at this sort of stuff
+			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
+			if (objs.Count == 0)
+				return null;
 			
-			short xmin = obj.X;
-			short ymin = obj.Y;
-			short xmax = obj.X;
-			short ymax = obj.Y;
-			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-			{
-				xmin = Math.Min(xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymin = Math.Min(ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-				xmax = Math.Max(xmax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymax = Math.Max(ymax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-			}
-			
+			short xmin = Math.Min(obj.X, objs.Min(a => a.X));
+			short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
+			short xmax = Math.Max(obj.X, objs.Max(a => a.X));
+			short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X - xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y - ymin);
+			for (int i = 0; i < objs.Count - 1; i++)
+				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin);
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.HTZ
+namespace S2ObjectDefinitions.EHZ
 {
-	class VsDeleter : ObjectDefinition
+	class ObjectActivator : ObjectDefinition
 	{
 		private PropertySpec[] properties;
 		private Sprite img;
@@ -21,8 +21,8 @@ namespace S2ObjectDefinitions.HTZ
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Delete Count", typeof(int), "Extended",
-				"How many of the following objects should be deleted when in 1P mode.", null,
+			properties[0] = new PropertySpec("Activate Offset", typeof(int), "Extended",
+				"The Entity Pos offset of the Object to be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
@@ -59,28 +59,19 @@ namespace S2ObjectDefinitions.HTZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
+			int index = LevelData.Objects.IndexOf(obj) + obj.PropertyValue;
+			
+			if ((index > LevelData.Objects.Count) || (obj.PropertyValue == 0))
 				return null;
 			
-			// Do pardon the dust, this isn't particularly good but I'm not too proficient at this sort of stuff
-			
-			short xmin = obj.X;
-			short ymin = obj.Y;
-			short xmax = obj.X;
-			short ymax = obj.Y;
-			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-			{
-				xmin = Math.Min(xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymin = Math.Min(ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-				xmax = Math.Max(xmax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymax = Math.Max(ymax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-			}
+			short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
+			short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
+			short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
+			short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
 			
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X - xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y - ymin);
+			bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

@@ -33,7 +33,7 @@ namespace SonicRetro.SonLVL
 		readonly List<string> stageFiles = new List<string>();
 		private void GameConfigEditorDialog_Load(object sender, EventArgs e)
 		{
-			switch (LevelData.RSDKVer)
+			switch (LevelData.Game.RSDKVer)
 			{
 				case EngineVersion.V4:
 					origConf = LevelData.ReadFileNoMod<RSDKv4.GameConfig>("Data/Game/GameConfig.bin");
@@ -55,7 +55,7 @@ namespace SonicRetro.SonLVL
 						break;
 				}
 			gameDescription.Text = sb.ToString();
-			switch (LevelData.RSDKVer)
+			switch (LevelData.Game.RSDKVer)
 			{
 				case EngineVersion.V3:
 					gameDescription.Text = LevelData.GameConfig.gameDescription.Replace("\r", Environment.NewLine);
@@ -89,7 +89,7 @@ namespace SonicRetro.SonLVL
 				for (int i = 0; i < 4; i++)
 					stages[i] = new List<StageXML>(LevelData.GameConfig.stageLists[i].list.Select(a => (StageXML)a));
 			}
-			if (LevelData.RSDKVer != EngineVersion.V4)
+			if (LevelData.Game.RSDKVer != EngineVersion.V4)
 				sounds.ForEach(a => a.name = Path.GetFileNameWithoutExtension(a.path));
 			ReloadData();
 			loaded = true;
@@ -284,7 +284,7 @@ namespace SonicRetro.SonLVL
 			else
 			{
 				sfxDeleteButton.Enabled = true;
-				sfxNameBox.Enabled = LevelData.RSDKVer == EngineVersion.V4;
+				sfxNameBox.Enabled = LevelData.Game.RSDKVer == EngineVersion.V4;
 				sfxFileBox.Enabled = true;
 				sfxBrowseButton.Enabled = true;
 				loaded = false;
@@ -323,7 +323,7 @@ namespace SonicRetro.SonLVL
 		{
 			if (!loaded) return;
 			sounds[sfxListBox.SelectedIndex].path = sfxFileBox.Text;
-			if (LevelData.RSDKVer != EngineVersion.V4)
+			if (LevelData.Game.RSDKVer != EngineVersion.V4)
 				sfxNameBox.Text = Path.GetFileNameWithoutExtension(sfxFileBox.Text);
 		}
 
@@ -556,7 +556,7 @@ namespace SonicRetro.SonLVL
 						foreach (var stginf in allstg)
 						{
 							RSDKv3_4.StageConfig stgconf = null;
-							switch (LevelData.RSDKVer)
+							switch (LevelData.Game.RSDKVer)
 							{
 								case EngineVersion.V3:
 									stgconf = LevelData.ReadFile<RSDKv3.StageConfig>($"Data/Stages/{stginf.folder}/StageConfig.bin");
@@ -567,7 +567,7 @@ namespace SonicRetro.SonLVL
 							}
 							if (!stgconf.loadGlobalObjects) continue;
 							RSDKv3_4.Scene scene = null;
-							switch (LevelData.RSDKVer)
+							switch (LevelData.Game.RSDKVer)
 							{
 								case EngineVersion.V3:
 									scene = LevelData.ReadFile<RSDKv3.Scene>($"Data/Stages/{stginf.folder}/Act{stginf.id}.bin");
@@ -626,7 +626,7 @@ namespace SonicRetro.SonLVL
 					string path = Path.Combine(LevelData.ModFolder, "Data/Game/GameConfig.bin");
 					if (File.Exists(path))
 						File.Delete(path);
-					switch (LevelData.RSDKVer)
+					switch (LevelData.Game.RSDKVer)
 					{
 						case EngineVersion.V3:
 							path = Path.Combine(LevelData.ModFolder, "Data/Palettes/MasterPalette.act");
@@ -665,7 +665,7 @@ namespace SonicRetro.SonLVL
 				LevelData.GameXML.objects = objects;
 				LevelData.GameXML.variables = variables;
 				LevelData.GameXML.sounds = sounds;
-				if (LevelData.RSDKVer != EngineVersion.V4)
+				if (LevelData.Game.RSDKVer != EngineVersion.V4)
 					sounds.ForEach(a => a.name = null);
 				LevelData.GameXML.players = players.Select(a => new PlayerXML(a)).ToList();
 				LevelData.GameXML.presentationStages = stages[0];
@@ -682,7 +682,7 @@ namespace SonicRetro.SonLVL
 					if (File.Exists(path))
 						File.Delete(path);
 					if (LevelData.GameXML.palette.Any(a => a.bank == 0))
-						switch (LevelData.RSDKVer)
+						switch (LevelData.Game.RSDKVer)
 						{
 							case EngineVersion.V3:
 								{
@@ -711,7 +711,7 @@ namespace SonicRetro.SonLVL
 				LevelData.GameConfig.gameTitle = gameName.Text;
 				LevelData.GameConfig.gameDescription = gameDescription.Text.Replace(Environment.NewLine, "\n");
 				LevelData.GameConfig.objects = objects.Select(a => (RSDKv3_4.GameConfig.ObjectInfo)a).ToList();
-				switch (LevelData.RSDKVer)
+				switch (LevelData.Game.RSDKVer)
 				{
 					case EngineVersion.V3:
 						LevelData.GameConfig.globalVariables = new List<RSDKv3_4.GameConfig.GlobalVariable>(variables.Select(a => (RSDKv3.GameConfig.GlobalVariable)a));

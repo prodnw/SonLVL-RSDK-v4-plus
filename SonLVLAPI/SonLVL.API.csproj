@@ -59,6 +59,7 @@
       <DependentUpon>BugReportDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Converters.cs" />
+    <Compile Include="DataFolder.cs" />
     <Compile Include="DataTypes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileSelector.cs">
@@ -68,6 +69,7 @@
       <DependentUpon>FileSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSelectorMode.cs" />
+    <Compile Include="GameInfo.cs" />
     <Compile Include="GameXML.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="IniSerializer.cs" />

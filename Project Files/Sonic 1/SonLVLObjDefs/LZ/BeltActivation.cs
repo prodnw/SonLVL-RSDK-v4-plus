@@ -1,12 +1,12 @@
 using SonicRetro.SonLVL.API;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 
-namespace S2ObjectDefinitions.EHZ
+namespace S1ObjectDefinitions.LZ
 {
-	class ObjectActivator : ObjectDefinition
+	class BeltActivation : ObjectDefinition
 	{
 		private PropertySpec[] properties;
 		private Sprite img;
@@ -18,18 +18,18 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
+			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(239, 239, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Activate Offset", typeof(int), "Extended",
-				"The Entity Pos offset of the Object to be activated by this Activator.", null,
+			properties[0] = new PropertySpec("Activate Count", typeof(int), "Extended",
+				"How many of the following objects should be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 1; }
+			get { return 8; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -62,16 +62,18 @@ namespace S2ObjectDefinitions.EHZ
 			if (obj.PropertyValue == 0)
 				return null;
 			
-			int index = LevelData.Objects.IndexOf(obj) + obj.PropertyValue;
+			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
+			if (objs.Count == 0)
+				return null;
 			
-			short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
-			short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
-			short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
-			short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
-			
+			short xmin = Math.Min(obj.X, objs.Min(a => a.X));
+			short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
+			short xmax = Math.Max(obj.X, objs.Max(a => a.X));
+			short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
+			for (int i = 0; i < objs.Count - 1; i++)
+				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin);
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

@@ -1,8 +1,8 @@
 using SonicRetro.SonLVL.API;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 
 namespace S2ObjectDefinitions.SCZ
 {
@@ -63,27 +63,22 @@ namespace S2ObjectDefinitions.SCZ
 				return null;
 			
 			// In Origins' SCZ missions, they deleted some objects and threw off the activators
-			// Because of that, there are now lines going all across the stage, up and down, left and right
+			// Because of that, there are now lines going all across the stage, up and down, left and right, 'n all around
 			// Activators pointing to activators pointing to activators, it ain't anything pretty i tell you
-			// Not much we can do from here, unfortunately
+			// Not much we can do from here unfortunately, as that's how it is in-game too :(
 			
-			int xmin = obj.X;
-			int ymin = obj.Y;
-			int xmax = obj.X;
-			int ymax = obj.Y;
+			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
+			if (objs.Count == 0)
+				return null;
 			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-			{
-				xmin = Math.Min(xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymin = Math.Min(ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-				xmax = Math.Max(xmax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X);
-				ymax = Math.Max(ymax, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y);
-			}
-			
+			short xmin = Math.Min(obj.X, objs.Min(a => a.X));
+			short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
+			short xmax = Math.Max(obj.X, objs.Max(a => a.X));
+			short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			for (int i = 1; i < obj.PropertyValue + 1; i++)
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].X - xmin, LevelData.Objects[LevelData.Objects.IndexOf(obj) + i].Y - ymin);
+			for (int i = 0; i < objs.Count - 1; i++)
+				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin);
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

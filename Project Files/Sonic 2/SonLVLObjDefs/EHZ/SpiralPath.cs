@@ -9,10 +9,15 @@ namespace S2ObjectDefinitions.EHZ
 	class SpiralPath : ObjectDefinition
 	{
 		private Sprite img;
+		private Sprite debug;
 
 		public override void Init(ObjectData data)
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(127, 113, 16, 16), -8, -8);
+			
+			BitmapBits bitmap = new BitmapBits(385, 57);
+			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 384, 56);
+			debug = new Sprite(bitmap, -192, 8);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -47,10 +52,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			// Draw the activator box of the Spiral
-			var bitmap = new BitmapBits(385, 57);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 384, 56);
-			return new Sprite(bitmap, -192, 8);
+			return debug;
 		}
 	}
 }

@@ -64,16 +64,24 @@ namespace S2ObjectDefinitions.EHZ
 			if ((index > LevelData.Objects.Count) || (obj.PropertyValue == 0))
 				return null;
 			
-			short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
-			short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
-			short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
-			short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
+			try
+			{
+				short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
+				short ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
+				short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
+				short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
+				
+				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+				
+				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
+				
+				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			}
+			catch
+			{
+			}
 			
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
-			
-			bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
-			
-			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			return null;
 		}
 	}
 }

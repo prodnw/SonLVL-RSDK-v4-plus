@@ -10,6 +10,7 @@ namespace S2ObjectDefinitions.Global
 	{
 		private PropertySpec[] properties;
 		private readonly Sprite[] sprites = new Sprite[4];
+		private readonly Sprite[] debug   = new Sprite[4];
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -49,6 +50,13 @@ namespace S2ObjectDefinitions.Global
 				"The entity pos offset of these Spikes' parent. Only applicable if state is set to 5, to be carried by another object.", null,
 				(obj) => ((V4ObjectEntry)obj).Value2,
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = ((int)value));
+			
+			BitmapBits bitmap = new BitmapBits(33, 33);
+			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 32, 32);
+			debug[0] = new Sprite(bitmap, -16,  16);
+			debug[1] = new Sprite(bitmap, -48, -16);
+			debug[2] = new Sprite(bitmap,  16, -16);
+			debug[3] = new Sprite(bitmap, -16, -48);
 		}
 		
 		public override byte DefaultSubtype
@@ -79,6 +87,13 @@ namespace S2ObjectDefinitions.Global
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprites[obj.PropertyValue & 3];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			if (obj.PropertyValue > 127) return debug[obj.PropertyValue & 3];
+			
+			return null;
 		}
 	}
 }

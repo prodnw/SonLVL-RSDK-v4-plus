@@ -72,13 +72,11 @@ namespace S2ObjectDefinitions.Global
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int width = obj.PropertyValue >> 4;
-			int height = obj.PropertyValue & 15;
-			width += 1; height += 1;
+			int width = (obj.PropertyValue >> 4) + 1;
+			int height = (obj.PropertyValue & 15) + 1;
 			
-			int sx = (obj.PropertyValue & 240) << 15;
-			int sy = (obj.PropertyValue & 15) << 19;
-			sx >>= 16; sy >>= 16;
+			int sx = (obj.PropertyValue & 240) >> 1;
+			int sy = (obj.PropertyValue & 15) << 3;
 			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < height; i++)

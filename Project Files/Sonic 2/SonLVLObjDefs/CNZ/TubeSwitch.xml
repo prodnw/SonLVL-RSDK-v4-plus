@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Type" type="types" startbit="0" length="1" />
+    <Property name="Type" type="types" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="types">

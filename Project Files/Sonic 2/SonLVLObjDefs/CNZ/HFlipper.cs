@@ -1,4 +1,5 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -7,19 +8,22 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class HFlipper : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(26, 185, 47, 26), -25, -9);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(26, 185, 47, 26), -25, -9);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(189, 402, 47, 26), -25, -9);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(189, 402, 47, 26), -25, -9);
 			}
+			
+			sprites[1] = new Sprite(sprites[0]);
+			sprites[1].Flip(true, false);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
@@ -62,19 +66,17 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) == 1, false);
-			return sprite;
+			return sprites[Math.Min(subtype, (byte)1)];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[Math.Min(obj.PropertyValue, (byte)1)];
 		}
 	}
 }

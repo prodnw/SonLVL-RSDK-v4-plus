@@ -7,10 +7,12 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class Eggman : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[2];
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] sprites = new Sprite[2];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("CNZ/Objects.gif");
@@ -24,6 +26,8 @@ namespace S2ObjectDefinitions.CNZ
 				sprites[0] = new Sprite(sheet.GetSection(1, 5, 44, 16), -28, -16);
 				sprites[1] = new Sprite(sheet.GetSection(232, 112, 80, 72), -40, -40);
 			}
+			
+			sprite = new Sprite(sprites);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -43,24 +47,17 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprite;; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			// All point here for simplicity's sake
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(0);
+			return sprite;
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace S2ObjectDefinitions.CNZ
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0; }
+			get { return 56; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -68,7 +68,7 @@ namespace S2ObjectDefinitions.CNZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int dist = (obj.PropertyValue & 127) << 2;
-			var bitmap = new BitmapBits(2, (2 * dist) + 1);
+			BitmapBits bitmap = new BitmapBits(2, (2 * dist) + 1);
 			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, (2 * dist));
 			return new Sprite(bitmap, 0, -dist);
 		}

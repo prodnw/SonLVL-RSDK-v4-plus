@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.CNZ
 					{ "False", 0 },
 					{ "True", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -52,11 +52,10 @@ namespace S2ObjectDefinitions.CNZ
 			switch (subtype)
 			{
 				case 0:
+				default:
 					return "Start Open";
 				case 1:
 					return "Start Closed";
-				default:
-					return "Unknown";
 			}
 		}
 

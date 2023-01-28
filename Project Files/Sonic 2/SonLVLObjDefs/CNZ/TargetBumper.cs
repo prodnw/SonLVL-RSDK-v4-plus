@@ -74,6 +74,8 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
+			// this whole thing's a little bit weird, i hope you don't mind
+			
 			int frame = 0;
 			bool flip = false;
 			switch (obj.PropertyValue & 63)

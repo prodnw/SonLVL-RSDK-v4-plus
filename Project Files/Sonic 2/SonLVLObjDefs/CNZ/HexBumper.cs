@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.CNZ
 					{ "Static", 0 },
 					{ "Moving", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -52,11 +52,10 @@ namespace S2ObjectDefinitions.CNZ
 			switch (subtype)
 			{
 				case 0:
+				default:
 					return "Static";
 				case 1:
 					return "Moving";
-				default:
-					return "Unknown";
 			}
 		}
 

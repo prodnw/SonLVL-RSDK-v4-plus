@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.CPZ
+namespace S2ObjectDefinitions.ARZ
 {
 	class OneWayDoor : ObjectDefinition
 	{
@@ -12,14 +12,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2') // "2" for both CPZ and DEZ (DEZ obj loads CPZ sheet)
-			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(206, 142, 16, 64), -8, -32);
-			}
-			else
-			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(93, 312, 16, 64), -8, -32);
-			}
+			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(1, 78, 16, 64), -8, -32);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Open From", typeof(int), "Extended",

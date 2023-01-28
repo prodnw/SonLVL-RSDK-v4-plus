@@ -22,19 +22,25 @@ namespace S2ObjectDefinitions.ARZ
 			sprites[1] = new Sprite(sheet.GetSection(174, 218, 16, 16), -8, -8);
 			sprites[2] = new Sprite(sheet.GetSection(126, 191, 64, 16), -32, -8);
 			
-			properties = new PropertySpec[2];
+			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => (obj.PropertyValue & 0x7f),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x80) | (byte)((int)value & 0x7f)));
-			properties[1] = new PropertySpec("Detaches", typeof(int), "Extended",
-				"If the platform should detach and turn into a raft (doesn't work when X-flipped).", null, new Dictionary<string, int>
+			
+			properties[1] = new PropertySpec("Can Snap", typeof(int), "Extended",
+				"If the platform should detach and turn into a raft. Does not work when X-flipped.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
 					{ "True", 1 }
 				},
 				(obj) => (obj.PropertyValue >> 7),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x7f) | (byte)((int)value << 7)));
+			
+			properties[2] = new PropertySpec("Inverted", typeof(bool), "Extended",
+				"If the Swinging Platform's movement should be inverted, compared to normal Swing Platforms.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
 		}
 		
 		public override byte DefaultSubtype
@@ -86,7 +92,7 @@ namespace S2ObjectDefinitions.ARZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int chains = (obj.PropertyValue & 0x7f);
-			var overlay = new BitmapBits(2 * ((chains * 16) + 24) + 1, (chains * 16) + 25);
+			BitmapBits overlay = new BitmapBits(2 * ((chains * 16) + 24) + 1, (chains * 16) + 25);
 			overlay.DrawCircle(LevelData.ColorWhite, ((chains * 16) + 24), 0, (chains * 16) + 8);
 			return new Sprite(overlay, -((chains * 16) + 24), 0);
 		}

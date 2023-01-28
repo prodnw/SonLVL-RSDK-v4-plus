@@ -108,10 +108,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override bool Hidden { get { return true; } }
 	}
-}
-
-namespace S2ObjectDefinitions.EHZ
-{
+	
 	abstract class Generic : ObjectDefinition
 	{
 		private PropertySpec[] properties;

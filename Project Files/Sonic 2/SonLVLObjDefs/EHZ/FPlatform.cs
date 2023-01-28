@@ -39,13 +39,13 @@ namespace S2ObjectDefinitions.EHZ
 					{ "Fall", 0 },
 					{ "Static", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 1; }
+			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -75,8 +75,8 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0) return debug;
-			return null;
+			if (obj.PropertyValue == 1) return null;
+			return debug;
 		}
 	}
 }

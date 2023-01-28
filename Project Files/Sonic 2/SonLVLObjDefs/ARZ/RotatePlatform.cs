@@ -29,10 +29,12 @@ namespace S2ObjectDefinitions.ARZ
 				"The offset/starting angle of the platform.", null,
 				(obj) => (obj.PropertyValue & 0x0f),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0xf0) | (byte)((int)value)));
+			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
 				"The speed of the platform.", null,
 				(obj) => (obj.PropertyValue & 0x70) >> 4,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x8f) | (byte)((int)value << 4)));
+			
 			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
 				{
@@ -65,12 +67,12 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override Sprite Image
 		{
-			get { return sprites[0]; }
+			get { return sprites[2]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[2];
 		}
 
 		public override Rectangle GetBounds(ObjectEntry obj)

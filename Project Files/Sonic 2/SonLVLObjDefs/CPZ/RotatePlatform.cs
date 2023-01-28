@@ -34,7 +34,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Small", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~15) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Starting position", typeof(int), "Extended",
 				"The position (or angle) from where the Platform will start.", null, new Dictionary<string, int>
@@ -45,7 +45,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Up", 0x30 }
 				},
 				(obj) => (obj.PropertyValue % 0x40) & 0x30,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~(0x30)) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x30) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
@@ -54,7 +54,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Clockwise", 0x40 }
 				},
 				(obj) => obj.PropertyValue & 0x40,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0xbf) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x40) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -74,7 +74,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (((subtype % 0x10) == 0) ? 0 : 1)
+			switch (subtype)
 			{
 				case 0:
 					return "Large";

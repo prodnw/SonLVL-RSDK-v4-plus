@@ -8,8 +8,8 @@ namespace S2ObjectDefinitions.CPZ
 	class HPlatform : ObjectDefinition
 	{
 		private PropertySpec[] properties;
-
 		private readonly Sprite[] sprites = new Sprite[2];
+		private Sprite debug;
 
 		public override void Init(ObjectData data)
 		{
@@ -25,16 +25,30 @@ namespace S2ObjectDefinitions.CPZ
 				sprites[0] = new Sprite(sheet.GetSection(464, 971, 64, 27), -32, -16);
 				sprites[1] = new Sprite(sheet.GetSection(529, 971, 48, 26), -24, -16);
 			}
-
-			properties = new PropertySpec[1];
+			
+			BitmapBits overlay = new BitmapBits(192, 1);
+			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 192, 1);
+			debug = new Sprite(overlay, -96, 0);
+			
+			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the platform.", null, new Dictionary<string, int>
 				{
 					{ "Large", 0 },
 					{ "Small", 1 }
 				},
-				(obj) => (obj.PropertyValue & 1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue > 0) : 1 : 0, // in-game behaviour: 0 is large, all other values are small
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
+			
+			// maybe "invert movement" would be simpler, but this one works well enough hopefully
+			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way the Platform will go.", null, new Dictionary<string, int>
+				{
+					{ "Downwards", 0 },
+					{ "Upwards", 1 }
+				},
+				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)) ? 1 : 0,
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -54,14 +68,13 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch ((subtype == 0) ? 0 : 1)
+			switch (subtype)
 			{
 				case 0:
 					return "Large";
 				case 1:
-					return "Small";
 				default:
-					return "Unknown";
+					return "Small";
 			}
 		}
 
@@ -72,12 +85,12 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[(subtype == 0) ? 0 : 1];
+			return sprites[Math.Min(subtype, (byte)1)];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			var sprite = new Sprite(SubtypeImage(obj.PropertyValue));
+			Sprite sprite = new Sprite(SubtypeImage(obj.PropertyValue));
 			// Flip XY doesn't flip the platform..
 			if (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX))
 			{
@@ -88,9 +101,7 @@ namespace S2ObjectDefinitions.CPZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(192, 1);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 192, 1);
-			return new Sprite(overlay, -96, 0);
+			return debug;
 		}
 	}
 }

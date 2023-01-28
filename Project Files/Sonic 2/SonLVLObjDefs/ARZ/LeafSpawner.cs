@@ -1,15 +1,15 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
 namespace S2ObjectDefinitions.ARZ
 {
-	class HPlatform : ObjectDefinition
+	class LeafSpawner : ObjectDefinition
 	{
-		private Sprite img;
-		private Sprite debug;
 		private PropertySpec[] properties;
+		private Sprite img;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -18,21 +18,13 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
-			
-			BitmapBits overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
-			debug = new Sprite(overlay, -64, 0);
+			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
-				{
-					{ "Left", 0 },
-					{ "Right", 1 }
-				},
-				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
-				(obj, value) => obj.PropertyValue = (byte)(int)value);
+			properties[0] = new PropertySpec("Size", typeof(byte), "Extended",
+				"The size of this Leaf Spawner. Increases in powers of 2, based on this number.", null,
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = ((byte)value));
 		}
 		
 		public override byte DefaultSubtype
@@ -67,7 +59,10 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug;
+			int width = (32 << (obj.PropertyValue + 1));
+			BitmapBits debug = new BitmapBits(width+1, 65);
+			debug.DrawRectangle(LevelData.ColorWhite, 0, 0, width, 64);
+			return new Sprite(debug, -(width/2), -32);
 		}
 	}
 }

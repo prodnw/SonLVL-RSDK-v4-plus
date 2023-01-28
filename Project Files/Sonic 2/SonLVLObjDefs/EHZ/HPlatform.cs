@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.EHZ
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		

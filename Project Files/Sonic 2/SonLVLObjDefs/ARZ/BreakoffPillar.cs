@@ -15,7 +15,7 @@ namespace S2ObjectDefinitions.ARZ
 			BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
 			sprites[0] = new Sprite(sheet.GetSection(59, 42, 56, 56), -28, -32);
 			sprites[1] = new Sprite(sheet.GetSection(140, 80, 32, 8), -16, 24);
-			sprites[2] = new Sprite(sheet.GetSection(173, 38, 32, 37), -16, 48);
+			sprites[2] = new Sprite(sheet.GetSection(173, 38, 32, 37), -16, 32);
 			
 			var bitmap = new BitmapBits(1, 0x40);
 			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x00, 0, 0x03);

@@ -10,47 +10,45 @@ namespace S2ObjectDefinitions.ARZ
 		private Sprite img;
 		private Sprite debug;
 		private PropertySpec[] properties;
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
 
 		public override void Init(ObjectData data)
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
 			
-			var bitmap = new BitmapBits(1, 0x1C);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x00, 0, 0x03);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x08, 0, 0x0B);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x10, 0, 0x13);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x18, 0, 0x1B);
-			debug = new Sprite(bitmap, 0, 33);
-
+			BitmapBits overlay = new BitmapBits(2, 62);
+			for (int i = 0; i < 62; i += 12)
+				overlay.DrawLine(LevelData.ColorWhite, 0, i, 0, i + 6);
+			debug = new Sprite(overlay, 0, 0);
+			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Falls", typeof(int), "Extended",
-				"If the platform should fall or not.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
+				"How this Platform should act upon player contact.", null, new Dictionary<string, int>
 				{
-					{ "True", 0 },
-					{ "False", 1 }
+					{ "Fall", 0 },
+					{ "Static", 1 }
 				},
-				(obj) => ((obj.PropertyValue == 0) ? 0 : 1),
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
-		}
-
-		public override PropertySpec[] CustomProperties
-		{
-			get { return properties; }
-		}
-
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
 		public override byte DefaultSubtype
 		{
 			get { return 0; }
 		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -70,11 +68,8 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
-			{
-				return debug;
-			}
-			return new Sprite();
+			if (obj.PropertyValue == 1) return null;
+			return debug;
 		}
 	}
 }

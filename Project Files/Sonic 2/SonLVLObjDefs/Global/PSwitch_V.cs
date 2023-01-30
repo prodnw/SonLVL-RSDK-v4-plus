@@ -123,12 +123,12 @@ namespace S2ObjectDefinitions.Global
 
 		public override Sprite Image
 		{
-			get { return sprites[16]; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[16];
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

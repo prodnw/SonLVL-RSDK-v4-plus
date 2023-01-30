@@ -7,16 +7,18 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class Rexon : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[3];
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] sprites = new Sprite[3];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("HTZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(143, 123, 23, 16), -19, -6);
-				sprites[1] = new Sprite(sheet.GetSection(52, 38, 16, 16), -8, -8);
-				sprites[2] = new Sprite(sheet.GetSection(91, 105, 32, 16), -16, -8);
+				sprites[0] = new Sprite(sheet.GetSection(143, 123, 23, 16), -19, -6); // head
+				sprites[1] = new Sprite(sheet.GetSection(52, 38, 16, 16), -8, -8); // body piece
+				sprites[2] = new Sprite(sheet.GetSection(91, 105, 32, 16), -16, -8); // shell
 			}
 			else
 			{
@@ -28,7 +30,28 @@ namespace S2ObjectDefinitions.Enemies
 				sprites[2] = new Sprite(sheet.GetSection(436, 289, 32, 16), -16, -8);
 			}
 			
-			// prop val is unused, only ported Rexons have it anyways
+			// Assemble the Rexon sprite now
+			
+			int[] offsets = {
+				-31,  4,  // piece 4, spr 1
+				-29, -11, // piece 3, spr 1
+				-25, -25, // piece 2, spr 1
+				-20, -39, // piece 1, spr 1
+				-16, -54, // head, spr 0
+				 0,   0   // shell, spr 2
+			};
+			
+			Sprite[] sprs = new Sprite[6];
+			for (int i = 0; i < 6; i++)
+			{
+				Sprite spr = new Sprite(sprites[((i == 5) ? 2 : (i == 4) ? 0 : 1)]);
+				spr.Offset(offsets[i * 2], offsets[(i * 2) + 1]);
+				sprs[i] = spr;
+			}
+			
+			sprite = new Sprite(sprs);
+			
+			// btw prop val is unused, only ported Rexons have it anyways
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -48,31 +71,17 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			// TODO: temp, probably should fix it but i think this looks funny
-			// (in other words, idk how to do it the right way)
-			
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 6; i++)
-			{
-				Sprite sprite = new Sprite(sprites[(i == 5 ? 0 : 1)]);
-				sprite.Offset(0, -(i * 17));
-				sprs.Add(sprite);
-			}
-			
-			Sprite tmp = new Sprite(sprites[2]);
-			sprs.Add(tmp);
-			
-			return new Sprite(sprs.ToArray());
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprite;
 		}
 	}
 }

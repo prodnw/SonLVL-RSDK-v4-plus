@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.Global
 		
 		public override byte DefaultSubtype
 		{
-			get { return 17; }
+			get { return 0x11; }
 		}
 		
 		public override PropertySpec[] CustomProperties

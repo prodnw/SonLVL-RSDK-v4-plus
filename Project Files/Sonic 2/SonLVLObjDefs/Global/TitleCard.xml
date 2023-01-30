@@ -11,11 +11,19 @@
   <Enums>
     <Enum name="acttypes">
       <EnumMember name="Use Act Num" />
-	  <EnumMember name="Show Act 1" />
-	  <EnumMember name="Show Act 2" />
-	  <EnumMember name="Show Act 3" />
-	  <EnumMember name="Show Zone Text" />
-	  <EnumMember name="Show Zone Text (MBZ)" />
+      <EnumMember name="Show Act 1" />
+      <EnumMember name="Show Act 2" />
+      <EnumMember name="Show Act 3" />
+      <EnumMember name="Show Zone Text" />
+      <EnumMember name="Show Zone Text (MBZ)" />
     </Enum>
   </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Use Act Num" image="titlecard" />
+	<Subtype id="01" name="Show Act 1" image="titlecard" />
+	<Subtype id="02" name="Show Act 2" image="titlecard" />
+	<Subtype id="03" name="Show Act 3" image="titlecard" />
+	<Subtype id="04" name="Show Zone Text" image="titlecard" />
+	<Subtype id="05" name="Show Zone Text (MBZ)" image="titlecard" />
+  </Subtypes>
 </ObjDef>

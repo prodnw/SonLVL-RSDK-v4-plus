@@ -15,7 +15,7 @@
     <ImageSet id="prison">
       <ImageRef image="capsule" />
       <ImageRef image="button" />
-	  <ImageRef image="lock" />
+      <ImageRef image="lock" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>

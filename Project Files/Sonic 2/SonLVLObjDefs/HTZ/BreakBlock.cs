@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.HTZ
 		
 		public override byte DefaultSubtype
 		{
-			get { return 3; }
+			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -77,12 +77,12 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return sprites[3]; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[3];
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

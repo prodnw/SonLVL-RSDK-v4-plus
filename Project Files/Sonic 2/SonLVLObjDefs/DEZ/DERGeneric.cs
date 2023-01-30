@@ -117,11 +117,11 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			// Original object forgoes this, but we may as well anyways
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			// Even if the sprites for it exist on the sheet, this object skips MBZ sheet checks and *always* uses the DEZ sheet instead
+			// if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(296, 50, 7, 16), -4, -8);
-			else
-				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(808, 50, 7, 16), -4, -8);
+			// else
+			// 	return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(808, 50, 7, 16), -4, -8);
 		}
 	}
 }

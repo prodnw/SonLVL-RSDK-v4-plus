@@ -7,10 +7,12 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class Eggman : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[3];
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] sprites = new Sprite[3];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("HTZ/Objects.gif");
@@ -20,12 +22,13 @@ namespace S2ObjectDefinitions.HTZ
 			}
 			else
 			{
-				// he looks weird in the level, but at least he's using the right sheet
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(1007, 34, 17, 7), -15, -10);
 				sprites[1] = new Sprite(sheet.GetSection(415, 154, 64, 45), -32, -12);
 				sprites[2] = new Sprite(sheet.GetSection(423, 130, 40, 24), -24, -36);
 			}
+			
+			sprite = new Sprite(sprites);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -45,24 +48,17 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			// All point here for simplicity's sake
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 3; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(0);
+			return sprite;
 		}
 	}
 }

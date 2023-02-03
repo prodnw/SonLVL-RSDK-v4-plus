@@ -130,7 +130,6 @@ namespace S2ObjectDefinitions.DEZ
 {
 	abstract class DERGeneric : ObjectDefinition
 	{
-		private PropertySpec[] properties;
 		private Sprite img;
 
 		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
@@ -148,11 +147,11 @@ namespace S2ObjectDefinitions.DEZ
 			get { return 0; }
 		}
 		
-		public override PropertySpec[] CustomProperties
+		public override bool Hidden
 		{
-			get { return properties; }
+			get { return true; }
 		}
-
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;

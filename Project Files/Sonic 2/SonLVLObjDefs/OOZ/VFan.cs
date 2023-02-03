@@ -3,34 +3,32 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.Enemies
+namespace S2ObjectDefinitions.OOZ
 {
-	class OctusShot : ObjectDefinition
+	class VFan : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
+		private Sprite debug;
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(92, 32, 6, 6), -3, -3);
+				sprite = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(206, 181, 32, 24), -16, -12);
 			}
 			else
 			{
-				// (SCZ mission ends up here too)
-				
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(910, 332, 6, 6), -3, -3);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(376, 820, 32, 24), -16, -12);
 			}
+			
+			BitmapBits bitmap = new BitmapBits(129, 145);
+			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 128, 144);
+			debug = new Sprite(bitmap, -64, -112);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override bool Hidden
-		{
-			get { return true; }
 		}
 		
 		public override byte DefaultSubtype
@@ -45,17 +43,22 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

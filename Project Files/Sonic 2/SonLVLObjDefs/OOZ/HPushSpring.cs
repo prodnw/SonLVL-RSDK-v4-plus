@@ -1,43 +1,43 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.Enemies
+namespace S2ObjectDefinitions.OOZ
 {
-	class Aquis : ObjectDefinition
+	class HPushSpring : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+		}
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(272, 223, 40, 32), -20, -16);
 			}
 			else
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(756, 778, 40, 32), -20, -16);
 			}
 			
 			sprites[1] = new Sprite(sprites[0]);
 			sprites[1].Flip(true, false);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which way the Aquis is facing.", null, new Dictionary<string, int>
+				"Which way the Spring is facing.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Right", 0 },
+					{ "Left", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
-		}
-
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
 		public override byte DefaultSubtype
@@ -52,13 +52,14 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype & 1)
+			switch (subtype)
 			{
 				case 0:
-				default:
-					return "Facing Left";
+					return "Right";
 				case 1:
-					return "Facing Right";
+					return "Left";
+				default:
+					return "Unknown";
 			}
 		}
 

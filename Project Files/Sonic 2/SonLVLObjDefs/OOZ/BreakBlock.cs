@@ -1,40 +1,41 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.Enemies
+namespace S2ObjectDefinitions.OOZ
 {
-	class Aquis : ObjectDefinition
+	class GasBreakBlock : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
-
+		private PropertySpec[] properties = new PropertySpec[1];
+		
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
+				BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(69, 141, 32, 32), -16, -16);
+				sprites[1] = new Sprite(sheet.GetSection(69, 174, 32, 32), -16, -16);
 			}
 			else
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
+				BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(991, 843, 32, 32), -16, -16);
+				sprites[1] = new Sprite(sheet.GetSection(991, 876, 32, 32), -16, -16);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
-			
-			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which way the Aquis is facing.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
+				"Which way the Block will launch the player.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Vertical", 0 },
+					{ "Horizontal", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
-
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
@@ -56,9 +57,9 @@ namespace S2ObjectDefinitions.Enemies
 			{
 				case 0:
 				default:
-					return "Facing Left";
+					return "Launch Vertically";
 				case 1:
-					return "Facing Right";
+					return "Launch Horizontally";
 			}
 		}
 

@@ -68,13 +68,21 @@ namespace S1ObjectDefinitions.Enemies
 		public override Sprite SubtypeImage(byte subtype)
 		{
 			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 128) != 0, false);
+			sprite.Flip(subtype > 127, false);
 			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return SubtypeImage(obj.PropertyValue);
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			int dist = (obj.PropertyValue & 127) << 4;
+			BitmapBits bitmap = new BitmapBits(dist + 1, 2);
+			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, dist, 0);
+			return new Sprite(bitmap, (obj.PropertyValue > 127) ? 0 : -dist, 0);
 		}
 	}
 }

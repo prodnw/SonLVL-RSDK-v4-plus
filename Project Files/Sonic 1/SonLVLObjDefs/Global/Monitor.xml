@@ -54,7 +54,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Contents" description="The contents of this Monitor." type="Contents" startbit="0" length="5" />
+    <Property name="Contents" description="The contents of this Monitor." type="Contents" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="Contents">
@@ -147,7 +147,7 @@
     </ImageSet>
   </ImageSets>
   <DefaultImage>
-    <ImageSetRef set="blank" />
+    <ImageSetRef set="rings" />
   </DefaultImage>
   <Subtypes>
     <Subtype id="00" name="Empty">

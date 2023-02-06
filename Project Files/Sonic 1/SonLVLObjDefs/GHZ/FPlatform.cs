@@ -8,6 +8,7 @@ namespace S1ObjectDefinitions.GHZ
 	class FPlatform : ObjectDefinition
 	{
 		private Sprite img;
+		private Sprite debug;
 		private PropertySpec[] properties;
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -18,6 +19,11 @@ namespace S1ObjectDefinitions.GHZ
 		public override void Init(ObjectData data)
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(50, 18, 64, 32), -32, -14);
+			
+			BitmapBits overlay = new BitmapBits(2, 62);
+			for (int i = 0; i < 62; i += 12)
+				overlay.DrawLine(LevelData.ColorWhite, 0, i, 0, i + 6);
+			debug = new Sprite(overlay, 0, 0);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
@@ -62,16 +68,8 @@ namespace S1ObjectDefinitions.GHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 1)
-				return null;
-			
-			// Line gets cut off on purpose
-			
-			var overlay = new BitmapBits(2, 62);
-			
-			for (int i = 0; i < 62; i += 12)
-				overlay.DrawLine(LevelData.ColorWhite, 0, i, 0, i + 6);
-			return new Sprite(overlay, 0, 0);
+			if (obj.PropertyValue == 0) return debug;
+			return null;
 		}
 	}
 }

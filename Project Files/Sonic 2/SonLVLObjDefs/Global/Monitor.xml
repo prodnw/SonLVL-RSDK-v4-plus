@@ -58,7 +58,7 @@
   </Images>
   <Properties>
     <Property name="Contents" description="The primary contents of this Monitor." type="MonitorType" startbit="0" length="4" />
-    <Property name="Alt Contents" description="The alternative contents of this Monitor. Used if Contents holds an elemental shield when the setting for them is off. Static ALt Contents mean that the Monitor should not appear at all when elemental shields are disabled." type="MonitorType" startbit="4" length="4" />
+    <Property name="Alt Contents" description="The alternative contents of this Monitor. Used if Contents holds an elemental shield when the setting for them is off. Static Alt Contents mean that the Monitor should not appear at all when elemental shields are disabled." type="MonitorType" startbit="4" length="4" />
   </Properties>
   <Enums>
     <Enum name="MonitorType">

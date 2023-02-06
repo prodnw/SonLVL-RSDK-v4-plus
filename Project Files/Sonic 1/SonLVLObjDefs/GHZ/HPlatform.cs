@@ -8,6 +8,7 @@ namespace S1ObjectDefinitions.GHZ
 	class HPlatform : ObjectDefinition
 	{
 		private Sprite img;
+		private Sprite debug;
 		private PropertySpec[] properties;
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -18,6 +19,10 @@ namespace S1ObjectDefinitions.GHZ
 		public override void Init(ObjectData data)
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(50, 18, 64, 32), -32, -14);
+			
+			BitmapBits overlay = new BitmapBits(129, 2);
+			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
+			debug = new Sprite(overlay, -64, 0);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
@@ -62,9 +67,7 @@ namespace S1ObjectDefinitions.GHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
-			return new Sprite(overlay, -64, 0);
+			return debug;
 		}
 	}
 }

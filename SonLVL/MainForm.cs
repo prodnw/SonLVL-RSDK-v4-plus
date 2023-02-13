@@ -6990,9 +6990,9 @@ namespace SonicRetro.SonLVL.GUI
 		private void loadGlobalObjects_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!loaded) return;
+			bool reload = false;
 			if (loadGlobalObjects.Checked)
 			{
-				bool reload = false;
 				switch (MessageBox.Show(this, "Enabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match?", "Enable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 				{
 					case DialogResult.Yes:
@@ -7014,16 +7014,9 @@ namespace SonicRetro.SonLVL.GUI
 						return;
 				}
 				LevelData.ObjTypes.InsertRange(1, LevelData.GlobalObjects.Select(o => LevelData.MakeObjectDefinition(o)));
-				InitObjectTypes();
-				if (reload)
-					foreach (var item in LevelData.Objects)
-						item.UpdateSprite();
-				SelectedObjectChanged();
-				objectAddButton.Enabled = LevelData.ObjTypes.Count < 256;
 			}
 			else
 			{
-				bool reload = false;
 				switch (MessageBox.Show(this, "Disabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match and delete entities using global types?", "Disable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 				{
 					case DialogResult.Yes:
@@ -7058,15 +7051,15 @@ namespace SonicRetro.SonLVL.GUI
 						loaded = true;
 						return;
 				}
-				LevelData.StageConfig.loadGlobalObjects = loadGlobalObjects.Checked;
 				LevelData.ObjTypes.RemoveRange(1, LevelData.GlobalObjects.Count);
-				InitObjectTypes();
-				if (reload)
-					foreach (var item in LevelData.Objects)
-						item.UpdateSprite();
-				SelectedObjectChanged();
-				objectAddButton.Enabled = LevelData.ObjTypes.Count < 256;
 			}
+			LevelData.StageConfig.loadGlobalObjects = loadGlobalObjects.Checked;
+			InitObjectTypes();
+			if (reload)
+				foreach (var item in LevelData.Objects)
+					item.UpdateSprite();
+			SelectedObjectChanged();
+			objectAddButton.Enabled = LevelData.ObjTypes.Count < 256;
 		}
 
 		private void objectListBox_SelectedIndexChanged(object sender, EventArgs e)

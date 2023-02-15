@@ -79,6 +79,36 @@ namespace SonicRetro.SonLVL.API.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bytecode/BR1Zone01.bin
+        ///Bytecode/BR2Zone02.bin
+        ///Bytecode/BR3Zone03.bin
+        ///Bytecode/BR4Zone04.bin
+        ///Bytecode/BR5Zone05.bin
+        ///Bytecode/BR6Zone06.bin
+        ///Bytecode/BR7Zone07.bin
+        ///Bytecode/BR8Zone09.bin
+        ///Bytecode/BR9Zone11.bin
+        ///Bytecode/BR9Zone12.bin
+        ///Bytecode/Continue.bin
+        ///Bytecode/Credits.bin
+        ///Bytecode/DLC_Zone01.bin
+        ///Bytecode/DLC_Zone02.bin
+        ///Bytecode/DLC_Zone06.bin
+        ///Bytecode/DLC_Zone09.bin
+        ///Bytecode/Ending.bin
+        ///Bytecode/GlobalCode.bin
+        ///Bytecode/LSelect.bin
+        ///Bytecode/Mission_M.bin
+        ///Bytecode/Mission_Zone01.bin
+        ///Byteco [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string rsdk_files_list {
+            get {
+                return ResourceManager.GetString("rsdk_files_list", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap UnknownImg {

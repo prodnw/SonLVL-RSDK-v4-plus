@@ -62,6 +62,7 @@ namespace SonicRetro.SonLVL.API
 		public const int ColorWhite = 1;
 		public const int ColorYellow = 2;
 		public const int ColorBlack = 3;
+		static readonly List<string> rsdk_files_list = new List<string>();
 
 		static LevelData()
 		{
@@ -73,6 +74,14 @@ namespace SonicRetro.SonLVL.API
 			InvalidTile.DrawLine(15, 0, 15, 15, 0);
 			for (int i = 0; i < 256; i++)
 				GrayscalePalette[i] = Color.FromArgb(i, i, i);
+			using (var sr = new StringReader(Properties.Resources.rsdk_files_list))
+				while (true)
+				{
+					var s = sr.ReadLine();
+					if (s == null)
+						break;
+					rsdk_files_list.Add(s);
+				}
 		}
 
 		public static void LoadGame(string filename)
@@ -89,12 +98,12 @@ namespace SonicRetro.SonLVL.API
 			if (File.Exists(dataFile))
 			{
 				if (Game.IsV5U)
-					DataFile = new RSDKv5.DataPack(dataFile);
+					DataFile = new RSDKv5.DataPack(dataFile, rsdk_files_list);
 				else
 					switch (Game.RSDKVer)
 					{
 						case EngineVersion.V4:
-							DataFile = new RSDKv4.DataPack(dataFile);
+							DataFile = new RSDKv4.DataPack(dataFile, rsdk_files_list);
 							break;
 						case EngineVersion.V3:
 							DataFile = new RSDKv3.DataPack(dataFile);

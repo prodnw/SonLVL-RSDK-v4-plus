@@ -18,22 +18,18 @@ namespace S2ObjectDefinitions.WFZ
 			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Width", typeof(int), "Extended",
 				"How wide the Invisible Block will be.", null,
-				(obj) => obj.PropertyValue >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((((int)value) & 15) << 4)));
+				(obj) => (obj.PropertyValue >> 4) + 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)(Math.Max((((((int)value) & 15) << 4) - 1), 0))));
 			
 			properties[1] = new PropertySpec("Height", typeof(int), "Extended",
 				"How tall the Invisible Block will be.", null,
-				(obj) => obj.PropertyValue & 15,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(((int)value) & 15)));
+				(obj) => (obj.PropertyValue & 15) + 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(Math.Max(((((int)value) & 15) - 1), 0))));
 			
-			properties[2] = new PropertySpec("Time Attack Only", typeof(int), "Extended",
-				"If this Block should only be in Time Attack.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => ((V4ObjectEntry)obj).Value0,
-				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
+			properties[2] = new PropertySpec("Time Attack Only", typeof(bool), "Extended",
+				"If this Block should only be in Time Attack.", null,
+				(obj) => ((V4ObjectEntry)obj).Value0 == 1,
+				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -43,7 +39,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override byte DefaultSubtype
 		{
-			get { return 17; }
+			get { return 0x11; }
 		}
 
 		public override PropertySpec[] CustomProperties

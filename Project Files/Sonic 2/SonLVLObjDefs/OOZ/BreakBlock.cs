@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.OOZ
 			}
 			else
 			{
-				BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
+				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(991, 843, 32, 32), -16, -16);
 				sprites[1] = new Sprite(sheet.GetSection(991, 876, 32, 32), -16, -16);
 			}

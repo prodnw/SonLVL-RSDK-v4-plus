@@ -83,9 +83,7 @@ namespace S2ObjectDefinitions.Global
 			{
 				for (int j = 0; j < width; j++)
 				{
-					Sprite tmp = new Sprite(sprites[Math.Min(((V4ObjectEntry)obj).State, 2)]);
-					tmp.Offset(-sx + (j * 16), -sy + (i * 16));
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprites[Math.Min(((V4ObjectEntry)obj).State, 2)], -sx + (j * 16), -sy + (i * 16)));
 				}
 			}
 			return new Sprite(sprs.ToArray());

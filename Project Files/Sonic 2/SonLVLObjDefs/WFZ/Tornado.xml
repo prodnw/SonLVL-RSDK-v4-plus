@@ -27,6 +27,14 @@
       <ImageRef image="tails" />
     </ImageSet>
   </ImageSets>
+  <Subtypes>
+	<Subtype id="00" name="Intro Tornado">
+      <ImageSetRef set="tornado" />
+    </Subtype>
+	<Subtype id="01" name="Outro Tornado">
+      <ImageSetRef set="tornado" />
+    </Subtype>
+  </Subtypes>
   <DefaultImage>
     <ImageSetRef set="tornado" />
   </DefaultImage>

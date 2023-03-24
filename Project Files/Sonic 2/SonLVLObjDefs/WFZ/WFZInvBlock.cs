@@ -8,14 +8,13 @@ namespace S2ObjectDefinitions.WFZ
 {
 	class WFZInvBlock : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[3];
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 176, 16, 14), -8, -7);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 176, 16, 14), -8, -7);
 			
-			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Width", typeof(int), "Extended",
 				"How wide the Invisible Block will be.", null,
 				(obj) => (obj.PropertyValue >> 4) + 1,
@@ -54,32 +53,28 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int width = obj.PropertyValue >> 4;
-			int height = obj.PropertyValue & 15;
-			width += 1; height += 1;
+			int width = (obj.PropertyValue >> 4) + 1;
+			int height = (obj.PropertyValue & 15) + 1;
 			
-			int sx = (obj.PropertyValue & 240) << 15;
-			int sy = (obj.PropertyValue & 15) << 19;
-			sx >>= 16; sy >>= 16;
+			int sx = (obj.PropertyValue & 240) >> 1;
+			int sy = (obj.PropertyValue & 15) << 3;
 			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					Sprite tmp = new Sprite(img);
-					tmp.Offset(-sx + (j * 16), -sy + (i * 16));
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprite, -sx + (j * 16), -sy + (i * 16)));
 				}
 			}
 			return new Sprite(sprs.ToArray());

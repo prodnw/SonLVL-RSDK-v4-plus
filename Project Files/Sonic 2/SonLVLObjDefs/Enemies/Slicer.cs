@@ -7,11 +7,13 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class Slicer : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[4];
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
+			Sprite img;
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
 			{
 				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(29, 1, 47, 32), -16, -16);
@@ -20,25 +22,23 @@ namespace S2ObjectDefinitions.Enemies
 			{
 				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(880, 256, 47, 32), -16, -16);
 			}
-
-			properties = new PropertySpec[2];
+			
+			for (int i = 0; i < 4; i++)
+			{
+				sprites[i] = new Sprite(img);
+				sprites[i].Flip((i & 1) == 0, (i & 2) == 2);
+			}
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Slicer is facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Right", 1 },
+					{ "Left (Roof)", 2 },
+					{ "Right  (Roof)", 3 }
 				},
-				(obj) => (obj.PropertyValue & 1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
-			
-			properties[1] = new PropertySpec("On Roof", typeof(int), "Extended",
-				"If the Slicer is on a roof or not.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 2 }
-				},
-				(obj) => (obj.PropertyValue & 2),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue & 3),
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -58,8 +58,9 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
+			switch (subtype & 3)
 			{
+				default:
 				case 0:
 					return "Facing Left";
 				case 1:
@@ -68,26 +69,22 @@ namespace S2ObjectDefinitions.Enemies
 					return "Facing Left, Roof";
 				case 3:
 					return "Facing Right, Roof";
-				default:
-					return "Unknown";
 			}
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) == 0, (subtype & 2) == 2);
-			return sprite;
+			return sprites[subtype & 3];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 3];
 		}
 	}
 }

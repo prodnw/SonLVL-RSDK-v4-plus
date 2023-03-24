@@ -21,6 +21,8 @@ namespace S2ObjectDefinitions.Enemies
 				
 				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(843, 289, 32, 28), -16, -14);
 			}
+			
+			// even if prop val is set, it isn't used
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

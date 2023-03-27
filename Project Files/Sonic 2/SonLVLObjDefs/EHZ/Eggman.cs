@@ -9,32 +9,36 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class Eggman : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
-			Sprite[] sprites = new Sprite[2];
+			Sprite[] sprites = new Sprite[7];
 			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(70, 155, 60, 20), -28, -28);
-				sprites[1] = new Sprite(sheet.GetSection(0, 209, 64, 29), -32, -8);
+				sprites[0] = new Sprite(sheet.GetSection(1, 143, 32, 32), -16 - 44, -16 + 20); // back wheel
+				sprites[1] = new Sprite(sheet.GetSection(70, 155, 60, 20), -28, -28); // eggman
+				sprites[2] = new Sprite(sheet.GetSection(0, 209, 64, 29), -32, -8); // eggmobile
+				sprites[3] = new Sprite(sheet.GetSection(0, 109, 93, 32), -48, -16 + 8); // car
+				sprites[4] = new Sprite(sheet.GetSection(94, 131, 32, 23), -16 - 54, -12 + 16); // drill
+				sprites[5] = new Sprite(sheet.GetSection(1, 143, 32, 32), -16 - 12, -16 + 20); // front wheel 1
+				sprites[6] = new Sprite(sheet.GetSection(1, 143, 32, 32), -16 + 28, -16 + 20); // front wheel 1
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(1, 1, 60, 20), -28, -28);
-				sprites[1] = new Sprite(sheet.GetSection(415, 170, 64, 29), -32, -8);
+				sprites[0] = new Sprite(sheet.GetSection(123, 58, 32, 32), -16 - 44, -16 + 20); // back wheel
+				sprites[1] = new Sprite(sheet.GetSection(1, 1, 60, 20), -28, -28); // eggman
+				sprites[2] = new Sprite(sheet.GetSection(415, 170, 64, 29), -32, -8); // eggmobile
+				sprites[3] = new Sprite(sheet.GetSection(123, 1, 93, 32), -48, -16 + 8); // car
+				sprites[4] = new Sprite(sheet.GetSection(123, 34, 32, 23), -16 - 54, -12 + 16); // drill
+				sprites[5] = new Sprite(sheet.GetSection(123, 58, 32, 32), -16 - 12, -16 + 20); // front wheel 1
+				sprites[6] = new Sprite(sheet.GetSection(123, 58, 32, 32), -16 + 28, -16 + 20); // front wheel 1
 			}
 			
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprs.Add(sprite);
-			}
-			img = new Sprite(sprs.ToArray());
+			sprite = new Sprite(sprites);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -54,17 +58,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

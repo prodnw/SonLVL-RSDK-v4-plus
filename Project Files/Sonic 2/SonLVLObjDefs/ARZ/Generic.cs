@@ -23,6 +23,38 @@ namespace S2ObjectDefinitions.ARZ
 		public override bool Hidden { get { return true; } }
 	}
 	
+	class Eggman : ARZ.Generic
+	{
+		public override Sprite GetSprite()
+		{
+			Sprite[] sprites = new Sprite[4];
+			
+			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '3')
+			{
+				BitmapBits sheet = LevelData.GetSpriteSheet("Global/EggMobile.gif");
+				sprites[0] = new Sprite(sheet.GetSection(5, 1, 60, 20), -28, -28);
+				sprites[1] = new Sprite(sheet.GetSection(1, 64, 64, 29), -32, -8);
+				
+				// Eggman Hammer frames
+				sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
+				sprites[2] = new Sprite(sheet.GetSection(1, 147, 76, 52), -44, -28); // eggmobile addon
+				sprites[3] = new Sprite(sheet.GetSection(1, 202, 54, 53), -50 - 40, -49 + 4); // hammer (idle)
+			}
+			else
+			{
+				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
+				sprites[0] = new Sprite(sheet.GetSection(1, 1, 60, 20), -28, -28);
+				sprites[1] = new Sprite(sheet.GetSection(415, 170, 64, 29), -32, -8);
+				
+				// Eggman Hammer frames
+				sprites[2] = new Sprite(sheet.GetSection(222, 5, 76, 52), -44, -28); // eggmobile addon
+				sprites[3] = new Sprite(sheet.GetSection(255, 58, 54, 53), -50 - 40, -49 + 4); // hammer (idle)
+			}
+			
+			return new Sprite(sprites);
+		}
+	}
+	
 	class EggmanHammer : ARZ.Generic
 	{
 		public override Sprite GetSprite()

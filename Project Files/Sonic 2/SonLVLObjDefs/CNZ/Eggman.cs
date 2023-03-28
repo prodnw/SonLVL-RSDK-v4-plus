@@ -21,7 +21,6 @@ namespace S2ObjectDefinitions.CNZ
 			}
 			else
 			{
-				// he looks weird in the level, but at least he's using the right sheet
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(1, 5, 44, 16), -28, -16);
 				sprites[1] = new Sprite(sheet.GetSection(232, 112, 80, 72), -40, -40);

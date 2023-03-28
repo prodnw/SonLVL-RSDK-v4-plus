@@ -7,29 +7,28 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class SpinyFloor : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(1, 1, 48, 23), -24, -11);
+				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(1, 1, 48, 23), -24, -11);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(131, 256, 48, 23), -24, -11);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(131, 256, 48, 23), -24, -11);
 			}
-
-			properties = new PropertySpec[1];
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spiny will move.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (obj.PropertyValue & 1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -53,22 +52,21 @@ namespace S2ObjectDefinitions.Enemies
 			{
 				case 0:
 					return "Facing Left";
+				default:
 				case 1:
 					return "Facing Right";
-				default:
-					return "Unknown";
 			}
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
 			// sprite isn't flipped, even if there's a "Direction" property
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

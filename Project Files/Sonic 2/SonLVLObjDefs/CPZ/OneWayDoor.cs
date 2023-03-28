@@ -7,28 +7,29 @@ namespace S2ObjectDefinitions.CPZ
 {
 	class OneWayDoor : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[2];
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2') // "2" for both CPZ and DEZ (DEZ obj loads CPZ sheet)
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(206, 142, 16, 64), -8, -32);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(206, 142, 16, 64), -8, -32);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(93, 312, 16, 64), -8, -32);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(93, 312, 16, 64), -8, -32);
 			}
 			
-			properties = new PropertySpec[1];
+			sprites[1] = new Sprite(sprites[0], true, false);
+				
 			properties[0] = new PropertySpec("Open From", typeof(int), "Extended",
 				"Which direction this Door should be opened from.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1, // in-game any non-0/1 values are treated as opening from the right but they don't flip their sprite
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -62,17 +63,17 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprites[(subtype == 1) ? 1 : 0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprites[(obj.PropertyValue == 1) ? 1 : 0];
 		}
 	}
 }

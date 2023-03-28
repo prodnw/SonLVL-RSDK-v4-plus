@@ -20,7 +20,12 @@ namespace S2ObjectDefinitions.Enemies
 				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(84, 302, 8, 8), -4, -4);
 			}
 		}
-
+		
+		public override bool Hidden
+		{
+			get { return true; }
+		}
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }

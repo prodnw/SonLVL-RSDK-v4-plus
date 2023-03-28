@@ -3,34 +3,32 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S2ObjectDefinitions.CPZ
+namespace S1ObjectDefinitions.SYZ
 {
-	class SpeedBooster : ObjectDefinition
+	class HPlatform : ObjectDefinition
 	{
 		private Sprite sprite;
+		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
-
+		
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
-			{
-				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(91, 25, 48, 16), -24, -8);
-			}
-			else
-			{
-				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(474, 321, 48, 16), -24, -8);
-			}
+			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
 			
-			properties[0] = new PropertySpec("Speed", typeof(int), "Extended",
-				"The amount of speed the player gets after being launched.", null, new Dictionary<string, int>
+			BitmapBits overlay = new BitmapBits(129, 2);
+			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
+			debug = new Sprite(overlay, -64, 0);
+			
+			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
+				"The starting direction of this Platform.", null, new Dictionary<string, int>
 				{
-					{ "Fast", 0 },
-					{ "Slow", 1 }
+					{ "Left", 0 },
+					{ "Right", 1 }
 				},
-				(obj) => (obj.PropertyValue == 0 ? 0 : 1),
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => obj.PropertyValue & 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 		}
-
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
@@ -48,14 +46,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Fast";
-				default:
-				case 1:
-					return "Slow";
-			}
+			return null;
 		}
 
 		public override Sprite Image
@@ -71,6 +62,11 @@ namespace S2ObjectDefinitions.CPZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

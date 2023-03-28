@@ -5,30 +5,30 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class GrabberShot : ObjectDefinition
+	class Bubbler : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(46, 83, 8, 8), -4, -4);
+				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(190, 141, 14, 14), 2, -2);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(84, 302, 8, 8), -4, -4);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(166, 1, 24, 24), -12, -12); // broken frame (base game is like this)
 			}
+		}
+
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override bool Hidden
 		{
 			get { return true; }
-		}
-		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -43,17 +43,17 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

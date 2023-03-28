@@ -7,20 +7,19 @@ namespace S2ObjectDefinitions.CPZ
 {
 	class BumpingPlatform : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		private readonly Sprite[] sprites = new Sprite[2];
-		private readonly Sprite[] debug = new Sprite[4];
+		private readonly Sprite[] debug = new Sprite[3];
 
 		public override void Init(ObjectData data)
 		{
-			Sprite img;
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(6, 204, 48, 14), -24, -8);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(6, 204, 48, 14), -24, -8);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(469, 692, 48, 14), -24, -8);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(469, 692, 48, 14), -24, -8);
 			}
 			
 			// (copy of BumpingPlatform_offsetTable from the game's script)
@@ -30,25 +29,19 @@ namespace S2ObjectDefinitions.CPZ
 				-0x780000, 0x800000,
 				 0x670000, 0x000000 };
 			
+			sprites[1] = new Sprite(new Sprite(sprites[0], -24, 0), new Sprite(sprites[0], 25, 0));
+
+			BitmapBits overlay = new BitmapBits(1024, 2);
 			
-			Sprite[] sprs = new Sprite[2];
-			sprs[0] = new Sprite(img);
-			sprs[0].Offset(-24, 0);
-			sprs[1] = new Sprite(img);
-			sprs[1].Offset(25, 0);
-
-			sprites[0] = new Sprite(img);
-			sprites[1] = new Sprite(sprs);
-
-			BitmapBits overlay = new BitmapBits(1024, 1);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 512, 1);
+			overlay.DrawLine(6, 0, 0, 512, 1); // LevelData.ColorWhite
 			debug[0] = new Sprite(overlay, -128, -2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 768, 1);
+			
+			overlay.DrawLine(6, 0, 0, 768, 1); // LevelData.ColorWhite
 			debug[1] = new Sprite(overlay, -192, -2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 1024, 1);
+			
+			overlay.DrawLine(6, 0, 0, 1024, 1); // LevelData.ColorWhite
 			debug[2] = new Sprite(overlay, -256, -2);
-
-			properties = new PropertySpec[1];
+			
 			properties[0] = new PropertySpec("Movement", typeof(int), "Extended",
 				"The way this platform moves.", null, new Dictionary<string, int>
 				{
@@ -70,6 +63,7 @@ namespace S2ObjectDefinitions.CPZ
 			switch (subtype)
 			{
 				case 0:
+				default:
 					return "One platform, 256px";
 				case 1:
 					return "Two platforms, 384px";
@@ -77,8 +71,6 @@ namespace S2ObjectDefinitions.CPZ
 					return "Two platforms, 512px";
 				case 3:
 					return "Two platforms, 512px";
-				default:
-					return "One platform, 256px";
 			}
 		}
 

@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.DEZ
 	class DeathEggRobot : ObjectDefinition
 	{
 		private Sprite img;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -21,15 +21,10 @@ namespace S2ObjectDefinitions.DEZ
 				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(911, 183, 112, 72), -44, -36);
 			}
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Skip Cutscene", typeof(int), "Extended",
-				"If the Death Egg Robot should skip the ending cutscene after it is defeated.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				"If the Death Egg Robot should skip the ending cutscene after it is defeated.", null,
+				(obj) => obj.PropertyValue != 0,
+				(obj, value) => obj.PropertyValue = ((byte)(((bool)value == true) ? 1 : 0)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -53,10 +48,9 @@ namespace S2ObjectDefinitions.DEZ
 			{
 				case 0:
 					return "Trigger Cutscene";
+				default:
 				case 1:
 					return "Skip Cutscene";
-				default:
-					return "Unknown";
 			}
 		}
 

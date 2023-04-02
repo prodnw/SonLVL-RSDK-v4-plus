@@ -11,7 +11,7 @@
   <Enums>
     <Enum name="intervals">
       <EnumMember name="Interval A" />
-	  <EnumMember name="Interval B" />
+      <EnumMember name="Interval B" />
     </Enum>
   </Enums>
   <Subtypes>

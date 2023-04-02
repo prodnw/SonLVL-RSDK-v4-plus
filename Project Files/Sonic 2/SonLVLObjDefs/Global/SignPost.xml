@@ -50,24 +50,24 @@
       <ImageRef image="base" />
       <ImageRef image="robotnik" />
     </ImageSet>
-	<ImageSet id="sonic">
+    <ImageSet id="sonic">
       <ImageRef image="base" />
       <ImageRef image="sonic" />
     </ImageSet>
-	<ImageSet id="tails">
+    <ImageSet id="tails">
       <ImageRef image="base" />
       <ImageRef image="tails" />
     </ImageSet>
   </ImageSets>
   <Subtypes>
     <Subtype id="00" name="Normal">
-	  <ImageSetRef set="robotnik" />
+      <ImageSetRef set="robotnik" />
     </Subtype>
-	<Subtype id="01" name="VS Only (Y Bounds)">
-	  <ImageSetRef set="sonic" />
+    <Subtype id="01" name="VS Only (Y Bounds)">
+      <ImageSetRef set="sonic" />
     </Subtype>
-	<Subtype id="02" name="VS Only (No Y Bounds)">
-	  <ImageSetRef set="tails" />
+    <Subtype id="02" name="VS Only (No Y Bounds)">
+      <ImageSetRef set="tails" />
     </Subtype>
   </Subtypes>
 </ObjDef>

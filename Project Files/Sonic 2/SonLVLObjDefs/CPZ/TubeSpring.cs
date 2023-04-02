@@ -42,7 +42,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Plane A", 2 },
 					{ "Plane B", 4 }
 				},
-				(obj) => (obj.PropertyValue >> 2) % 2,
+				(obj) => (obj.PropertyValue >> 2),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~6) | (byte)((int)value)));
 			
 			properties[3] = new PropertySpec("Reset XVel", typeof(bool), "Extended",

@@ -11,9 +11,9 @@
   <Enums>
     <Enum name="behaviours">
       <EnumMember name="Enter From Right, Exit From Left" />
-	  <EnumMember name="Enter From Left, Exit From Right" />
-	  <EnumMember name="Enter From Top, Stick to RWall" />
-	  <EnumMember name="Enter From Top, Stick to LWall" />
+      <EnumMember name="Enter From Left, Exit From Right" />
+      <EnumMember name="Enter From Top, Stick to RWall" />
+      <EnumMember name="Enter From Top, Stick to LWall" />
     </Enum>
   </Enums>
   <ImageSets>

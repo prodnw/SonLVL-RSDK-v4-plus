@@ -17,8 +17,8 @@
   <Enums>
     <Enum name="frames">
       <EnumMember name="Long Cloud" />
-	  <EnumMember name="Medium Cloud" />
-	  <EnumMember name="Small Cloud" />
+      <EnumMember name="Medium Cloud" />
+      <EnumMember name="Small Cloud" />
     </Enum>
   </Enums>
   <Subtypes>

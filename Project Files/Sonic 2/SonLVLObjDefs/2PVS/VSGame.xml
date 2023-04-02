@@ -11,8 +11,8 @@
   <Enums>
     <Enum name="modes">
       <EnumMember name="None" /> <!-- (will be erased in-game on startup) -->
-	  <EnumMember name="Boss Attack (Start)" />
-	  <EnumMember name="Boss Attack (End)" />
+      <EnumMember name="Boss Attack (Start)" />
+      <EnumMember name="Boss Attack (End)" />
     </Enum>
   </Enums>
 </ObjDef>

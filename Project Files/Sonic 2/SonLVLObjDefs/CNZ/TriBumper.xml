@@ -11,11 +11,11 @@
   <Enums>
     <Enum name="types">
       <EnumMember name="Small (Facing Left)" />
-	  <EnumMember name="Small (Facing Right)" />
-	  <EnumMember name="Large (Facing Up)" />
-	  <EnumMember name="Large (Facing Down)" />
-	  <EnumMember name="Large (Facing Left)" />
-	  <EnumMember name="Large (Facing Right)" />
+      <EnumMember name="Small (Facing Right)" />
+      <EnumMember name="Large (Facing Up)" />
+      <EnumMember name="Large (Facing Down)" />
+      <EnumMember name="Large (Facing Left)" />
+      <EnumMember name="Large (Facing Right)" />
     </Enum>
   </Enums>
 </ObjDef>

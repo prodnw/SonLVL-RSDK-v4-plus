@@ -20,10 +20,10 @@
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Use Act Num" image="titlecard" />
-	<Subtype id="01" name="Show Act 1" image="titlecard" />
-	<Subtype id="02" name="Show Act 2" image="titlecard" />
-	<Subtype id="03" name="Show Act 3" image="titlecard" />
-	<Subtype id="04" name="Show Zone Text" image="titlecard" />
-	<Subtype id="05" name="Show Zone Text (MBZ)" image="titlecard" />
+    <Subtype id="01" name="Show Act 1" image="titlecard" />
+    <Subtype id="02" name="Show Act 2" image="titlecard" />
+    <Subtype id="03" name="Show Act 3" image="titlecard" />
+    <Subtype id="04" name="Show Zone Text" image="titlecard" />
+    <Subtype id="05" name="Show Zone Text (MBZ)" image="titlecard" />
   </Subtypes>
 </ObjDef>

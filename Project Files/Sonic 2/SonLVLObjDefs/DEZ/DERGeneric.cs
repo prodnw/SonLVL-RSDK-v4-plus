@@ -111,6 +111,11 @@ namespace S2ObjectDefinitions.DEZ
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(513, 1, 40, 56), -20, -28);
 		}
+		
+		public override bool Hidden
+		{
+			get { return false; }
+		}
 	}
 	
 	class MechaSonicSpike : DEZ.DERGeneric

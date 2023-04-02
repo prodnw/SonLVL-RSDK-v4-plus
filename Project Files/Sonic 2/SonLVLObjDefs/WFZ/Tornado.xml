@@ -28,10 +28,10 @@
     </ImageSet>
   </ImageSets>
   <Subtypes>
-	<Subtype id="00" name="Intro Tornado">
+    <Subtype id="00" name="Intro Tornado">
       <ImageSetRef set="tornado" />
     </Subtype>
-	<Subtype id="01" name="Outro Tornado">
+    <Subtype id="01" name="Outro Tornado">
       <ImageSetRef set="tornado" />
     </Subtype>
   </Subtypes>

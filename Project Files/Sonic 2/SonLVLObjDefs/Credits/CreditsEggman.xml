@@ -49,7 +49,7 @@
       <EnumMember name="Emerald 5" />
       <EnumMember name="Emerald 6" />
       <EnumMember name="Emerald 7" />
-	  <EnumMember name="Knuckles" />
+      <EnumMember name="Knuckles" />
     </Enum>
   </Enums>
   <Display>
@@ -57,39 +57,39 @@
       <Condition property="Frame ID" value="Eggman - Juggling" />
       <ImageRef image="juggling" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Eggman - Tantrum" />
       <ImageRef image="tantrum" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 1" />
       <ImageRef image="emerald1" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 2" />
       <ImageRef image="emerald2" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 3" />
       <ImageRef image="emerald3" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 4" />
       <ImageRef image="emerald4" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 5" />
       <ImageRef image="emerald5" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 6" />
       <ImageRef image="emerald6" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Emerald 7" />
       <ImageRef image="emerald7" />
     </DisplayOption>
-	<DisplayOption>
+    <DisplayOption>
       <Condition property="Frame ID" value="Knuckles" />
       <ImageRef image="knuxbush" />
       <ImageRef image="knuxeyes" />

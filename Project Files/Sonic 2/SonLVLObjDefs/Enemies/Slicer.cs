@@ -12,22 +12,19 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			Sprite img;
-			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(29, 1, 47, 32), -16, -16);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(29, 1, 47, 32), -16, -16);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(880, 256, 47, 32), -16, -16);
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(880, 256, 47, 32), -16, -16);
 			}
 			
-			for (int i = 0; i < 4; i++)
-			{
-				sprites[i] = new Sprite(img);
-				sprites[i].Flip((i & 1) == 0, (i & 2) == 2);
-			}
+			sprites[0].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
+			sprites[2] = new Sprite(sprites[0], false, true);
+			sprites[3] = new Sprite(sprites[0], true, true);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Slicer is facing.", null, new Dictionary<string, int>

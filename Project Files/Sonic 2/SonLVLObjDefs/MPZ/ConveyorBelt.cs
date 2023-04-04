@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.MPZ
 {
 	class ConveyorBelt : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite img;
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -20,7 +20,6 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How large the Conveyor Belt is.", null,
 				(obj) => obj.PropertyValue,
@@ -60,8 +59,8 @@ namespace S2ObjectDefinitions.MPZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int width = ((Math.Max((int)obj.PropertyValue, 1)) << 4) * 2;
-			var bitmap = new BitmapBits(width + 1, 21);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, width, 20);
+			BitmapBits bitmap = new BitmapBits(width + 1, 21);
+			bitmap.DrawRectangle(6, 0, 0, width, 20); // LevelData.ColorWhite
 			return new Sprite(bitmap, -(width / 2), -20);
 		}
 	}

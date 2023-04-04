@@ -8,27 +8,37 @@ namespace S2ObjectDefinitions.MPZ
 {
 	class Cylinder : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-		private Sprite img;
+		private Sprite sprite;
+		private Sprite[] debug = new Sprite[2];
+		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Allow Drop", typeof(int), "Extended",
+			// Small hitbox
+			BitmapBits bitmap = new BitmapBits(384 + 1, 17);
+			bitmap.DrawRectangle(6, 0, 0, 384, 16); // LevelData.ColorWhite
+			debug[0] = new Sprite(bitmap, -(384 / 2), 60);
+			
+			// Large hitbox
+			bitmap = new BitmapBits(768 + 1, 17);
+			bitmap.DrawRectangle(6, 0, 0, 768, 16); // LevelData.ColorWhite
+			debug[1] = new Sprite(bitmap, -(768 / 2), 60);
+			
+			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the Corkscrew Cylinder.", null, new Dictionary<string, int>
 				{
 					{ "Small", 0 },
 					{ "Large", 1 }
 				},
-				(obj) => (obj.PropertyValue & 1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -43,31 +53,27 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 0) ? "Small Cylinder" : "Large Cylinder";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			// Show the ground area of the hitbox, as opposed to just outlining the entire cylinder
-			int size = (obj.PropertyValue == 0) ? 384 : 768;
-			var bitmap = new BitmapBits(size + 1, 17);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, size, 16);
-			return new Sprite(bitmap, -(size / 2), 60);
+			return debug[(obj.PropertyValue == 0) ? 0 : 1];
 		}
 	}
 }

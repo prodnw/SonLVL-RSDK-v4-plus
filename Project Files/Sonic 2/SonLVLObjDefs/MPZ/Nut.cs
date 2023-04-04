@@ -8,27 +8,26 @@ namespace S2ObjectDefinitions.MPZ
 {
 	class Nut : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-		private Sprite img;
+		private PropertySpec[] properties = new PropertySpec[2];
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(130, 156, 64, 24), -32, -12);
+			sprite = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(130, 156, 64, 24), -32, -12);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Allow Drop", typeof(int), "Extended",
 				"If the Nut should drop once it reaches a certain point.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
-					{ "True", 128 }
+					{ "True", 0x80 }
 				},
-				(obj) => (obj.PropertyValue & 128),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue & 0x80),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Drop Distance", typeof(int), "Extended",
 				"At what point the Nut should start falling. Only applicable if Allow Drop is true.", null,
-				(obj) => (obj.PropertyValue & 127),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)(((int)value) & 127)));
+				(obj) => (obj.PropertyValue & 0x7F),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7F) | (byte)(((int)value) & 0x7F)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -53,30 +52,27 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue > 127)
-			{
-				int height = (obj.PropertyValue & 127) << 3;
-				var bitmap = new BitmapBits(2, height + 1);
-				bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, height);
-				return new Sprite(bitmap);
-			}
+			if ((obj.PropertyValue & 0x80) == 0) return null;
 			
-			return null;
+			int height = (obj.PropertyValue & 127) << 3;
+			var bitmap = new BitmapBits(2, height + 1);
+			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, height);
+			return new Sprite(bitmap);
 		}
 	}
 }

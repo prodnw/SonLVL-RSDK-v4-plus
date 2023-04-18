@@ -7,8 +7,8 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Crabmeat : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -17,17 +17,15 @@ namespace S1ObjectDefinitions.Enemies
 				case '1':
 				case 'M': // Origins test mission
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(138, 157, 42, 31), -21, -16);
+					sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(138, 157, 42, 31), -21, -16);
 					break;
 				case '3':
-					img = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(184, 1, 42, 31), -21, -16);
+					sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(184, 1, 42, 31), -21, -16);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(168, 81, 42, 31), -21, -16);
+					sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(168, 81, 42, 31), -21, -16);
 					break;
 			}
-
-			properties = new PropertySpec[1];
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Crabmeat is facing.", null, new Dictionary<string, int>
@@ -35,7 +33,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
@@ -56,32 +54,22 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Facing Left";
-				case 1:
-					return "Facing Right";
-				default:
-					return "Unknown";
-			}
+			return (subtype == 1) ? "Facing Right" : "Facing Left";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) != 0, false);
 			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprite;
 		}
 	}
 }

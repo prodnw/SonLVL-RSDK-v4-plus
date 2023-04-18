@@ -45,7 +45,7 @@
     <Subtype id="09" name="Static" image="static" />
   </Subtypes>
   <Properties>
-    <Property name="Contents" type="MonitorType" startbit="0" length="8" />
+    <Property name="Contents" description="The Contents of this Monitor." type="MonitorType" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="MonitorType">

@@ -65,7 +65,7 @@ namespace SCDObjectDefinitions.Global
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var bitmap = new BitmapBits(1, 1);
+			BitmapBits bitmap;
 			switch (obj.PropertyValue)
 			{
 				case 0:

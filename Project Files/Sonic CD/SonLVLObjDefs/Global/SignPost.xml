@@ -9,10 +9,10 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" type="Behaviours" startbit="0" length="2" />
+    <Property name="Behaviour" description="How this Signpost should behave." type="behaviours" startbit="0" length="2" />
   </Properties>
   <Enums>
-    <Enum name="Behaviours">
+    <Enum name="behaviours">
       <EnumMember name="Expand Stage - Normal" />
 	  <EnumMember name="Expand Stage - Wider" />
 	  <EnumMember name="Normal" />

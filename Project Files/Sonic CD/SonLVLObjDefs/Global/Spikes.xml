@@ -14,6 +14,17 @@
       <Offset X="-16" Y="-16" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Orientation" description="Which way the Spikes are facing." type="orientations" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="orientations">
+      <EnumMember name="Up" />
+	  <EnumMember name="Right" />
+	  <EnumMember name="Left" />
+	  <EnumMember name="Down" />
+    </Enum>
+  </Enums>
   <Subtypes>
     <Subtype id="00" name="Up" image="up" />
     <Subtype id="01" name="Right" image="right" />

@@ -8,37 +8,42 @@ namespace S1ObjectDefinitions.Enemies
 	class BuzzBomber : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] frames = new Sprite[2];
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
 				case '1':
 				case 'M': // Origins test mission
 				default:
 					BitmapBits sheet = LevelData.GetSpriteSheet("GHZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(98, 74, 45, 19), -23, -9);
-					sprites[1] = new Sprite(sheet.GetSection(144, 79, 35, 8), -17, -15);
+					frames[0] = new Sprite(sheet.GetSection(98, 74, 45, 19), -23, -9);
+					frames[1] = new Sprite(sheet.GetSection(144, 79, 35, 8), -17, -15);
 					break;
 				case '2':
 					sheet = LevelData.GetSpriteSheet("MZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(1, 127, 45, 19), -23, -9);
-					sprites[1] = new Sprite(sheet.GetSection(38, 147, 35, 8), -17, -15);
+					frames[0] = new Sprite(sheet.GetSection(1, 127, 45, 19), -23, -9);
+					frames[1] = new Sprite(sheet.GetSection(38, 147, 35, 8), -17, -15);
 					break;
 				case '3':
 					sheet = LevelData.GetSpriteSheet("SYZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(1, 81, 45, 19), -23, -9);
-					sprites[1] = new Sprite(sheet.GetSection(38, 101, 35, 8), -17, -15);
+					frames[0] = new Sprite(sheet.GetSection(1, 81, 45, 19), -23, -9);
+					frames[1] = new Sprite(sheet.GetSection(38, 101, 35, 8), -17, -15);
 					break;
-				case '4':
+				case '7':
 					sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-					sprites[0] = new Sprite(sheet.GetSection(1, 1, 45, 19), -23, -9);
-					sprites[1] = new Sprite(sheet.GetSection(38, 21, 35, 8), -17, -15);
+					frames[0] = new Sprite(sheet.GetSection(1, 1, 45, 19), -23, -9);
+					frames[1] = new Sprite(sheet.GetSection(38, 21, 35, 8), -17, -15);
 					break;
 			}
-
-			properties = new PropertySpec[2];
+			
+			sprites[0] = new Sprite(frames);
+			
+			sprites[1] = new Sprite(sprites[0]);
+			sprites[1].Flip(true, false);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Buzz Bomber is facing.", null, new Dictionary<string, int>
 				{
@@ -80,26 +85,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite tmp = new Sprite(sprites[i]);
-				tmp.Flip((subtype & 1) != 0, false);
-				sprs.Add(tmp);
-			}
-			
-			return new Sprite(sprs.ToArray());
+			return sprites[subtype & 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 1];
 		}
 	}
 }

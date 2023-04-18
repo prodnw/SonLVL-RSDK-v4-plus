@@ -7,7 +7,7 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Roller : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
@@ -15,10 +15,10 @@ namespace S1ObjectDefinitions.Enemies
 			{
 				case '3':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(1, 179, 29, 47), -16, -33);
+					sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(1, 179, 29, 47), -16, -33);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(105, 30, 29, 47), -16, -33);
+					sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(105, 30, 29, 47), -16, -33);
 					break;
 			}
 		}
@@ -40,17 +40,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

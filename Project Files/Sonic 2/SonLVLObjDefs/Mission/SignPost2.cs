@@ -33,7 +33,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj) => ((V4ObjectEntry)obj).Value0 << 4,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value) >> 4);
 			
-			properties[2] = new PropertySpec("Enable Move Right", typeof(bool), "Extended",
+			properties[2] = new PropertySpec("Exit Right", typeof(bool), "Extended",
 				"If the Signpost should make the player move right afterwards.", null,
 				(obj) => (((V4ObjectEntry)obj).Value1 == 1),
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value == false ? 0 : 1));

@@ -7,16 +7,19 @@ namespace S1ObjectDefinitions.Mission
 {
 	class SetRingCount : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
-
-			properties = new PropertySpec[1];
+			Sprite frame = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
+			
+			BitmapBits bitmap = new BitmapBits(18, 18); // LevelData.ColorWhite
+			bitmap.DrawRectangle(6, 0, 0, 17, 17); // LevelData.ColorWhite
+			sprite = new Sprite(frame, new Sprite(bitmap, -9, -9));
+			
 			properties[0] = new PropertySpec("Ring Count", typeof(int), "Extended",
-				"How many rings the player will start with.", null,
+				"How many rings the player will start with.", 50,
 				(obj) => ((V4ObjectEntry)obj).Value0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 		}
@@ -48,17 +51,17 @@ namespace S1ObjectDefinitions.Mission
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

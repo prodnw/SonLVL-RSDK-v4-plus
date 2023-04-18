@@ -7,7 +7,7 @@
     <ImageFromSheet id="future" sheet="Global/Display.gif" sourcex="237" sourcey="223" width="16" height="16" />
   </Images>
   <Properties>
-    <Property name="Time Period" type="periods" startbit="0" length="2" />
+    <Property name="Time Period" description="What Time Period this stage is set in. In-game, other objects will look at this value to determine their own behaviours and sprites and such." type="periods" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="periods">

@@ -7,8 +7,8 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Bomb : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[4];
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
@@ -16,17 +16,25 @@ namespace S1ObjectDefinitions.Enemies
 			{
 				case '5':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(53, 131, 20, 37), -10, -21);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(53, 131, 20, 37), -10, -21);
 					break;
 				case '6':
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(52, 40, 20, 37), -10, -21);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(52, 40, 20, 37), -10, -21);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(53, 328, 20, 37), -10, -21);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(53, 328, 20, 37), -10, -21);
 					break;
 			}
-
-			properties = new PropertySpec[2];
+			
+			sprites[1] = new Sprite(sprites[0]);
+			sprites[1].Flip(true, false);
+			
+			sprites[2] = new Sprite(sprites[0]);
+			sprites[2].Flip(false, true);
+			
+			sprites[3] = new Sprite(sprites[0]);
+			sprites[3].Flip(true, true);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Bomb is facing.", null, new Dictionary<string, int>
 				{
@@ -34,7 +42,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("On Roof", typeof(int), "Extended",
 				"If the Bomb is on a roof or not.", null, new Dictionary<string, int>
@@ -43,7 +51,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "True", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -71,24 +79,21 @@ namespace S1ObjectDefinitions.Enemies
 				case 3: return "Right - Roof";
 				default: return "Unknown";
 			}
-			return subtype + "";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) != 0, (subtype & 2) != 0); // Do pardon the odd syntax...
-			return sprite;
+			return sprites[subtype & 3];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 3];
 		}
 	}
 }

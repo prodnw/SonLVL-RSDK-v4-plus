@@ -7,8 +7,8 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class BallHog : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[2];
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
@@ -16,28 +16,28 @@ namespace S1ObjectDefinitions.Enemies
 			{
 				case '6':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(1, 170, 22, 37), -11, -17);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(1, 170, 22, 37), -11, -17);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(76, 292, 22, 37), -11, -17);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(76, 292, 22, 37), -11, -17);
 					break;
 			}
-
-			properties = new PropertySpec[2];
+			
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Bomb Time", typeof(int), "Extended",
 				"How long thrown bombs will last, in seconds.", null,
-				(obj) => obj.PropertyValue & 127,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value) & 127));
+				(obj) => obj.PropertyValue & 0x7F,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7F) | (byte)((int)value) & 0x7F));
 
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Ball Hog will be facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
-					{ "Right", 128 }
+					{ "Right", 0x80 }
 				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -47,7 +47,7 @@ namespace S1ObjectDefinitions.Enemies
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0; }
+			get { return 6; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -62,19 +62,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 128) != 0, false);
-			return sprite;
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue >> 7];
 		}
 	}
 }

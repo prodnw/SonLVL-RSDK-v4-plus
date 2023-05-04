@@ -29,7 +29,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			properties[1] = new PropertySpec("Center Offset", typeof(int), "Extended",
-				"How offset the Signpost's camera will be. X-wise. Measured in pixels, to every 16th pixel", null,
+				"How offset the Signpost's camera will be. X-wise. Measured in pixels, to every 16th pixel.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0 << 4,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value) >> 4);
 			

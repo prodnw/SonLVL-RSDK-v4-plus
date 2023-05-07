@@ -7,9 +7,9 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class FPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -20,11 +20,11 @@ namespace S2ObjectDefinitions.EHZ
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 98, 64, 32), -32, -12);
+				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 98, 64, 32), -32, -12);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 402, 64, 32), -32, -8);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 402, 64, 32), -32, -8);
 			}
 			
 			BitmapBits overlay = new BitmapBits(2, 62);
@@ -32,14 +32,13 @@ namespace S2ObjectDefinitions.EHZ
 				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, 0);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How this Platform should act upon player contact.", null, new Dictionary<string, int>
 				{
 					{ "Fall", 0 },
 					{ "Static", 1 }
 				},
-				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
@@ -60,17 +59,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

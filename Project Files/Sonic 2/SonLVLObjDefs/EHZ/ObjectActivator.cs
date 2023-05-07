@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.EHZ
 	class ObjectActivator : ObjectDefinition
 	{
 		private PropertySpec[] properties;
-		private Sprite img;
+		private Sprite sprite;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Activate Offset", typeof(int), "Extended",
@@ -44,17 +44,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

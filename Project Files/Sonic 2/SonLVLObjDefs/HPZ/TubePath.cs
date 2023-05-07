@@ -91,10 +91,10 @@ namespace S2ObjectDefinitions.HPZ
 				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 				
 				if (obj.X != nodes[0].X || obj.Y != nodes[0].Y)
-					bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);
+					bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin); // LevelData.ColorWhite
 				
 				for (int i = 0; i < nodes.Count - 1; i++)
-					bmp.DrawLine(LevelData.ColorWhite, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin);
+					bmp.DrawLine(6, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin); // LevelData.ColorWhite
 				
 				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 			}

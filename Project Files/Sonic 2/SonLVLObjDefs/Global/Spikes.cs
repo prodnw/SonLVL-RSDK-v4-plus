@@ -52,7 +52,7 @@ namespace S2ObjectDefinitions.Global
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = ((int)value));
 			
 			BitmapBits bitmap = new BitmapBits(33, 33);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 32, 32);
+			bitmap.DrawRectangle(6, 0, 0, 32, 32); // LevelData.ColorWhite
 			debug[0] = new Sprite(bitmap, -16,  16);
 			debug[1] = new Sprite(bitmap, -48, -16);
 			debug[2] = new Sprite(bitmap,  16, -16);

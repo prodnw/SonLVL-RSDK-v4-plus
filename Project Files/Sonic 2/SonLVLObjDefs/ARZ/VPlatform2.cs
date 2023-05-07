@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.ARZ
 			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(191, 170, 64, 85), -32, -45);
 			
 			BitmapBits overlay = new BitmapBits(2, 65);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 64);
+			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, -32);
 			
 			properties = new PropertySpec[1];

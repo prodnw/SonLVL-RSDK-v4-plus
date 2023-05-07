@@ -16,7 +16,7 @@ namespace S2ObjectDefinitions.CNZ
 			img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(82, 34, 64, 64), -32, -32);
 			
 			BitmapBits bitmap = new BitmapBits(193, 2);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 192, 0);
+			bitmap.DrawLine(6, 0, 0, 192, 0); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -96, 0);
 			
 			properties = new PropertySpec[1];

@@ -18,10 +18,10 @@ namespace S2ObjectDefinitions.ARZ
 			sprites[2] = new Sprite(sheet.GetSection(173, 38, 32, 37), -16, 32);
 			
 			var bitmap = new BitmapBits(1, 0x40);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x00, 0, 0x03);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x08, 0, 0x0B);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x30, 0, 0x33);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x38, 0, 0x3B);
+			bitmap.DrawLine(6, 0, 0x00, 0, 0x03); // LevelData.ColorWhite
+			bitmap.DrawLine(6, 0, 0x08, 0, 0x0B);
+			bitmap.DrawLine(6, 0, 0x30, 0, 0x33);
+			bitmap.DrawLine(6, 0, 0x38, 0, 0x3B);
 			debug = new Sprite(bitmap, 0, 33);
 		}
 

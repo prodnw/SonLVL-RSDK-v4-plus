@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.SCZ
 			// In Origins' SCZ missions, they deleted some objects and threw off the activators
 			// Because of that, there are now lines going all across the stage, up and down, left and right, 'n all around
 			// Activators pointing to activators pointing to activators, it ain't anything pretty i tell you
-			// Not much we can do from here unfortunately, as that's how it is in-game too :(
+			// Not much we can do from here unfortunately, as that's what happens in-game too :(
 			
 			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
 			if (objs.Count == 0)
@@ -78,7 +78,7 @@ namespace S2ObjectDefinitions.SCZ
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
 			for (int i = 0; i < objs.Count - 1; i++)
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin);
+				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

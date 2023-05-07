@@ -73,7 +73,7 @@ namespace S2ObjectDefinitions.EHZ
 				
 				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 				
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin);
+				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin); // LevelData.ColorWhite
 				
 				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 			}

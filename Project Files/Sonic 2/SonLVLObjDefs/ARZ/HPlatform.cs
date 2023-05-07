@@ -1,4 +1,5 @@
-using SonicRetro.SonLVL.API;
+
+ SonicRetro.SonLVL.API;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -21,7 +22,7 @@ namespace S2ObjectDefinitions.ARZ
 			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
 			
 			BitmapBits overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
+			overlay.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -64, 0);
 			
 			properties = new PropertySpec[1];

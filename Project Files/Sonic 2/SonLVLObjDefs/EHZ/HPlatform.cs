@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.EHZ
 			}
 			
 			BitmapBits overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
+			overlay.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -64, 0);
 			
 			properties = new PropertySpec[1];

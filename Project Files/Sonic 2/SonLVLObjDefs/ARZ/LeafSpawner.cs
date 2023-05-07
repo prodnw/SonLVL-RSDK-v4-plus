@@ -61,7 +61,7 @@ namespace S2ObjectDefinitions.ARZ
 		{
 			int width = (32 << (obj.PropertyValue + 1));
 			BitmapBits debug = new BitmapBits(width+1, 65);
-			debug.DrawRectangle(LevelData.ColorWhite, 0, 0, width, 64);
+			debug.DrawRectangle(6, 0, 0, width, 64); // LevelData.ColorWhite
 			return new Sprite(debug, -(width/2), -32);
 		}
 	}

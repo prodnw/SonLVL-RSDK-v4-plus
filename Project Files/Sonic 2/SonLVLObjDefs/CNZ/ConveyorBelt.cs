@@ -61,7 +61,7 @@ namespace S2ObjectDefinitions.CNZ
 		{
 			int width = ((Math.Max((int)obj.PropertyValue, 1)) << 4);
 			var bitmap = new BitmapBits(width + 1, 21);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, width, 20);
+			bitmap.DrawRectangle(6, 0, 0, width, 20); // LevelData.ColorWhite
 			return new Sprite(bitmap, -(width / 2), -20);
 		}
 	}

@@ -16,7 +16,7 @@ namespace S2ObjectDefinitions.EHZ
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(127, 113, 16, 16), -8, -8);
 			
 			BitmapBits bitmap = new BitmapBits(385, 57);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 384, 56);
+			bitmap.DrawRectangle(6, 0, 0, 384, 56); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -192, 8);
 		}
 

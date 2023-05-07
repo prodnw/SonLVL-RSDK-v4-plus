@@ -42,7 +42,7 @@ namespace S2ObjectDefinitions.EHZ
 			
 			// Set up the debug visualisation for when the current frame is an empty sprite
 			BitmapBits bitmap = new BitmapBits(65, 65);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 64, 64);
+			bitmap.DrawRectangle(6, 0, 0, 64, 64); // LevelData.ColorWhite
 			placeholder = new Sprite(bitmap, -32, -32);
 		}
 		

@@ -69,7 +69,7 @@ namespace S2ObjectDefinitions.CNZ
 		{
 			int dist = (obj.PropertyValue & 127) << 2;
 			BitmapBits bitmap = new BitmapBits(2, (2 * dist) + 1);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, (2 * dist));
+			bitmap.DrawLine(6, 0, 0, 0, (2 * dist)); // LevelData.ColorWhite
 			return new Sprite(bitmap, 0, -dist);
 		}
 	}

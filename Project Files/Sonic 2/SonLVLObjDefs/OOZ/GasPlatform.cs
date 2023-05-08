@@ -21,11 +21,11 @@ namespace S2ObjectDefinitions.OOZ
 			img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(84, 108, 48, 12), -24, -8);
 			
 			BitmapBits overlay = new BitmapBits(2, 208);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 207);
+			overlay.DrawLine(6, 0, 0, 0, 207); // LevelData.ColorWhite
 			debug[0] = new Sprite(overlay, 0, -207);
 			
 			overlay = new BitmapBits(2, 121);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 120);
+			overlay.DrawLine(6, 0, 0, 0, 120);
 			debug[1] = new Sprite(overlay, 0, -120);
 			
 			

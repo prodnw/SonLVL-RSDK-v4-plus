@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.ARZ
 
 			int radius = 64;
 			var overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);
-			overlay.DrawCircle(LevelData.ColorWhite, radius, radius, radius);
+			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -radius, -radius - 4);
 
 			properties = new PropertySpec[3];

@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.Mission
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 			
 			BitmapBits bmp = new BitmapBits(257, 2);
-			bmp.DrawLine(LevelData.ColorWhite, 0, 0, 256, 0);
+			bmp.DrawLine(6, 0, 0, 256, 0); // LevelData.ColorWhite
 			debug = new Sprite(bmp, -128, 0);
 		}
 		

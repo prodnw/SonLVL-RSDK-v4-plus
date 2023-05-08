@@ -74,8 +74,8 @@ namespace S2ObjectDefinitions.OOZ
 				sprites[i].Flip((frameInfo[(inType * 2) + 1] & 1) == 1, (frameInfo[(inType * 2) + 1] & 2) == 2);
 				
 				BitmapBits dbg = new BitmapBits(91, 91);
-				dbg.DrawLine(LevelData.ColorWhite, 45, 45, debugInfo[inType * 2] * 45 + 45, debugInfo[(inType * 2) + 1] * 45 + 45);
-				dbg.DrawLine(LevelData.ColorWhite, 45, 45, debugInfo[outType * 2] * 32 + 45, debugInfo[(outType * 2) + 1] * 32 + 45);
+				dbg.DrawLine(6, 45, 45, debugInfo[inType * 2] * 45 + 45, debugInfo[(inType * 2) + 1] * 45 + 45); // LevelData.ColorWhite
+				dbg.DrawLine(6, 45, 45, debugInfo[outType * 2] * 32 + 45, debugInfo[(outType * 2) + 1] * 32 + 45);
 				debug[i] = new Sprite(dbg, -45, -45);
 			}
 			

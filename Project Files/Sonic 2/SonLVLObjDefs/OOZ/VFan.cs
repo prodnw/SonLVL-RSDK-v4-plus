@@ -22,7 +22,7 @@ namespace S2ObjectDefinitions.OOZ
 			}
 			
 			BitmapBits bitmap = new BitmapBits(129, 145);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 128, 144);
+			bitmap.DrawRectangle(6, 0, 0, 128, 144); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -64, -112);
 		}
 

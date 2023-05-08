@@ -98,7 +98,7 @@ namespace S2ObjectDefinitions.HTZ
 			int sy = dist * 1;
 			
 			var bitmap = new BitmapBits(sx + 1, sy + 1);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, sx, sy);
+			bitmap.DrawLine(6, 0, 0, sx, sy); // LevelData.ColorWhite
 			bitmap.Flip((((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)), false);
 			return new Sprite(bitmap, (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)) ? -sx : 0, 0);
 		}

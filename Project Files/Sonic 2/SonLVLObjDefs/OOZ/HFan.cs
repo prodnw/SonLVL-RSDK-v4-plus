@@ -19,7 +19,7 @@ namespace S2ObjectDefinitions.OOZ
 			sprites[1].Flip(true, false);
 			
 			BitmapBits bitmap = new BitmapBits(193, 225);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 192, 224);
+			bitmap.DrawRectangle(6, 0, 0, 192, 224); // LevelData.ColorWhite
 			debug[0] = new Sprite(bitmap, -160, -112);
 			debug[1] = new Sprite(bitmap, -32, -112);
 			

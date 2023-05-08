@@ -21,10 +21,10 @@ namespace S2ObjectDefinitions.ARZ
 			sprite = new Sprite(sprites);
 			
 			BitmapBits bitmap = new BitmapBits(1, 0x1C);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x00, 0, 0x03);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x08, 0, 0x0B);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x10, 0, 0x13);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0x18, 0, 0x1B);
+			bitmap.DrawLine(6, 0, 0x00, 0, 0x03); // LevelData.ColorWhite
+			bitmap.DrawLine(6, 0, 0x08, 0, 0x0B);
+			bitmap.DrawLine(6, 0, 0x10, 0, 0x13);
+			bitmap.DrawLine(6, 0, 0x18, 0, 0x1B);
 			debug = new Sprite(bitmap, 0, 64);
 
 			properties = new PropertySpec[1];

@@ -93,7 +93,7 @@ namespace S2ObjectDefinitions.ARZ
 		{
 			int chains = (obj.PropertyValue & 0x7f);
 			BitmapBits overlay = new BitmapBits(2 * ((chains * 16) + 24) + 1, (chains * 16) + 25);
-			overlay.DrawCircle(LevelData.ColorWhite, ((chains * 16) + 24), 0, (chains * 16) + 8);
+			overlay.DrawCircle(6, ((chains * 16) + 24), 0, (chains * 16) + 8); // LevelData.ColorWhite
 			return new Sprite(overlay, -((chains * 16) + 24), 0);
 		}
 		

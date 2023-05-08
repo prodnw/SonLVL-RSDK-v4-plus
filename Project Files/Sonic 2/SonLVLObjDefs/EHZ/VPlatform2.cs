@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class VPlatform2 : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 		private PropertySpec[] properties;
 		
@@ -20,15 +20,15 @@ namespace S2ObjectDefinitions.EHZ
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 1, 64, 96), -32, -52);
+				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 1, 64, 96), -32, -52);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 305, 64, 96), -32, -46);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 305, 64, 96), -32, -46);
 			}
 			
 			BitmapBits overlay = new BitmapBits(2, 65);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 64);
+			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, -32);
 			
 			properties = new PropertySpec[1];
@@ -59,17 +59,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

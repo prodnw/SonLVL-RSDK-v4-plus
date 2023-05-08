@@ -16,7 +16,7 @@ namespace S2ObjectDefinitions.OOZ
 			sprite = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(206, 26, 48, 80), -24, -40);
 			
 			BitmapBits bitmap = new BitmapBits(209, 2);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 208, 0);
+			bitmap.DrawLine(6, 0, 0, 208, 0); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -104, 0);
 			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",

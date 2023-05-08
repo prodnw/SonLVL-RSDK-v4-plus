@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.HTZ
 			img = new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(191, 223, 64, 32), -32, -12);
 			
 			BitmapBits overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
+			overlay.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -64, 0);
 			
 			properties = new PropertySpec[1];

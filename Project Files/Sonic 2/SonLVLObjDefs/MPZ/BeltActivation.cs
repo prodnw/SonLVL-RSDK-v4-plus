@@ -77,7 +77,7 @@ namespace S2ObjectDefinitions.MPZ
 			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
 			for (int i = 0; i < objs.Count - 1; i++)
-				bmp.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin);
+				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
 			
 			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
 		}

@@ -23,18 +23,18 @@ namespace S1ObjectDefinitions.Global
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Width", typeof(int), "Extended",
 				"How wide the Invisible Block will be.", null,
-				(obj) => obj.PropertyValue >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((((int)value) & 15) << 4)));
+				(obj) => (obj.PropertyValue >> 4) + 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)(Math.Max((((((int)value) & 15) << 4) - 1), 0))));
 			
 			properties[1] = new PropertySpec("Height", typeof(int), "Extended",
 				"How tall the Invisible Block will be.", null,
-				(obj) => obj.PropertyValue & 15,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(((int)value) & 15)));
+				(obj) => (obj.PropertyValue & 15) + 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(Math.Max(((((int)value) & 15) - 1), 0))));
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 17; }
+			get { return 0x11; }
 		}
 		
 		public override PropertySpec[] CustomProperties

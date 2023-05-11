@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="orb">
+  <Images>
+	<ImageFromSheet id="orb" sheet="SBZ/Objects.gif" sourcex="246" sourcey="477" width="132" height="34">
+	  <Offset X="-64" Y="-10"/>
+	</ImageFromSheet>
+  </Images>
+  <Properties>
+	<Property name="Direction" type="directions" startbit="0" length="1" />
+	<Property name="Interval" type="intervals" startbit="1" length="2" />
+  </Properties>
+  <Enums>
+	<Enum name="directions">
+	  <EnumMember name="Up" />
+	  <EnumMember name="Down" />
+	</Enum>
+	<Enum name="intervals">
+	  <EnumMember name="Every 24 frames" />
+	  <EnumMember name="Every 12 frames" />
+	  <EnumMember name="Every 6 frames" />
+	</Enum>
+  </Enums>
+  <Display>
+	<DisplayOption>
+	  <Condition property="Direction" value="Up" />
+	  <ImageRef image="orb" />
+	</DisplayOption>
+	<DisplayOption>
+	  <Condition property="Direction" value="Down" />
+	  <ImageRef image="orb" xflip="AlwaysFlip" />
+	</DisplayOption>
+  </Display>
+</ObjDef>

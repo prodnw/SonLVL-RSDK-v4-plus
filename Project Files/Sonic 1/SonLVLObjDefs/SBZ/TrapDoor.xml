@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org">
+  <Images>
+	<ImageFromSheet id="trapdoor" sheet="SBZ/Objects.gif" sourcex="318" sourcey="115" width="64" height="24">
+	  <Offset X="0" Y="-12"/>
+	</ImageFromSheet>
+  </Images>
+  <Properties>
+	<Property name="Delay" description="How long, in seconds, this Trap Door should spend in its cycles." type="int" startbit="0" length="4" />
+  </Properties>
+  <ImageSets>
+    <ImageSet id="trapdoor">
+      <ImageRef image="trapdoor" xflip="NeverFlip" />
+      <ImageRef image="trapdoor" xflip="AlwaysFlip" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="trapdoor" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="0 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="01" name="1 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="02" name="2 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="03" name="3 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="04" name="4 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="05" name="5 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="06" name="6 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="07" name="7 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="08" name="8 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="09" name="9 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0A" name="10 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0B" name="11 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0C" name="12 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0D" name="13 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0E" name="14 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+    <Subtype id="0F" name="15 Second Delay" >
+		<ImageSetRef set="trapdoor" />
+	</Subtype>
+  </Subtypes>
+</ObjDef>

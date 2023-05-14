@@ -7,28 +7,34 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class VPlatform : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
 			
-			BitmapBits overlay = new BitmapBits(2, 97);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 96);
-			debug = new Sprite(overlay, 0, -38);
+			// tagging this area with LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(65, 129);
+			bitmap.DrawRectangle(6, 0, 0, 63, 32); // top box
+			bitmap.DrawRectangle(6, 0, 96, 63, 32); // bottom box
+			bitmap.DrawLine(6, 32, 10, 32, 106); // movement line
+			debug = new Sprite(bitmap, -32, -58);
 			
-			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
-				"How this Platform should behave.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Cycle", typeof(int), "Extended",
+				"Which Oscillation this Platform should follow.", null, new Dictionary<string, int>
 				{
 					{ "Use Stage Oscillation", 0 },
-					{ "Use Stage Oscillation (Reversed)", 1 },
-					{ "Use Global Oscillation", 2 },
-					{ "Use Global Oscillation (Reversed)", 3 },
+					{ "Use Global Oscillation", 2 }
 				},
-				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)(int)value);
+				(obj) => obj.PropertyValue & 2,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | ((int)value)));
+			
+			properties[1] = new PropertySpec("Reverse", typeof(bool), "Extended",
+				"If this Platform's movement should be inverse of the normal cycle.", null,
+				(obj) => (obj.PropertyValue & 1) == 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (((bool)value) ? 1 : 0)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

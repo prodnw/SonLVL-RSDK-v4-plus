@@ -15,9 +15,12 @@ namespace S1ObjectDefinitions.SYZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
 			
-			BitmapBits overlay = new BitmapBits(129, 2);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 128, 0);
-			debug = new Sprite(overlay, -64, 0);
+			// tagging this area withLevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(193, 33);
+			bitmap.DrawRectangle(6, 0, 0, 63, 31); // left box
+			bitmap.DrawRectangle(6, 128, 0, 63, 31); // right box
+			bitmap.DrawLine(6, 32, 10, 160, 10);
+			debug = new Sprite(bitmap, -96, -10);
 			
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
 				"The starting direction of this Platform.", null, new Dictionary<string, int>

@@ -7,22 +7,23 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class StaticPlatform : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
 			
-			BitmapBits overlay = new BitmapBits(2, 512);
-			overlay.DrawLine(LevelData.ColorWhite, 0, 0, 0, 511);
-			debug = new Sprite(overlay, 0, -511);
+			BitmapBits overlay = new BitmapBits(65, 522);
+			overlay.DrawRectangle(6, 0, 0, 64, 32); // LevelData.ColorWhite
+			overlay.DrawLine(6, 32, 10, 32, 521); // LevelData.ColorWhite
+			debug = new Sprite(overlay, -32, -521);
 			
-			properties[0] = new PropertySpec("Triggered By Button", typeof(bool), "Extended",
-				"If this Platform should rise vertically if button[-1] is pressed.", null,
+			properties[0] = new PropertySpec("Button Triggered", typeof(bool), "Extended",
+				"If this Platform should rise vertically when button[-1] is pressed.", null,
 				(obj) => (obj.PropertyValue == 1),
-				(obj, value) => obj.PropertyValue = (byte)(((bool)value == false) ? 0 : 1));
+				(obj, value) => obj.PropertyValue = (byte)(((bool)value) ? 1 : 0));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -42,7 +43,7 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Can Move" : "Static";
+			return (subtype == 1) ? "Button Triggered" : "Static";
 		}
 
 		public override Sprite Image

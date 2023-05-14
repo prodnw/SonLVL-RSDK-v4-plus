@@ -8,7 +8,7 @@ namespace S1ObjectDefinitions.Enemies
 	class BuzzBomber : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties = new PropertySpec[2];
+		private PropertySpec[] properties = new PropertySpec[3];
 
 		public override void Init(ObjectData data)
 		{
@@ -40,9 +40,7 @@ namespace S1ObjectDefinitions.Enemies
 			}
 			
 			sprites[0] = new Sprite(frames);
-			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Buzz Bomber is facing.", null, new Dictionary<string, int>
@@ -61,6 +59,11 @@ namespace S1ObjectDefinitions.Enemies
 				},
 				(obj) => obj.PropertyValue & 2,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
+			
+			properties[2] = new PropertySpec("Hide On Off Screen", typeof(bool), "Extended",
+				"If this Buzz Bomber should hide after going off screen.", null,
+				(obj) => (((V4ObjectEntry)obj).Value3 == 1),
+				(obj, value) => ((V4ObjectEntry)obj).Value3 = ((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

@@ -7,10 +7,10 @@ namespace S1ObjectDefinitions.MZ
 {
 	class ChainedCrusher : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[3];
 		private readonly Sprite[] crusherbase = new Sprite[2];
 		private readonly Sprite[] crushers = new Sprite[3];
-		private PropertySpec[] properties;
-
+		
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MZ/Objects.gif");
@@ -20,8 +20,7 @@ namespace S1ObjectDefinitions.MZ
 			crushers[0] = new Sprite(new Sprite(sheet.GetSection(143, 180, 112, 32), -56, -20), new Sprite(sheet.GetSection(199, 256, 88, 32), -44, 12));
 			crushers[1] = new Sprite(new Sprite(sheet.GetSection(159, 147, 96, 32), -48, -20), new Sprite(sheet.GetSection(199, 256, 88, 32), -44, 12));
 			crushers[2] = new Sprite(sheet.GetSection(256, 109, 32, 32), -16, -20);
-
-			properties = new PropertySpec[3];
+			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"The distance the crusher drops.", null, new Dictionary<string, int>
 				{
@@ -34,7 +33,8 @@ namespace S1ObjectDefinitions.MZ
 					{ "184 px", 6 }
 				},
 				(obj) => ((obj.PropertyValue & 0x0f ) < 7) ? obj.PropertyValue & 0x0f : 0,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0xf0) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
+			
 			properties[1] = new PropertySpec("Style", typeof(int), "Extended",
 				"The style of the crusher.", null, new Dictionary<string, int>
 				{
@@ -43,15 +43,16 @@ namespace S1ObjectDefinitions.MZ
 					{ "Small block", 2 }
 				},
 				(obj) => ((obj.PropertyValue & 0x70) >> 4) % 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x8f) | (byte)((int)value << 4)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x70) | (byte)((int)value << 4)));
+			
 			properties[2] = new PropertySpec("Triggered", typeof(int), "Extended",
-				"If the crusher should be activated by a button as opposed to rising automatically.", null, new Dictionary<string, int>
+				"If the crusher should be activated by a button, as opposed to rising automatically.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
 					{ "True", 1 }
 				},
 				(obj) => (obj.PropertyValue >> 7),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x7f) | (byte)((int)value << 7)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value << 7)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -87,33 +88,32 @@ namespace S1ObjectDefinitions.MZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			int type = (((obj.PropertyValue & 0x70) / 16) % 3);
-			var y = ((obj.PropertyValue & 0x80) != 0) ? 20 : 0;	// Small thing to distinguish the triggered ones from the automatic ones..
-			var sprites = new Sprite(new Sprite(crusherbase), new Sprite(crushers[type], 0, y));
-			return sprites;
+			int y = ((obj.PropertyValue & 0x80) != 0) ? 20 : 0;	// Small thing to distinguish the triggered ones from the automatic ones..
+			return new Sprite(new Sprite(crusherbase), new Sprite(crushers[type], 0, y));
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int[] distances = new int[7] {0x70, 0xa0, 0x50, 0x78, 0x38, 0x58, 0xb8};
 			int type = (((obj.PropertyValue & 0x70) / 16) % 3);
-			var dist = ((obj.PropertyValue & 0x0f) < 7) ? distances[obj.PropertyValue & 0x0f] : distances[0];
+			int dist = ((obj.PropertyValue & 0x0f) < 7) ? distances[obj.PropertyValue & 0x0f] : distances[0];
 			dist = dist * 16 / 0x10;
 
-			var w = 0;
-			var h = 0;
+			int w = 0;
+			int h = 0;
 			if (type == 0){w = 112; h = 56;}
 			else if (type == 1){w = 96; h = 56;}
 			else if (type == 2){w = 32; h = 32; dist -= 8;}
 
-			var overlay = new BitmapBits(w, h);
-			overlay.DrawRectangle(LevelData.ColorWhite, 0, 0, w - 1, h - 1);
+			BitmapBits overlay = new BitmapBits(w, h);
+			overlay.DrawRectangle(6, 0, 0, w - 1, h - 1); // LevelData.ColorWhite
 			return new Sprite(overlay, -(w / 2), -12 + dist);
 		}
 
 		public override Rectangle GetBounds(ObjectEntry obj)
 		{
 			int type = (((obj.PropertyValue & 0x70) / 16) % 3);
-			var bounds = new Sprite(crushers[type]).Bounds;
+			Rectangle bounds = new Sprite(crushers[type]).Bounds;
 			bounds.Offset(obj.X, obj.Y);
 			return bounds;
 		}

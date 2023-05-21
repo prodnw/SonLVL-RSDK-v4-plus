@@ -82,7 +82,7 @@ namespace S1ObjectDefinitions.SLZ
 			// If you've modified those, you can simply copy them over.
 			int[] RisingPlatform_distanceTable = new int[15] {0x400000, 0x800000, 0xD00000, 0x400000, 0x800000, 0xD00000, 0x500000, 0x900000, 0xB00000, 0x500000, 0x900000, 0xB00000, 0x800000, 0x800000, 0xC00000};
 			var overlay = new BitmapBits(80, 32);
-			overlay.DrawRectangle(LevelData.ColorWhite, 0, 0, 80 - 1, 32 - 1);
+			overlay.DrawRectangle(6, 0, 0, 80 - 1, 32 - 1); // LevelData.ColorWhite
 			if (obj.PropertyValue < 14)
 			{
 				if (obj.PropertyValue < 12)

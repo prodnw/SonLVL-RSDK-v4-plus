@@ -53,8 +53,9 @@ namespace S1ObjectDefinitions.Mission
 			int ymax = Math.Max(obj.Y, (obj.Y - obj.Y) + 0x0580);
 			BitmapBits bmp = new BitmapBits(257, ymax - ymin + 1);
 			
-			bmp.DrawLine(LevelData.ColorWhite, 128, obj.Y - ymin, 128, 0x0580 - ymin);
-			bmp.DrawLine(LevelData.ColorWhite, 0, 0x0580 - ymin, 256, 0x0580 - ymin);
+			// tagging this area with LevelData.ColorWhite
+			bmp.DrawLine(6, 128, obj.Y - ymin, 128, 0x0580 - ymin);
+			bmp.DrawLine(6, 0, 0x0580 - ymin, 256, 0x0580 - ymin);
 			
 			return new Sprite(bmp, -128, ymin - obj.Y);
 		}

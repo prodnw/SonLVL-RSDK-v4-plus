@@ -94,7 +94,7 @@ namespace S1ObjectDefinitions.SLZ
 		{
 			int radius = 80;
 			var overlay = new BitmapBits(radius 	* 2 + 1, radius * 2 + 1);
-			overlay.DrawCircle(LevelData.ColorWhite, radius, radius, radius);
+			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			return new Sprite(overlay, -radius, -radius);
 		}
 	}

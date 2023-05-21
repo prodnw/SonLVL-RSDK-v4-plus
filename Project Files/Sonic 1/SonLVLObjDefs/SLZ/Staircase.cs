@@ -76,7 +76,7 @@ namespace S1ObjectDefinitions.SLZ
 			var bitmap = new BitmapBits(129, 129);
 			for (int i = 0; i < 97; i += 32)
 			{
-				bitmap.DrawRectangle(LevelData.ColorWhite, i, i, 32, 32);
+				bitmap.DrawRectangle(6, i, i, 32, 32); // LevelData.ColorWhite
 			}
 			bitmap.Flip(!(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)), (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY)));
 			return new Sprite(bitmap, -16 - ((!(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX))) ? 1 : 0), 16);

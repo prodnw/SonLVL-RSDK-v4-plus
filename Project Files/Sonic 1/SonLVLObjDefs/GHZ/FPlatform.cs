@@ -22,7 +22,7 @@ namespace S1ObjectDefinitions.GHZ
 			
 			BitmapBits overlay = new BitmapBits(2, 62);
 			for (int i = 0; i < 62; i += 12)
-				overlay.DrawLine(LevelData.ColorWhite, 0, i, 0, i + 6);
+				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, 0);
 			
 			properties = new PropertySpec[1];

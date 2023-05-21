@@ -7,8 +7,8 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Jaws : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[2];
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
@@ -16,28 +16,28 @@ namespace S1ObjectDefinitions.Enemies
 			{
 				case '4':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(1, 105, 48, 24), -16, -12);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(1, 105, 48, 24), -16, -12);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 264, 48, 24), -16, -12);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 264, 48, 24), -16, -12);
 					break;
 			}
-
-			properties = new PropertySpec[2];
+			
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Swim Time", typeof(int), "Extended",
 				"How long the Jaws will swim in a direction at a time, to be multiplied by 64 frames in-game.", null,
-				(obj) => obj.PropertyValue & 127,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value) & 127));
+				(obj) => obj.PropertyValue & 0x7f,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value) & 0x7f));
 
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Jaws will be facing initially.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
-					{ "Right", 128 }
+					{ "Right", 0x80 }
 				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -62,27 +62,25 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip(subtype > 127, false);
-			return sprite;
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[(obj.PropertyValue & 0x80) >> 7];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			int dist = (obj.PropertyValue & 127) << 4;
+			int dist = (obj.PropertyValue & 0x7f) << 4;
 			BitmapBits bitmap = new BitmapBits(dist + 1, 2);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, dist, 0);
-			return new Sprite(bitmap, (obj.PropertyValue > 127) ? 0 : -dist, 0);
+			bitmap.DrawLine(6, 0, 0, dist, 0); // LevelData.ColorWhite
+			return new Sprite(bitmap, (obj.PropertyValue > 0x7f) ? 0 : -dist, 0);
 		}
 	}
 }

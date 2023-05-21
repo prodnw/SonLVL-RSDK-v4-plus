@@ -77,7 +77,7 @@ namespace S1ObjectDefinitions.SLZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
-			overlay.DrawCircle(LevelData.ColorWhite, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 8);
+			overlay.DrawCircle(6, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 8); // LevelData.ColorWhite
 			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), 0);
 		}
 		

@@ -7,14 +7,14 @@ namespace S1ObjectDefinitions.LZ
 {
 	class HarpoonVert : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite[] sprites = new Sprite[2];
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(213, 207, 8, 48), -4, -40);
+			sprites[0] = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(213, 207, 8, 48), -4, -40);
+			sprites[1] = new Sprite(sprites[0], false, true);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Harpoon is pointing.", null, new Dictionary<string, int>
 				{
@@ -47,19 +47,17 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip(false, (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY)));
-			return sprite;
+			return sprites[(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY) ? 1 : 0)];
 		}
 	}
 }

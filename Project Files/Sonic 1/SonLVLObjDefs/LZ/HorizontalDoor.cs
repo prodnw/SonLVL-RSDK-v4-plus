@@ -8,22 +8,27 @@ namespace S1ObjectDefinitions.LZ
 {
 	class HorizontalDoor : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-		private Sprite img;
-
+		private PropertySpec[] properties = new PropertySpec[2];
+		private Sprite sprite;
+		private Sprite[] debug = new Sprite[2];
+		
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(84, 223, 128, 32), -64, -16);
+			sprite = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(84, 223, 128, 32), -64, -16);
 			
-			properties = new PropertySpec[2];
+			BitmapBits bitmap = new BitmapBits(129, 33);
+			bitmap.DrawRectangle(6, 0, 0, 128, 32); // LevelData.ColorWhite
+			debug[0] = new Sprite(bitmap, -192, -16);
+			debug[1] = new Sprite(bitmap, 64, -16);
+			
 			properties[0] = new PropertySpec("Activate By", typeof(int), "Extended",
 				"How this Door will be activated. If Button, the object[+1] will be looked at.", null, new Dictionary<string, int>
 				{
 					{ "Button", 0 },
 					{ "Water", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Door will slide.", null, new Dictionary<string, int>
@@ -31,7 +36,7 @@ namespace S1ObjectDefinitions.LZ
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
+				(obj) => ((((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 
@@ -57,24 +62,22 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var bitmap = new BitmapBits(129, 33);
-			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, 128, 32);
-			return new Sprite(bitmap, (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 64 : -192), -16);
+			return debug[(((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1];
 		}
 	}
 }

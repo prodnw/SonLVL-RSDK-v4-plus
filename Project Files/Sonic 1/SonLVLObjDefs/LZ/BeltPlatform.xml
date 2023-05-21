@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="platform">
+  <Images>
+    <ImageFromSheet id="platform" sheet="LZ/Objects.gif" sourcex="223" sourcey="154" width="32" height="16">
+      <Offset X="-16" Y="-8" />
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Movement Path" description="Which path this Platform should follow."  type="int" startbit="0" length="4" />
+    <Property name="Offset" description="How offset into its cycle this Platform should be."  type="int" startbit="4" length="4" />
+  </Properties>
+</ObjDef>

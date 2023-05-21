@@ -36,12 +36,11 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Frame ID" description="The sprite this Waterfall should use." type="frameids" startbit="0" length="4" />
+    <Property name="Frame ID" description="The sprite this Waterfall should use." type="frameids" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frameids">
-      <EnumMember name="Frame 0" />
-	  <EnumMember name="Frame 1" />
+      <EnumMember name="Frame 1" />
 	  <EnumMember name="Frame 2" />
 	  <EnumMember name="Frame 3" />
 	  <EnumMember name="Frame 4" />
@@ -49,20 +48,22 @@
 	  <EnumMember name="Frame 6" />
 	  <EnumMember name="Frame 7" />
 	  <EnumMember name="Frame 8" />
+	  <EnumMember name="Frame 9" />
+	  <EnumMember name="Frame 10" />
 	  <EnumMember name="Splash" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Frame 0" image="frame0x1" />
-	<Subtype id="01" name="Frame 1" image="frame0x2" />
-	<Subtype id="02" name="Frame 2" image="frame0x3" />
-	<Subtype id="03" name="Frame 3" image="frame0x4" />
-	<Subtype id="04" name="Frame 4" image="frame0x5" />
-	<Subtype id="05" name="Frame 5" image="frame0x6" />
-	<Subtype id="06" name="Frame 6" image="frame0x7" />
-	<Subtype id="07" name="Frame 7" image="frame0x8" />
-	<Subtype id="08" name="Frame 8" image="frame0x9" />
-	<Subtype id="09" name="Frame 9" image="frame0xa" />
+    <Subtype id="00" name="Frame 1" image="frame0x1" />
+	<Subtype id="01" name="Frame 2" image="frame0x2" />
+	<Subtype id="02" name="Frame 3" image="frame0x3" />
+	<Subtype id="03" name="Frame 4" image="frame0x4" />
+	<Subtype id="04" name="Frame 5" image="frame0x5" />
+	<Subtype id="05" name="Frame 6" image="frame0x6" />
+	<Subtype id="06" name="Frame 7" image="frame0x7" />
+	<Subtype id="07" name="Frame 8" image="frame0x8" />
+	<Subtype id="08" name="Frame 9" image="frame0x9" />
+	<Subtype id="09" name="Frame 10" image="frame0xa" />
 	<Subtype id="0a" name="Splash" image="frame0xb" />
   </Subtypes>
 </ObjDef>

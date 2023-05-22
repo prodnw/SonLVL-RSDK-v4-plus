@@ -16,7 +16,7 @@ namespace S2ObjectDefinitions.HPZ
 			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("End Type", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Marker Type", typeof(int), "Extended",
 				"If this Tube Path is an enterance or an exit.", null, new Dictionary<string, int>
 				{
 					{ "Enterance", 0 },

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="vsgame">
+<ObjDef xmlns="http://www.sonicretro.org" Image="vsgame" DefaultSubtype="1">
   <Images>
     <ImageFromSheet id="vsgame" sheet="Global/Display.gif" sourcex="103" sourcey="56" width="16" height="7">
       <Offset X="-8" Y="-32"/>
@@ -10,8 +10,7 @@
   </Properties>
   <Enums>
     <Enum name="modes">
-      <EnumMember name="None" /> <!-- (will be erased in-game on startup) -->
-      <EnumMember name="Boss Attack (Start)" />
+      <EnumMember name="Boss Attack (Start)" value="1" />
       <EnumMember name="Boss Attack (End)" />
     </Enum>
   </Enums>

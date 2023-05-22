@@ -33,9 +33,9 @@ namespace S2ObjectDefinitions.HTZ
 			
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
-				"How far this Lift will go.", null,
-				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				"How far this Lift will go, in pixels.", null,
+				(obj) => obj.PropertyValue << 4,
+				(obj, value) => obj.PropertyValue = (byte)((int)value >> 4));
 			
 			properties[1] = new PropertySpec("Travel Direction", typeof(int), "Extended",
 				"Which way the Lift will go.", null, new Dictionary<string, int>
@@ -43,7 +43,7 @@ namespace S2ObjectDefinitions.HTZ
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)) ? 1 : 0,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 		

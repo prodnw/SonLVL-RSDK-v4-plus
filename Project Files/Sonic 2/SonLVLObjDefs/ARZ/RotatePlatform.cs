@@ -93,11 +93,7 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			var radians = 0.0;
-			if ((obj.PropertyValue & 1) == 1)
-			{
-				radians += Math.PI;
-			}
+			var radians = Math.PI * (obj.PropertyValue & 1);
 			radians += ((obj.PropertyValue & 12) / 4) * (Math.PI * 2 / 3);
 
 			//var radians = (Math.PI / 8) * (obj.PropertyValue & 0xf);

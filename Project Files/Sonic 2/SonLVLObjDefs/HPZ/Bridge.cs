@@ -7,16 +7,22 @@ namespace S2ObjectDefinitions.HPZ
 {
 	class Bridge : ObjectDefinition
 	{
-		private Sprite img;
-
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[1];
+		
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("HPZ/Objects.gif").GetSection(181, 73, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("HPZ/Objects.gif").GetSection(181, 73, 16, 16), -8, -8);
+			
+			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
+				"How long this Bridge will be.", null,
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 8, 10, 12, 14, 16 }); }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -28,26 +34,32 @@ namespace S2ObjectDefinitions.HPZ
 		{
 			return (subtype) + " orbs";
 		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
+			if (obj.PropertyValue == 0)
+				return sprite;
+			
 			int st = -(((obj.PropertyValue) * 16) / 2) + 8;
 			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < (obj.PropertyValue); i++)
+			for (int i = 0; i < obj.PropertyValue; i++)
 			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset(st + (i * 16), 0);
-				sprs.Add(tmp);
+				sprs.Add(new Sprite(sprite, st + (i * 16), 0));
 			}
 			return new Sprite(sprs.ToArray());
 		}

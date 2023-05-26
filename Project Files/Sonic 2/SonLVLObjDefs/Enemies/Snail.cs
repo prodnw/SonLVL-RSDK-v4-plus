@@ -8,37 +8,41 @@ namespace S2ObjectDefinitions.Enemies
 	class Snail : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] frames = new Sprite[2];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(44, 27, 32, 33), -16, -16);
-				sprites[1] = new Sprite(sheet.GetSection(110, 44, 16, 16), -23, -6);
+				frames[0] = new Sprite(sheet.GetSection(44, 27, 32, 33), -16, -16);
+				frames[1] = new Sprite(sheet.GetSection(110, 44, 16, 16), -23, -6);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(44, 27, 32, 33), -16, -16); // using broken frames
-				sprites[1] = new Sprite(sheet.GetSection(110, 44, 16, 16), -23, -6);
+				frames[0] = new Sprite(sheet.GetSection(44, 27, 32, 33), -16, -16); // using broken frames
+				frames[1] = new Sprite(sheet.GetSection(110, 44, 16, 16), -23, -6);
 			}
-
-			properties = new PropertySpec[1];
+			
+			sprites[0] = new Sprite(frames);
+			sprites[1] = new Sprite(sprites[0], true, false);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"The direction the Snail will be facing initially.", null, new Dictionary<string, int>
+				"Which direction the Snail will be facing initially.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 1, // in-game is a bit iffy, startup only looks at first bit but oob reset looks at entire number (== 0) - we're just gonna stick with 1st bit here
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -53,7 +57,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return (subtype == 0) ? "Start Facing Left" : "Start Facing Right";
 		}
 
 		public override Sprite Image
@@ -63,19 +67,12 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprite.Flip((subtype & 1) == 1, false);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprites[subtype & 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 1];
 		}
 	}
 }

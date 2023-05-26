@@ -16,14 +16,12 @@
   </Properties>
   <Enums>
     <Enum name="rewards">
-      <EnumMember name="None" />
-      <EnumMember name="10000" />
+      <EnumMember name="10000" value="1" />
       <EnumMember name="1000" />
       <EnumMember name="100" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="No Points" image="10000" />
     <Subtype id="01" name="10000 Points" image="10000" />
     <Subtype id="02" name="1000 Points" image="1000" />
     <Subtype id="03" name="100 Points" image="100" />

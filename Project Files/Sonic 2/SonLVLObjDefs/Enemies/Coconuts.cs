@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class Coconuts : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite spritezS;
 
 		// Coconuts' subtype is normally 30, but this value isn't used in any proper way
 		// (property value is treated as direction, but it gets reset to face the player in-game and a subtype of 30 doesn't exactly sound like a direction either)
@@ -17,11 +17,11 @@ namespace S2ObjectDefinitions.Enemies
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 63, 26, 45), -8, -14);
+				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 63, 26, 45), -8, -14);
 			}
 			else
 			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(50, 256, 26, 45), -8, -14);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(50, 256, 26, 45), -8, -14);
 			}
 		}
 
@@ -42,17 +42,17 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

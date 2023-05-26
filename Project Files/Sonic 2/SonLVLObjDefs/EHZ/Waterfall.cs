@@ -8,8 +8,8 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class Waterfall : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[9];
-		private Sprite placeholder;
+		private readonly Sprite[] sprites = new Sprite[10];
+		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
@@ -43,7 +43,21 @@ namespace S2ObjectDefinitions.EHZ
 			// Set up the debug visualisation for when the current frame is an empty sprite
 			BitmapBits bitmap = new BitmapBits(65, 65);
 			bitmap.DrawRectangle(6, 0, 0, 64, 64); // LevelData.ColorWhite
-			placeholder = new Sprite(bitmap, -32, -32);
+			sprites[9] = new Sprite(bitmap, -32, -32);
+			
+			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
+				"Which frame this Waterfall should display.", null, new Dictionary<string, int>
+				{
+					{ "Frame 0", 0 }, // yeah these names are kinda bad and don't make much sense but i don't got anything better, so
+					{ "Frame 1", 1 },
+					{ "Frame 3", 3 },
+					{ "Frame 5", 5 },
+					{ "Frame 6", 6 },
+					{ "Frame 7", 7 },
+					{ "Frame 8", 8 }
+				},
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -56,6 +70,11 @@ namespace S2ObjectDefinitions.EHZ
 			get { return 0; }
 		}
 		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return "Frame " + (subtype);
@@ -63,35 +82,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return sprites[0]; }
+			get { return sprites[1]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[Math.Min((int)subtype, 8)];
+			return sprites[Math.Min((int)subtype, 9)];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
-		}
-		
-		// For the empty frames, make sure they don't just disappear into the void
-		
-		public override Rectangle GetBounds(ObjectEntry obj)
-		{
-			if (obj.PropertyValue == 2 || obj.PropertyValue == 4)
-				return new Rectangle(obj.X - 32, obj.Y - 32, 64, 64);
-				
-			return Rectangle.Empty;
-		}
-		
-		public override Sprite GetDebugOverlay(ObjectEntry obj)
-		{
-			if (obj.PropertyValue == 2 || obj.PropertyValue == 4)
-				return placeholder;
-			
-			return null;
+			return sprites[Math.Min((int)obj.PropertyValue, 9)];
 		}
 	}
 }

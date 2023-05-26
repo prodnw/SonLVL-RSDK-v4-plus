@@ -9,15 +9,11 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
+			int yoffset = -12;
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 98, 64, 32), -32, -12);
@@ -25,13 +21,16 @@ namespace S2ObjectDefinitions.EHZ
 			else
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 402, 64, 32), -32, -8);
+				yoffset = -8;
 			}
 			
-			BitmapBits overlay = new BitmapBits(2, 129);
-			overlay.DrawLine(6, 0, 0, 0, 128); // LevelData.ColorWhite
-			debug = new Sprite(overlay, 0, -64);
+			// tagging this area with LevelData.ColorWhite
+			BitmapBits overlay = new BitmapBits(65, 161);
+			overlay.DrawRectangle(6, 0, 0, 63, 31); // top box
+			overlay.DrawRectangle(6, 0, 128, 63, 31); // bottom box
+			overlay.DrawLine(6, 32, -yoffset, 32, -yoffset + 128); // movement line
+			debug = new Sprite(overlay, -32, -64 + yoffset);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
 				"The starting direction of this Platform.", null, new Dictionary<string, int>
 				{
@@ -40,6 +39,11 @@ namespace S2ObjectDefinitions.EHZ
 				},
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -54,7 +58,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 1) ? "Start Downwards" : "Start Upwards";
 		}
 
 		public override Sprite Image

@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite sprite;
-		// private Sprite[] debug   = new Sprite[2];
+		// private Sprite[] debug = new Sprite[2];
 		
 		public override void Init(ObjectData data)
 		{

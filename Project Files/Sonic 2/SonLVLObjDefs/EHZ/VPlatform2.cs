@@ -9,13 +9,8 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
@@ -31,7 +26,6 @@ namespace S2ObjectDefinitions.EHZ
 			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, -32);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
 				"The starting direction of this Platform.", null, new Dictionary<string, int>
 				{
@@ -40,6 +34,11 @@ namespace S2ObjectDefinitions.EHZ
 				},
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -54,7 +53,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 1) ? "Start Downwards" : "Start Upwards";
 		}
 
 		public override Sprite Image

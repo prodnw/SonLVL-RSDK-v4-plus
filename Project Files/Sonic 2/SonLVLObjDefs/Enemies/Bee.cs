@@ -8,24 +8,28 @@ namespace S2ObjectDefinitions.Enemies
 	class Bee : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
+			Sprite[] frames = new Sprite[2];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(78, 1, 48, 18), -24, -8);
-				sprites[1] = new Sprite(sheet.GetSection(19, 50, 6, 5), 5, -8);
+				frames[0] = new Sprite(sheet.GetSection(78, 1, 48, 18), -24, -8);
+				frames[1] = new Sprite(sheet.GetSection(19, 50, 6, 5), 5, -8);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(78, 1, 48, 18), -24, -8);
-				sprites[1] = new Sprite(sheet.GetSection(137, 331, 6, 5), 5, -8);
+				frames[0] = new Sprite(sheet.GetSection(78, 1, 48, 18), -24, -8);
+				frames[1] = new Sprite(sheet.GetSection(137, 331, 6, 5), 5, -8);
 			}
-
-			properties = new PropertySpec[1];
+			
+			sprites[0] = new Sprite(frames);
+			sprites[1] = new Sprite(sprites[0], true, false);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction the Bee will be facing initially.", null, new Dictionary<string, int>
 				{
@@ -33,12 +37,12 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -53,29 +57,22 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return (subtype == 0) ? "Start Facing Left" : "Start Facing Right";
 		}
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprite.Flip((subtype & 1) == 1, false);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprites[subtype & 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 1];
 		}
 	}
 }

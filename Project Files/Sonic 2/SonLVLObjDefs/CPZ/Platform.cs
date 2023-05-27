@@ -106,11 +106,6 @@ namespace S2ObjectDefinitions.CPZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -118,13 +113,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Large";
-				default:
-					return "Small";
-			}
+			return (subtype > 0) ? "Small Platform" : "Large Platform";
 		}
 
 		public override Sprite Image

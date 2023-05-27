@@ -8,4 +8,8 @@
   <Properties>
     <Property name="GHZ Achievement" description="If this ring should count towards the Green Hill Zone achievement tally." type="bool" startbit="0" length="1" />
   </Properties>
+  <Subtypes>
+    <Subtype id="00" name="Normal" image="ring" />
+    <Subtype id="01" name="Award GHZ Achievement" image="ring" />
+  </Subtypes>
 </ObjDef>

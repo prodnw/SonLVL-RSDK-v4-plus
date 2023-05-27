@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class Coconuts : ObjectDefinition
 	{
-		private Sprite spritezS;
+		private Sprite sprite;
 
 		// Coconuts' subtype is normally 30, but this value isn't used in any proper way
 		// (property value is treated as direction, but it gets reset to face the player in-game and a subtype of 30 doesn't exactly sound like a direction either)

@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.MCZ
 		private readonly Sprite[] sprites = new Sprite[3];
 		private PropertySpec[] properties = new PropertySpec[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MCZ/Objects.gif");
@@ -26,12 +21,12 @@ namespace S2ObjectDefinitions.MCZ
 			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => obj.PropertyValue & 0x0f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0xf0) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
 				"How fast the Spike Ball should swing. Positive values are clockwise, negative values are counter-clockwise.", null,
-				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - ((obj.PropertyValue & 0xf0) > 0x80 ? 0x10 : 0x00),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x0f) | (byte)(((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4))));
+				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - (((obj.PropertyValue & 0xf0) > 0x80) ? 0x10 : 0x00),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)(((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4))));
 			
 			properties[2] = new PropertySpec("Initial Direction", typeof(int), "Extended",
 				"Which direction this Rotating Spike should start from.", null, new Dictionary<string, int>
@@ -43,6 +38,11 @@ namespace S2ObjectDefinitions.MCZ
 				},
 				(obj) => (int)(((V4ObjectEntry)obj).Direction),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -81,9 +81,7 @@ namespace S2ObjectDefinitions.MCZ
 			for (int i = 0; i < length + 1; i++)
 			{
 				int frame = (i == 0) ? 0 : (i == length) ? 2 : 1;
-				Sprite sprite = new Sprite(sprites[frame]);
-				sprite.Offset((int)(Math.Cos(angle) * (i * 16)), (int)(Math.Sin(angle) * (i * 16)));
-				sprs.Add(sprite);
+				sprs.Add(new Sprite(sprites[frame], (int)(Math.Cos(angle) * (i * 16)), (int)(Math.Sin(angle) * (i * 16))));
 			}
 			
 			return new Sprite(sprs.ToArray());

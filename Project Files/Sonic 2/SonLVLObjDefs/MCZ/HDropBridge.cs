@@ -17,16 +17,8 @@ namespace S2ObjectDefinitions.MCZ
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < 4; i++)
 			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset((i * 16) - 56, 0);
-				sprs.Add(tmp);
-			}
-			
-			for (int i = 0; i < 4; i++)
-			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset(56 - (i * 16), 0);
-				sprs.Add(tmp);
+				sprs.Add(new Sprite(img, (i * 16) - 56, 0));
+				sprs.Add(new Sprite(img, 56 - (i * 16), 0));
 			}
 			
 			sprite = new Sprite(sprs.ToArray());

@@ -65,11 +65,6 @@ namespace S2ObjectDefinitions.EHZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 3, 5, 6, 7, 8 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

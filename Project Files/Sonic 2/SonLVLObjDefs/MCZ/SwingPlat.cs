@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.MCZ
 		private readonly Sprite[] sprites = new Sprite[3];
 		private PropertySpec[] properties = new PropertySpec[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MCZ/Objects.gif");
@@ -41,6 +36,11 @@ namespace S2ObjectDefinitions.MCZ
 				"If the Swinging Platform's movement should be inverted, compared to normal Swing Platforms.", null,
 				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -75,18 +75,11 @@ namespace S2ObjectDefinitions.MCZ
 			int py = 16;
 			for (int i = 0; i < length + 1; i++)
 			{
-				Sprite sprite = new Sprite(sprites[1]);
-				sprite.Offset(0, py);
-				sprs.Add(sprite);
-				
-				py += 16;
+				sprs.Add(new Sprite(sprites[1], 0, (py+=16)-16));
 			}
 			
 			sprs.Add(new Sprite(sprites[0]));
-			
-			Sprite spr = new Sprite(sprites[2]);
-			spr.Offset(0, py-8);
-			sprs.Add(spr);
+			sprs.Add(new Sprite(sprites[2], 0, py-8));
 			
 			return new Sprite(sprs.ToArray());
 		}

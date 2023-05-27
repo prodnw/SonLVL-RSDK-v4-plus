@@ -8,15 +8,10 @@ namespace S2ObjectDefinitions.Global
 {
 	class Spikes : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[3];
 		private readonly Sprite[] sprites = new Sprite[4];
 		private readonly Sprite[] debug   = new Sprite[4];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Items2.gif");
@@ -25,7 +20,6 @@ namespace S2ObjectDefinitions.Global
 			sprites[2] = new Sprite(sheet.GetSection(215, 132, 32, 32), -16, -16);
 			sprites[3] = new Sprite(sheet.GetSection(215, 99, 32, 32), -16, -16);
 			
-			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
 				{
@@ -35,7 +29,7 @@ namespace S2ObjectDefinitions.Global
 					{ "Down", 3 }
 				},
 				(obj) => (obj.PropertyValue & 3),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Moving", typeof(int), "Extended",
 				"If these Spikes are retracting or not. Their position in the scene is their extended position.", null, new Dictionary<string, int>
@@ -44,7 +38,7 @@ namespace S2ObjectDefinitions.Global
 					{ "True", 128 }
 				},
 				(obj) => (obj.PropertyValue & 128),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
 				"The entity pos offset of these Spikes' parent. Only applicable if state is set to 5, to be carried by another object.", null,
@@ -52,13 +46,18 @@ namespace S2ObjectDefinitions.Global
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = ((int)value));
 			
 			BitmapBits bitmap = new BitmapBits(33, 33);
-			bitmap.DrawRectangle(6, 0, 0, 32, 32); // LevelData.ColorWhite
+			bitmap.DrawRectangle(6, 0, 0, 31, 31); // LevelData.ColorWhite
 			debug[0] = new Sprite(bitmap, -16,  16);
 			debug[1] = new Sprite(bitmap, -48, -16);
 			debug[2] = new Sprite(bitmap,  16, -16);
 			debug[3] = new Sprite(bitmap, -16, -48);
 		}
 		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 0x80, 0x81, 0x82, 0x83 }); }
+		}
+
 		public override byte DefaultSubtype
 		{
 			get { return 0; }
@@ -71,7 +70,12 @@ namespace S2ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			string[] directions = { "Up", "Right", "Left", "Down" };
+			string name = "Facing " + directions[subtype & 3];
+			
+			if (subtype > 0x7f) name += " (Moving)";
+			
+			return name;
 		}
 
 		public override Sprite Image
@@ -81,7 +85,7 @@ namespace S2ObjectDefinitions.Global
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[subtype & 3];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
@@ -91,9 +95,7 @@ namespace S2ObjectDefinitions.Global
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue > 127) return debug[obj.PropertyValue & 3];
-			
-			return null;
+			return (obj.PropertyValue > 0x7f) ? debug[obj.PropertyValue & 3] : null;
 		}
 	}
 }

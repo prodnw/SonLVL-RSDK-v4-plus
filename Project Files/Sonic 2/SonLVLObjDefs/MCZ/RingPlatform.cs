@@ -12,11 +12,6 @@ namespace S2ObjectDefinitions.MCZ
 		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			Sprite[] sprites = new Sprite[6];
@@ -24,8 +19,7 @@ namespace S2ObjectDefinitions.MCZ
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
 			for (int i = 1; i < 6; i++)
 			{
-				sprites[i] = new Sprite(sprites[0]);
-				sprites[i].Offset(0, i * 16);
+				sprites[i] = new Sprite(sprites[0], 0, i * 16);
 			}
 			
 			sprite = new Sprite(sprites);
@@ -43,6 +37,11 @@ namespace S2ObjectDefinitions.MCZ
 				},
 				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override PropertySpec[] CustomProperties

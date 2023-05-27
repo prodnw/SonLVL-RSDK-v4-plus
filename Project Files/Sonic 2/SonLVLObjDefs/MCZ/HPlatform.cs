@@ -7,13 +7,13 @@ namespace S2ObjectDefinitions.MCZ
 {
 	class HPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(141, 165, 48, 16), -24, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(141, 165, 48, 16), -24, -8);
 			
 			BitmapBits overlay = new BitmapBits(209, 2);
 			overlay.DrawLine(6, 0, 0, 208, 0); // LevelData.ColorWhite
@@ -34,11 +34,6 @@ namespace S2ObjectDefinitions.MCZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -51,17 +46,17 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

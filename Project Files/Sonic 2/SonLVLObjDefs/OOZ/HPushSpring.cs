@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.OOZ
 		private Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
@@ -27,8 +22,7 @@ namespace S2ObjectDefinitions.OOZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(756, 778, 40, 32), -20, -16);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spring is facing.", null, new Dictionary<string, int>
@@ -40,9 +34,9 @@ namespace S2ObjectDefinitions.OOZ
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -55,9 +49,9 @@ namespace S2ObjectDefinitions.OOZ
 			switch (subtype)
 			{
 				case 0:
-					return "Right";
+					return "Facing Right";
 				case 1:
-					return "Left";
+					return "Facing Left";
 				default:
 					return "Unknown";
 			}

@@ -8,14 +8,9 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class BreakBlock : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[5];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
@@ -37,7 +32,6 @@ namespace S2ObjectDefinitions.HTZ
 				sprites[4] = new Sprite(sheet.GetSection(105, 751, 32, 16), -16, -8);
 			}
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many blocks comprise this Break Block.", null, new Dictionary<string, int>
 				{
@@ -47,22 +41,22 @@ namespace S2ObjectDefinitions.HTZ
 					{ "2 Blocks", 3 },
 					{ "1 Block", 4 }
 				},
-				(obj) => (obj.PropertyValue & 127),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue & 0x7f),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Collision Plane", typeof(int), "Extended",
 				"Which Collision Plane this Break Block is for.", null, new Dictionary<string, int>
 				{
 					{ "Plane A", 0 },
-					{ "Plane B", 128 }
+					{ "Plane B", 0x80 }
 				},
-				(obj) => (obj.PropertyValue & 128),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue & 0x80),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 0x80, 0x81, 0x82, 0x83, 0x84 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -72,7 +66,10 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			string name = (5 - (subtype & 0x7f)) + " Blocks";
+			if (subtype > 0x7f) name += " (Plane B)";
+			else name += " (Plane A)";
+			return name;
 		}
 
 		public override Sprite Image
@@ -87,7 +84,7 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[Math.Min(obj.PropertyValue & 127, 4)];
+			return sprites[Math.Min(obj.PropertyValue & 0x7f, 4)];
 		}
 	}
 }

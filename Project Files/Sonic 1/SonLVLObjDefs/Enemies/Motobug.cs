@@ -7,22 +7,22 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Motobug : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
-
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite[] sprites = new Sprite[2];
+		
 		public override void Init(ObjectData data)
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
 				default: // Origins uses Motobugs everywhere, keep this the default
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(98, 127, 40, 28), -21, -13);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(98, 127, 40, 28), -21, -13);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(170, 145, 40, 28), -21, -13);
+					sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(170, 145, 40, 28), -21, -13);
 					break;
 			}
-
-			properties = new PropertySpec[1];
+			
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Motobug will be facing initially.", null, new Dictionary<string, int>
@@ -30,18 +30,13 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -51,32 +46,22 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Facing Left";
-				case 1:
-					return "Facing Right";
-				default:
-					return "Unknown";
-			}
+			return (subtype == 0) ? "Facing Left" : "Facing Right";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip((subtype & 1) != 0, false);
-			return sprite;
+			return sprites[(subtype == 0) ? 0 : 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[(obj.PropertyValue == 0) ? 0 : 1];
 		}
 	}
 }

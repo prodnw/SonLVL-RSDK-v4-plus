@@ -135,7 +135,7 @@ namespace S2ObjectDefinitions.DEZ
 {
 	abstract class DERGeneric : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
 		{
@@ -144,12 +144,7 @@ namespace S2ObjectDefinitions.DEZ
 
 		public override void Init(ObjectData data)
 		{
-			img = GetFrame();
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
+			sprite = GetFrame();
 		}
 		
 		public override bool Hidden
@@ -164,22 +159,22 @@ namespace S2ObjectDefinitions.DEZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public virtual Sprite GetFrame()
 		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
+			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 		}
 	}
 }

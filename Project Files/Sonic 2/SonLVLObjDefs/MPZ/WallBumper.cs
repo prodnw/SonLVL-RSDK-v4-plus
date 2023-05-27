@@ -8,22 +8,16 @@ namespace S2ObjectDefinitions.MPZ
 {
 	class WallBumper : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-		private Sprite img;
+		private PropertySpec[] properties = new PropertySpec[2];
+		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(93, 113, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(93, 113, 16, 16), -8, -8);
 			
 			// First bit is unused, it seems
-			// The official definition for it probably has something, 
+			// The official definition for it probably has something, but it doesn't do anything in-game
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How large the Wall Bumper will be.", null, new Dictionary<string, int>
 				{
@@ -31,7 +25,7 @@ namespace S2ObjectDefinitions.MPZ
 					{ "8 Bumpers", 1 }
 				},
 				(obj) => (obj.PropertyValue & 0x70) >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x8f) | (byte)((((int)value) & 7) << 4)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x70) | (byte)((((int)value) & 7) << 4)));
 			
 			properties[1] = new PropertySpec("Bounce Direction", typeof(int), "Extended",
 				"Which way Sonic will be bounced by this wall.", null, new Dictionary<string, int>
@@ -43,9 +37,9 @@ namespace S2ObjectDefinitions.MPZ
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 0x70 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -55,17 +49,17 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 0) ? "4 Bumpers" : "8 Bumpers";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
@@ -73,14 +67,10 @@ namespace S2ObjectDefinitions.MPZ
 			List<Sprite> sprs = new List<Sprite>();
 			
 			int count = (((obj.PropertyValue & 0x10) >> 4) + 1) * 8;
-			int sy    = (((obj.PropertyValue & 0x10) >> 4) + 1) * (-64);
+			int sy    = (((obj.PropertyValue & 0x10) >> 4) + 1) * -64;
 			
 			for (int i = 0; i < count; i++)
-			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset(0, sy + (i * 16) + 8);
-				sprs.Add(tmp);
-			}
+				sprs.Add(new Sprite(sprite, 0, sy + (i * 16) + 8));
 			
 			return new Sprite(sprs.ToArray());
 		}

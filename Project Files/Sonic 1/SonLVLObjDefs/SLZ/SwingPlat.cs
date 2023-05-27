@@ -60,16 +60,7 @@ namespace S1ObjectDefinitions.SLZ
 			for (int i = 0; i <= (obj.PropertyValue + 1); i++)
 			{
 				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
-				Sprite sprite = new Sprite(sprites[frame]);
-				if (i == (obj.PropertyValue + 1))
-				{
-					sprite.Offset(0, (i * 16) - 8);
-				}
-				else
-				{
-					sprite.Offset(0, (i * 16));
-				}
-				sprs.Add(sprite);
+				sprs.Add(new Sprite(sprites[frame], 0, (i * 16) - ((i == (obj.PropertyValue + 1)) ? 8 : 0)));
 			}
 			return new Sprite(sprs.ToArray());
 		}

@@ -7,13 +7,19 @@ namespace S1ObjectDefinitions.SLZ
 {
 	class RotatePlatform : ObjectDefinition
 	{
-		private Sprite img;
 		private PropertySpec[] properties;
-
+		private Sprite sprite;
+		private Sprite debug;
+		
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(1, 196, 48, 16), -24, -8);
-
+			sprite = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(1, 196, 48, 16), -24, -8);
+			
+			int radius = 80;
+			var overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);
+			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
+			debug = new Sprite(overlay, -radius, -radius);
+			
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Starting position", typeof(int), "Extended",
 				"The position (or angle) from where the Platform will start.", null, new Dictionary<string, int>
@@ -24,7 +30,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Up", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
@@ -33,17 +39,12 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Clockwise", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 251) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -58,44 +59,41 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			Sprite sprite = new Sprite(img);
+			Sprite spr = new Sprite(sprite);
 			int radius = ((obj.PropertyValue & 4) != 0) ? -80 : 80;
 			
 			if ((obj.PropertyValue & 3) == 0)
 			{
-				sprite.Offset(-radius, 0);
+				spr.Offset(-radius, 0);
 			}
 			else if ((obj.PropertyValue & 3) == 1)
 			{
-				sprite.Offset(radius, 0);
+				spr.Offset(radius, 0);
 			}
 			else if ((obj.PropertyValue & 3) == 2)
 			{
-				sprite.Offset(0, radius);
+				spr.Offset(0, radius);
 			}
 			else if ((obj.PropertyValue & 3) == 3)
 			{
-				sprite.Offset(0, -radius);
+				spr.Offset(0, -radius);
 			}
-			return new Sprite(sprite);
+			return new Sprite(spr);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			int radius = 80;
-			var overlay = new BitmapBits(radius 	* 2 + 1, radius * 2 + 1);
-			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
-			return new Sprite(overlay, -radius, -radius);
+			return debug;
 		}
 	}
 }

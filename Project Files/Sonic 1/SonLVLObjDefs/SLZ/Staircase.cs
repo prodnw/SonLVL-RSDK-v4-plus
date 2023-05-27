@@ -7,12 +7,12 @@ namespace S1ObjectDefinitions.SLZ
 {
 	class Staircase : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 26, 128, 32), -16, -16);
+			sprite = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 26, 128, 32), -16, -16);
 			
 			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Activate From", typeof(int), "Extended",
@@ -39,11 +39,6 @@ namespace S1ObjectDefinitions.SLZ
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -56,18 +51,16 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			Sprite sprite = new Sprite(img);
-			sprite.Flip(false, (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY)));
 			return sprite;
 		}
 		

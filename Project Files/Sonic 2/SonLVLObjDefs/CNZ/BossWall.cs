@@ -28,17 +28,12 @@ namespace S2ObjectDefinitions.CNZ
 			properties[0] = new PropertySpec("Start Closed", typeof(bool), "Extended",
 				"If the Wall should start closed or not. Used to differenciate the enterance wall from the exit wall.", null,
 				(obj) => (obj.PropertyValue == 1),
-				(obj, value) => obj.PropertyValue = (byte)(((bool)value == false) ? 0 : 1));
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,14 +43,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-				default:
-					return "Start Open";
-				case 1:
-					return "Start Closed";
-			}
+			return (subtype == 1) ? "Start Closed" : "Start Open";
 		}
 
 		public override Sprite Image

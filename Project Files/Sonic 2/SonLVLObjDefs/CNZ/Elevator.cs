@@ -7,27 +7,26 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class Elevator : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(193, 34, 32, 16), -16, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(193, 34, 32, 16), -16, -8);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the Elevator will go. Direction is determined by the Travel Direction variable.", null,
-				(obj) => obj.PropertyValue & 127,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x7f,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Travel Direction", typeof(int), "Extended",
 				"Which direction the Elevator will travel in.", null, new Dictionary<string, int>
 				{
 					{ "Upwards", 0 },
-					{ "Downwards", 128 }
+					{ "Downwards", 0x80 }
 				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -52,17 +51,17 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

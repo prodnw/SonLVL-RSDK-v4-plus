@@ -44,11 +44,6 @@ namespace S2ObjectDefinitions.Mission
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -59,8 +54,8 @@ namespace S2ObjectDefinitions.Mission
 			switch (subtype)
 			{
 				case 0: return "Normal";
-				case 1:
-				default: return "VS Only (Y Bounds)";
+				default:
+				case 1:  return "VS Only (Y Bounds)";
 				case 2: return "VS Only (No Y Bounds)";
 			}
 		}
@@ -77,7 +72,7 @@ namespace S2ObjectDefinitions.Mission
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(obj.PropertyValue == 0) ? 0 : (obj.PropertyValue == 2) ? 2 : 1];
+			return sprites[((obj.PropertyValue == 2) || (obj.PropertyValue == 0)) ? obj.PropertyValue : 1];
 		}
 	}
 }

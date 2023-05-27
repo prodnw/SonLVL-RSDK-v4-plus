@@ -7,14 +7,9 @@ namespace S1ObjectDefinitions.GHZ
 {
 	class SwingPlat : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[3];
-		private PropertySpec[] properties;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("GHZ/Objects.gif");
@@ -22,7 +17,6 @@ namespace S1ObjectDefinitions.GHZ
 			sprites[1] = new Sprite(sheet.GetSection(101, 1, 16, 16), -8, -8);
 			sprites[2] = new Sprite(sheet.GetSection(118, 1, 48, 16), -24, -8);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => obj.PropertyValue,
@@ -38,6 +32,11 @@ namespace S1ObjectDefinitions.GHZ
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 			
 			// State is set in an Origins mission but that doesn't appear to mean anything?
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

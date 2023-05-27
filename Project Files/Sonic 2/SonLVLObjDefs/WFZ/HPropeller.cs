@@ -10,11 +10,6 @@ namespace S2ObjectDefinitions.WFZ
 		private Sprite sprite;
 		private Sprite debug;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			Sprite[] frames = new Sprite[2];
@@ -25,6 +20,11 @@ namespace S2ObjectDefinitions.WFZ
 			BitmapBits overlay = new BitmapBits(129, 169);
 			overlay.DrawRectangle(6, 0, 0, 128, 168); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -64, -112);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

@@ -7,16 +7,15 @@ namespace S1ObjectDefinitions.MZ
 {
 	class Fireball : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
-
+		
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MZ/Objects.gif");
 			sprites[0] = new Sprite(sheet.GetSection(52, 114, 15, 31), -7, -23);
 			sprites[1] = new Sprite(sheet.GetSection(103, 114, 31, 15), -23, -8);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Pattern", typeof(int), "Extended",
 				"The pattern this Fireball is to follow.", null, new Dictionary<string, int>
 				{
@@ -30,7 +29,7 @@ namespace S1ObjectDefinitions.MZ
 					{ "Travel Right", 7 }
 				},
 				(obj) => obj.PropertyValue & 7,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 248) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
 				"The timings this Fireball is to be based off.", null, new Dictionary<string, int>
@@ -53,17 +52,12 @@ namespace S1ObjectDefinitions.MZ
 					{ "480 Frames", 0xf0 },
 				},
 				(obj) => obj.PropertyValue & 240,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

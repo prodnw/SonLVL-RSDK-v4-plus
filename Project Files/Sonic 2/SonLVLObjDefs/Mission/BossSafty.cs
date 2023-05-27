@@ -8,28 +8,23 @@ namespace S2ObjectDefinitions.Mission
 {
 	class Safty : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 			
 			BitmapBits bmp = new BitmapBits(257, 2);
 			bmp.DrawLine(6, 0, 0, 256, 0); // LevelData.ColorWhite
 			debug = new Sprite(bmp, -128, 0);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;
@@ -37,17 +32,17 @@ namespace S2ObjectDefinitions.Mission
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

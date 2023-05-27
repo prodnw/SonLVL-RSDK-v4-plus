@@ -26,8 +26,7 @@ namespace S1ObjectDefinitions.Enemies
 					break;
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Yadrin is facing.", null, new Dictionary<string, int>
@@ -42,11 +41,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

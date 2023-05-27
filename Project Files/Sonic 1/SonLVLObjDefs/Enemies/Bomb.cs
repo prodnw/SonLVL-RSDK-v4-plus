@@ -26,14 +26,9 @@ namespace S1ObjectDefinitions.Enemies
 					break;
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
-			
-			sprites[2] = new Sprite(sprites[0]);
-			sprites[2].Flip(false, true);
-			
-			sprites[3] = new Sprite(sprites[0]);
-			sprites[3].Flip(true, true);
+			sprites[1] = new Sprite(sprites[0], true, false);
+			sprites[2] = new Sprite(sprites[0], false, true);
+			sprites[3] = new Sprite(sprites[0], true, true);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Bomb is facing.", null, new Dictionary<string, int>
@@ -57,11 +52,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

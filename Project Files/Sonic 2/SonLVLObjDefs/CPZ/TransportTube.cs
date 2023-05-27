@@ -9,22 +9,11 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite sprite;
-		// private Sprite[] debug = new Sprite[2];
+		// private Sprite[] debug = new Sprite[3];
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
-			
-			/*
-			BitmapBits bitmap = new BitmapBits(97, 112);
-			bitmap.DrawEllipse(6, 0, 0, 96, 222); // somewhat off, but it's close enough
-			debug[0] = new Sprite(bitmap, 0, -112);
-			
-			bitmap.Clear();
-			bitmap.DrawRectangle(6, 0, 0, 0, 111);
-			bitmap.DrawRectangle(6, 96, 0, 96, 111);
-			debug[1] = new Sprite(bitmap, 0, -112);
-			*/
 			
 			properties[0] = new PropertySpec("Entry Type", typeof(int), "Extended",
 				"desc A.", null, new Dictionary<string, int>
@@ -67,11 +56,6 @@ namespace S2ObjectDefinitions.CPZ
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -100,7 +84,8 @@ namespace S2ObjectDefinitions.CPZ
 		/*
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue >> 7];
+			// TODO:
+			// yeahhhh... this one's gonna be fun
 		}
 		*/
 	}

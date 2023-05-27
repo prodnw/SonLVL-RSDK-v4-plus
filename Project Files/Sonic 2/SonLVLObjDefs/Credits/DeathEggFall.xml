@@ -121,118 +121,34 @@
       <EnumMember name="Dust Puff 3" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Sky BG" />
-      <ImageRef image="skybg" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Death Egg" />
-      <ImageRef image="deathegg" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Angel Island" />
-      <ImageRef image="angelisland" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Cloud (Wide)" />
-      <ImageRef image="widecloud" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Cloud (Small)" />
-      <ImageRef image="smallcloud" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 1 (Frame 1)" />
-      <ImageRef image="dust_1_1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 1 (Frame 2)" />
-      <ImageRef image="dust_1_2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 1 (Frame 3)" />
-      <ImageRef image="dust_1_3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 1 (Frame 4)" />
-      <ImageRef image="dust_1_4" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 2 (Frame 1)" />
-      <ImageRef image="dust_2_1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 2 (Frame 2)" />
-      <ImageRef image="dust_2_2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 2 (Frame 3)" />
-      <ImageRef image="dust_2_3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 2 (Frame 4)" />
-      <ImageRef image="dust_2_4" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 1 (Frame 1)" />
-      <ImageRef image="dust_s_1_1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 1 (Frame 2)" />
-      <ImageRef image="dust_s_1_2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 1 (Frame 3)" />
-      <ImageRef image="dust_s_1_3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 1 (Frame 4)" />
-      <ImageRef image="dust_s_1_4" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 2 (Frame 1)" />
-      <ImageRef image="dust_s_2_1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 2 (Frame 2)" />
-      <ImageRef image="dust_s_2_2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 2 (Frame 3)" />
-      <ImageRef image="dust_s_2_3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Small Dust Puff 2 (Frame 4)" />
-      <ImageRef image="dust_s_2_4" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 1)" />
-      <ImageRef image="sparks_1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 2)" />
-      <ImageRef image="sparks_2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 3)" />
-      <ImageRef image="sparks_3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 4)" />
-      <ImageRef image="sparks_4" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 5)" />
-      <ImageRef image="sparks_5" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Spark (Frame 6)" />
-      <ImageRef image="sparks_6" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Dust Puff 3" />
-      <ImageRef image="dust_3" />
-    </DisplayOption>
-  </Display>
+  <Subtypes>
+    <Subtype id="00" name="Sky BG" image="skybg" />
+    <Subtype id="01" name="Death Egg" image="deathegg" />
+    <Subtype id="02" name="Angel Island" image="angelisland" />
+    <Subtype id="03" name="Cloud (Wide)" image="widecloud" />
+    <Subtype id="04" name="Cloud (Small)" image="smallcloud" />
+    <Subtype id="05" name="Dust Puff 1 (Frame 1)" image="dust_1_1" />
+    <Subtype id="06" name="Dust Puff 1 (Frame 2)" image="dust_1_2" />
+    <Subtype id="07" name="Dust Puff 1 (Frame 3)" image="dust_1_3" />
+    <Subtype id="08" name="Dust Puff 1 (Frame 4)" image="dust_1_4" />
+    <Subtype id="09" name="Dust Puff 2 (Frame 1)" image="dust_2_1" />
+    <Subtype id="0A" name="Dust Puff 2 (Frame 2)" image="dust_2_2" />
+    <Subtype id="0B" name="Dust Puff 2 (Frame 3)" image="dust_2_3" />
+    <Subtype id="0C" name="Dust Puff 2 (Frame 4)" image="dust_2_4" />
+    <Subtype id="0D" name="Small Dust Puff 1 (Frame 1)" image="dust_s_1_1" />
+    <Subtype id="0E" name="Small Dust Puff 1 (Frame 2)" image="dust_s_1_2" />
+    <Subtype id="0F" name="Small Dust Puff 1 (Frame 3)" image="dust_s_1_3" />
+    <Subtype id="10" name="Small Dust Puff 1 (Frame 4)" image="dust_s_1_4" />
+    <Subtype id="11" name="Small Dust Puff 2 (Frame 1)" image="dust_s_2_1" />
+    <Subtype id="12" name="Small Dust Puff 2 (Frame 2)" image="dust_s_2_2" />
+    <Subtype id="13" name="Small Dust Puff 2 (Frame 3)" image="dust_s_2_3" />
+    <Subtype id="14" name="Small Dust Puff 2 (Frame 4)" image="dust_s_2_4" />
+    <Subtype id="15" name="Spark (Frame 1)" image="sparks_1" />
+    <Subtype id="16" name="Spark (Frame 2)" image="sparks_2" />
+    <Subtype id="17" name="Spark (Frame 3)" image="sparks_3" />
+    <Subtype id="18" name="Spark (Frame 4)" image="sparks_4" />
+    <Subtype id="19" name="Spark (Frame 5)" image="sparks_5" />
+    <Subtype id="1A" name="Spark (Frame 6)" image="sparks_6" />
+    <Subtype id="1B" name="Dust Puff 3" image="dust_3" />
+  </Subtypes>
 </ObjDef>

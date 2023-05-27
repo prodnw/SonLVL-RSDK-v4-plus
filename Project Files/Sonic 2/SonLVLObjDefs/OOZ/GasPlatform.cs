@@ -7,18 +7,13 @@ namespace S2ObjectDefinitions.OOZ
 {
 	class GasPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite[] debug = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(84, 108, 48, 12), -24, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(84, 108, 48, 12), -24, -8);
 			
 			BitmapBits overlay = new BitmapBits(2, 208);
 			overlay.DrawLine(6, 0, 0, 0, 207); // LevelData.ColorWhite
@@ -39,9 +34,9 @@ namespace S2ObjectDefinitions.OOZ
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -63,22 +58,22 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue == 1 ? 1 : 0];
+			return debug[(obj.PropertyValue == 1) ? 1 : 0];
 		}
 	}
 }

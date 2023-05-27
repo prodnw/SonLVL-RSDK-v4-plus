@@ -16,4 +16,10 @@
       <EnumMember name="Floating In Lava" value="4" />
     </Enum>
   </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Idle" image="block" />
+    <Subtype id="01" name="Floating (Won't Drop)" image="block" />
+    <Subtype id="02" name="Floating (Will Drop)" image="block" />
+    <Subtype id="04" name="Floating In Lava" image="block" />
+  </Subtypes>
 </ObjDef>

@@ -50,9 +50,10 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Two platforms, 512px", 2 },
 					{ "One platforms, 384px", 3 }
 				},
-				(obj) => (obj.PropertyValue & 3),
+				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
@@ -79,11 +80,6 @@ namespace S2ObjectDefinitions.CPZ
 			get { return properties; }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override Sprite Image
 		{
 			get { return sprites[0]; }

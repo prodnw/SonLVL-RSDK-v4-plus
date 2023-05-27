@@ -7,12 +7,12 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class OneWayDoor : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(1, 78, 16, 64), -8, -32);
+			sprite = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(1, 78, 16, 64), -8, -32);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Open From", typeof(int), "Extended",
@@ -28,11 +28,6 @@ namespace S2ObjectDefinitions.ARZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -55,17 +50,17 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

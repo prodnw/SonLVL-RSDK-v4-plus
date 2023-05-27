@@ -124,11 +124,6 @@ namespace S2ObjectDefinitions.EHZ
 			sprite = GetSprite();
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

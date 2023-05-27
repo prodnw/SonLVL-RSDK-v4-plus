@@ -7,7 +7,7 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class NewtronShot : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
@@ -16,10 +16,10 @@ namespace S1ObjectDefinitions.Enemies
 				case '1':
 				case 'M': // Origins test mission
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(160, 111, 12, 12), -6, -6);
+					sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(160, 111, 12, 12), -6, -6);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(35, 51, 16, 16), -8, -8); // Inaccurate to how it is in official S1 RSDK editor probably, but load the correct sheet anyways
+					sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(35, 51, 16, 16), -8, -8); // Inaccurate to how it is in official S1 RSDK editor probably, but load the correct sheet anyways
 					break;
 			}
 		}
@@ -34,11 +34,6 @@ namespace S1ObjectDefinitions.Enemies
 			get { return true; }
 		}
 
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";
@@ -46,17 +41,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

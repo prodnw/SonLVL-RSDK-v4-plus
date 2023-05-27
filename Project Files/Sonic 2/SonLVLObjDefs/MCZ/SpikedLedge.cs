@@ -12,11 +12,6 @@ namespace S2ObjectDefinitions.MCZ
 		private Sprite[] debug = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(1, 99, 128, 32), -64, -16);
@@ -39,6 +34,11 @@ namespace S2ObjectDefinitions.MCZ
 			debug[1] = new Sprite(bitmap, 64, -16);
 		}
 		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -46,7 +46,7 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype & 1) == 1 ? "Facing Right" : "Facing Left";
+			return ((subtype & 1) == 1) ? "Facing Right" : "Facing Left";
 		}
 
 		public override Sprite Image

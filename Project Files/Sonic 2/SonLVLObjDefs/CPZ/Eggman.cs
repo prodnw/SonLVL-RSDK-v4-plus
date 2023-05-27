@@ -91,7 +91,7 @@ namespace S2ObjectDefinitions.CPZ
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(93, 122, 8, 8), -4, -4);
 			}
-			else // base game doesn't use else but we want a fallback in case neither folders match
+			else // base game doesn't use else (for some reason) but we want a fallback in case neither folders match
 			{
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(104, 155, 8, 8), -4, -4);
 			}
@@ -122,11 +122,6 @@ namespace S2ObjectDefinitions.CPZ
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";

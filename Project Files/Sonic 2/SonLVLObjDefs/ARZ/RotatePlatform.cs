@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class RotatePlatform : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[3];
 		private readonly Sprite[] sprites = new Sprite[3];
 		private Sprite debug;
 
@@ -23,17 +23,16 @@ namespace S2ObjectDefinitions.ARZ
 			var overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);
 			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -radius, -radius - 4);
-
-			properties = new PropertySpec[3];
+			
 			properties[0] = new PropertySpec("Offset", typeof(int), "Extended",
 				"The offset/starting angle of the platform.", null,
 				(obj) => (obj.PropertyValue & 0x0f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0xf0) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
 				"The speed of the platform.", null,
 				(obj) => (obj.PropertyValue & 0x70) >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x8f) | (byte)((int)value << 4)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x70) | (byte)((int)value << 4)));
 			
 			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
@@ -42,7 +41,7 @@ namespace S2ObjectDefinitions.ARZ
 					{ "Counter-clockwise", 1 }
 				},
 				(obj) => (obj.PropertyValue >> 7),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x7f) | (byte)((int)value << 7)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value << 7)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -55,11 +54,6 @@ namespace S2ObjectDefinitions.ARZ
 			get { return properties; }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";

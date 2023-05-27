@@ -110,7 +110,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	abstract class Generic : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -119,12 +119,7 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override void Init(ObjectData data)
 		{
-			img = GetSprite();
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
+			sprite = GetSprite();
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -134,17 +129,17 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public virtual Sprite GetSprite()

@@ -7,25 +7,19 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class FPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
+			sprite = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
 			
 			BitmapBits overlay = new BitmapBits(2, 62);
 			for (int i = 0; i < 62; i += 12)
 				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, 0);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How this Platform should act upon player contact.", null, new Dictionary<string, int>
 				{
@@ -36,9 +30,9 @@ namespace S2ObjectDefinitions.ARZ
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,28 +42,27 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 0) ? "Fall Platform" : "Static Platform";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 1) return null;
-			return debug;
+			return (obj.PropertyValue == 1) ? null : debug;
 		}
 	}
 }

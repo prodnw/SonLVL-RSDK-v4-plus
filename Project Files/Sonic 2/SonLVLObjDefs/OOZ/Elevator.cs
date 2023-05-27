@@ -16,17 +16,17 @@ namespace S2ObjectDefinitions.OOZ
 			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the Elevator will go.", null,
-				(obj) => obj.PropertyValue & 127,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 128) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x7f,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
 				"Where the Elevator will start from.", null, new Dictionary<string, int>
 				{
 					{ "Bottom", 0 },
-					{ "Top", 128 }
+					{ "Top", 0x80 }
 				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

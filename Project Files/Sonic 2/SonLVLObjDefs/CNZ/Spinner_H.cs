@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class Spinner_H : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[2];
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -23,7 +23,6 @@ namespace S2ObjectDefinitions.CNZ
 			sprites[0] = new Sprite(sheet.GetSection(127, 113, 16, 16), -8, -8);
 			sprites[1] = new Sprite(sheet.GetSection(144, 113, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How wide the Spinner is.", null, new Dictionary<string, int>
 				{
@@ -33,7 +32,7 @@ namespace S2ObjectDefinitions.CNZ
 					{ "32 Nodes", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Enter From", typeof(int), "Extended",
 				"Which plane is above.", null, new Dictionary<string, int>
@@ -41,13 +40,8 @@ namespace S2ObjectDefinitions.CNZ
 					{ "Top", 0 },
 					{ "Bottom", 4 }
 				},
-				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 251) | (byte)((int)value)));
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
+				(obj) => obj.PropertyValue & ~4,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -77,9 +71,7 @@ namespace S2ObjectDefinitions.CNZ
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < count; i++)
 			{
-				Sprite tmp = new Sprite(sprites[(obj.PropertyValue & 4) >> 2]);
-				tmp.Offset(sx + (i * 16), 0);
-				sprs.Add(tmp);
+				sprs.Add(new Sprite(sprites[(obj.PropertyValue & 4) >> 2], sx + (i * 16), 0));
 			}
 			return new Sprite(sprs.ToArray());
 		}

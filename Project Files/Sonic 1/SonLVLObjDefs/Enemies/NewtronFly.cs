@@ -7,7 +7,7 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class NewtronFly : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
@@ -16,10 +16,10 @@ namespace S1ObjectDefinitions.Enemies
 				case '1':
 				case 'M': // Origins test mission
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(161, 1, 39, 39), -20, -20);
+					sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(161, 1, 39, 39), -20, -20);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 124, 39, 39), -20, -20);
+					sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 124, 39, 39), -20, -20);
 					break;
 			}
 			
@@ -33,11 +33,6 @@ namespace S1ObjectDefinitions.Enemies
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";
@@ -45,17 +40,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

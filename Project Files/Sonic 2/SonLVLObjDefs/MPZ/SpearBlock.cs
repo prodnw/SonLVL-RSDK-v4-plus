@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.MPZ
 		private PropertySpec[] properties = new PropertySpec[1];
 		private readonly Sprite[] sprites = new Sprite[4];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			Sprite[] frames = new Sprite[5];
@@ -73,6 +68,11 @@ namespace S2ObjectDefinitions.MPZ
 				},
 				(obj) => (obj.PropertyValue & 3),
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
 		}
 		
 		public override byte DefaultSubtype

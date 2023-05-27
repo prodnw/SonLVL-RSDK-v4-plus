@@ -83,11 +83,6 @@ namespace S2ObjectDefinitions.OOZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {  }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

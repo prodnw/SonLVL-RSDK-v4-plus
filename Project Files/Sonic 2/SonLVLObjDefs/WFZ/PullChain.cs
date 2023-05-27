@@ -12,11 +12,6 @@ namespace S2ObjectDefinitions.WFZ
 		private Sprite[] debug = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet;
@@ -68,9 +63,9 @@ namespace S2ObjectDefinitions.WFZ
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x10) | (byte)((int)value)));
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override PropertySpec[] CustomProperties

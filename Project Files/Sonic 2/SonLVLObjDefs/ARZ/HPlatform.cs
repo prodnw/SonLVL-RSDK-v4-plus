@@ -1,5 +1,4 @@
-
- SonicRetro.SonLVL.API;
+using SonicRetro.SonLVL.API;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -8,18 +7,13 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class HPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 		private PropertySpec[] properties;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
+			sprite = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
 			
 			BitmapBits overlay = new BitmapBits(129, 2);
 			overlay.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
@@ -36,9 +30,9 @@ namespace S2ObjectDefinitions.ARZ
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,22 +42,22 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 1) ? "Start Right" : "Start Left";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

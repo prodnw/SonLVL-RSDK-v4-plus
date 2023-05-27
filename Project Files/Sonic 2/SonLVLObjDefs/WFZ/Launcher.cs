@@ -27,8 +27,7 @@ namespace S2ObjectDefinitions.WFZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(445, 403, 32, 16), -16, -31);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How many pixels this Launcher should push the player before launching them. Note that actual launch velocity is unaffected by this value.", null,

@@ -7,17 +7,17 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class MotobugExhaust : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
 				default: // Origins uses Motobugs everywhere, keep this the default
-					img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(143, 235, 4, 4), -2, -2);
+					sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(143, 235, 4, 4), -2, -2);
 					break;
 				case '7':
-					img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(211, 220, 4, 4), -2, -2);
+					sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(211, 220, 4, 4), -2, -2);
 					break;
 			}
 		}
@@ -32,11 +32,6 @@ namespace S1ObjectDefinitions.Enemies
 			get { return true; }
 		}
 
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";
@@ -44,17 +39,17 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Range", typeof(int), "Extended",
 				"The range of the Buzz Bomber's activation trigger.", null, new Dictionary<string, int>
@@ -58,7 +58,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Small", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 253) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Hide On Off Screen", typeof(bool), "Extended",
 				"If this Buzz Bomber should hide after going off screen.", null,
@@ -69,11 +69,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

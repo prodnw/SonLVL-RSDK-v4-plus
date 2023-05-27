@@ -32,12 +32,7 @@ namespace S1ObjectDefinitions.Enemies
 		{
 			get { return true; }
 		}
-
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return subtype + "";

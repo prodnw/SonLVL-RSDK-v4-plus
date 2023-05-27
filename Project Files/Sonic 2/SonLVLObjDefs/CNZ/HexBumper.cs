@@ -37,11 +37,6 @@ namespace S2ObjectDefinitions.CNZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -49,14 +44,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-				default:
-					return "Static";
-				case 1:
-					return "Moving";
-			}
+			return (subtype == 1) ? "Moving Bumper" : "Static Bumper";
 		}
 
 		public override Sprite Image

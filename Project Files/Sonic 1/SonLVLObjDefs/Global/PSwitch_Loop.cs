@@ -8,8 +8,8 @@ namespace S1ObjectDefinitions.Global
 {
 	class PSwitch_Loop : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite sprite;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -18,9 +18,8 @@ namespace S1ObjectDefinitions.Global
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(222, 239, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(222, 239, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How tall the Plane Switch will be.", null, new Dictionary<string, int>
 				{
@@ -29,18 +28,19 @@ namespace S1ObjectDefinitions.Global
 					{ "16 Nodes", 2 },
 					{ "32 Nodes", 3 }
 				},
-				(obj) => obj.PropertyValue,
+				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
-
-		public override bool Debug
+		
+		// this obj doesn't have much reason to exist, so... maybe?
+		public override bool Hidden
 		{
 			get { return true; }
 		}
 		
-		public override byte DefaultSubtype
+		public override bool Debug
 		{
-			get { return 0; }
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -55,12 +55,12 @@ namespace S1ObjectDefinitions.Global
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
@@ -69,11 +69,8 @@ namespace S1ObjectDefinitions.Global
 			int sy = -(((count) * 16) / 2) + 8;
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < count; i++)
-			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset(0, sy + (i * 16));
-				sprs.Add(tmp);
-			}
+				sprs.Add(new Sprite(sprite, 0, sy + (i * 16)));
+			
 			return new Sprite(sprs.ToArray());
 		}
 	}

@@ -10,11 +10,6 @@ namespace S2ObjectDefinitions.MCZ
 		private Sprite[] sprite = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '6')
@@ -29,12 +24,8 @@ namespace S2ObjectDefinitions.MCZ
 			Sprite[] sprites = new Sprite[3];
 			
 			sprites[0] = new Sprite(sprite[0]);
-			
-			sprites[1] = new Sprite(sprite[0]);
-			sprites[1].Offset(0x40, 0x40);
-			
-			sprites[2] = new Sprite(sprite[0]);
-			sprites[2].Offset(-0x40, 0x40);
+			sprites[1] = new Sprite(sprite[0], 0x40, 0x40);
+			sprites[2] = new Sprite(sprite[0], -0x40, 0x40);
 			
 			sprite[1] = new Sprite(sprites);
 			
@@ -46,6 +37,11 @@ namespace S2ObjectDefinitions.MCZ
 				},
 				(obj) => ((obj.PropertyValue == 0) ? 0 : 1),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties

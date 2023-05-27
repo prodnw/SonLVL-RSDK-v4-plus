@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.HTZ
 	class LiftEnd : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[4];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -29,7 +29,6 @@ namespace S2ObjectDefinitions.HTZ
 				sprites[3] = new Sprite(sheet.GetSection(92, 888, 0, 0), -9, -24);
 			}
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Sprite ID", typeof(int), "Extended",
 				"What sprite this Lift End should use.", null, new Dictionary<string, int>
 				{
@@ -44,7 +43,7 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
 		}
 
 		public override byte DefaultSubtype
@@ -76,12 +75,12 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[System.Math.Min((int)subtype, 3)];
+			return sprites[subtype & 3];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

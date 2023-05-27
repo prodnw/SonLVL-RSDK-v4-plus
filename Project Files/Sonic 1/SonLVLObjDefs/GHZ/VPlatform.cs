@@ -7,37 +7,34 @@ namespace S1ObjectDefinitions.GHZ
 {
 	class VPlatform : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(50, 18, 64, 32), -32, -14);
+			sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(50, 18, 64, 32), -32, -14);
 			
-			BitmapBits overlay = new BitmapBits(2, 129);
-			overlay.DrawLine(6, 0, 0, 0, 128); // LevelData.ColorWhite
-			debug = new Sprite(overlay, 0, -64);
+			// tagging this area with LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(65, 129);
+			bitmap.DrawRectangle(6, 0, 0, 63, 32); // top box
+			bitmap.DrawRectangle(6, 0, 96, 63, 32); // bottom box
+			bitmap.DrawLine(6, 32, 10, 32, 106); // movement line
+			debug = new Sprite(bitmap, -32, -58);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
 				"The starting direction of this Platform.", null, new Dictionary<string, int>
 				{
 					{ "Upwards", 0 },
 					{ "Downwards", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)(int)value);
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -47,22 +44,22 @@ namespace S1ObjectDefinitions.GHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 1) ? "Start Downwards" : "Start Upwards";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.HPZ
 		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("HPZ/Objects.gif");
@@ -27,9 +22,7 @@ namespace S2ObjectDefinitions.HPZ
 			List<Sprite> sprs = new List<Sprite>();
 			
 			for (int i = 0; i <= 7; i++)
-			{
 				sprs.Add(new Sprite(frames[(i == 7) ? 2 : 1], 0, ((i+1) * 6)));
-			}
 			
 			frames[3] = new Sprite(sprs.ToArray());
 			
@@ -49,6 +42,11 @@ namespace S2ObjectDefinitions.HPZ
 				},
 				(obj) => (obj.PropertyValue & 0x80),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

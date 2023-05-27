@@ -15,7 +15,7 @@ namespace S1ObjectDefinitions.MZ
 			BitmapBits sheet = LevelData.GetSpriteSheet("MZ/Objects.gif");
 			
 			// this is kinda iffy
-			// if i go `[2][4]` then the compilter gets mad
+			// if i go `[2][4]` then the compiler gets mad
 			// and i don't want to go `[2,4]` because i need to get the entire table which (i think) i can only do if i declare it like this
 			// i dunno as long as it works it's fine ig
 			Sprite[][] frames = new Sprite[2][];
@@ -63,11 +63,6 @@ namespace S1ObjectDefinitions.MZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

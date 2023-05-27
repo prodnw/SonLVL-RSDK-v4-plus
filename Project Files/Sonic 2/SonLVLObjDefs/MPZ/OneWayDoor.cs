@@ -13,9 +13,8 @@ namespace S2ObjectDefinitions.MPZ
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(195, 191, 24, 64), -12, -32);
-			
 			sprites[1] = new Sprite(sprites[0], true, false);
-				
+			
 			properties[0] = new PropertySpec("Open From", typeof(int), "Extended",
 				"Which direction this Door should be opened from.", null, new Dictionary<string, int>
 				{
@@ -29,11 +28,6 @@ namespace S2ObjectDefinitions.MPZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

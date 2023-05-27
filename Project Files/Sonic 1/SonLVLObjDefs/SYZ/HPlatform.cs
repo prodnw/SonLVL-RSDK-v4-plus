@@ -37,11 +37,6 @@ namespace S1ObjectDefinitions.SYZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -49,7 +44,7 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 1) ? "Start Right" : "Start Left";
 		}
 
 		public override Sprite Image

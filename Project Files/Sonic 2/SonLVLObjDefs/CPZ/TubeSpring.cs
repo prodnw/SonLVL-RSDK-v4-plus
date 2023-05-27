@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.CPZ
 			properties[2] = new PropertySpec("Collision Plane", typeof(bool), "Extended",
 				"Which Collision Plane this Spring should set the Player too upon launch.", null, new Dictionary<string, int>
 				{
-					{ "Don't set Collision Plane", 0 },
+					{ "Don't Set", 0 },
 					{ "Plane A", 2 },
 					{ "Plane B", 4 }
 				},
@@ -54,11 +54,6 @@ namespace S2ObjectDefinitions.CPZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

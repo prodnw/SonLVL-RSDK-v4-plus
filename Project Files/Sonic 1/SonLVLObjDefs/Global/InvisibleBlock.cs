@@ -8,14 +8,9 @@ namespace S1ObjectDefinitions.Global
 {
 	class InvisibleBlock : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[3];
 		private readonly Sprite[] sprites = new Sprite[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Display.gif");
@@ -23,16 +18,15 @@ namespace S1ObjectDefinitions.Global
 			sprites[1] = new Sprite(sheet.GetSection(17, 176, 16, 14), -8, -7);
 			sprites[2] = new Sprite(sheet.GetSection(1, 190, 16, 14), -8, -7);
 			
-			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Width", typeof(int), "Extended",
 				"How wide the Invisible Block will be.", null,
 				(obj) => (obj.PropertyValue >> 4) + 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 15) | (byte)(Math.Max((((((int)value) & 15) << 4) - 1), 0))));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)(Math.Max((((((int)value) & 0x0f) << 4) - 1), 0))));
 			
 			properties[1] = new PropertySpec("Height", typeof(int), "Extended",
 				"How tall the Invisible Block will be.", null,
-				(obj) => (obj.PropertyValue & 15) + 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 240) | (byte)(Math.Max(((((int)value) & 15) - 1), 0))));
+				(obj) => (obj.PropertyValue & 0x0f) + 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)(Math.Max(((((int)value) & 0x0f) - 1), 0))));
 			
 			properties[2] = new PropertySpec("Mode", typeof(int), "Extended",
 				"Which behaviour the Invisible Block will assume.", null, new Dictionary<string, int>
@@ -43,6 +37,11 @@ namespace S1ObjectDefinitions.Global
 				},
 				(obj) => ((V4ObjectEntry)obj).State,
 				(obj, value) => ((V4ObjectEntry)obj).State = ((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -72,24 +71,21 @@ namespace S1ObjectDefinitions.Global
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int width = obj.PropertyValue >> 4;
-			int height = obj.PropertyValue & 15;
-			width += 1; height += 1;
+			int width = (obj.PropertyValue >> 4) + 1;
+			int height = (obj.PropertyValue & 0x0f) + 1;
 			
-			int sx = (obj.PropertyValue & 240) << 15;
-			int sy = (obj.PropertyValue & 15) << 19;
-			sx >>= 16; sy >>= 16;
+			int sx = (obj.PropertyValue & 0xf0) >> 1;
+			int sy = (obj.PropertyValue & 0x0f) << 3;
 			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					Sprite tmp = new Sprite(sprites[Math.Min(((V4ObjectEntry)obj).State, 2)]);
-					tmp.Offset(-sx + (j * 16), -sy + (i * 16));
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprites[Math.Min(((V4ObjectEntry)obj).State, 2)], -sx + (j * 16), -sy + (i * 16)));
 				}
 			}
+			
 			return new Sprite(sprs.ToArray());
 		}
 	}

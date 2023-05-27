@@ -11,11 +11,6 @@ namespace S1ObjectDefinitions.Global
 		private PropertySpec[] properties;
 		private readonly Sprite[] sprites = new Sprite[8];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Items.gif");
@@ -38,7 +33,7 @@ namespace S1ObjectDefinitions.Global
 					{ "6 Spikes - Spaced", 12 }
 				},
 				(obj) => obj.PropertyValue & 12,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 243) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~12) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Orientation", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
@@ -49,7 +44,7 @@ namespace S1ObjectDefinitions.Global
 					{ "Down", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 252) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Moving", typeof(int), "Extended",
 				"If the Spikes should peek in and out.", null, new Dictionary<string, int>
@@ -58,12 +53,12 @@ namespace S1ObjectDefinitions.Global
 					{ "True", 128 }
 				},
 				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 127) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (byte)((int)value)));
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -89,7 +84,6 @@ namespace S1ObjectDefinitions.Global
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			int temp = obj.PropertyValue & 15;
-			Sprite tmp;
 			List<Sprite> sprs = new List<Sprite>();
 			switch (temp)
 			{
@@ -101,34 +95,23 @@ namespace S1ObjectDefinitions.Global
 				case 5: // 1 Spike (Right)
 				case 6: // 1 Spike (Left)
 				case 7: // 1 Spike (Down)
-					tmp = new Sprite(sprites[temp]);
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprites[temp]));
 					break;
 				
 				case 8:  // 3 Spikes (Spaced Out) (Up)
 				case 11: // 3 Spikes (Spaced Out) (Down)
 					temp -= 4;
-					tmp = new Sprite(sprites[temp]);
-					tmp.Offset(-24, 0);
-					sprs.Add(tmp);
-					tmp = new Sprite(sprites[temp]);
-					sprs.Add(tmp);
-					tmp = new Sprite(sprites[temp]);
-					tmp.Offset(24, 0);
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprites[temp], -24, 0));
+					sprs.Add(new Sprite(sprites[temp]));
+					sprs.Add(new Sprite(sprites[temp], 24, 0));
 					break;
 				
 				case 9:  // 3 Spikes (Spaced Out) (Right)
 				case 10: // 3 Spikes (Spaced Out) (Left)
 					temp -= 4;
-					tmp = new Sprite(sprites[temp]);
-					tmp.Offset(0, -24);
-					sprs.Add(tmp);
-					tmp = new Sprite(sprites[temp]);
-					sprs.Add(tmp);
-					tmp = new Sprite(sprites[temp]);
-					tmp.Offset(0, 24);
-					sprs.Add(tmp);
+					sprs.Add(new Sprite(sprites[temp], 0, -24));
+					sprs.Add(new Sprite(sprites[temp]));
+					sprs.Add(new Sprite(sprites[temp], 0, 24));
 					break;
 					
 				case 12: // 6 Spikes (Spaced Out) (Up)
@@ -136,11 +119,7 @@ namespace S1ObjectDefinitions.Global
 					temp -= 8;
 					int sx = -60;
 					for (int i = 0; i < 6; i++)
-					{
-						tmp = new Sprite(sprites[temp]);
-						tmp.Offset((sx+=24)-24, 0);
-						sprs.Add(tmp);
-					}
+						sprs.Add(new Sprite(sprites[temp], (sx+=24)-24, 0));
 					break;
 					
 				case 13: // 6 Spikes (Spaced Out) (Right)
@@ -148,11 +127,7 @@ namespace S1ObjectDefinitions.Global
 					temp -= 8;
 					int sy = -60;
 					for (int i = 0; i < 6; i++)
-					{
-						tmp = new Sprite(sprites[temp]);
-						tmp.Offset(0, (sy+=24)-24);
-						sprs.Add(tmp);
-					}
+						sprs.Add(new Sprite(sprites[temp], 0, (sy+=24)-24));
 					break;
 			}
 			return new Sprite(sprs.ToArray());

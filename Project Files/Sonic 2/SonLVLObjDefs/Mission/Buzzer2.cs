@@ -8,9 +8,9 @@ namespace S2ObjectDefinitions.Mission
 {
 	class Buzzer2 : ObjectDefinition
 	{
-		private Sprite sprite;
-		private PropertySpec[] properties;
-
+		private PropertySpec[] properties = new PropertySpec[3];
+		private Sprite[] sprites = new Sprite[2];
+		
 		public override void Init(ObjectData data)
 		{
 			Sprite[] sprites = new Sprite[2];
@@ -28,9 +28,9 @@ namespace S2ObjectDefinitions.Mission
 				sprites[1] = new Sprite(sheet.GetSection(137, 331, 6, 5), 5, -8);
 			}
 			
-			sprite = new Sprite(sprites);
+			sprites[0] = new Sprite(sprites);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			properties = new PropertySpec[3];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction the Buzzer will be facing initially.", null, new Dictionary<string, int>
 				{
@@ -42,12 +42,12 @@ namespace S2ObjectDefinitions.Mission
 			
 			properties[1] = new PropertySpec("Cooldown", typeof(int), "Extended",
 				"How long this Buzzer's pauses should be, in frames.", null,
-				(obj) => Math.Max(((V4ObjectEntry)obj).Value0, 0),
+				(obj) => (((V4ObjectEntry)obj).Value0 > 0) ? ((V4ObjectEntry)obj).Value0 : 256,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 			
 			properties[2] = new PropertySpec("Speed", typeof(decimal), "Extended",
 				"The speed at which this Buzzer should move horizontally, in pixels per frame.", null,
-				(obj) => Math.Max(((decimal)(((V4ObjectEntry)obj).Value1)) / 100m, 0),
+				(obj) => (decimal)((((V4ObjectEntry)obj).Value1 > 1) ? ((V4ObjectEntry)obj).Value1 : 100),
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)(((decimal)value) * 100m));
 		}
 
@@ -78,12 +78,12 @@ namespace S2ObjectDefinitions.Mission
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[subtype & 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[obj.PropertyValue & 1];
 		}
 	}
 }

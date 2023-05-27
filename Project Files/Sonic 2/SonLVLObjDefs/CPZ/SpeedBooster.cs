@@ -27,18 +27,13 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Fast", 0 },
 					{ "Slow", 1 }
 				},
-				(obj) => (obj.PropertyValue == 0 ? 0 : 1),
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,14 +43,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Fast";
-				default:
-				case 1:
-					return "Slow";
-			}
+			return (subtype == 0) ? "Fast Booster" : "Slow Booster";
 		}
 
 		public override Sprite Image

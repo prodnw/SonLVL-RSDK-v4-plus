@@ -20,11 +20,6 @@ namespace S1ObjectDefinitions.SBZ
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(239, 239, 16, 16), -8, -8);
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;

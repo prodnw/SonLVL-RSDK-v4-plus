@@ -8,30 +8,29 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class Lift : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
+			Sprite[] frames = new Sprite[2];
+			
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("HTZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(102, 1, 56, 90), -28, -63);
-				sprites[1] = new Sprite(sheet.GetSection(109, 212, 64, 21), -32, 27);
+				frames[0] = new Sprite(sheet.GetSection(102, 1, 56, 90), -28, -63);
+				frames[1] = new Sprite(sheet.GetSection(109, 212, 64, 21), -32, 27);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(73, 848, 56, 90), -28, -63);
-				sprites[1] = new Sprite(sheet.GetSection(1, 953, 64, 21), -32, 27);
+				frames[0] = new Sprite(sheet.GetSection(73, 848, 56, 90), -28, -63);
+				frames[1] = new Sprite(sheet.GetSection(1, 953, 64, 21), -32, 27);
 			}
 			
-			properties = new PropertySpec[2];
+			sprites[0] = new Sprite(frames);
+			sprites[1] = new Sprite(sprites[0], true, false);
+			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far this Lift will go, in pixels.", null,
 				(obj) => obj.PropertyValue << 4,
@@ -45,6 +44,11 @@ namespace S2ObjectDefinitions.HTZ
 				},
 				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -64,30 +68,17 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprites[0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < 2; i++)
-			{
-				Sprite sprite = new Sprite(sprites[i]);
-				sprite.Flip((((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)), false);
-				sprs.Add(sprite);
-			}
-			return new Sprite(sprs.ToArray());
+			return sprites[(((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

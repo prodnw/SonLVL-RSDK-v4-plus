@@ -14,7 +14,7 @@ namespace S1ObjectDefinitions.Mission
 		{
 			Sprite frame = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
 			
-			BitmapBits bitmap = new BitmapBits(18, 18); // LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(18, 18);
 			bitmap.DrawRectangle(6, 0, 0, 17, 17); // LevelData.ColorWhite
 			sprite = new Sprite(frame, new Sprite(bitmap, -9, -9));
 			
@@ -32,11 +32,6 @@ namespace S1ObjectDefinitions.Mission
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

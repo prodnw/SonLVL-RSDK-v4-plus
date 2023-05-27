@@ -8,7 +8,7 @@ namespace S1ObjectDefinitions.Mission
 {
 	class Safty : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
@@ -17,14 +17,9 @@ namespace S1ObjectDefinitions.Mission
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return null;
@@ -32,25 +27,25 @@ namespace S1ObjectDefinitions.Mission
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			// Draw a line from this object's position to its falling bounds, and then draw a line across those falling bounds
 			// (0x0580 is a value hardcoded in the script)
-			int ymin = Math.Min(obj.Y, (obj.Y - obj.Y) + 0x0580);
-			int ymax = Math.Max(obj.Y, (obj.Y - obj.Y) + 0x0580);
+			int ymin = Math.Min(obj.Y, 0x0580);
+			int ymax = Math.Max(obj.Y, 0x0580);
 			BitmapBits bmp = new BitmapBits(257, ymax - ymin + 1);
 			
 			// tagging this area with LevelData.ColorWhite

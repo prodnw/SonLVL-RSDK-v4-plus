@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.WFZ
 		private Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(1, 69, 64, 64), -64, -32);
@@ -33,6 +28,11 @@ namespace S2ObjectDefinitions.WFZ
 				"If this Panel should be used for the ending cutscene.", null,
 				(obj) => (obj.PropertyValue == 0x7F),
 				(obj, value) => obj.PropertyValue = (byte)(((bool)value == false) ? 0 : 0x7F));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

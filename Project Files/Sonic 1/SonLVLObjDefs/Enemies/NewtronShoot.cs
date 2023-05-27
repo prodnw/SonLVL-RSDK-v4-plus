@@ -8,7 +8,7 @@ namespace S1ObjectDefinitions.Enemies
 	class NewtronShoot : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
@@ -33,7 +33,6 @@ namespace S1ObjectDefinitions.Enemies
 			// However, since they're displayed alphabetically, they're the other way around instead :(
 			// At least there's descriptions, though
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Fire In Dir", typeof(int), "Extended",
 				"If the Newtroon should only shoot in a specific direction, direction decided by Fire Direction. Only has effect in Origins's Mission Mode.", null, new Dictionary<string, int>
 				{
@@ -58,11 +57,6 @@ namespace S1ObjectDefinitions.Enemies
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -85,7 +79,6 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			// Probably could just flip frame 1, but may as well use the dedicated flip sprite anyways
 			return sprites[obj.PropertyValue & 1];
 		}
 	}

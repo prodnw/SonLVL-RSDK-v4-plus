@@ -64,16 +64,16 @@ namespace S2ObjectDefinitions.MCZ
 	
 	abstract class Generic : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetSprite();
+		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
-		public override void Init(ObjectData data)
-		{
-			img = GetSprite();
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -83,17 +83,17 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public virtual Sprite GetSprite()

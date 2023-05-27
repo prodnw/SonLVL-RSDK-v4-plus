@@ -7,9 +7,9 @@ namespace S1ObjectDefinitions.Enemies
 {
 	class Jaws : ObjectDefinition
 	{
-		private Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[2];
-
+		private Sprite[] sprites = new Sprite[2];
+		
 		public override void Init(ObjectData data)
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
@@ -43,11 +43,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

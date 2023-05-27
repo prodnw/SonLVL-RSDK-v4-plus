@@ -10,11 +10,6 @@ namespace S2ObjectDefinitions.OOZ
 		private readonly Sprite[] sprites = new Sprite[3];
 		private PropertySpec[] properties = new PropertySpec[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
@@ -40,6 +35,11 @@ namespace S2ObjectDefinitions.OOZ
 				"If the Swinging Platform's movement should be inverted, compared to normal Swing Platforms.", null,
 				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

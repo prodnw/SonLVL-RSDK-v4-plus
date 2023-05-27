@@ -6,10 +6,10 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Mode" description="How this Signpost should behave." type="Modes" startbit="0" length="8" />
+    <Property name="Mode" description="How this Signpost should behave." type="modes" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="Modes">
+    <Enum name="modes">
       <EnumMember name="Normal" />
       <EnumMember name="Follow Bounds" value="3" />
     </Enum>

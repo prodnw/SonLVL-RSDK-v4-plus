@@ -10,11 +10,6 @@ namespace S2ObjectDefinitions.MCZ
 		private Sprite sprite;
 		private Sprite debug;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(201, 0, 30, 148), -15, -74);
@@ -22,6 +17,11 @@ namespace S2ObjectDefinitions.MCZ
 			BitmapBits overlay = new BitmapBits(31, 149);
 			overlay.DrawRectangle(6, 0, 0, 30, 148);
 			debug = new Sprite(overlay, -15, -74 - 95); // pardon the weird formatting - -74 is sprite offset, 95 is movement offset
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override string SubtypeName(byte subtype)

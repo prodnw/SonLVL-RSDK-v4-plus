@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.MCZ
 		private readonly Sprite[] sprites = new Sprite[3];
 		private PropertySpec[] properties = new PropertySpec[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MCZ/Objects.gif");
@@ -36,6 +31,11 @@ namespace S2ObjectDefinitions.MCZ
 				},
 				(obj) => (Math.Max(obj.PropertyValue, (byte)1) - 1) & 8,
 				(obj, value) => obj.PropertyValue = (byte)((((Math.Max(obj.PropertyValue, (byte)1) - 1) & ~8) | (byte)(((int)value))) + 1));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

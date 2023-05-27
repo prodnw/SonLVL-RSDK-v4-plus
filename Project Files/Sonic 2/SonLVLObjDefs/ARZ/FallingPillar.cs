@@ -48,21 +48,9 @@ namespace S2ObjectDefinitions.ARZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-				default:
-					return "Falling";
-				case 1:
-					return "Static";
-			}
+			return (subtype == 1) ? "Static Platform" : "Falling Platform";
 		}
 
 		public override Sprite Image

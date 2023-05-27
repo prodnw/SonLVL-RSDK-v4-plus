@@ -37,7 +37,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "Flip", 0 },
 					{ "X Flip", 0x40 }
 				},
-				(obj) => obj.PropertyValue & 64,
+				(obj) => obj.PropertyValue & 0x40,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x40) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Behaviour", typeof(int), "Extended",
@@ -53,11 +53,6 @@ namespace S2ObjectDefinitions.CPZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

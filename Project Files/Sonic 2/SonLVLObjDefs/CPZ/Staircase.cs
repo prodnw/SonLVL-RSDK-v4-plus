@@ -28,12 +28,10 @@ namespace S2ObjectDefinitions.CPZ
 			debug[1, 1] = new Sprite(bitmap, -16, -112);
 			
 			// down, flip
-			debug[0, 1] = new Sprite(debug[1, 1]);
-			debug[0, 1].Flip(false, true);
+			debug[0, 1] = new Sprite(debug[1, 1], false, true);
 			
 			// up, flip
-			debug[1, 0] = new Sprite(debug[0, 0]);
-			debug[1, 0].Flip(false, true);
+			debug[1, 0] = new Sprite(debug[0, 0], false, true);
 			
 			properties[0] = new PropertySpec("Open Towards", typeof(int), "Extended",
 				"Which way this staircase should open.", null, new Dictionary<string, int>
@@ -48,17 +46,12 @@ namespace S2ObjectDefinitions.CPZ
 			properties[1] = new PropertySpec("Flip", typeof(bool), "Extended",
 				"If this staircase should face the other direction, X-wise.", null,
 				(obj) => (((V4ObjectEntry)obj).Direction != RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)(((bool)value == true) ? 1 : 0));
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

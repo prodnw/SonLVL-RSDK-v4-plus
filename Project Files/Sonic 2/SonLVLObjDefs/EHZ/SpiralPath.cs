@@ -8,12 +8,12 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class SpiralPath : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(127, 113, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(127, 113, 16, 16), -8, -8);
 			
 			// SpiralPath_offsetTable
 			int[] offsetTable = { 
@@ -58,11 +58,6 @@ namespace S2ObjectDefinitions.EHZ
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return null;
@@ -70,17 +65,17 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

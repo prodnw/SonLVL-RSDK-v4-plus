@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.CNZ
 	class TargetBumper : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[3];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
@@ -17,7 +17,6 @@ namespace S2ObjectDefinitions.CNZ
 			sprites[1] = new Sprite(sheet.GetSection(1, 229, 24, 24), -12, -12);
 			sprites[2] = new Sprite(sheet.GetSection(60, 140, 12, 32), -6, -16);
 			
-			properties = new PropertySpec[2];
 			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
 				"How the Bumper is facing.", null, new Dictionary<string, int>
 				{
@@ -27,8 +26,8 @@ namespace S2ObjectDefinitions.CNZ
 					{ "Horizontal (Right)", 3 },
 					{ "Horizontal (Left)", 4 }
 				},
-				(obj) => obj.PropertyValue & 63,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 192) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x3f,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x3f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Combo Type", typeof(int), "Extended",
 				"The conditions needed for this Bumper's combo reward.", null, new Dictionary<string, int>
@@ -38,18 +37,13 @@ namespace S2ObjectDefinitions.CNZ
 					{ "Right (obj[-1] & obj[-2] are required)", 128 },
 					{ "Standalone", 192 }
 				},
-				(obj) => obj.PropertyValue & 192,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 63) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0xc0,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xc0) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -78,7 +72,7 @@ namespace S2ObjectDefinitions.CNZ
 			
 			int frame = 0;
 			bool flip = false;
-			switch (obj.PropertyValue & 63)
+			switch (obj.PropertyValue & 0x3f)
 			{
 				case 2:
 					flip = true;
@@ -93,9 +87,7 @@ namespace S2ObjectDefinitions.CNZ
 					frame = 2;
 					break;
 			}
-			Sprite sprite = new Sprite(sprites[frame]);
-			sprite.Flip(flip, false);
-			return sprite;
+			return new Sprite(sprites[frame], flip, false);
 		}
 		
 		// For the combo variable, maybe we could draw lines to the connecting objects but i dunno if that'd be too cluttered...

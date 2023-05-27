@@ -30,7 +30,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Frame ID" description="Which sprite this object will use." type="frameids" startbit="0" length="4" />
+    <Property name="Frame ID" description="Which sprite this object will use." type="frameids" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frameids">
@@ -45,42 +45,15 @@
       <EnumMember name="Emerald 7" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Frame ID" value="Eggman - Juggling" />
-      <ImageRef image="juggling" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Eggman - Tantrum" />
-      <ImageRef image="tantrum" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 1" />
-      <ImageRef image="emerald1" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 2" />
-      <ImageRef image="emerald2" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 3" />
-      <ImageRef image="emerald3" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 4" />
-      <ImageRef image="emerald4" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 5" />
-      <ImageRef image="emerald5" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 6" />
-      <ImageRef image="emerald6" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Frame ID" value="Emerald 7" />
-      <ImageRef image="emerald7" />
-    </DisplayOption>
-  </Display>
+  <Subtypes>
+    <Subtype id="00" name="Eggman - Juggling" image="juggling" />
+    <Subtype id="01" name="Eggman - Tantrum" image="tantrum" />
+    <Subtype id="02" name="Emerald 1" image="emerald1" />
+    <Subtype id="03" name="Emerald 2" image="emerald2" />
+    <Subtype id="04" name="Emerald 3" image="emerald3" />
+    <Subtype id="05" name="Emerald 4" image="emerald4" />
+    <Subtype id="06" name="Emerald 5" image="emerald5" />
+    <Subtype id="07" name="Emerald 6" image="emerald6" />
+    <Subtype id="08" name="Emerald 7" image="emerald7" />
+  </Subtypes>
 </ObjDef>

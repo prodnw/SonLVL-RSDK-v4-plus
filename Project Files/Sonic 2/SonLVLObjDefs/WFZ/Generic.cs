@@ -124,11 +124,6 @@ namespace S2ObjectDefinitions.WFZ
 			sprite = GetSprite();
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;

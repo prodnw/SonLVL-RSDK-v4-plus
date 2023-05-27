@@ -25,11 +25,6 @@ namespace S2ObjectDefinitions.WFZ
 			debug = new Sprite(bitmap, -24, 0);
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;

@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.CNZ
 	class HFlipper : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -22,10 +22,8 @@ namespace S2ObjectDefinitions.CNZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(189, 402, 47, 26), -25, -9);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Where the Flipper is facing.", null, new Dictionary<string, int>
 				{
@@ -41,11 +39,6 @@ namespace S2ObjectDefinitions.CNZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -53,15 +46,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Facing Right";
-				case 1:
-					return "Facing Left";
-				default:
-					return "Unknown";
-			}
+			return (subtype == 0) ? "Facing Right" : "Facing Left";
 		}
 
 		public override Sprite Image

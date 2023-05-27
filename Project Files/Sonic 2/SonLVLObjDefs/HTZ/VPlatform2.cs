@@ -7,18 +7,13 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class VPlatform2 : ObjectDefinition
 	{
-		private Sprite img;
+		private Sprite sprite;
 		private Sprite debug;
 		private PropertySpec[] properties;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(191, 126, 64, 96), -32, -52);
+			sprite = new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(191, 126, 64, 96), -32, -52);
 			
 			BitmapBits overlay = new BitmapBits(2, 65);
 			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
@@ -35,9 +30,9 @@ namespace S2ObjectDefinitions.HTZ
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
-		public override byte DefaultSubtype
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -52,17 +47,17 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

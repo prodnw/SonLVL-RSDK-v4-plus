@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.ARZ
 	class BreakablePillar : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -24,7 +24,6 @@ namespace S2ObjectDefinitions.ARZ
 			frames[1] = new Sprite(sheet.GetSection(71, 130, 32, 16), -16, 8); // grass frame
 			sprites[1] = new Sprite(frames);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Hide Grass", typeof(bool), "Extended",
 				"If the bottom of this Pillar should have grass or not. Purely cosmetic, does not affect actual in-game behaviour.", null, 
 				(obj) => (obj.PropertyValue > 0),
@@ -33,12 +32,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,7 +42,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return (subtype > 0) ? "Hide Grass" : "Show Grass";
 		}
 
 		public override Sprite Image

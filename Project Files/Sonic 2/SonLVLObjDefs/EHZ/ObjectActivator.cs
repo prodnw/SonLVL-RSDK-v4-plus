@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.EHZ
 {
 	class ObjectActivator : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -20,7 +20,6 @@ namespace S2ObjectDefinitions.EHZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Activate Offset", typeof(int), "Extended",
 				"The Entity Pos offset of the Object to be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,

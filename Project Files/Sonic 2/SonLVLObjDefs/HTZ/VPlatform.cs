@@ -19,8 +19,8 @@ namespace S2ObjectDefinitions.HTZ
 			BitmapBits overlay = new BitmapBits(65, 161);
 			overlay.DrawRectangle(6, 0, 0, 63, 31); // top box
 			overlay.DrawRectangle(6, 0, 128, 63, 31); // bottom box
-			overlay.DrawLine(6, 32, -12, 32, -12 + 128); // movement line
-			debug = new Sprite(overlay, -32, -64 + 12);
+			overlay.DrawLine(6, 32, 12, 32, 12 + 128); // movement line
+			debug = new Sprite(overlay, -32, -64 - 12);
 			
 			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
 				"The starting direction of this Platform.", null, new Dictionary<string, int>

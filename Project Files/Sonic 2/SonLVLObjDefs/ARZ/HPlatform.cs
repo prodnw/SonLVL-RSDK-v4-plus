@@ -17,14 +17,14 @@ namespace S2ObjectDefinitions.ARZ
 			
 			BitmapBits overlay = new BitmapBits(129, 2);
 			overlay.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
-			debug = new Sprite(overlay, -64, 0);
+			debug = new Sprite(overlay, -64, 8);
 			
 			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Reverse", typeof(int), "Extended",
+				"Reverses platform movement.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "False", 0 },
+					{ "True", 1 }
 				},
 				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
@@ -57,7 +57,12 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int offset = 64;
+			if (obj.PropertyValue == 1)
+			{
+				offset *= -1;
+			}
+			return new Sprite(sprite, offset, 0);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

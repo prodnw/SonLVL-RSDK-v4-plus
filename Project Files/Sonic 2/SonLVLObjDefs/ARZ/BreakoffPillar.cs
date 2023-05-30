@@ -16,13 +16,14 @@ namespace S2ObjectDefinitions.ARZ
 			sprites[0] = new Sprite(sheet.GetSection(59, 42, 56, 56), -28, -32);
 			sprites[1] = new Sprite(sheet.GetSection(140, 80, 32, 8), -16, 24);
 			sprites[2] = new Sprite(sheet.GetSection(173, 38, 32, 37), -16, 32);
-			
-			var bitmap = new BitmapBits(1, 0x40);
-			bitmap.DrawLine(6, 0, 0x00, 0, 0x03); // LevelData.ColorWhite
-			bitmap.DrawLine(6, 0, 0x08, 0, 0x0B);
-			bitmap.DrawLine(6, 0, 0x30, 0, 0x33);
-			bitmap.DrawLine(6, 0, 0x38, 0, 0x3B);
-			debug = new Sprite(bitmap, 0, 33);
+
+			// LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(32, 64);
+			bitmap.DrawRectangle(6, 0, 0, 31, 36);
+			bitmap.DrawLine(6, 16, 0x08 + 32, 16, 0x0B + 32);
+			bitmap.DrawLine(6, 16, 0x10 + 32, 16, 0x13 + 32);
+			bitmap.DrawLine(6, 16, 0x18 + 32, 16, 0x1B + 32);
+			debug = new Sprite(bitmap, -16, 32);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

@@ -15,10 +15,13 @@ namespace S2ObjectDefinitions.ARZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("ARZ/Objects.gif").GetSection(126, 145, 64, 45), -32, -13);
 			
-			BitmapBits overlay = new BitmapBits(2, 62);
-			for (int i = 0; i < 62; i += 12)
-				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
-			debug = new Sprite(overlay, 0, 0);
+			// LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(1, 0x1C);
+			bitmap.DrawLine(6, 0, 0x00, 0, 0x03);
+			bitmap.DrawLine(6, 0, 0x08, 0, 0x0B);
+			bitmap.DrawLine(6, 0, 0x10, 0, 0x13);
+			bitmap.DrawLine(6, 0, 0x18, 0, 0x1B);
+			debug = new Sprite(bitmap, 0, 34);
 			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How this Platform should act upon player contact.", null, new Dictionary<string, int>

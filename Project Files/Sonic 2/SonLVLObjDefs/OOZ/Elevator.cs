@@ -8,12 +8,16 @@ namespace S2ObjectDefinitions.OOZ
 	class Elevator : ObjectDefinition
 	{
 		private Sprite sprite;
+		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(127, 1, 128, 24), -64, -12);
-			
+			BitmapBits overlay = new BitmapBits(128, 24);
+			overlay.DrawRectangle(6, 0, 0, 127, 23); // LevelData.ColorWhite
+			debug = new Sprite(overlay, -64, -12);
+
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the Elevator will go.", null,
 				(obj) => obj.PropertyValue & 0x7f,
@@ -61,15 +65,27 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int dist = (obj.PropertyValue & 127) << 2;
+			if ((obj.PropertyValue & 0x80) == 0)
+			{
+				dist *= -1;
+			}
+			return new Sprite(sprite, 0, -dist + 4);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int dist = (obj.PropertyValue & 127) << 2;
+			/*
 			BitmapBits bitmap = new BitmapBits(2, (2 * dist) + 1);
 			bitmap.DrawLine(6, 0, 0, 0, (2 * dist)); // LevelData.ColorWhite
 			return new Sprite(bitmap, 0, -dist);
+			*/
+			if ((obj.PropertyValue & 0x80) == 0)
+			{
+				dist *= -1;
+			}
+			return new Sprite(debug, 0, dist + 4);
 		}
 	}
 }

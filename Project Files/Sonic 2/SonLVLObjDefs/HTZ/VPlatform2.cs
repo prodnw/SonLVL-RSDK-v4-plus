@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
@@ -19,14 +19,13 @@ namespace S2ObjectDefinitions.HTZ
 			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
 			debug = new Sprite(overlay, 0, -32);
 			
-			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Reverse", typeof(int), "Extended",
+				"Reverses platform movement.", null, new Dictionary<string, int>
 				{
-					{ "Upwards", 0 },
-					{ "Downwards", 1 }
+					{ "False", 0 },
+					{ "True", 1 }
 				},
-				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 		
@@ -57,7 +56,12 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int offset = 32;
+			if (obj.PropertyValue == 1)
+			{
+				offset *= -1;
+			}
+			return new Sprite(sprite, 0, offset);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

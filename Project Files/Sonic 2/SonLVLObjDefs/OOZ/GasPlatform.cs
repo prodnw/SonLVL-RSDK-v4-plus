@@ -15,12 +15,13 @@ namespace S2ObjectDefinitions.OOZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(84, 108, 48, 12), -24, -8);
 			
-			BitmapBits overlay = new BitmapBits(2, 208);
-			overlay.DrawLine(6, 0, 0, 0, 207); // LevelData.ColorWhite
-			debug[0] = new Sprite(overlay, 0, -207);
+			BitmapBits overlay = new BitmapBits(11, 208);
+			overlay.DrawLine(6, 5, 0, 5, 198); // LevelData.ColorWhite
+			overlay.DrawLine(6, 0, 0, 10, 0);
+			debug[0] = new Sprite(overlay, -5, -207);
 			
 			overlay = new BitmapBits(2, 121);
-			overlay.DrawLine(6, 0, 0, 0, 120);
+			overlay.DrawLine(6, 0, 0, 0, 111);
 			debug[1] = new Sprite(overlay, 0, -120);
 			
 			

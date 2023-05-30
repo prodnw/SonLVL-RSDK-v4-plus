@@ -13,10 +13,10 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override void Init(ObjectData data)
 		{
-			int yoffset = -12;
+			int yoffset = 4;
 			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
 			{
-				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 98, 64, 32), -32, -12);
+				sprite = new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(127, 98, 64, 32), -32, -12);a
 			}
 			else
 			{
@@ -24,18 +24,15 @@ namespace S2ObjectDefinitions.EHZ
 				yoffset = -8;
 			}
 			
-			// tagging this area withLevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(193, 33);
-			bitmap.DrawRectangle(6, 0, 0, 63, 31); // left box
-			bitmap.DrawRectangle(6, 128, 0, 63, 31); // right box
-			bitmap.DrawLine(6, 32, -yoffset, 160, -yoffset);
+			BitmapBits bitmap = new BitmapBits(193, 2);
+			bitmap.DrawLine(6, 32, 0, 160, 0);
 			debug = new Sprite(bitmap, -96, yoffset);
 			
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Reverse", typeof(int), "Extended",
+				"Reverses platform movement.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "False", 0 },
+					{ "True", 1 }
 				},
 				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
@@ -68,7 +65,12 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int offset = 64;
+			if (obj.PropertyValue == 1)
+			{
+				offset *= -1;
+			}
+			return new Sprite(sprite, offset, 0);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

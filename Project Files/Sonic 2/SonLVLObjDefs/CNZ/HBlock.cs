@@ -19,14 +19,14 @@ namespace S2ObjectDefinitions.CNZ
 			bitmap.DrawLine(6, 0, 0, 192, 0); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -96, 0);
 			
-			properties[0] = new PropertySpec("Starting Direction", typeof(int), "Extended",
-				"Which direction the Horizontal Block will initially travel in. Overall range is the same between both directions.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Reverse", typeof(int), "Extended",
+				"Reverses block movement.", null, new Dictionary<string, int>
 				{
-					{ "Right", 0 },
-					{ "Left", 1 }
+					{ "False", 0 },
+					{ "True", 1 }
 				},
-				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
+				(obj, value) => obj.PropertyValue = (byte)(int)value);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -56,7 +56,12 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int offset = -96;
+			if (obj.PropertyValue == 1)
+			{
+				offset *= -1;
+			}
+			return new Sprite(sprite, offset, 0);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

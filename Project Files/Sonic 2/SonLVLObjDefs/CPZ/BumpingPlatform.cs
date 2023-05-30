@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private readonly Sprite[] sprites = new Sprite[2];
-		private readonly Sprite[] debug = new Sprite[3];
+		private readonly Sprite[] debug = new Sprite[4];
 
 		public override void Init(ObjectData data)
 		{
@@ -33,14 +33,17 @@ namespace S2ObjectDefinitions.CPZ
 
 			BitmapBits overlay = new BitmapBits(1024, 2);
 			
-			overlay.DrawLine(6, 0, 0, 512, 1); // LevelData.ColorWhite
+			overlay.DrawLine(6, 0, 0, 255, 0); // LevelData.ColorWhite
 			debug[0] = new Sprite(overlay, -128, -2);
 			
-			overlay.DrawLine(6, 0, 0, 768, 1); // LevelData.ColorWhite
+			overlay.DrawLine(6, 0, 0, 383, 0); // LevelData.ColorWhite
 			debug[1] = new Sprite(overlay, -192, -2);
 			
-			overlay.DrawLine(6, 0, 0, 1024, 1); // LevelData.ColorWhite
+			overlay.DrawLine(6, 0, 0, 511, 0); // LevelData.ColorWhite
 			debug[2] = new Sprite(overlay, -256, -2);
+
+			overlay.DrawLine(6, 0, 0, 383, 0); // LevelData.ColorWhite
+			debug[3] = new Sprite(overlay, -192, -2);
 			
 			properties[0] = new PropertySpec("Movement", typeof(int), "Extended",
 				"The way this platform moves.", null, new Dictionary<string, int>
@@ -48,7 +51,7 @@ namespace S2ObjectDefinitions.CPZ
 					{ "One platform, 256px", 0 },
 					{ "Two platforms, 384px", 1 },
 					{ "Two platforms, 512px", 2 },
-					{ "One platforms, 384px", 3 }
+					{ "One platform, 384px", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -71,7 +74,7 @@ namespace S2ObjectDefinitions.CPZ
 				case 2:
 					return "Two platforms, 512px";
 				case 3:
-					return "Two platforms, 512px";
+					return "One platform, 384px";
 			}
 		}
 

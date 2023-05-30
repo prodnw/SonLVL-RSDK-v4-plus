@@ -15,18 +15,15 @@ namespace S2ObjectDefinitions.HTZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(191, 223, 64, 32), -32, -12);
 			
-			// tagging this area withLevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(193, 33);
-			bitmap.DrawRectangle(6, 0, 0, 63, 31); // left box
-			bitmap.DrawRectangle(6, 128, 0, 63, 31); // right box
-			bitmap.DrawLine(6, 32, 12, 160, 12);
-			debug = new Sprite(bitmap, -96, -12);
+			BitmapBits bitmap = new BitmapBits(193, 2);
+			bitmap.DrawLine(6, 32, 0, 160, 0);
+			debug = new Sprite(bitmap, -96, 4);
 			
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Reverse", typeof(int), "Extended",
+				"Reverses platform movement.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "False", 0 },
+					{ "True", 1 }
 				},
 				(obj) => ((obj.PropertyValue == 1) ? 1 : 0),
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
@@ -59,7 +56,12 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			int offset = 64;
+			if (obj.PropertyValue == 1)
+			{
+				offset *= -1;
+			}
+			return new Sprite(sprite, offset, 0);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

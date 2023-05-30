@@ -8,6 +8,7 @@ namespace S2ObjectDefinitions.CNZ
 	class HexBumper : ObjectDefinition
 	{
 		private Sprite img;
+		private Sprite debug;
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
@@ -20,6 +21,10 @@ namespace S2ObjectDefinitions.CNZ
 			{
 				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(581, 343, 48, 32), -24, -16);
 			}
+
+			BitmapBits bitmap = new BitmapBits(193, 2);
+			bitmap.DrawLine(6, 0, 0, 192, 0); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -96, 0);
 			
 			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Moving", typeof(int), "Extended",
@@ -60,6 +65,15 @@ namespace S2ObjectDefinitions.CNZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return img;
+		}
+
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			if (obj.PropertyValue == 1)
+			{
+				return debug;
+			}
+			return new Sprite();
 		}
 	}
 }

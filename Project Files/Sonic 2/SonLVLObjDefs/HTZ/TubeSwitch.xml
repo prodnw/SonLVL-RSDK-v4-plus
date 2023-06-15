@@ -33,4 +33,12 @@
   <DefaultImage>
     <ImageSetRef set="tubeswitch" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Enter From Left">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="01" name="Enter From Right">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

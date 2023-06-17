@@ -2,85 +2,50 @@ using SonicRetro.SonLVL.API;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System;
 
 namespace S2ObjectDefinitions.OOZ
 {
 	class OilFall : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-
-		private readonly Sprite[] spritesSmall = new Sprite[8];
-		private readonly Sprite[] spritesSmallFlip = new Sprite[8];
-		private readonly Sprite[] spritesLarge = new Sprite[8];
-		private readonly Sprite[] spritesLargeDouble = new Sprite[8];
+		private Sprite[] sprites = new Sprite[6];
+		private PropertySpec[] properties = new PropertySpec[2];
 
 		public override void Init(ObjectData data)
 		{
-			// this does not perfectly mimic the rendering logic, but it does use the same spritesheet data and stuff
-
 			BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
-			Sprite[] sprs;
-
-			spritesSmall[0] = new Sprite(sheet.GetSection(182, 51, 6, 32), -2, -16);
-			spritesSmall[1] = new Sprite(sheet.GetSection(182, 59, 6, 32), -2, -16);
-
-			for (int i = 2; i <= 7; i++)
-			{
-				sprs = new Sprite[i];
-				for (int j = 0; j < i; j++)
+			sprites[0] = new Sprite(sheet.GetSection(182, 51, 6, 32), -2, -16);
+			sprites[1] = new Sprite(sheet.GetSection(182, 148, 6, 32), -2, -16);
+			sprites[2] = new Sprite(sheet.GetSection(182, 59, 6, 32), -2, -16);
+			sprites[3] = new Sprite(sheet.GetSection(182, 156, 6, 32), -2, -16);
+			sprites[4] = new Sprite(sheet.GetSection(189, 75, 16, 32), -8, -16);
+			sprites[5] = new Sprite(sheet.GetSection(189, 107, 48, 32), -24, -16);
+			
+			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
+				"How long this Oil Fall should run for.", null,
+				(obj) => obj.PropertyValue & 7,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
+			
+			properties[1] = new PropertySpec("Frame", typeof(int), "Extended",
+				"Which sprite this Oil Fall should display.", null, new Dictionary<string, int>
 				{
-					sprs[j] = new Sprite(spritesSmall[1], 0, 32 * (j));
-				}
-				spritesSmall[i] = new Sprite(sprs);
-				spritesSmall[i].Offset(0, (i - 1) * -16);
-			}
-
-			spritesSmallFlip[0] = new Sprite(sheet.GetSection(182, 156, 6, 32), -2, -16);
-			spritesSmallFlip[1] = new Sprite(sheet.GetSection(182, 156, 6, 32), -2, -16);
-
-			for (int i = 2; i <= 7; i++)
-			{
-				sprs = new Sprite[i];
-				for (int j = 0; j < i; j++)
-				{
-					sprs[j] = new Sprite(spritesSmallFlip[1], 0, 32 * (j));
-				}
-				spritesSmallFlip[i] = new Sprite(sprs);
-				spritesSmallFlip[i].Offset(0, (i - 1) * -16);
-			}
-
-			spritesLarge[0] = new Sprite(sheet.GetSection(189, 75, 16, 32), -8, -16);
-			spritesLarge[1] = new Sprite(sheet.GetSection(189, 107, 16, 32), -8, -16);
-
-			for (int i = 2; i <= 7; i++)
-			{
-				sprs = new Sprite[i];
-				for (int j = 0; j < i; j++)
-				{
-					sprs[j] = new Sprite(spritesLarge[1], 0, 32 * (j));
-				}
-				spritesLarge[i] = new Sprite(sprs);
-				spritesLarge[i].Offset(0, (i - 1) * -16);
-			}
-
-			spritesLargeDouble[0] = new Sprite(sheet.GetSection(189, 107, 48, 32), -24, -16);
-			spritesLargeDouble[1] = new Sprite(sheet.GetSection(189, 107, 48, 32), -24, -16);
-
-			for (int i = 2; i <= 7; i++)
-			{
-				sprs = new Sprite[i];
-				for (int j = 0; j < i; j++)
-				{
-					sprs[j] = new Sprite(spritesLargeDouble[1], 0, 32 * (j));
-				}
-				spritesLargeDouble[i] = new Sprite(sprs);
-				spritesLargeDouble[i].Offset(0, (i - 1) * -16);
-			}	
+					{ "Curve", 0 },
+					{ "Thin", 1 },
+					{ "Wide", 2 },
+					{ "Wide (Double)", 3 }
+				},
+				(obj) => (obj.PropertyValue >> 3) & 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~(3 << 3)) | (byte)(((int)value & 3) << 3)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {  }); }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 0x10; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -95,29 +60,31 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite Image
 		{
-			get { return spritesSmall[0]; }
+			get { return sprites[4]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return spritesSmall[2];
+			return sprites[4];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			if ((obj.PropertyValue & 0x10) == 0x10)
+			int frame = obj.PropertyValue >> 3;
+			
+			if (obj.PropertyValue > 0)
+				frame += 2;
+			else
+				frame &= 1; // original code does this, i don't think this really means anything though..?
+			
+			int length = Math.Max((int)(obj.PropertyValue & 7), 1);
+			int sy = -((length * 32) / 2) + 16;
+			List<Sprite> sprs = new List<Sprite>();
+			for (int i = 0; i < length; i++)
 			{
-				if ((obj.PropertyValue & 0x08) == 0x08)
-				{
-					return spritesLargeDouble[obj.PropertyValue % 8];
-				}
-				return spritesLarge[obj.PropertyValue % 8];
+				sprs.Add(new Sprite(sprites[frame], 0, sy + (i * 32)));
 			}
-			if ((obj.PropertyValue & 0x08) == 0x08)
-			{
-				return spritesSmallFlip[obj.PropertyValue % 8];
-			}
-			return spritesSmall[obj.PropertyValue % 8];
+			return new Sprite(sprs.ToArray());
 		}
 	}
 }

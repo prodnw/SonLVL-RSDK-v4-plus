@@ -10,7 +10,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(158, 95, 8, 8), -4, -4);
 			}
@@ -27,7 +27,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(191, 94, 16, 16), -8, -8);
 			}
@@ -44,7 +44,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(52, 1, 16, 13), -8, -6);
 			}
@@ -61,7 +61,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(1, 1, 16, 31), -8, -15);
 			}
@@ -78,7 +78,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(124, 110, 16, 11), -8, -2);
 			}
@@ -95,7 +95,7 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("HTZ/Objects.gif").GetSection(91, 123, 15, 15), -8, -8);
 			}

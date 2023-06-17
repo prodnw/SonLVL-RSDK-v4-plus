@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.CNZ
 		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Display.gif");
@@ -42,6 +37,11 @@ namespace S2ObjectDefinitions.CNZ
 				},
 				(obj) => obj.PropertyValue & ~4,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override PropertySpec[] CustomProperties

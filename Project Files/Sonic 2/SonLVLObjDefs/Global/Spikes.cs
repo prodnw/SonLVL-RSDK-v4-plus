@@ -28,17 +28,17 @@ namespace S2ObjectDefinitions.Global
 					{ "Left", 2 },
 					{ "Down", 3 }
 				},
-				(obj) => (obj.PropertyValue & 3),
+				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Moving", typeof(int), "Extended",
 				"If these Spikes are retracting or not. Their position in the scene is their extended position.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
-					{ "True", 128 }
+					{ "True", 0x80 }
 				},
-				(obj) => (obj.PropertyValue & 128),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
 				"The entity pos offset of these Spikes' parent. Only applicable if state is set to 5, to be carried by another object.", null,

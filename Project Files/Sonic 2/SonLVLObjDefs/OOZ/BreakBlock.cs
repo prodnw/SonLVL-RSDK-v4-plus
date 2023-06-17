@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.OOZ
 		
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(69, 141, 32, 32), -16, -16);

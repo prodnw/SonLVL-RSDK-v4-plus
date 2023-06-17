@@ -15,7 +15,7 @@ namespace S2ObjectDefinitions.HTZ
 		{
 			Sprite[] frames = new Sprite[2];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("HTZ/Objects.gif");
 				frames[0] = new Sprite(sheet.GetSection(102, 1, 56, 90), -28, -63);
@@ -53,7 +53,7 @@ namespace S2ObjectDefinitions.HTZ
 		
 		public override byte DefaultSubtype
 		{
-			get { return 30; }
+			get { return 0x10; }
 		}
 		
 		public override PropertySpec[] CustomProperties

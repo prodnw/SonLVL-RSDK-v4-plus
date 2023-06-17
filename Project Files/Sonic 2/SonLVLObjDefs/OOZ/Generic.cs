@@ -11,7 +11,7 @@ namespace S2ObjectDefinitions.OOZ
 		public override Sprite GetSprite()
 		{
 			Sprite[] sprites = new Sprite[2];
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("OOZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(365, 125, 96, 64), -48, -32);
@@ -32,7 +32,7 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(379, 213, 16, 31), -8, -34);
 			}
@@ -49,7 +49,7 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(141, 224, 40, 16), -32, -8);
 			}
@@ -66,7 +66,7 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(149, 241, 16, 4), -16, -2);
 			}
@@ -83,7 +83,7 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(345, 231, 16, 24), -8, -24);
 			}
@@ -100,14 +100,14 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = GetSprite();
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override string SubtypeName(byte subtype)

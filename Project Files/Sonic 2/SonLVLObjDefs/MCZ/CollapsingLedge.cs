@@ -15,8 +15,7 @@ namespace S2ObjectDefinitions.MCZ
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(136, 66, 64, 48), -32, -24);
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			// prop val is unused btw, even if it is set in the scene
 			// (it's *supposed* to be used, but a little TypeName typo gets in the way)

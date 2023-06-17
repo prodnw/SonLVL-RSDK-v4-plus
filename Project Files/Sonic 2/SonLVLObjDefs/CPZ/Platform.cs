@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.CPZ
 {
 	class HPlatform : CPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(-96, 0); }
+		public override Point Offset { get { return new Point(-96, 0); } }
 		
 		public override Sprite SetupDebugOverlay()
 		{
@@ -20,7 +20,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class VPlatform : CPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, -128); }
+		public override Point Offset { get { return new Point(0, -128); } }
 		
 		public override Sprite SetupDebugOverlay()
 		{
@@ -32,7 +32,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class VPlatform2 : CPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, -191); }
+		public override Point Offset { get { return new Point(0, -191); } }
 		
 		public override Sprite SetupDebugOverlay()
 		{
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.CPZ
 		private Sprite[] sprites = new Sprite[4];
 		private Sprite debug;
 		
-		public virtual Point GetOffset() { return new Point(0, 0); }
+		public virtual Point Offset { get { return new Point(0, 0); } }
 		public virtual Sprite SetupDebugOverlay() { return null; }
 		
 		public virtual PropertySpec[] SetupProperties()
@@ -94,8 +94,8 @@ namespace S2ObjectDefinitions.CPZ
 			sprites[0] = new Sprite(sheet.GetSection(136, 155, 64, 27), -32, -16);
 			sprites[1] = new Sprite(sheet.GetSection(136, 183, 48, 26), -24, -16);
 			
-			sprites[2] = new Sprite(sprites[0], GetOffset());
-			sprites[3] = new Sprite(sprites[1], GetOffset());
+			sprites[2] = new Sprite(sprites[0], Offset);
+			sprites[3] = new Sprite(sprites[1], Offset);
 			
 			debug = SetupDebugOverlay();
 			properties = SetupProperties();

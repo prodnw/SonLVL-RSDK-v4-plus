@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.CNZ
 		{
 			Sprite[] sprites = new Sprite[2];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("CNZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(76, 140, 44, 16), -28, -16);

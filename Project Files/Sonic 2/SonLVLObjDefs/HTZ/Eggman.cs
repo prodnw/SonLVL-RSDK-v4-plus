@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.HTZ
 		{
 			Sprite[] sprites = new Sprite[3];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '5')
+			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("HTZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(66, 108, 17, 7), -15, -10);

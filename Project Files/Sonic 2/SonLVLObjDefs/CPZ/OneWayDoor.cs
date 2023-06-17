@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2') // "2" for both CPZ and DEZ (DEZ obj loads CPZ sheet)
+			if (LevelData.StageInfo.folder.EndsWith("Zone02") || LevelData.StageInfo.folder.EndsWith("Zone12")) // yeah DEZ loads the CPZ sheet too
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(206, 142, 16, 64), -8, -32);
 			}

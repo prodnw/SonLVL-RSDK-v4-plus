@@ -14,9 +14,7 @@ namespace S2ObjectDefinitions.OOZ
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(462, 157, 24, 32), -12, -16);
-			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			BitmapBits bitmap = new BitmapBits(193, 225);
 			bitmap.DrawRectangle(6, 0, 0, 192, 224); // LevelData.ColorWhite

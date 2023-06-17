@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.CPZ
 		{
 			Sprite[] sprites = new Sprite[6];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("Global/EggMobile.gif");
 				sprites[0] = new Sprite(sheet.GetSection(5, 1, 60, 20), -28, -28);
@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(55, 74, 37, 52), -5, -68);
 			}
@@ -67,7 +67,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(97, 189, 18, 29), -9, -18);
 			}
@@ -87,7 +87,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(93, 122, 8, 8), -4, -4);
 			}

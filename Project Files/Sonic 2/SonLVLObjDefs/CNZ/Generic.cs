@@ -27,7 +27,7 @@ namespace S2ObjectDefinitions.CNZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(145, 172, 8, 8), -4, -4);
 			}
@@ -44,7 +44,7 @@ namespace S2ObjectDefinitions.CNZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(77, 231, 16, 24), -28, 24);
 			}
@@ -61,7 +61,7 @@ namespace S2ObjectDefinitions.CNZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(101, 157, 16, 48), -8, -24);
 			}
@@ -76,7 +76,7 @@ namespace S2ObjectDefinitions.CNZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(147, 34, 22, 56), -11, -28);
 			}

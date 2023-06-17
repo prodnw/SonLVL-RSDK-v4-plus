@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(91, 25, 48, 16), -24, -8);
 			}

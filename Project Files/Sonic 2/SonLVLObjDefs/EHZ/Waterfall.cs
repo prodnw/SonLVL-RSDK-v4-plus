@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(192, 0, 64, 16), -32, -128);

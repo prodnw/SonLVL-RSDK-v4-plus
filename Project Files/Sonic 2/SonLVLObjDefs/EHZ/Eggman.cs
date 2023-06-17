@@ -15,7 +15,7 @@ namespace S2ObjectDefinitions.EHZ
 		{
 			Sprite[] sprites = new Sprite[7];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(1, 143, 32, 32), -16 - 44, -16 + 20); // back wheel

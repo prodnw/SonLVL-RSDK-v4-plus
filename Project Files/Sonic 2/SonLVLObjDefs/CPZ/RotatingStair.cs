@@ -15,7 +15,7 @@ namespace S2ObjectDefinitions.CPZ
 		{
 			Sprite sprite;
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects3.gif").GetSection(1, 62, 32, 32), -16, -16);
 			}

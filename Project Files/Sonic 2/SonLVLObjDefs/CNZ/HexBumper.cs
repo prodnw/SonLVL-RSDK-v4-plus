@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '4')
+			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
 				img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(99, 99, 48, 32), -24, -16);
 			}

@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.MCZ
 		
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '6')
+			if (LevelData.StageInfo.folder.EndsWith("Zone06"))
 			{
 				sprite[0] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(136, 1, 64, 64), -32, -32);
 			}

@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(191, 1, 32, 16), -16, -16);
 			}
@@ -24,7 +24,7 @@ namespace S2ObjectDefinitions.CPZ
 			properties[0] = new PropertySpec("Use Twirl Anim", typeof(bool), "Extended",
 				"If this Spring should trigger the Twirling animation upon launch.", null,
 				(obj) => (obj.PropertyValue & 1) == 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)(((bool)value == true) ? 1 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((bool)value ? 1 : 0)));
 			
 			properties[1] = new PropertySpec("Strength", typeof(bool), "Extended",
 				"This Spring's launch velocity.", null, new Dictionary<string, int>

@@ -64,7 +64,7 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			if ((obj.PropertyValue & 0x80) == 0) return null;
 			
-			int height = (obj.PropertyValue & 127) << 3;
+			int height = (obj.PropertyValue & 0x7f) << 3;
 			var bitmap = new BitmapBits(2, height + 1);
 			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, height);
 			return new Sprite(bitmap);

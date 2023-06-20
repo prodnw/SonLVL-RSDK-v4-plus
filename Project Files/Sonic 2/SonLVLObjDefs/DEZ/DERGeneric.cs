@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(487, 125, 24, 24), -12, -12);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(999, 125, 24, 24), -12, -12);
@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(401, 125, 28, 32), -14, -16);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(913, 125, 28, 32), -14, -16);
@@ -29,7 +29,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(291, 88, 64, 60), -32, -28);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(803, 88, 64, 60), -32, -28);
@@ -40,7 +40,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(430, 100, 64, 24), -32, -12);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(942, 100, 64, 24), -32, -12);
@@ -51,7 +51,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(356, 154, 32, 32), -16, -16);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(868, 154, 32, 32), -16, -16);
@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(356, 123, 32, 30), -16, -16);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(868, 123, 32, 30), -16, -16);
@@ -73,7 +73,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(356, 213, 42, 42), -21, -21);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(868, 213, 42, 42), -21, -21);
@@ -84,7 +84,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(1, 58, 32, 51), -16, -25);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(513, 58, 32, 51), -16, -25);
@@ -95,7 +95,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(133, 114, 32, 24), -16, -12);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(645, 114, 32, 24), -16, -12);
@@ -106,7 +106,7 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		public override Sprite GetFrame()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(1, 1, 40, 56), -20, -28);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(513, 1, 40, 56), -20, -28);
@@ -123,7 +123,7 @@ namespace S2ObjectDefinitions.DEZ
 		public override Sprite GetFrame()
 		{
 			// Even if the sprites for it exist on the sheet, this object skips MBZ sheet checks and *always* uses the DEZ sheet instead
-			// if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			// if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(296, 50, 7, 16), -4, -8);
 			// else
 			// 	return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(808, 50, 7, 16), -4, -8);
@@ -137,14 +137,14 @@ namespace S2ObjectDefinitions.DEZ
 	{
 		private Sprite sprite;
 
-		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new System.Collections.ObjectModel.ReadOnlyCollection<byte>(new System.Collections.Generic.List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = GetFrame();
+		}
+		
+		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new System.Collections.ObjectModel.ReadOnlyCollection<byte>(new System.Collections.Generic.List<byte>()); }
 		}
 		
 		public override bool Hidden

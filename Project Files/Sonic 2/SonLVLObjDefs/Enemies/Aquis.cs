@@ -8,11 +8,11 @@ namespace S2ObjectDefinitions.Enemies
 	class Aquis : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 1, 29, 47), -15, -24);
 			}
@@ -21,10 +21,8 @@ namespace S2ObjectDefinitions.Enemies
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(929, 331, 29, 47), -15, -24);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Aquis is facing.", null, new Dictionary<string, int>
 				{
@@ -52,14 +50,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype & 1)
-			{
-				case 0:
-				default:
-					return "Facing Left";
-				case 1:
-					return "Facing Right";
-			}
+			return ((subtype & 1) == 1) ? "Facing Right" : "Facing Left";
 		}
 
 		public override Sprite Image

@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(1, 1, 48, 23), -24, -11);
 			}
@@ -48,14 +48,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Facing Left";
-				default:
-				case 1:
-					return "Facing Right";
-			}
+			return (subtype == 0) ? "Move Left" : "Move Right";
 		}
 
 		public override Sprite Image
@@ -65,13 +58,12 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			// sprite isn't flipped, even if there's a "Direction" property
 			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprite;
 		}
 	}
 }

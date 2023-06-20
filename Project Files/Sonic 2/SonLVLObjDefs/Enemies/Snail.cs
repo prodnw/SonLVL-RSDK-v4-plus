@@ -14,7 +14,7 @@ namespace S2ObjectDefinitions.Enemies
 		{
 			Sprite[] frames = new Sprite[2];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
 				frames[0] = new Sprite(sheet.GetSection(44, 27, 32, 33), -16, -16);
@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)

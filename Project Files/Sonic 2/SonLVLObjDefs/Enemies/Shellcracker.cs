@@ -12,13 +12,13 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(199, 30, 56, 31), -24, -19);
 			}
 			else
 			{
-				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(132, 377, 56, 31), -24, -19); // using fixed frame
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(199, 30, 56, 31), -24, -19); // broken frame btw
 			}
 			
 			sprites[1] = new Sprite(sprites[0], true, false);
@@ -40,7 +40,7 @@ namespace S2ObjectDefinitions.Enemies
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0; }
+			get { return 1; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -50,14 +50,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-				default:
-					return "Facing Left";
-				case 1:
-					return "Facing Right";
-			}
+			return (subtype == 1) ? "Facing Right" : "Facing Left";
 		}
 
 		public override Sprite Image

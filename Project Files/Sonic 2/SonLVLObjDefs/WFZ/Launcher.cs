@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone11"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(152, 74, 32, 16), -16, -31);
 			}

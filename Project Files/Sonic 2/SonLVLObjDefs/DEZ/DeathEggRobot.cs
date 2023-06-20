@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.DEZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
 			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(399, 183, 112, 72), -44, -36);
 			}

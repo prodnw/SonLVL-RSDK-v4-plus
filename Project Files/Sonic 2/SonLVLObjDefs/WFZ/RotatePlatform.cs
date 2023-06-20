@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone11"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("SCZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(381, 178, 48, 24), -24, -16);

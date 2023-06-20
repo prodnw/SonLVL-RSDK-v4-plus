@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.Enemies
 			
 			Sprite[] frames = new Sprite[2];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '3')
+			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects4.gif");
 				frames[0] = new Sprite(sheet.GetSection(32, 41, 28, 32), -14, -12);
@@ -45,7 +45,7 @@ namespace S2ObjectDefinitions.Enemies
 			Sprite[] frames = new Sprite[2];
 			
 			// Default - red Grounder sprites
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '3')
+			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("ARZ/Objects.gif");
 				frames[0] = new Sprite(sheet.GetSection(133, 1, 28, 32), -14, -12);
@@ -92,14 +92,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-				default:
-					return "Start Hidden";
-				case 1:
-					return "Start Walking";
-			}
+			return (subtype == 1) ? "Start Walking" : "Start Hidden";
 		}
 
 		public override Sprite Image

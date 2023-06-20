@@ -14,7 +14,7 @@ namespace S2ObjectDefinitions.Enemies
 		{
 			Sprite[] frames = new Sprite[3];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("CPZ/Objects.gif");
 				frames[0] = new Sprite(sheet.GetSection(5, 74, 40, 32), -27, -8);
@@ -30,9 +30,7 @@ namespace S2ObjectDefinitions.Enemies
 			}
 			
 			sprites[0] = new Sprite(frames);
-			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spiny will move.", null, new Dictionary<string, int>
@@ -41,7 +39,7 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -61,14 +59,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
-			{
-				case 0:
-					return "Facing Left";
-				default:
-				case 1:
-					return "Facing Right";
-			}
+			return (subtype == 0) ? "Facing Left" : "Facing Right";
 		}
 
 		public override Sprite Image

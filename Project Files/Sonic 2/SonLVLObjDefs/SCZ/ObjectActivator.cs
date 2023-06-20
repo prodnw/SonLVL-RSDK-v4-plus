@@ -8,14 +8,13 @@ namespace S2ObjectDefinitions.SCZ
 {
 	class ObjectActivator : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Activate Count", typeof(int), "Extended",
 				"How many of the following objects should be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,

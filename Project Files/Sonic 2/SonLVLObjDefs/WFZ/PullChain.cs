@@ -17,7 +17,7 @@ namespace S2ObjectDefinitions.WFZ
 			BitmapBits sheet;
 			int sprX = 0, sprY = 0;
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone11"))
 			{
 				sheet = LevelData.GetSpriteSheet("SCZ/Objects.gif");
 				sprX = 236;

@@ -14,7 +14,7 @@ namespace S2ObjectDefinitions.MPZ
 		public override void Init(ObjectData data)
 		{
 			Sprite[] frames = new Sprite[5];
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MPZ/Objects.gif");
 				frames[0] = new Sprite(sheet.GetSection(34, 102, 8, 32), -4, -16);
@@ -35,27 +35,25 @@ namespace S2ObjectDefinitions.MPZ
 			
 			for (int i = 0; i < 4; i++)
 			{
-				Sprite[] sprite = new Sprite[2];
-				sprite[0] = new Sprite(frames[i]);
+				Sprite sprite = new Sprite(frames[i]);
 				
 				switch (i)
 				{
 					case 0:
-						sprite[0].Offset(0, -32);
+						sprite.Offset(0, -32);
 						break;
 					case 1:
-						sprite[0].Offset(32, 0);
+						sprite.Offset(32, 0);
 						break;
 					case 2:
-						sprite[0].Offset(0, 32);
+						sprite.Offset(0, 32);
 						break;
 					case 3:
-						sprite[0].Offset(-32, 0);
+						sprite.Offset(-32, 0);
 						break;
 				}
 				
-				sprite[1] = new Sprite(frames[4]);
-				sprites[i] = new Sprite(sprite);
+				sprites[i] = new Sprite(frames[4], sprite);
 			}
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",

@@ -8,11 +8,11 @@ namespace S2ObjectDefinitions.Enemies
 	class Octus : ObjectDefinition
 	{
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '7')
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 49, 42, 25), -21, -12);
 			}
@@ -23,10 +23,8 @@ namespace S2ObjectDefinitions.Enemies
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(667, 256, 42, 25), -21, -12);
 			}
 			
-			sprites[1] = new Sprite(sprites[0]);
-			sprites[1].Flip(true, false);
+			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Octus is facing.", null, new Dictionary<string, int>
 				{
@@ -54,14 +52,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype & 1)
-			{
-				case 0:
-				default:
-					return "Facing Left";
-				case 1:
-					return "Facing Right";
-			}
+			return ((subtype & 1) == 0) ? "Facing Left" : "Facing Right";
 		}
 
 		public override Sprite Image

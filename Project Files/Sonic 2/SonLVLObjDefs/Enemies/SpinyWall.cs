@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '2')
+			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(1, 25, 23, 48), -12, -24);
 			}
@@ -29,7 +29,7 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
-				(obj) => (obj.PropertyValue & 1),
+				(obj) => obj.PropertyValue & 1,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 

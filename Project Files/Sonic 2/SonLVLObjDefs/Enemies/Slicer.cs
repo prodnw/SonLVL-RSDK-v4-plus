@@ -12,7 +12,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(29, 1, 47, 32), -16, -16);
 			}

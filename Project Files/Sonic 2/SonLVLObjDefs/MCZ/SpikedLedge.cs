@@ -18,14 +18,14 @@ namespace S2ObjectDefinitions.MCZ
 			
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			properties[0] = new PropertySpec("Direction", typeof(byte), "Extended",
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Ledge is facing.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)value);
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			BitmapBits bitmap = new BitmapBits(129, 33);
 			bitmap.DrawRectangle(6, 0, 0, 128, 32); // LevelData.ColorWhite

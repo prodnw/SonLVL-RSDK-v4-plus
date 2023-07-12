@@ -8,13 +8,30 @@
       <Offset X="-16" Y="-40" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Plane" description="Which Plane this Future Post should be on." type="planes" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="planes">
+      <EnumMember name="High Plane" />
+      <EnumMember name="Low Plane" />
+    </Enum>
+  </Enums>
   <ImageSets>
-    <ImageSet id="img">
+    <ImageSet id="futurepost">
       <ImageRef image="post" />
       <ImageRef image="future" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>
-    <ImageSetRef set="img" />
+    <ImageSetRef set="futurepost" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="High Plane">
+      <ImageSetRef set="futurepost" />
+    </Subtype>
+    <Subtype id="01" name="Low Plane">
+      <ImageSetRef set="futurepost" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

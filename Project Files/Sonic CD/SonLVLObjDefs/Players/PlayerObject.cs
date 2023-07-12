@@ -15,12 +15,12 @@ namespace SCDObjectDefinitions.Players
 		
 		public override void Init(ObjectData data)
 		{
-			string[] anis = new string[]{ "Sonic.ani", "Tails.ani", "Knuckles.ani", "Amy.ani" };
-			
 			bool plus = false;
 			
 			try
 			{
+				string[] anis = new string[]{ "Sonic.ani", "Tails.ani", "Knuckles.ani", "Amy.ani" };
+				
 				for (int i = 0; i < anis.Length; i++)
 				{
 					RSDKv3_4.Animation anim = LevelData.ReadFile<RSDKv3_4.Animation>("Data/Animations/" + anis[i]);
@@ -32,7 +32,7 @@ namespace SCDObjectDefinitions.Players
 			}
 			catch
 			{
-				// one or more of the ani files doesn't exist, so we're likely on a pre-plus file that doesn't have knux or amy
+				// one or more of the ani files doesn't exist, we're likely on a pre-plus file that doesn't have knux or amy
 				// (don't really need to reset it again but may as well)
 				plus = false;
 			}

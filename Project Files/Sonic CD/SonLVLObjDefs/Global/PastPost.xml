@@ -8,13 +8,30 @@
       <Offset X="-16" Y="-40" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Plane" description="Which Plane this Past Post should be on." type="planes" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="planes">
+      <EnumMember name="High Plane" />
+      <EnumMember name="Low Plane" />
+    </Enum>
+  </Enums>
   <ImageSets>
-    <ImageSet id="img">
+    <ImageSet id="pastpost">
       <ImageRef image="post" />
       <ImageRef image="past" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>
-    <ImageSetRef set="img" />
+    <ImageSetRef set="pastpost" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="High Plane">
+      <ImageSetRef set="pastpost" />
+    </Subtype>
+    <Subtype id="01" name="Low Plane">
+      <ImageSetRef set="pastpost" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

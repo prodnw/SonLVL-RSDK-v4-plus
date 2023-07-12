@@ -20,12 +20,26 @@
     </Enum>
   </Enums>
   <ImageSets>
-    <ImageSet id="img">
+    <ImageSet id="signpost">
       <ImageRef image="post" />
       <ImageRef image="eggman" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>
-    <ImageSetRef set="img" />
+    <ImageSetRef set="signpost" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Expand Stage - 2 Chunks">
+      <ImageSetRef set="signpost" />
+    </Subtype>
+    <Subtype id="01" name="Expand Stage - 4 Chunks">
+      <ImageSetRef set="signpost" />
+    </Subtype>
+    <Subtype id="02" name="Normal">
+      <ImageSetRef set="signpost" />
+    </Subtype>
+    <Subtype id="03" name="Normal (Handles Multiple Signposts)">
+      <ImageSetRef set="signpost" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

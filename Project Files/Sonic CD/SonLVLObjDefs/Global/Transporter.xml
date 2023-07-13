@@ -8,12 +8,6 @@
     <ImageFromSheet id="inactivebase" sheet="Global/Items3.gif" sourcex="175" sourcey="18" width="80" height="25">
       <Offset X="-40" Y="-32" />
     </ImageFromSheet>
-    <ImageFromSheet id="activedestroyed" sheet="Global/Items3.gif" sourcex="175" sourcey="44" width="80" height="16">
-      <Offset X="-40" Y="16" />
-    </ImageFromSheet>
-    <ImageFromSheet id="inactivedestroyed" sheet="Global/Items3.gif" sourcex="175" sourcey="1" width="80" height="16">
-      <Offset X="-40" Y="16" />
-    </ImageFromSheet>
   </Images>
   <ImageSets>
     <ImageSet id="active">
@@ -44,11 +38,8 @@
     <Subtype id="01" name="Inactive">
       <ImageSetRef set="inactive" />
     </Subtype>
-    <Subtype id="02" name="Active, Destroyed" image="activedestroyed" />
-    <Subtype id="03" name="Inactive, Destroyed" image="inactivedestroyed" />
   </Subtypes>
   <Properties>
     <Property name="Inactive" type="bool" startbit="0" length="1" />
-    <Property name="Destroyed" type="bool" startbit="1" length="1" />
   </Properties>
 </ObjDef>

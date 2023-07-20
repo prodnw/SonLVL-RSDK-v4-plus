@@ -63,7 +63,7 @@ namespace S2ObjectDefinitions.Mission
 		
 		// Kind of hacky and definitely a really really bad solution... there's almost certainly a better way to do this but i can't think of anything better so this'll have to do
 		// (this is here to avoid an unlimited recursion loop when two blocks repeatedly call each other's UpdateSprite())
-		int spriteUpdateCount = 0;
+		bool updateSprite = false;
 		
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
@@ -74,18 +74,18 @@ namespace S2ObjectDefinitions.Mission
 					ObjectEntry other = LevelData.Objects[LevelData.Objects.IndexOf(obj) + 1];
 					if (other.Name != "M035Block" || other.PropertyValue != 1)
 					{
-						spriteUpdateCount = 0;
+						updateSprite = false;
 						return sprites[0];
 					}
 					else
 					{
-						if (spriteUpdateCount == 0)
+						if (!updateSprite)
 						{
-							spriteUpdateCount++;
+							updateSprite = true;
 							other.UpdateSprite();
 						}
 						else
-							spriteUpdateCount = 0;
+							updateSprite = false;
 						
 						Sprite sprite = new Sprite();
 						for (int i = obj.X; i < other.X; i += 32)
@@ -98,18 +98,19 @@ namespace S2ObjectDefinitions.Mission
 					ObjectEntry other = LevelData.Objects[LevelData.Objects.IndexOf(obj) - 1];
 					if (other.Name != "M035Block" || other.PropertyValue != 0)
 					{
-						spriteUpdateCount = 0;
+						updateSprite = false;
 						return sprites[0];
 					}
 					else
 					{
-						if (spriteUpdateCount == 0)
+						if (!updateSprite)
 						{
-							spriteUpdateCount++;
+							updateSprite = true;
 							other.UpdateSprite();
 						}
 						else
-							spriteUpdateCount = 0;
+							updateSprite = false;
+						
 						Sprite sprite = new Sprite();
 						for (int i = other.X; i < obj.X; i += 32)
 							sprite = new Sprite(sprite, new Sprite(sprites[0], i - other.X, 0));
@@ -122,7 +123,7 @@ namespace S2ObjectDefinitions.Mission
 			{
 			}
 			
-			spriteUpdateCount = 0;
+			updateSprite = false;
 			return sprites[0];
 		}
 		

@@ -7,26 +7,24 @@ namespace S2ObjectDefinitions.MCZ
 {
 	class HPlatform : ObjectDefinition
 	{
-		private Sprite sprite;
+		private Sprite[] sprites = new Sprite[3];
 		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(141, 165, 48, 16), -24, -8);
+			sprites[2] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(141, 165, 48, 16), -24, -8);
+			sprites[0] = new Sprite(sprites[2], -104, 0);
+			sprites[1] = new Sprite(sprites[2],  104, 0);
 			
 			BitmapBits overlay = new BitmapBits(209, 2);
 			overlay.DrawLine(6, 0, 0, 208, 0); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -104, 0);
 			
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
-				{
-					{ "Left", 0 },
-					{ "Right", 1 }
-				},
-				(obj) => ((obj.PropertyValue == 0) ? 0 : 1),
-				(obj, value) => obj.PropertyValue = (byte)(int)value);
+			properties[0] = new PropertySpec("Flip Movement", typeof(bool), "Extended",
+				"If this Platform's movement cycle should be flipped or not.", null,
+				(obj) => (obj.PropertyValue != 0),
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -41,22 +39,22 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 0) ? "Start Leftwards" : "Start Rightwards";
+			return (subtype == 1) ? "Flipped Movement" : "Normal Movement";
 		}
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[2]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[2];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[(obj.PropertyValue != 0) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

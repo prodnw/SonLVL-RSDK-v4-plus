@@ -12,13 +12,13 @@ namespace S2ObjectDefinitions.MCZ
 		
 		public override void Init(ObjectData data)
 		{
-			Sprite img = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(135, 131, 16, 16), -8, -8);
+			Sprite log = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(135, 131, 16, 16), -8, -8);
 			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < 4; i++)
 			{
-				sprs.Add(new Sprite(img, (i * 16) - 56, 0));
-				sprs.Add(new Sprite(img, 56 - (i * 16), 0));
+				sprs.Add(new Sprite(log, (i * 16) - 56, 0));
+				sprs.Add(new Sprite(log, 56 - (i * 16), 0));
 			}
 			
 			sprite = new Sprite(sprs.ToArray());

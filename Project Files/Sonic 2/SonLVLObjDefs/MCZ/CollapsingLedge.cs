@@ -14,7 +14,6 @@ namespace S2ObjectDefinitions.MCZ
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(136, 66, 64, 48), -32, -24);
-			
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			// prop val is unused btw, even if it is set in the scene
@@ -42,7 +41,7 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image

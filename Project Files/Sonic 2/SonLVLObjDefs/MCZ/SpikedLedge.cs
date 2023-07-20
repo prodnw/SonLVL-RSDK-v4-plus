@@ -15,7 +15,6 @@ namespace S2ObjectDefinitions.MCZ
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("MCZ/Objects.gif").GetSection(1, 99, 128, 32), -64, -16);
-			
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",

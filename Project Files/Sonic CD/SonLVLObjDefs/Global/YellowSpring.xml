@@ -21,7 +21,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orientation" type="directions" startbit="0" length="4" />
+    <Property name="Orientation" description="Where the Spring will be facing." type="directions" startbit="0" length="4" />
   </Properties>
   <Enums>
     <Enum name="directions">

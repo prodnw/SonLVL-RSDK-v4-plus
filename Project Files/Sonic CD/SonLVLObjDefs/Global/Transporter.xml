@@ -40,6 +40,6 @@
     </Subtype>
   </Subtypes>
   <Properties>
-    <Property name="Inactive" type="bool" startbit="0" length="1" />
+    <Property name="Inactive" description="If this Transporter should be active or not. Traditionally active in the Past and inactive in the Present." type="bool" startbit="0" length="1" />
   </Properties>
 </ObjDef>

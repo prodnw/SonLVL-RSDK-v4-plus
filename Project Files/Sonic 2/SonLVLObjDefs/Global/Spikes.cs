@@ -31,19 +31,19 @@ namespace S2ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 3,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
-			properties[1] = new PropertySpec("Moving", typeof(int), "Extended",
-				"If these Spikes are retracting or not. Their position in the scene is their extended position.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 0x80 }
-				},
-				(obj) => obj.PropertyValue & 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+			properties[1] = new PropertySpec("Moving", typeof(bool), "Extended",
+				"If these Spikes are retracting or not. Their position in the scene is their extended position.", null,
+				(obj) => obj.PropertyValue > 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 3) | (byte)((bool)value ? 0x80 : 0)));
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
-				"The entity pos offset of these Spikes' parent. Only applicable if state is set to 5, to be carried by another object.", null,
+				"The object slot offset of this Spikes' parent, used for series of vertically retracting spikes.", null,
 				(obj) => ((V4ObjectEntry)obj).Value2,
-				(obj, value) => ((V4ObjectEntry)obj).Value2 = ((int)value));
+				(obj, value) =>
+				{
+					((V4ObjectEntry)obj).Value2 = (int)value;
+					((V4ObjectEntry)obj).State = ((int)value == 0) ? 0 : 5; // if non-zero value, then set state to 5
+				});
 			
 			BitmapBits bitmap = new BitmapBits(33, 33);
 			bitmap.DrawRectangle(6, 0, 0, 31, 31); // LevelData.ColorWhite
@@ -55,6 +55,8 @@ namespace S2ObjectDefinitions.Global
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
+			// moving spikes are iffy, in ported zones they use the top bit while in new scenes (hpz, probably some origins missions) they use the 3rd bit
+			// since most levels use the top bit, let's stick with that
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 0x80, 0x81, 0x82, 0x83 }); }
 		}
 
@@ -73,7 +75,7 @@ namespace S2ObjectDefinitions.Global
 			string[] directions = { "Up", "Right", "Left", "Down" };
 			string name = "Facing " + directions[subtype & 3];
 			
-			if (subtype > 0x7f) name += " (Moving)";
+			if (subtype > 3) name += " (Moving)";
 			
 			return name;
 		}
@@ -95,7 +97,7 @@ namespace S2ObjectDefinitions.Global
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return (obj.PropertyValue > 0x7f) ? debug[obj.PropertyValue & 3] : null;
+			return (obj.PropertyValue > 3) ? debug[obj.PropertyValue & 3] : null;
 		}
 	}
 }

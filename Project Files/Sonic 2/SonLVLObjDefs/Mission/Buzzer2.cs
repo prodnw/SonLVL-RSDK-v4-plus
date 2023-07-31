@@ -13,22 +13,22 @@ namespace S2ObjectDefinitions.Mission
 		
 		public override void Init(ObjectData data)
 		{
-			Sprite[] sprites = new Sprite[2];
+			Sprite[] frames = new Sprite[2];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(1, 1, 48, 16), -24, -8);
-				sprites[1] = new Sprite(sheet.GetSection(19, 50, 6, 5), 5, -8);
+				frames[0] = new Sprite(sheet.GetSection(1, 1, 48, 16), -24, -8);
+				frames[1] = new Sprite(sheet.GetSection(19, 50, 6, 5), 5, -8);
 			}
 			else
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(1, 256, 48, 16), -24, -8);
-				sprites[1] = new Sprite(sheet.GetSection(137, 331, 6, 5), 5, -8);
+				frames[0] = new Sprite(sheet.GetSection(1, 256, 48, 16), -24, -8);
+				frames[1] = new Sprite(sheet.GetSection(137, 331, 6, 5), 5, -8);
 			}
 			
-			sprites[0] = new Sprite(sprites);
+			sprites[0] = new Sprite(frames);
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.Mission
 			
 			properties[2] = new PropertySpec("Speed", typeof(decimal), "Extended",
 				"The speed at which this Buzzer should move horizontally, in pixels per frame.", null,
-				(obj) => (decimal)((((V4ObjectEntry)obj).Value1 > 1) ? ((V4ObjectEntry)obj).Value1 : 100),
+				(obj) => ((decimal)((((V4ObjectEntry)obj).Value1 > 0) ? ((V4ObjectEntry)obj).Value1 : 100))/100m,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)(((decimal)value) * 100m));
 		}
 
@@ -73,7 +73,7 @@ namespace S2ObjectDefinitions.Mission
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)

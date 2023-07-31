@@ -60,7 +60,7 @@ namespace S2ObjectDefinitions.Mission
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)

@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(82, 61, 16, 16), -8, -8);
 			}
@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(82, 78, 16, 16), -8, -8);
 			}
@@ -45,7 +45,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(0, 109, 93, 32), -48, -16);
 			}
@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(94, 131, 32, 23), -16, -12);
 			}
@@ -79,7 +79,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 143, 32, 32), -16, -16);
 			}
@@ -96,7 +96,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '1')
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(49, 18, 8, 8), -4, -4);
 			}

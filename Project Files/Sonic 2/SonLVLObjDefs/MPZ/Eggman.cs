@@ -13,7 +13,7 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			Sprite[] sprites = new Sprite[3];
 			
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MPZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(195, 151, 44, 16), -28, -24);
@@ -36,7 +36,7 @@ namespace S2ObjectDefinitions.MPZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(430, 133, 48, 47), -24, -24);
 			}
@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.MPZ
 	{
 		public override Sprite GetSprite()
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == '9')
+			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
 				return new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(220, 193, 64, 12), -32, -6);
 			}

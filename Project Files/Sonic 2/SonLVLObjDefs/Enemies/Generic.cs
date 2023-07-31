@@ -2,6 +2,7 @@ using SonicRetro.SonLVL.API;
 using System;
 
 // mostly just projeciles and other basic renders which only need MBZ checks
+// sorted alphabetically
 
 namespace S2ObjectDefinitions.Enemies
 {
@@ -14,6 +15,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(933, 323, 8, 8), -4, -4);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Asteron : Enemies.Generic
@@ -25,8 +28,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(843, 289, 32, 28), -16, -14); // (SCZ mission ends up here too)
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class AsteronSpike : Enemies.Generic
@@ -38,6 +39,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(968, 322, 7, 14), -4, -8); // (SCZ mission ends up here too)
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Ball : Enemies.Generic
@@ -49,8 +52,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(166, 1, 24, 24), -12, -12); // broken frame btw
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class BigTurtloid : Enemies.Generic
@@ -62,8 +63,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(72, 42, 56, 31), -28, -15); // broken frame btw
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class Bubbler : Enemies.Generic
@@ -75,6 +74,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(166, 1, 24, 24), -12, -12); // broken frame btw
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class BuzzerShot : Enemies.Generic
@@ -86,6 +87,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(66, 302, 8, 10), -12, -3);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Clucker : Enemies.Generic
@@ -109,8 +112,6 @@ namespace S2ObjectDefinitions.Enemies
 			
 			return new Sprite(sprites);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class CluckerBase : Enemies.Generic
@@ -122,8 +123,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(576, 289, 48, 16), -24, -8);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class CluckerShot : Enemies.Generic
@@ -135,6 +134,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(660, 289, 6, 8), -3, -4);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Coconut : Enemies.Generic
@@ -146,6 +147,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(258, 297, 12, 13), -6, -7);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Coconuts : Enemies.Generic
@@ -161,8 +164,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(50, 256, 26, 45), -8, -14);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class Crawl : Enemies.Generic
@@ -174,8 +175,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(436, 256, 47, 32), -23, -16);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class Crawlton : Enemies.Generic
@@ -200,8 +199,6 @@ namespace S2ObjectDefinitions.Enemies
 			
 			return new Sprite(sprites);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class Flasher : Enemies.Generic
@@ -213,8 +210,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 1, 23, 15), -16, -8); // broken frame btw
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class GrabberShot : Enemies.Generic
@@ -226,6 +221,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(84, 302, 8, 8), -4, -4);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Masher : Enemies.Generic
@@ -237,8 +234,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(66, 313, 20, 32), -10, -16);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class NebulaBomb : Enemies.Generic
@@ -250,6 +245,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(220, 1, 14, 13), -7, -7);  // broken frame btw
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class OctusShot : Enemies.Generic
@@ -261,6 +258,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(910, 332, 6, 6), -3, -3); // (SCZ mission ends up here too)
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Rexon : Enemies.Generic
@@ -303,8 +302,6 @@ namespace S2ObjectDefinitions.Enemies
 			
 			return new Sprite(sprs);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class RexonShot : Enemies.Generic
@@ -316,6 +313,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(36, 54, 8, 8), -4, -4); // broken frame btw
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class SlicerArm : Enemies.Generic
@@ -327,6 +326,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(926, 306, 16, 16), 0, -16);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class SmallTurtloid : Enemies.Generic
@@ -338,8 +339,6 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(186, 42, 24, 23), -12, -11); // broken frame btw
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	class SpinyShot : Enemies.Generic
@@ -351,6 +350,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(84, 302, 8, 8), -4, -4);
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class TurtloidShot : Enemies.Generic
@@ -362,6 +363,8 @@ namespace S2ObjectDefinitions.Enemies
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(815, 310, 6, 6), -3, -3); // broken frame btw
 		}
+		
+		public override bool Hidden { get { return true; } }
 	}
 	
 	class Whisp : Enemies.Generic
@@ -384,8 +387,6 @@ namespace S2ObjectDefinitions.Enemies
 			
 			return new Sprite(sprites);
 		}
-		
-		public override bool Hidden { get { return false; } }
 	}
 	
 	abstract class Generic : ObjectDefinition
@@ -400,11 +401,6 @@ namespace S2ObjectDefinitions.Enemies
 		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new System.Collections.ObjectModel.ReadOnlyCollection<byte>(new System.Collections.Generic.List<byte>()); }
-		}
-		
-		public override bool Hidden
-		{
-			get { return true; }
 		}
 		
 		public override string SubtypeName(byte subtype)

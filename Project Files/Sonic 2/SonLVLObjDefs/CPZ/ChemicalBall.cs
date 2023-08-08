@@ -34,7 +34,7 @@ namespace S2ObjectDefinitions.CPZ
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction this Chemical Ball should go in.", null, new Dictionary<string, int>
 				{
-					{ "Flip", 0 },
+					{ "No Flip", 0 },
 					{ "X Flip", 0x40 }
 				},
 				(obj) => obj.PropertyValue & 0x40,
@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image

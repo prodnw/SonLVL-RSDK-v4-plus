@@ -96,9 +96,9 @@ namespace S2ObjectDefinitions.DEZ
 		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone12"))
-				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(133, 114, 32, 24), -16, -12);
+				return new Sprite(LevelData.GetSpriteSheet("DEZ/Objects.gif").GetSection(1, 114, 32, 24), -16, -12);
 			else
-				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(645, 114, 32, 24), -16, -12);
+				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(513, 114, 32, 24), -16, -12);
 		}
 	}
 	

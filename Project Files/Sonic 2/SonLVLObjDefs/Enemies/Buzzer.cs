@@ -41,18 +41,13 @@ namespace S2ObjectDefinitions.Enemies
 			
 			properties[1] = new PropertySpec("Static", typeof(bool), "Extended",
 				"If the Buzzer should stay in one place, rather than hover around a spot. Only has effect in Origins' Mission Mode.", null,
-				(obj) => obj.PropertyValue & 2,
+				(obj) => (obj.PropertyValue & 2) == 2,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | ((bool)value ? 2 : 0)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
 		}
 		
 		public override PropertySpec[] CustomProperties

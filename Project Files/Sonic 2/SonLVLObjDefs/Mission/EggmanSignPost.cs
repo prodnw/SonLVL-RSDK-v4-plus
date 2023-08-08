@@ -23,7 +23,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 			
 			properties[1] = new PropertySpec("Charge Decrease", typeof(int), "Extended",
-				"How many less cycles Eggman will inhale chemicals before it reaches full", null,
+				"How many less cycles Eggman will inhale chemicals before being ready for release.", null,
 				(obj) => Math.Min(Math.Max(((V4ObjectEntry)obj).Value1, 0), 12),
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((int)value));
 			
@@ -33,7 +33,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = Math.Max(((int)value - 1), 0));
 			
 			properties[3] = new PropertySpec("Base Speed", typeof(int), "Extended",
-				"The speed at which Eggman should cross the arena with, in pixels.", null,
+				"The speed, in pixels, at which Eggman should cross the arena.", null,
 				(obj) => Math.Max(((V4ObjectEntry)obj).Value3, 0) + 3,
 				(obj, value) => ((V4ObjectEntry)obj).Value3 = Math.Max(((int)value - 3), 0));
 		}
@@ -43,11 +43,6 @@ namespace S2ObjectDefinitions.Mission
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -55,7 +50,7 @@ namespace S2ObjectDefinitions.Mission
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image

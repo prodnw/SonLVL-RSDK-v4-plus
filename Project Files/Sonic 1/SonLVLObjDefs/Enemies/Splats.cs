@@ -24,6 +24,8 @@ namespace S1ObjectDefinitions.Enemies
 					break;
 			}
 			
+			sprites[1] = new Sprite(sprites[0], true, false);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Splats will be facing intially.", null, new Dictionary<string, int>
 				{

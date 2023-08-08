@@ -67,8 +67,7 @@ namespace S2ObjectDefinitions.HTZ
 		public override string SubtypeName(byte subtype)
 		{
 			string name = (5 - (subtype & 0x7f)) + " Blocks";
-			if (subtype > 0x7f) name += " (Plane B)";
-			else name += " (Plane A)";
+			name += ((subtype > 0x7f) ? " (Plane B)" : " (Plane A)");
 			return name;
 		}
 
@@ -79,7 +78,7 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[Math.Min(subtype & 0x7f, 4)];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

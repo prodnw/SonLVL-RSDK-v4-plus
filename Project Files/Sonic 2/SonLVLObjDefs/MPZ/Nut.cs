@@ -24,8 +24,8 @@ namespace S2ObjectDefinitions.MPZ
 				(obj) => (obj.PropertyValue & 0x80),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 			
-			properties[1] = new PropertySpec("Drop Distance", typeof(int), "Extended",
-				"At what point the Nut should start falling. Only applicable if Allow Drop is true.", null,
+			properties[1] = new PropertySpec("Ground Distance", typeof(int), "Extended",
+				"How far down this Nut should be able to go. If Allow Drop is true, this is the height at which the Nut will drop.", null,
 				(obj) => (obj.PropertyValue & 0x7F),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7F) | (byte)(((int)value) & 0x7F)));
 		}
@@ -42,7 +42,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image
@@ -62,11 +62,9 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if ((obj.PropertyValue & 0x80) == 0) return null;
-			
 			int height = (obj.PropertyValue & 0x7f) << 3;
 			var bitmap = new BitmapBits(2, height + 1);
-			bitmap.DrawLine(LevelData.ColorWhite, 0, 0, 0, height);
+			bitmap.DrawLine(6, 0, 0, 0, height); // LevelData.ColorWhite
 			return new Sprite(bitmap);
 		}
 	}

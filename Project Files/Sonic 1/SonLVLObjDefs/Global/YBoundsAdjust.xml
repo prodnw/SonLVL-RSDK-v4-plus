@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Mode" description="How the Bounds should adjust. Regular is based on the player being past or beyond the object, while Box is if the player is between this and object[+1]." type="adjusttypes" startbit="0" length="1" />
+    <Property name="Mode" description="How the Bounds should adjust. Regular is based on the player being past or beyond the object, while Box is if the player is between this and object[+1]." type="adjusttypes" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="adjusttypes">
@@ -14,4 +14,8 @@
       <EnumMember name="Box Adjust" />
     </Enum>
   </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Regular Adjust" image="sprite" />
+    <Subtype id="01" name="Box Adjust" image="sprite" />
+  </Subtypes>
 </ObjDef>

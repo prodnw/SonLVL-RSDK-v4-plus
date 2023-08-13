@@ -51,7 +51,7 @@ namespace S1ObjectDefinitions.GHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image
@@ -70,9 +70,7 @@ namespace S1ObjectDefinitions.GHZ
 			for (int i = 0; i <= (obj.PropertyValue + 1); i++)
 			{
 				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
-				Sprite sprite = new Sprite(sprites[frame]);
-				sprite.Offset(0, (i * 16));
-				sprs.Add(sprite);
+				sprs.Add(new Sprite(sprites[frame], 0, (i * 16)));
 			}
 			return new Sprite(sprs.ToArray());
 		}

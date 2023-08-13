@@ -40,6 +40,11 @@ namespace S1ObjectDefinitions.MZ
 				{
 					{ "Large crusher", 0 },
 					{ "Medium crusher", 1 },
+					/*
+					// RE2 has these listed like this.. but the get method doesn't even support the Drop On Visible value? so i'm not really sure...
+					{ "Small (Interval)", 2 },
+					{ "Small (Drop On Visible)", 3 }
+					*/
 					{ "Small block", 2 }
 				},
 				(obj) => ((obj.PropertyValue & 0x70) >> 4) % 3,

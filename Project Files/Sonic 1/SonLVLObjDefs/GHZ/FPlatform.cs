@@ -50,7 +50,7 @@ namespace S1ObjectDefinitions.GHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Static Platform" : "Falling Platform";
+			return (subtype == 0) ? "Falling Platform" : "Static Platform";
 		}
 
 		public override Sprite Image

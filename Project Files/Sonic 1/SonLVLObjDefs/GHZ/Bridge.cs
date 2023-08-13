@@ -15,7 +15,7 @@ namespace S1ObjectDefinitions.GHZ
 			sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(1, 1, 16, 16), -8, -8);
 			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-				"How long the Bridge should be. Although values up to 255 are technically supported, they do not necesarily work well.", null,
+				"How long the Bridge should be.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
@@ -34,7 +34,12 @@ namespace S1ObjectDefinitions.GHZ
 		{
 			return (subtype) + " logs";
 		}
-
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
+		
 		public override Sprite Image
 		{
 			get { return sprite; }

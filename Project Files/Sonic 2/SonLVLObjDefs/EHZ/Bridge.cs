@@ -59,7 +59,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
+			if (obj.PropertyValue <= 1)
 				return sprite;
 			
 			int st = -(((obj.PropertyValue) * 16) / 2) + 8;

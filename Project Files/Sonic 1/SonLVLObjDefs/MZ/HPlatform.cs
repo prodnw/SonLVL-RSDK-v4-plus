@@ -27,8 +27,8 @@ namespace S1ObjectDefinitions.MZ
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -43,7 +43,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Initially Move Right" : "Initially Move Left";
+			return (subtype == 1) ? "Start From Left" : "Start From Right";
 		}
 
 		public override Sprite Image

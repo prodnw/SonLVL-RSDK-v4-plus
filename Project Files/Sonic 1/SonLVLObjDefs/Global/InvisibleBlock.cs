@@ -56,7 +56,7 @@ namespace S1ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image

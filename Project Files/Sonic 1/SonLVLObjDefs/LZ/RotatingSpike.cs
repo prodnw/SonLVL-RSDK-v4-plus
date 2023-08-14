@@ -37,9 +37,9 @@ namespace S1ObjectDefinitions.LZ
 				"Which angle the Spike Ball should start at.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
-					{ "Upwards", 1 },
+					{ "Downwards", 1 },
 					{ "Left", 2 },
-					{ "Downwards", 3 }
+					{ "Upwards", 3 }
 				},
 				(obj) => (int)(((V4ObjectEntry)obj).Direction),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);

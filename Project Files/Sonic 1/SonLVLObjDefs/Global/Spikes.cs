@@ -9,7 +9,8 @@ namespace S1ObjectDefinitions.Global
 	class Spikes : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[3];
-		private readonly Sprite[] sprites = new Sprite[16];
+		private Sprite[] sprites = new Sprite[16];
+		private Sprite[] debug = new Sprite[16];
 		
 		public override void Init(ObjectData data)
 		{
@@ -27,9 +28,9 @@ namespace S1ObjectDefinitions.Global
 			
 			for (int i = 0; i < 16; i++)
 			{
-				int temp = i;
 				List<Sprite> sprs = new List<Sprite>();
-				switch (temp)
+				int frame = i;
+				switch (frame)
 				{
 					case 0: // 3 Spikes (Up)
 					case 1: // 3 Spikes (Right)
@@ -39,41 +40,55 @@ namespace S1ObjectDefinitions.Global
 					case 5: // 1 Spike (Right)
 					case 6: // 1 Spike (Left)
 					case 7: // 1 Spike (Down)
-						sprs.Add(new Sprite(frames[temp]));
+						sprs.Add(new Sprite(frames[frame]));
 						break;
 					
 					case 8:  // 3 Spikes (Spaced Out) (Up)
 					case 11: // 3 Spikes (Spaced Out) (Down)
-						temp -= 4;
-						sprs.Add(new Sprite(frames[temp], -24, 0));
-						sprs.Add(new Sprite(frames[temp]));
-						sprs.Add(new Sprite(frames[temp], 24, 0));
+						frame -= 4;
+						sprs.Add(new Sprite(frames[frame], -24, 0));
+						sprs.Add(new Sprite(frames[frame]));
+						sprs.Add(new Sprite(frames[frame], 24, 0));
 						break;
 					
 					case 9:  // 3 Spikes (Spaced Out) (Right)
 					case 10: // 3 Spikes (Spaced Out) (Left)
-						temp -= 4;
-						sprs.Add(new Sprite(frames[temp], 0, -24));
-						sprs.Add(new Sprite(frames[temp]));
-						sprs.Add(new Sprite(frames[temp], 0, 24));
+						frame -= 4;
+						sprs.Add(new Sprite(frames[frame], 0, -24));
+						sprs.Add(new Sprite(frames[frame]));
+						sprs.Add(new Sprite(frames[frame], 0, 24));
 						break;
 						
 					case 12: // 6 Spikes (Spaced Out) (Up)
 					case 15: // 6 Spikes (Spaced Out) (Down)
-						temp -= 8;
+						frame -= 8;
 						for (int j = 0; j < 6; j++)
-							sprs.Add(new Sprite(frames[temp], -60 + (j * 24), 0));
+							sprs.Add(new Sprite(frames[frame], -60 + (j * 24), 0));
 						break;
 						
 					case 13: // 6 Spikes (Spaced Out) (Right)
 					case 14: // 6 Spikes (Spaced Out) (Left)
-						temp -= 8;
+						frame -= 8;
 						for (int j = 0; j < 6; j++)
-							sprs.Add(new Sprite(frames[temp], 0, -60 + (j * 24)));
+							sprs.Add(new Sprite(frames[frame], 0, -60 + (j * 24)));
 						break;
 				}
 				
 				sprites[i] = new Sprite(sprs.ToArray());
+				
+				// and now, let's do the debug vis for moving spikes
+				Rectangle bounds = sprites[i].Bounds;
+				BitmapBits overlay = new BitmapBits(bounds.Size);
+				overlay.DrawRectangle(6, 0, 0, bounds.Width - 1, bounds.Height - 1); // LevelData.ColorWhite
+				debug[i] = new Sprite(overlay, bounds.X, bounds.Y);
+				
+				switch (i & 3) // Orientation
+				{
+					case 0: debug[i].Offset(0,  32); break; // Up
+					case 1: debug[i].Offset(-32, 0); break; // Right
+					case 2: debug[i].Offset( 32, 0); break; // Left
+					case 3: debug[i].Offset(0, -32); break; // Down
+				}
 			}
 			
 			properties[0] = new PropertySpec("Count", typeof(int), "Extended",
@@ -136,6 +151,11 @@ namespace S1ObjectDefinitions.Global
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprites[obj.PropertyValue & 15];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return ((obj.PropertyValue & 128) == 0) ? null : debug[obj.PropertyValue & 15];
 		}
 	}
 }

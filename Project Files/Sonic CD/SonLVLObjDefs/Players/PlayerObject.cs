@@ -9,14 +9,12 @@ namespace SCDObjectDefinitions.Players
 {
 	class PlayerObject : ObjectDefinition
 	{
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 		private ReadOnlyCollection<byte> subtypes;
 		private Sprite[] sprites = new Sprite[4];
 		
 		public override void Init(ObjectData data)
 		{
-			bool plus = false;
-			
 			try
 			{
 				string[] anis = new string[]{ "Sonic.ani", "Tails.ani", "Knuckles.ani", "Amy.ani" };
@@ -27,46 +25,33 @@ namespace SCDObjectDefinitions.Players
 					RSDKv3_4.Animation.AnimationEntry.Frame frame = anim.animations[0].frames[0];
 					sprites[i] = new Sprite(LevelData.GetSpriteSheet(anim.spriteSheets[frame.sheet]).GetSection(frame.sprX, frame.sprY, frame.width, frame.height), frame.pivotX, frame.pivotY);
 				}
-				
-				plus = true;
 			}
 			catch
 			{
 				// one or more of the ani files doesn't exist, we're likely on a pre-plus file that doesn't have knux or amy
-				// (don't really need to reset it again but may as well)
-				plus = false;
+				
+				// let's clear all sprites after Sonic
+				for (int i = 1; i < 4; i++)
+				{
+					sprites[i] = null;
+				}
 			}
 			
-			if (plus)
-			{
-				// Since we're on a Plus data file, let's allow character-specific spanws
-				
-				properties = new PropertySpec[1];
-				properties[0] = new PropertySpec("Character", typeof(int), "Extended",
-					"Which characters should start here. Only has effect in Origins.", null, new Dictionary<string, int>
-					{
-						{ "Default", 0 },
-						{ "Tails", 1 },
-						{ "Knuckles", 2 },
-						{ "Amy", 5 }
-					},
-					(obj) => (int)obj.PropertyValue,
-					(obj, value) => obj.PropertyValue = (byte)((int)value));
-				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 5 });
-			}
-			else
-			{
-				// We're on a pre-Plus data file, so let's not use any of Plus's features
-				
-				properties = new PropertySpec[0];
-				subtypes = new ReadOnlyCollection<byte>(new byte[] {});
-			}
+			properties[0] = new PropertySpec("Character", typeof(int), "Extended",
+				"Which characters should start here. Only has effect in Origins.", null, new Dictionary<string, int>
+				{
+					{ "Default", 0 },
+					{ "Tails", 1 },
+					{ "Knuckles", 2 },
+					{ "Amy", 5 }
+				},
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return subtypes; }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 5 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -76,20 +61,14 @@ namespace SCDObjectDefinitions.Players
 
 		public override string SubtypeName(byte subtype)
 		{
-			if (properties.Length > 0)
+			switch (subtype)
 			{
-				// We're on a Plus file
-				switch (subtype)
-				{
-					case 0: return "Default Start";
-					case 1: return "Tails Start";
-					case 2: return "Knuckles Start";
-					case 5: return "Amy Start";
-					default: return "Unknown";
-				}
+				case 0: return "Default Start";
+				case 1: return "Tails Start";
+				case 2: return "Knuckles Start";
+				case 5: return "Amy Start";
+				default: return "Unknown";
 			}
-			
-			return "";
 		}
 
 		public override Sprite Image
@@ -99,16 +78,15 @@ namespace SCDObjectDefinitions.Players
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			int index = 0;
-			if (properties.Length > 0) index = (subtype > 2) ? 3 : subtype;
-			return sprites[index];
+			// looks really goofy lol
+			int index = (subtype > 2) ? 3 : subtype;
+			return sprites[(sprites[index] != null) ? index : 0];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int index = 0;
-			if (properties.Length > 0) index = (obj.PropertyValue > 2) ? 3 : obj.PropertyValue;
-			return sprites[index];
+			int index = (obj.PropertyValue > 2) ? 3 : obj.PropertyValue;
+			return sprites[(sprites[index] != null) ? index : 0];
 		}
 	}
 }

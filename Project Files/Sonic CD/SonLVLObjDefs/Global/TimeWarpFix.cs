@@ -9,7 +9,7 @@ namespace SCDObjectDefinitions.Global
 	class TimeWarpFix : ObjectDefinition
 	{
 		private Sprite sprite;
-		private Sprite[] debug = new Sprite[3]; // 32x32 rect
+		private Sprite[] debug = new Sprite[3];
 		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
@@ -45,11 +45,6 @@ namespace SCDObjectDefinitions.Global
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4 }); }
-		}
-		
-		public override byte DefaultSubtype
-		{
-			get { return 2; }
 		}
 		
 		public override PropertySpec[] CustomProperties

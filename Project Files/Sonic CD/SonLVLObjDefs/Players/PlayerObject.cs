@@ -25,6 +25,9 @@ namespace SCDObjectDefinitions.Players
 					RSDKv3_4.Animation.AnimationEntry.Frame frame = anim.animations[0].frames[0];
 					sprites[i] = new Sprite(LevelData.GetSpriteSheet(anim.spriteSheets[frame.sheet]).GetSection(frame.sprX, frame.sprY, frame.width, frame.height), frame.pivotX, frame.pivotY);
 				}
+				
+				// let's give tails his, well, tails
+				sprites[1] = new Sprite(new Sprite(LevelData.GetSpriteSheet("Players/Tails1.gif").GetSection(82, 199, 16, 24), -22, -8), sprites[1]);
 			}
 			catch
 			{

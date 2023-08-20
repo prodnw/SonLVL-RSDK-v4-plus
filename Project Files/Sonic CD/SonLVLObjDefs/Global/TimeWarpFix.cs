@@ -94,6 +94,9 @@ namespace SCDObjectDefinitions.Global
 				case 3:
 					int index = Math.Max(0, LevelData.Objects.IndexOf(obj) + 1);
 					
+					if (index > (LevelData.Objects.Count-1))
+						index--; // just make it point to this object
+					
 					int xmin = Math.Min(obj.X, LevelData.Objects[index].X);
 					int ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);
 					int xmax = Math.Max(obj.X, LevelData.Objects[index].X);

@@ -7,7 +7,7 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class VBlock : ObjectDefinition
 	{
-		private Sprite[] sprites = new Sprite[2];
+		private Sprite[] sprites = new Sprite[3];
 		private Sprite[] debug = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[1];
 		
@@ -20,7 +20,7 @@ namespace S1ObjectDefinitions.SYZ
 			// tagging this area with LevelData.ColorWhite
 			BitmapBits bitmap = new BitmapBits(65, 128);
 			bitmap.DrawRectangle(6, 0, 0, 63, 63); // top box
-			bitmap.DrawRectangle(6, 0, 64, 63, 63); // top box
+			bitmap.DrawRectangle(6, 0, 64, 63, 63); // bottom box
 			bitmap.DrawLine(6, 32, 32, 32, 96); // movement line
 			debug[0] = new Sprite(bitmap, -32, -95); // a 1px difference in ranges between the two... is this really important? prolly not, but hey may as well anyways
 			debug[1] = new Sprite(bitmap, -32, -96);

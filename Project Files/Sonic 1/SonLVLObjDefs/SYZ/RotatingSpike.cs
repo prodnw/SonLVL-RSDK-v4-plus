@@ -53,16 +53,17 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
+			string name = "";
+			
+			switch (subtype & 6)
 			{
-				case 0: return "Speed: Fast, Starting Side: Right";
-				case 1: return "Speed: Fast, Starting Side: Left";
-				case 2: return "Speed: Slow, Starting Side: Right";
-				case 3: return "Speed: Slow, Starting Side: Left";
-				case 4: return "Speed: Medium, Starting Side: Right";
-				case 5: return "Speed: Medium, Starting Side: Left";
+				case 0: return "Fast";
+				case 2: return "Slow";
+				case 4: return "Medium";
 				default: return "Unknown";
 			}
+			
+			name += ((subtype & 1) == 0) ? " (Right)" : " (Left)";
 		}
 
 		public override Sprite Image

@@ -81,7 +81,7 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[Math.Min(obj.PropertyValue, (byte)5)];
+			return sprites[Math.Min(obj.PropertyValue, (byte)4)];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

@@ -29,17 +29,17 @@ namespace S1ObjectDefinitions.LZ
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Spin Speed", typeof(int), "Extended",
-				"How fast the Spikes will spin.", null,
-				(obj) => obj.PropertyValue >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)((int)value) << 4));
+				"How fast the Spike Ball should swing. Positive values are clockwise, negative values are counter-clockwise.", null,
+				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - (((obj.PropertyValue & 0xf0) > 0x80) ? 0x10 : 0x00),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)(((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4))));
 			
 			properties[2] = new PropertySpec("Starting Angle", typeof(int), "Extended",
 				"Which angle the Spike Ball should start at.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
-					{ "Downwards", 1 },
+					{ "Down", 1 },
 					{ "Left", 2 },
-					{ "Upwards", 3 }
+					{ "Up", 3 }
 				},
 				(obj) => (int)(((V4ObjectEntry)obj).Direction),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
@@ -83,6 +83,15 @@ namespace S1ObjectDefinitions.LZ
 			}
 			
 			return new Sprite(sprs.ToArray());
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			int length = (obj.PropertyValue & 0x0f) * 16;
+			
+			var overlay = new BitmapBits(2 * length + 1, 2 * length + 1);
+			overlay.DrawCircle(6, length, length, length); // LevelData.ColorWhite
+			return new Sprite(overlay, -length, -length);
 		}
 	}
 }

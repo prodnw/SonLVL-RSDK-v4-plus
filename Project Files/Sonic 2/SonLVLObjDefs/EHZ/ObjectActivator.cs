@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.EHZ
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
@@ -24,6 +19,11 @@ namespace S2ObjectDefinitions.EHZ
 				"The Entity Pos offset of the Object to be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype
@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image

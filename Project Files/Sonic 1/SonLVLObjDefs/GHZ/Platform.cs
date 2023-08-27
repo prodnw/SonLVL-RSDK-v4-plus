@@ -8,38 +8,20 @@ namespace S1ObjectDefinitions.GHZ
 {
 	class HPlatform : GHZ.Platform
 	{
-		public override Point Offset { get { return new Point(64, 0); } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits bitmap = new BitmapBits(129, 2);
-			bitmap.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
-			return new Sprite(bitmap, -64, 0);
-		}
+		public override Point offset { get { return new Point(64, 0); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Right", 0 }, { "Left", 1 }}; } }
 	}
 	
 	class VPlatform : GHZ.Platform
 	{
-		public override Point Offset { get { return new Point(0, 64); } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 129);
-			overlay.DrawLine(6, 0, 0, 0, 128); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -64);
-		}
+		public override Point offset { get { return new Point(0, 64); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 	}
 	
 	class VPlatform2 : GHZ.Platform
 	{
-		public override Point Offset { get { return new Point(0, 32); } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 65);
-			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -32);
-		}
+		public override Point offset { get { return new Point(0, 32); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 		
 		public override Sprite GetFrame()
 		{
@@ -53,8 +35,8 @@ namespace S1ObjectDefinitions.GHZ
 		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public virtual Point Offset { get { return new Point(0, 0); } }
-		public virtual Sprite SetupDebugOverlay() { return null; }
+		public virtual Point offset { get { return new Point(0, 0); } }
+		public virtual Dictionary<string, int> names { get { return new Dictionary<string, int>{}; } }
 		
 		public virtual Sprite GetFrame()
 		{
@@ -64,14 +46,17 @@ namespace S1ObjectDefinitions.GHZ
 		public override void Init(ObjectData data)
 		{
 			sprites[2] = GetFrame();
-			sprites[0] = new Sprite(sprites[2],  Offset.X,  Offset.Y);
-			sprites[1] = new Sprite(sprites[2], -Offset.X, -Offset.Y);
+			sprites[0] = new Sprite(sprites[2],  offset.X,  offset.Y);
+			sprites[1] = new Sprite(sprites[2], -offset.X, -offset.Y);
 			
-			debug = SetupDebugOverlay();
-			properties[0] = new PropertySpec("Flip Movement", typeof(bool), "Extended",
-				"If this Platform's movement cycle should be flipped or not.", null,
-				(obj) => (obj.PropertyValue == 1),
-				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
+			BitmapBits bitmap = new BitmapBits((offset.X * 2) + 1, (offset.Y * 2) + 1);
+			bitmap.DrawLine(6, 0, 0, offset.X * 2, offset.Y * 2); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -offset.X, -offset.Y);
+			
+			properties[0] = new PropertySpec("Start From", typeof(bool), "Extended",
+				"Which side this platform should start from.", null, names,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -86,7 +71,7 @@ namespace S1ObjectDefinitions.GHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Flipped Movement" : "Normal Movement";
+			return "Start From " + names.GetKey((subtype == 1) ? 1 : 0);
 		}
 
 		public override Sprite Image

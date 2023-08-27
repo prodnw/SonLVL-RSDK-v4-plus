@@ -34,7 +34,7 @@ namespace S1ObjectDefinitions.Enemies
 			// At least there's descriptions, though
 			
 			properties[0] = new PropertySpec("Fire In Dir", typeof(int), "Extended",
-				"If the Newtroon should only shoot in a specific direction, direction decided by Fire Direction. Only has effect in Origins's Mission Mode.", null, new Dictionary<string, int>
+				"Mission Mode only. If the Newtroon should only shoot in a specific direction, direction decided by Fire Direction.", null, new Dictionary<string, int>
 				{
 					{ "False", 0 },
 					{ "True", 1 }
@@ -43,7 +43,7 @@ namespace S1ObjectDefinitions.Enemies
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (byte)((int)value));
 			
 			properties[1] = new PropertySpec("Fire Direction", typeof(int), "Extended",
-				"Which way the Newtron should fire. Only takes effect if Fire In Dir is active too, similarly only has effect in Mission Mode.", null, new Dictionary<string, int>
+				"Mission Mode only. Which way the Newtron should fire, provided Fire In Dir is active.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
@@ -54,7 +54,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); } // not putting Fire Direction here because its Mission Mode only so it's not usable normally
 		}
 		
 		public override PropertySpec[] CustomProperties

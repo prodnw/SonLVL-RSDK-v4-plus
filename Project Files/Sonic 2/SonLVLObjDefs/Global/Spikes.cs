@@ -20,7 +20,7 @@ namespace S2ObjectDefinitions.Global
 			sprites[2] = new Sprite(sheet.GetSection(215, 132, 32, 32), -16, -16);
 			sprites[3] = new Sprite(sheet.GetSection(215, 99, 32, 32), -16, -16);
 			
-			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
 				{
 					{ "Up", 0 },
@@ -42,7 +42,7 @@ namespace S2ObjectDefinitions.Global
 				(obj, value) =>
 				{
 					((V4ObjectEntry)obj).Value2 = (int)value;
-					((V4ObjectEntry)obj).State = ((int)value == 0) ? 0 : 5; // if non-zero value, then set state to 5
+					((V4ObjectEntry)obj).State = ((int)value == 0) ? 0 : 5; // if non-zero value, then set state to 5, otherwise reset it
 				});
 			
 			BitmapBits bitmap = new BitmapBits(33, 33);
@@ -60,11 +60,6 @@ namespace S2ObjectDefinitions.Global
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 0x80, 0x81, 0x82, 0x83 }); }
 		}
 
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

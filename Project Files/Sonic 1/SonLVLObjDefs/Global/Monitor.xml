@@ -4,6 +4,9 @@
     <ImageFromSheet id="monitor" sheet="Global/Items.gif" sourcex="18" sourcey="1" width="32" height="32">
       <Offset X="-16" Y="-16"/>
     </ImageFromSheet>
+    <ImageFromSheet id="static" sheet="Global/Items.gif" sourcex="51" sourcey="1" width="16" height="14">
+      <Offset X="-8" Y="-9"/>
+    </ImageFromSheet>
     <ImageFromSheet id="rings" sheet="Global/Items.gif" sourcex="51" sourcey="16" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
@@ -37,7 +40,7 @@
     <ImageFromSheet id="lightning" sheet="Global/Items.gif" sourcex="51" sourcey="76" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
-    <ImageFromSheet id="robotnik" sheet="Global/Items.gif" sourcex="68" sourcey="91" width="16" height="14">
+    <ImageFromSheet id="eggman" sheet="Global/Items.gif" sourcex="68" sourcey="91" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
     <ImageFromSheet id="goggles" sheet="Global/Items.gif" sourcex="18" sourcey="100" width="16" height="14">
@@ -58,9 +61,9 @@
   </Properties>
   <Enums>
     <Enum name="Contents">
-      <EnumMember name="Blank" />
+      <EnumMember name="Static" />
       <EnumMember name="Rings" />
-      <EnumMember name="Classic Shield" />
+      <EnumMember name="Shield" />
       <EnumMember name="Invincibility" />
       <EnumMember name="Speed Shoes" />
       <EnumMember name="Sonic 1UP" />
@@ -70,7 +73,7 @@
       <EnumMember name="Bubble Shield" />
       <EnumMember name="Fire Shield" />
       <EnumMember name="Lightning Shield" />
-      <EnumMember name="Robotnik" />
+      <EnumMember name="Eggman" />
       <EnumMember name="Goggles" />
       <EnumMember name="Debug Spikes" />
       <EnumMember name="Debug Shields" />
@@ -78,8 +81,9 @@
     </Enum>
   </Enums>
   <ImageSets>
-    <ImageSet id="blank">
+    <ImageSet id="static">
       <ImageRef image="monitor" />
+      <ImageRef image="static" />
     </ImageSet>
     <ImageSet id="rings">
       <ImageRef image="monitor" />
@@ -125,9 +129,9 @@
       <ImageRef image="monitor" />
       <ImageRef image="lightning" />
     </ImageSet>
-    <ImageSet id="robotnik">
+    <ImageSet id="eggman">
       <ImageRef image="monitor" />
-      <ImageRef image="robotnik" />
+      <ImageRef image="eggman" />
     </ImageSet>
     <ImageSet id="goggles">
       <ImageRef image="monitor" />
@@ -150,13 +154,13 @@
     <ImageSetRef set="rings" />
   </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="Empty">
-      <ImageSetRef set="blank" />
+    <Subtype id="00" name="Static">
+      <ImageSetRef set="static" />
     </Subtype>
     <Subtype id="01" name="Rings">
       <ImageSetRef set="rings" />
     </Subtype>
-    <Subtype id="02" name="Classic Shield">
+    <Subtype id="02" name="Shield">
       <ImageSetRef set="shieldb" />
     </Subtype>
     <Subtype id="03" name="Invincibility">
@@ -186,8 +190,8 @@
     <Subtype id="0b" name="Lightning Shield">
       <ImageSetRef set="lightning" />
     </Subtype>
-    <Subtype id="0c" name="Robotnik">
-      <ImageSetRef set="robotnik" />
+    <Subtype id="0c" name="Eggman">
+      <ImageSetRef set="eggman" />
     </Subtype>
     <Subtype id="0d" name="Goggles">
       <ImageSetRef set="goggles" />

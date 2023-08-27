@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="End" description="Which end of the Bridge this Post is on." type="dirs" startbit="0" length="8" />
+    <Property name="Direction" description="Which end of the bridge this post is on." type="dirs" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="dirs">

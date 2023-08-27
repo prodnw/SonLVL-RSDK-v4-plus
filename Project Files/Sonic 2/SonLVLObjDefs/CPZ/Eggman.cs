@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class Eggman : CPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[6];
 			
@@ -45,7 +45,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class ChemicalDropper : CPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class ChemicalDrop : CPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
@@ -85,7 +85,7 @@ namespace S2ObjectDefinitions.CPZ
 	
 	class ChemicalSplash : CPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
 			{
@@ -107,14 +107,14 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		private Sprite sprite;
 		
-		public virtual Sprite GetSprite()
+		public virtual Sprite GetFrame()
 		{
 			return null;
 		}
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -124,7 +124,7 @@ namespace S2ObjectDefinitions.CPZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return "";
 		}
 
 		public override Sprite Image

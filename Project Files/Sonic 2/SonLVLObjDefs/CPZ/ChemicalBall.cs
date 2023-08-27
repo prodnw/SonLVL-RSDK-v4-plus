@@ -22,8 +22,8 @@ namespace S2ObjectDefinitions.CPZ
 			debug[0] = new Sprite(bitmap, 0, -112);
 			
 			bitmap.Clear();
-			bitmap.DrawRectangle(6, 0, 0, 0, 111);
-			bitmap.DrawRectangle(6, 96, 0, 96, 111);
+			bitmap.DrawLine(6, 0, 0, 0, 111);
+			bitmap.DrawLine(6, 96, 0, 96, 111);
 			debug[1] = new Sprite(bitmap, 0, -112);
 			
 			properties[0] = new PropertySpec("Interval", typeof(int), "Extended",

@@ -119,8 +119,8 @@ namespace S1ObjectDefinitions.Global
 					{ "False", 0 },
 					{ "True", 128 }
 				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 0x80,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

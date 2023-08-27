@@ -80,12 +80,19 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			switch (subtype & 3)
+			{
+				default:
+				case 0: return "Facing Left (Fire Orbs)";
+				case 1: return "Facing Right (Fire Orbs)";
+				case 2: return "Facing Left (Keep Orbs)";
+				case 3: return "Facing Right (Keep Orbs)";
+			}
 		}
 
 		public override Sprite Image
 		{
-			get { return SubtypeImage(0); }
+			get { return sprites[0]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)

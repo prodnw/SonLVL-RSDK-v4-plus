@@ -68,7 +68,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -78,7 +78,14 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			switch (subtype & 3)
+			{
+				default:
+				case 0: return "Facing Left (Large Range)";
+				case 1: return "Facing Right (Large Range)";
+				case 2: return "Facing Left (Small Range)";
+				case 3: return "Facing Right (Small Range)";
+			}
 		}
 
 		public override Sprite Image

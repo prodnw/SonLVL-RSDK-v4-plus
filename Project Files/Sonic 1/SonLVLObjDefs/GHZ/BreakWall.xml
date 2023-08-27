@@ -22,8 +22,8 @@
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Left" image="left" />
-    <Subtype id="01" name="Middle" image="middle" />
-    <Subtype id="02" name="Right" image="right" />
+    <Subtype id="00" name="Left Wall" image="left" />
+    <Subtype id="01" name="Middle Wall" image="middle" />
+    <Subtype id="02" name="Right Wall" image="right" />
   </Subtypes>
 </ObjDef>

@@ -11,7 +11,7 @@ namespace S2ObjectDefinitions.EHZ
 		// this object's subtype is set to 2, but unlike the original game where it was like "art index" or whatever,
 		// in this game it doesn't matter
 		
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -26,7 +26,7 @@ namespace S2ObjectDefinitions.EHZ
 	
 	class BurningLog : EHZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -43,7 +43,7 @@ namespace S2ObjectDefinitions.EHZ
 	
 	class EggmanCar : EHZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -60,7 +60,7 @@ namespace S2ObjectDefinitions.EHZ
 	
 	class EggmanDrill : EHZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -77,7 +77,7 @@ namespace S2ObjectDefinitions.EHZ
 	
 	class EggmanWheel : EHZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -94,7 +94,7 @@ namespace S2ObjectDefinitions.EHZ
 	
 	class ExhaustPuff : EHZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
@@ -111,27 +111,26 @@ namespace S2ObjectDefinitions.EHZ
 	
 	abstract class Generic : ObjectDefinition
 	{
-		private PropertySpec[] properties;
 		private Sprite sprite;
+		
+		public virtual Sprite GetFrame()
+		{
+			return null;
+		}
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetFrame();
+		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-
-		public override void Init(ObjectData data)
-		{
-			sprite = GetSprite();
-		}
 		
-		public override PropertySpec[] CustomProperties
-		{
-			get { return properties; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "";
 		}
 
 		public override Sprite Image
@@ -147,11 +146,6 @@ namespace S2ObjectDefinitions.EHZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

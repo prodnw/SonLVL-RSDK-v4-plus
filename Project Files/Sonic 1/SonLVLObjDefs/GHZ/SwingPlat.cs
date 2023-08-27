@@ -22,14 +22,10 @@ namespace S1ObjectDefinitions.GHZ
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
-			properties[1] = new PropertySpec("Inverted", typeof(int), "Extended",
-				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+			properties[1] = new PropertySpec("Inverted", typeof(bool), "Extended",
+				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0)); // could be more direct instead of bool>int>Direction but the whole class name is p long, so..
 			
 			// State is set in an Origins mission but that doesn't appear to mean anything?
 		}
@@ -41,7 +37,7 @@ namespace S1ObjectDefinitions.GHZ
 		
 		public override byte DefaultSubtype
 		{
-			get { return 4; }
+			get { return 6; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -79,7 +75,7 @@ namespace S1ObjectDefinitions.GHZ
 		{
 			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
 			overlay.DrawCircle(6, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 24); // LevelData.ColorWhite
-			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), 0);
+			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), -8);
 		}
 	}
 }

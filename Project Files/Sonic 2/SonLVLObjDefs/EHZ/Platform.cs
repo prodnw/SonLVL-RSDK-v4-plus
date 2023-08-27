@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
 
 namespace S2ObjectDefinitions.EHZ
 {
@@ -11,39 +10,18 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		public override Point offset { get { return new Point(64, 0); } }
 		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Right", 0 }, { "Left", 1 }}; } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits bitmap = new BitmapBits(129, 2);
-			bitmap.DrawLine(6, 0, 0, 128, 0); // LevelData.ColorWhite
-			return new Sprite(bitmap, -64, 0);
-		}
 	}
 	
 	class VPlatform : EHZ.Platform
 	{
 		public override Point offset { get { return new Point(0, 64); } }
-		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Downwards", 0 }, { "Upwards", 1 }}; } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 129);
-			overlay.DrawLine(6, 0, 0, 0, 128); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -64);
-		}
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 	}
 	
 	class VPlatform2 : EHZ.Platform
 	{
 		public override Point offset { get { return new Point(0, 32); } }
-		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Downwards", 0 }, { "Upwards", 1 }}; } }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 65);
-			overlay.DrawLine(6, 0, 0, 0, 64); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -32);
-		}
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 		
 		public override Sprite GetFrame()
 		{
@@ -62,7 +40,6 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public virtual Point offset { get { return new Point(0, 0); } }
 		public virtual Dictionary<string, int> names { get { return new Dictionary<string, int>{}; } }
-		public virtual Sprite SetupDebugOverlay() { return null; }
 		
 		public virtual Sprite GetFrame()
 		{
@@ -78,7 +55,10 @@ namespace S2ObjectDefinitions.EHZ
 			sprites[0] = new Sprite(sprites[2],  offset.X,  offset.Y);
 			sprites[1] = new Sprite(sprites[2], -offset.X, -offset.Y);
 			
-			debug = SetupDebugOverlay();
+			BitmapBits bitmap = new BitmapBits((offset.X * 2) + 1, (offset.Y * 2) + 1);
+			bitmap.DrawLine(6, 0, 0, offset.X * 2, offset.Y * 2); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -offset.X, -offset.Y);
+			
 			properties[0] = new PropertySpec("Start From", typeof(bool), "Extended",
 				"Which side this platform should start from.", null, names,
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,

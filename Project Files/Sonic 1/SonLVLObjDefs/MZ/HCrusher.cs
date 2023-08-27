@@ -7,7 +7,7 @@ namespace S1ObjectDefinitions.MZ
 {
 	class HCrusher : ObjectDefinition
 	{
-		private PropertySpec[] properties = new PropertySpec[3];
+		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite[,,] sprites = new Sprite[2,4,2]; // direction, length, triggered
 		private Sprite[,,] debug = new Sprite[2,4,2]; // direction, length, triggered
 		
@@ -98,13 +98,13 @@ namespace S1ObjectDefinitions.MZ
 			// Well.. it *should* work like this, but right-facing crushers aren't programmed correctly in the actual game, so...
 			// To restore this property, just remove the block comment markers and change the "PropertySpec[2]" at the top of the script to be a 3 instead
 			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which direction this crusher should be facing in.", null, new Dictionary<string, int>
+				"Which direction this crusher should extend in.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 0x40 }
 				},
 				(obj) => obj.PropertyValue & 0x40,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x40) | ((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x40) | (int)value));
 			*/
 		}
 

@@ -16,7 +16,7 @@ namespace S2ObjectDefinitions.CPZ
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 			
 			properties[0] = new PropertySpec("Entry Type", typeof(int), "Extended",
-				"desc A.", null, new Dictionary<string, int>
+				"What type of entrance this tube has. 4 Transporter objects should follow a main Entry object.", null, new Dictionary<string, int> // well really it's [playerCount], not necessarily 4, but that's what the base game does, so
 				{
 					{ "Entry", 0 },
 					{ "Entry 1", 1 },

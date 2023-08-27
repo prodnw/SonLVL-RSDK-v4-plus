@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="tbox">
+<ObjDef xmlns="http://www.sonicretro.org">
   <Images>
-    <ImageFromSheet id="tbox" sheet="Global/Display.gif" sourcex="239" sourcey="239" width="16" height="16">
+    <ImageFromSheet id="trigger" sheet="Global/Display.gif" sourcex="239" sourcey="239" width="16" height="16">
       <Offset X="-8" Y="-8"/>
     </ImageFromSheet>
   </Images>
@@ -16,16 +16,16 @@
   </Enums>
   <ImageSets>
     <ImageSet id="tubeswitch">
-      <ImageRef image="tbox">
+      <ImageRef image="trigger">
         <Offset X="-8" Y="-8" />
       </ImageRef>
-      <ImageRef image="tbox">
+      <ImageRef image="trigger">
         <Offset X="-8" Y="8" />
       </ImageRef>
-      <ImageRef image="tbox">
+      <ImageRef image="trigger">
         <Offset X="8" Y="-8" />
       </ImageRef>
-      <ImageRef image="tbox">
+      <ImageRef image="trigger">
         <Offset X="8" Y="8" />
       </ImageRef>
     </ImageSet>

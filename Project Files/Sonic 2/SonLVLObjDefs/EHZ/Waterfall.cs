@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.EHZ
 					{ "Frame 7", 7 },
 					{ "Frame 8", 8 }
 				},
-				(obj) => obj.PropertyValue,
+				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		

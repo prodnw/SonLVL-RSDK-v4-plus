@@ -9,6 +9,7 @@ namespace SCDObjectDefinitions.R4
 	class FallingBlocks : ObjectDefinition
 	{
 		private Sprite sprite;
+		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
@@ -51,6 +52,17 @@ namespace SCDObjectDefinitions.R4
 			frames[3] = new Sprite(LevelData.GetSpriteSheet("Global/Items3.gif").GetSection(50, 100, 32, 32), -16, 32);
 			
 			sprite = new Sprite(frames);
+			
+			Rectangle bounds = sprite.Bounds;
+			BitmapBits outline = new BitmapBits(bounds.Size);
+			outline.DrawRectangle(6, 0, 0, bounds.Width - 1, bounds.Height - 1); // LevelData.ColorWhite
+			debug = new Sprite(outline, bounds.X, bounds.Y);
+			
+			BitmapBits bitmap = new BitmapBits(1, 32);
+			
+			for (int i = 0; i < 32; i += 6)
+				bitmap.DrawLine(6, 0, i, 0, i + 3);
+			debug = new Sprite(debug, new Sprite(bitmap, 0, 64));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -76,6 +88,11 @@ namespace SCDObjectDefinitions.R4
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

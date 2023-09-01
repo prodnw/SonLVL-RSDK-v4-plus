@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ObjDef xmlns="http://www.sonicretro.org" Image="flicky">
   <Images>
-    <ImageFromSheet id="flicky" sheet="Global/Items2.gif" sourcex="83" sourcey="196" width="16" height="24">
+    <ImageFromSheet id="flicky" sheet="Global/Items.gif" sourcex="183" sourcey="78" width="16" height="20">
       <Offset X="-7" Y="-12"/>
     </ImageFromSheet>
   </Images>

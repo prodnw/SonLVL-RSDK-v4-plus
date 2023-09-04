@@ -8,28 +8,35 @@ namespace S1ObjectDefinitions.SLZ
 	class Fireball : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[2];
-		private readonly Sprite[] sprites = new Sprite[2];
+		private Sprite[] sprites = new Sprite[8];
+		private Sprite[] debug = new Sprite[4];
 		
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("SLZ/Objects.gif");
-			sprites[0] = new Sprite(sheet.GetSection(1, 1, 15, 31), -7, -23);
-			sprites[1] = new Sprite(sheet.GetSection(2, 34, 31, 15), -23, -8);
+			Sprite[] frames = new Sprite[2];
+			frames[0] = new Sprite(sheet.GetSection(1, 1, 15, 31), -7, -23);
+			frames[1] = new Sprite(sheet.GetSection(2, 34, 31, 15), -23, -8);
+			
+			for (int i = 0; i < 8; i++)
+			{
+				sprites[i] = new Sprite(frames[(i > 5) ? 1 : 0], (i == 6), (i < 5));
+			}
 			
 			properties[0] = new PropertySpec("Pattern", typeof(int), "Extended",
 				"The pattern this Fireball is to follow.", null, new Dictionary<string, int>
 				{
-					{ "Eject Up - Slowest", 0 },
-					{ "Eject Up - Slow", 1 },
-					{ "Eject Up - Fast", 2 },
-					{ "Eject Up - Fastest", 3 },
+					{ "Jump (84 px)", 0 },
+					{ "Jump (131 px)", 1 },
+					{ "Jump (189 px)", 2 },
+					{ "Jump (258 px)", 3 },
 					{ "Travel Up", 4 },
 					{ "Travel Down", 5 },
 					{ "Travel Left", 6 },
 					{ "Travel Right", 7 }
 				},
 				(obj) => obj.PropertyValue & 7,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (int)value));
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
 				"The timings this Fireball is to be based off.", null, new Dictionary<string, int>
@@ -52,7 +59,16 @@ namespace S1ObjectDefinitions.SLZ
 					{ "480 Frames", 0xf0 },
 				},
 				(obj) => obj.PropertyValue & 0xf0,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (int)value));
+			
+			// For the jumping fireballs, let's show how high they'll jump
+			int[] distances = {84, 131, 189, 258};
+			for (int i = 0; i < distances.Length; i++)
+			{
+				BitmapBits bitmap = new BitmapBits(2, distances[i] + 1);
+				bitmap.DrawLine(6, 0, 0, 0, distances[i]); // LevelData.ColorWhite
+				debug[i] = new Sprite(bitmap, 0, -distances[i]);
+			}
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -67,7 +83,7 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -77,14 +93,18 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			int temp = subtype & 7;
-			Sprite sprite = new Sprite(sprites[(temp > 5) ? 1 : 0], (temp == 6), (temp < 5));
-			return sprite;
+			return sprites[subtype & 7];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 7];
+		}
+		
+		// i'm kind of not sure.. maybe this one is too much? i'll leave it for now, but i might just remove this later, it feels a bit too much...
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return ((obj.PropertyValue & 7) < 4) ? debug[obj.PropertyValue & 7] : null;
 		}
 	}
 }

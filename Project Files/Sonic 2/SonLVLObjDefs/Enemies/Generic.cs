@@ -225,17 +225,6 @@ namespace S2ObjectDefinitions.Enemies
 		public override bool Hidden { get { return true; } }
 	}
 	
-	class Masher : Enemies.Generic
-	{
-		public override Sprite GetFrame()
-		{
-			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
-				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(105, 67, 20, 32), -10, -16);
-			else
-				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(66, 313, 20, 32), -10, -16);
-		}
-	}
-	
 	class NebulaBomb : Enemies.Generic
 	{
 		public override Sprite GetFrame()

@@ -89,17 +89,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override bool Hidden { get { return true; } }
 	}
 	
-	class Chopper : Enemies.Generic
-	{
-		public override Sprite GetFrame()
-		{
-			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
-				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(106, 81, 30, 32), -14, -15);
-			else
-				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(98, 94, 30, 32), -14, -15);
-		}
-	}
-	
 	class CrabmeatShot : Enemies.Generic
 	{
 		public override Sprite GetFrame()

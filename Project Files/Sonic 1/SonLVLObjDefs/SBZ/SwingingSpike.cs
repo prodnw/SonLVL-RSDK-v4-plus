@@ -23,18 +23,14 @@ namespace S1ObjectDefinitions.SBZ
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			properties[1] = new PropertySpec("Inverted", typeof(int), "Extended",
-				"If the Spike's movement should be inverse the global cycle.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+				"If the Spike's movement should be inverted, compared to other Spikes.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0)); // could be more direct instead of bool>int>Direction but the whole class name is p long, so..
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 5, 6, 7, 8, 9, 10 }); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -49,7 +45,7 @@ namespace S1ObjectDefinitions.SBZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " chains";
 		}
 
 		public override Sprite Image
@@ -65,21 +61,24 @@ namespace S1ObjectDefinitions.SBZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i <= (obj.PropertyValue + 1); i++)
+			int sy = 16;
+			for (int i = 0; i < obj.PropertyValue; i++)
 			{
-				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
-				Sprite sprite = new Sprite(sprites[frame]);
-				sprite.Offset(0, (i * 16));
-				sprs.Add(sprite);
+				sprs.Add(new Sprite(sprites[1], 0, sy));
+				sy += 16;
 			}
+			sy -= 8;
+			sprs.Add(new Sprite(sprites[2], 0, sy));
+			sprs.Add(sprites[0]); // yeah the post is drawn last instead of first, don't ask me what's up with that
 			return new Sprite(sprs.ToArray());
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
-			overlay.DrawCircle(6, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 24); // LevelData.ColorWhite
-			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), -8);
+			int l = (obj.PropertyValue * 16) + 8;
+			var overlay = new BitmapBits(2 * l + 1, l + 1);
+			overlay.DrawCircle(6, l, 0, l); // LevelData.ColorWhite
+			return new Sprite(overlay, -l, 0);
 		}
 	}
 }

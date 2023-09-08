@@ -30,7 +30,7 @@ namespace S1ObjectDefinitions.MZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 5, 6, 7, 8, 9, 10 }); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -45,7 +45,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return subtype + " chains";
 		}
 
 		public override Sprite Image
@@ -60,20 +60,24 @@ namespace S1ObjectDefinitions.MZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i <= (obj.PropertyValue + 1); i++)
+			List<Sprite> sprs = new List<Sprite>() { sprites[0] };
+			int sy = 16;
+			for (int i = 0; i < obj.PropertyValue; i++)
 			{
-				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
-				sprs.Add(new Sprite(sprites[frame], 0, (i * 16)));
+				sprs.Add(new Sprite(sprites[1], 0, sy));
+				sy += 16;
 			}
+			sy -= 8;
+			sprs.Add(new Sprite(sprites[2], 0, sy));
 			return new Sprite(sprs.ToArray());
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
-			overlay.DrawCircle(6, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 24); // LevelData.ColorWhite
-			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), -8);
+			int l = (obj.PropertyValue * 16) + 8;
+			var overlay = new BitmapBits(2 * l + 1, l + 1);
+			overlay.DrawCircle(6, l, 0, l); // LevelData.ColorWhite
+			return new Sprite(overlay, -l, 0);
 		}
 	}
 }

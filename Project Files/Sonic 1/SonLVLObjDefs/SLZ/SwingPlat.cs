@@ -7,14 +7,9 @@ namespace S1ObjectDefinitions.SLZ
 {
 	class SwingPlat : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[3];
-		private PropertySpec[] properties;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("SLZ/Objects.gif");
@@ -22,16 +17,25 @@ namespace S1ObjectDefinitions.SLZ
 			sprites[1] = new Sprite(sheet.GetSection(173, 158, 16, 16), -8, -8);
 			sprites[2] = new Sprite(sheet.GetSection(84, 141, 88, 46), -44, -16);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
+			
+			properties[1] = new PropertySpec("Inverted", typeof(bool), "Extended",
+				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0)); // could be more direct instead of bool>int>Direction but the whole class name is p long, so..
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 5, 6, 7, 8, 9, 10 }); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 4; }
+			get { return 7; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -41,7 +45,7 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " chains";
 		}
 
 		public override Sprite Image
@@ -56,25 +60,24 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i <= (obj.PropertyValue + 1); i++)
+			List<Sprite> sprs = new List<Sprite>() { sprites[0] };
+			int sy = 16;
+			for (int i = 0; i < obj.PropertyValue; i++)
 			{
-				int frame = (i == 0) ? 0 : (i == (obj.PropertyValue + 1)) ? 2 : 1;
-				sprs.Add(new Sprite(sprites[frame], 0, (i * 16) - ((i == (obj.PropertyValue + 1)) ? 8 : 0)));
+				sprs.Add(new Sprite(sprites[1], 0, sy));
+				sy += 16;
 			}
+			sy -= 8;
+			sprs.Add(new Sprite(sprites[2], 0, sy));
 			return new Sprite(sprs.ToArray());
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(2 * ((obj.PropertyValue * 16) + 24) + 1, (obj.PropertyValue * 16) + 25);
-			overlay.DrawCircle(6, ((obj.PropertyValue * 16) + 24), 0, (obj.PropertyValue * 16) + 8); // LevelData.ColorWhite
-			return new Sprite(overlay, -((obj.PropertyValue * 16) + 24), 0);
-		}
-		
-		public override Rectangle GetBounds(ObjectEntry obj)
-		{
-			return new Rectangle(obj.X - 44, obj.Y - 24 + ((obj.PropertyValue + 1) * 16), 88, 48);
+			int l = (obj.PropertyValue * 16) + 8;
+			var overlay = new BitmapBits(2 * l + 1, l + 1);
+			overlay.DrawCircle(6, l, 0, l); // LevelData.ColorWhite
+			return new Sprite(overlay, -l, 0);
 		}
 	}
 }

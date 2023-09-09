@@ -8,6 +8,15 @@
       <Offset X="-12" Y="-11"/>
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Orb Type" description="If this SeeSaw should have an orb or not." type="orbtypes" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="orbtypes">
+      <EnumMember name="Has Orb" />
+      <EnumMember name="No Orb" value="255" /> <!-- all non-zero values are "no orb" but the scene uses 0xFF, so let's stick with that -->
+    </Enum>
+  </Enums>
   <ImageSets>
     <ImageSet id="hasorb">
       <ImageRef image="seesaw" />
@@ -22,14 +31,11 @@
   <DefaultImage>
     <ImageSetRef set="noorb" />
   </DefaultImage>
-  <Properties>
-    <Property name="Remove Orb" type="bool" startbit="7" length="1" />
-  </Properties>
   <Subtypes>
     <Subtype id="00" name="Has Orb">
       <ImageSetRef set="hasorb" />
     </Subtype>
-    <Subtype id="ff" name="No Orb">
+    <Subtype id="FF" name="No Orb">
       <ImageSetRef set="noorb" />
     </Subtype>
   </Subtypes>

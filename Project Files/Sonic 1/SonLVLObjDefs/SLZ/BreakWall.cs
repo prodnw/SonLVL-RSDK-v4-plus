@@ -1,38 +1,37 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
 namespace S1ObjectDefinitions.SLZ
 {
-	class FallPlatform : ObjectDefinition
+	class BreakWall : ObjectDefinition
 	{
 		private Sprite sprite;
 		private Sprite debug;
-
+		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(67, 26, 64, 32), -32, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("SLZ/Objects.gif").GetSection(34, 26, 32, 64), -16, -32);
 			
-			// tagging this area with LevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(1, 0x1C);
-			bitmap.DrawLine(6, 0, 0x00, 0, 0x03);
-			bitmap.DrawLine(6, 0, 0x08, 0, 0x0B);
-			bitmap.DrawLine(6, 0, 0x10, 0, 0x13);
-			bitmap.DrawLine(6, 0, 0x18, 0, 0x1B);
-			debug = new Sprite(bitmap, 0, 24);
+			BitmapBits bitmap = new BitmapBits(32, 64);
+			bitmap.DrawRectangle(6, 0, 0, 31, 63); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -16, -32);
 		}
-
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {}); }
 		}
+		
+		// even if it's 1 in the scene normally, prop val is reset on startup in-game so we don't need a DefaultSubtype here
 		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;
 		}
-
+		
 		public override Sprite Image
 		{
 			get { return sprite; }

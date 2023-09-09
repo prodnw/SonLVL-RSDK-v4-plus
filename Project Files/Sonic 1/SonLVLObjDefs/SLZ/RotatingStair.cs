@@ -54,13 +54,7 @@ namespace S1ObjectDefinitions.SLZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var bitmap = new BitmapBits(257, 257);
-			for (int i = 0; i < 8; i++)
-			{
-				bitmap.DrawRectangle(6, (i * 32), (i * 32), 32, 32); // LevelData.ColorWhite
-			}
-			bitmap.Flip(true, false);
-			return new Sprite(bitmap, -128, -128);
+			return debug;
 		}
 	}
 }

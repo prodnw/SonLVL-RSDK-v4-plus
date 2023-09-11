@@ -31,7 +31,7 @@ namespace S1ObjectDefinitions.Global
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));;
 			
 			properties[1] = new PropertySpec("Enabled in Air", typeof(int), "Extended",
-				"If this Spring should trigger the Twirl animation upon launch. Only affects upwards springs.", null,
+				"If the Spring should be usable when the player is in the air already. Only affects horizontal springs.", null,
 				(obj) => (obj.PropertyValue >= 0x80),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | ((bool)value ? 0x80 : 0x00)));
 			
@@ -39,11 +39,13 @@ namespace S1ObjectDefinitions.Global
 				"If this Spring should allow as a platform rather than as a box. Upwards springs only.", null,
 				(obj) => ((V4ObjectEntry)obj).Value1 != 0,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value ? 1 : 0));
+			
+			// scale is set in m005 but it doesn't really mean anything lol
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 0x09, 0x0a }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4 | 1, 4 | 2 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties

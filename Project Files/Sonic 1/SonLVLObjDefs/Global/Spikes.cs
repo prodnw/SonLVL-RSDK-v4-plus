@@ -100,7 +100,7 @@ namespace S1ObjectDefinitions.Global
 					{ "6 Spikes - Spaced", 12 }
 				},
 				(obj) => obj.PropertyValue & 12,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~12) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~12) | (int)value));
 			
 			properties[1] = new PropertySpec("Orientation", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
@@ -111,21 +111,17 @@ namespace S1ObjectDefinitions.Global
 					{ "Down", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (int)value));
 			
-			properties[2] = new PropertySpec("Moving", typeof(int), "Extended",
-				"If the Spikes should peek in and out.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 128 }
-				},
-				(obj) => obj.PropertyValue & 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+			properties[2] = new PropertySpec("Moving", typeof(bool), "Extended",
+				"If the Spikes should peek in and out.", null,
+				(obj) => (obj.PropertyValue > 15) ? 0x80 : 0x00,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -135,7 +131,18 @@ namespace S1ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			// i don't really like this, but it's better than nothing ig
+			
+			string[] counts = {"3 ", " 1 ", "3 Spaced ", "6 Spaced"};
+			string[] directions = {"Upwards", "Right", "Left", "Downwards"}; // not too major, but should it be "Upward" or "Upwards"? i'm honestly not sure...
+			
+			string name = counts[(subtype & 12) >> 2];
+			if (((subtype & 12) >> 2) > 1) name += "Spaced ";
+			name += directions[subtype & 3];
+			
+			if (subtype > 15) name += " (Moving)";
+			
+			return name;
 		}
 
 		public override Sprite Image
@@ -145,7 +152,7 @@ namespace S1ObjectDefinitions.Global
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[subtype & 15];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
@@ -155,7 +162,7 @@ namespace S1ObjectDefinitions.Global
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return ((obj.PropertyValue & 128) == 0) ? null : debug[obj.PropertyValue & 15];
+			return ((obj.PropertyValue & 0x80) == 0) ? null : debug[obj.PropertyValue & 15];
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace S1ObjectDefinitions.Global
 {
 	class YellowSpring : ObjectDefinition
 	{
-		private PropertySpec[] properties = new PropertySpec[3];
+		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite[] sprites = new Sprite[4];
 		
 		public override void Init(ObjectData data)
@@ -28,13 +28,8 @@ namespace S1ObjectDefinitions.Global
 					{ "Down", 3 },
 					{ "Up (Stronger)", 5 },
 				},
-				(obj) => (obj.PropertyValue & 0x7f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));;
-			
-			properties[1] = new PropertySpec("Enabled in Air", typeof(int), "Extended",
-				"If this Spring should trigger the Twirl animation upon launch. Only affects upwards springs.", null,
-				(obj) => (obj.PropertyValue >= 0x80),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | ((bool)value ? 0x80 : 0x00)));
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			properties[2] = new PropertySpec("Platform", typeof(bool), "Extended",
 				"If this Spring should allow as a platform rather than as a box. Upwards springs only.", null,
@@ -47,7 +42,7 @@ namespace S1ObjectDefinitions.Global
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 5, 0x09, 0x0a }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 5 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties

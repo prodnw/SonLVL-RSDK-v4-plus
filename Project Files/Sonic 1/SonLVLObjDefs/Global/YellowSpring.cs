@@ -31,7 +31,7 @@ namespace S1ObjectDefinitions.Global
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
-			properties[2] = new PropertySpec("Platform", typeof(bool), "Extended",
+			properties[1] = new PropertySpec("Platform", typeof(bool), "Extended",
 				"If this Spring should allow as a platform rather than as a box. Upwards springs only.", null,
 				(obj) => ((V4ObjectEntry)obj).Value1 != 0,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value ? 1 : 0));

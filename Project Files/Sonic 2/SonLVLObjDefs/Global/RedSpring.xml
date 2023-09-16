@@ -22,7 +22,7 @@
   </Images>
   <Properties>
     <Property name="Direction" description="Which direction this Spring should face." type="directions" startbit="0" length="3" />
-    <Property name="Enabled In Air" description="If the Spring should be usable when the player is in the air already. Only affects horizontal springs." type="bool" startbit="3" length="1" />
+    <Property name="Enabled in Air" description="If the Spring should be usable when the player is in the air already. Only affects horizontal springs." type="bool" startbit="3" length="1" />
     <Property name="Twirl" description="If this Spring should trigger the Twirl animation upon launch. Only affects upwards springs." type="bool" startbit="7" length="1" />
   </Properties>
   <Enums>

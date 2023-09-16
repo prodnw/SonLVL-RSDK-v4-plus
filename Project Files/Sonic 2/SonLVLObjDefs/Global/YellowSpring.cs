@@ -66,7 +66,7 @@ namespace S2ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			string[] directions = { "Up", "Right", "Left", "Down", "Up Right", "Up Left", "Down Right", "Down Left" };
+			string[] directions = { "Upwards", "Right", "Left", "Down", "Up Right", "Up Left", "Down Right", "Down Left" };
 			string name = directions[subtype & 7];
 			if (subtype >= 0x80) name += " (Twirl)";
 			return name;

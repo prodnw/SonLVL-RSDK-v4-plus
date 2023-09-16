@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.Global
 					{ "32 Nodes", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (int)value));
 			
 			properties[1] = new PropertySpec("Left Collision Plane", typeof(int), "Extended",
 				"Which plane is to the left.", null, new Dictionary<string, int>
@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.Global
 					{ "Plane B", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (int)value));
 			
 			properties[2] = new PropertySpec("Right Collision Plane", typeof(int), "Extended",
 				"Which plane is to the right.", null, new Dictionary<string, int>
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.Global
 					{ "Plane B", 8 }
 				},
 				(obj) => obj.PropertyValue & 8,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~8) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~8) | (int)value));
 			
 			properties[3] = new PropertySpec("Left Draw Order", typeof(int), "Extended",
 				"Which draw layer is to the left.", null, new Dictionary<string, int>
@@ -74,7 +74,7 @@ namespace S2ObjectDefinitions.Global
 					{ "High Layer", 16 }
 				},
 				(obj) => obj.PropertyValue & 16,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~16) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~16) | (int)value));
 			
 			properties[4] = new PropertySpec("Right Draw Order", typeof(int), "Extended",
 				"Which draw layer is to the right.", null, new Dictionary<string, int>
@@ -83,7 +83,7 @@ namespace S2ObjectDefinitions.Global
 					{ "High Layer", 32 }
 				},
 				(obj) => obj.PropertyValue & 32,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~32) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~32) | (int)value));
 			
 			properties[5] = new PropertySpec("Only Draw Order", typeof(int), "Extended",
 				"If only Draw Order should be affected.", null, new Dictionary<string, int>
@@ -92,7 +92,7 @@ namespace S2ObjectDefinitions.Global
 					{ "True", 64 }
 				},
 				(obj) => obj.PropertyValue & 64,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~64) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~64) | (int)value));
 			
 			properties[6] = new PropertySpec("Grounded", typeof(int), "Extended",
 				"If only grounded players should be affected.", null, new Dictionary<string, int>
@@ -101,7 +101,7 @@ namespace S2ObjectDefinitions.Global
 					{ "True", 128 }
 				},
 				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (int)value));
 		}
 		
 		public override PropertySpec[] CustomProperties

@@ -29,12 +29,12 @@ namespace S2ObjectDefinitions.Global
 					{ "Down", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (int)value));
 			
 			properties[1] = new PropertySpec("Moving", typeof(bool), "Extended",
-				"If these Spikes are retracting or not. Their position in the scene is their extended position.", null,
+				"If the Spikes should peek in and out.", null,
 				(obj) => obj.PropertyValue > 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 3) | (byte)((bool)value ? 0x80 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 3) | ((bool)value ? 0x80 : 0)));
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
 				"The object slot offset of this Spikes' parent, used for series of vertically retracting spikes.", null,

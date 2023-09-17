@@ -4,6 +4,7 @@
     <ImageFromSheet id="frame1" sheet="MPZ/Objects.gif" sourcex="256" sourcey="1" width="28" height="32">
       <Offset X="-14" Y="-16" />
     </ImageFromSheet>
+	<!-- in-game, frame 1 is just rotated to meet all angles, leaving all the other frames unused, but let's use the pre-rotated vers here anyways (cause it's not like we can rotate sprites in editor, so) -->
     <ImageFromSheet id="frame2" sheet="MPZ/Objects.gif" sourcex="376" sourcey="1" width="32" height="32">
       <Offset X="-16" Y="-16" />
     </ImageFromSheet>
@@ -26,6 +27,15 @@
       <Offset X="-16" Y="-16" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Direction" description="Which direction this gear should rotate in." type="directions" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="directions">
+      <EnumMember name="Clockwise" />
+      <EnumMember name="Counter-Clockwise" />
+    </Enum>
+  </Enums>
   <ImageSets>
     <ImageSet id="largegear">
       <ImageRef image="frame1">
@@ -57,4 +67,12 @@
   <DefaultImage>
     <ImageSetRef set="largegear" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Rotate Clockwise">
+      <ImageSetRef set="largegear" />
+    </Subtype>
+    <Subtype id="01" name="Rotate Counter-Clockwise">
+      <ImageSetRef set="largegear" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

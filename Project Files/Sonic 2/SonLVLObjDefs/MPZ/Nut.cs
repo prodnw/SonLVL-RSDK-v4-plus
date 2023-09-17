@@ -15,19 +15,16 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("MPZ/Objects.gif").GetSection(130, 156, 64, 24), -32, -12);
 			
-			properties[0] = new PropertySpec("Allow Drop", typeof(int), "Extended",
-				"If the Nut should drop once it reaches a certain point.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 0x80 }
-				},
-				(obj) => (obj.PropertyValue & 0x80),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+			properties[0] = new PropertySpec("Drop", typeof(bool), "Extended",
+				"If the Nut should drop once it reaches a certain point.", null,
+				(obj) => ((obj.PropertyValue & 0x80) == 0x80),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | ((bool)value ? 0x80 : 0)));
 			
-			properties[1] = new PropertySpec("Ground Distance", typeof(int), "Extended",
-				"How far down this Nut should be able to go. If Allow Drop is true, this is the height at which the Nut will drop.", null,
-				(obj) => (obj.PropertyValue & 0x7F),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7F) | (byte)(((int)value) & 0x7F)));
+			// even if it's set by non-falling Nuts, it's only used by falling ones
+			properties[1] = new PropertySpec("Drop Distance", typeof(int), "Extended",
+				"Only used if Drop is true. How far down in pixels the Nut has to be in order to start falling.", null,
+				(obj) => (obj.PropertyValue & 0x7F) << 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7F) | (((int)value >> 3) & 0x7F)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -42,7 +39,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -63,7 +60,7 @@ namespace S2ObjectDefinitions.MPZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			int height = (obj.PropertyValue & 0x7f) << 3;
-			var bitmap = new BitmapBits(2, height + 1);
+			BitmapBits bitmap = new BitmapBits(2, height + 1);
 			bitmap.DrawLine(6, 0, 0, 0, height); // LevelData.ColorWhite
 			return new Sprite(bitmap);
 		}

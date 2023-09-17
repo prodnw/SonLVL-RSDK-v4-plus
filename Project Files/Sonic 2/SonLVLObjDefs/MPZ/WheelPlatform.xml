@@ -15,7 +15,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Interval Offset" description="How offset this Wheel Platform's rotation should be, compared to other Wheel Platforms." type="offsets" startbit="0" length="2" />
+    <Property name="Interval Offset" description="How offset this Wheel Platform's rotation should be from the global cycle." type="offsets" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="offsets">
@@ -45,4 +45,18 @@
   <DefaultImage>
     <ImageSetRef set="wheelplat" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="0% Cycle Offset">
+      <ImageSetRef set="wheelplat" />
+    </Subtype>
+    <Subtype id="01" name="25% Cycle Offset">
+      <ImageSetRef set="wheelplat" />
+    </Subtype>
+    <Subtype id="02" name="50% Cycle Offset">
+      <ImageSetRef set="wheelplat" />
+    </Subtype>
+    <Subtype id="03" name="75% Cycle Offset">
+      <ImageSetRef set="wheelplat" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

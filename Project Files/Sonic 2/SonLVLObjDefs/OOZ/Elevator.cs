@@ -21,16 +21,16 @@ namespace S2ObjectDefinitions.OOZ
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the Elevator will go.", null,
 				(obj) => obj.PropertyValue & 0x7f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));
 			
 			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
-				"Where the Elevator will start from.", null, new Dictionary<string, int>
+				"Which side the Elevator will start from.", null, new Dictionary<string, int>
 				{
 					{ "Bottom", 0 },
 					{ "Top", 0x80 }
 				},
 				(obj) => obj.PropertyValue & 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -50,7 +50,7 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

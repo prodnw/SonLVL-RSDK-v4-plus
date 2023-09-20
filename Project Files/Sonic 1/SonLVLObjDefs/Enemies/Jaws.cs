@@ -28,7 +28,7 @@ namespace S1ObjectDefinitions.Enemies
 			properties[0] = new PropertySpec("Swim Time", typeof(int), "Extended",
 				"How long the Jaws will swim in a direction at a time, to be multiplied by 64 frames in-game.", null,
 				(obj) => obj.PropertyValue & 0x7f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value) & 0x7f));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | ((int)value & 0x7f)));
 
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Jaws will be facing initially.", null, new Dictionary<string, int>
@@ -37,7 +37,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 0x80 }
 				},
 				(obj) => obj.PropertyValue & 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -52,7 +52,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

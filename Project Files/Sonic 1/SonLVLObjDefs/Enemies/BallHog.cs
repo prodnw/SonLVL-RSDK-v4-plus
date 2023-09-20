@@ -22,7 +22,7 @@ namespace S1ObjectDefinitions.Enemies
 			properties[0] = new PropertySpec("Bomb Time", typeof(int), "Extended",
 				"How long thrown bombs will last, in seconds.", null,
 				(obj) => obj.PropertyValue & 0x7f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value) & 0x7f));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | ((int)value & 0x7f)));
 
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Ball Hog will be facing.", null, new Dictionary<string, int>
@@ -31,12 +31,12 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 0x80 }
 				},
 				(obj) => obj.PropertyValue & 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 6, 7, 8, 0x86, 0x87, 0x88 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -51,7 +51,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return (subtype & 0x7f) + " Second Bomb Duration " + ((subtype > 0x80) ? "(Facing Right)" : "(Facing Left)");
 		}
 
 		public override Sprite Image
@@ -61,7 +61,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[subtype >> 7];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

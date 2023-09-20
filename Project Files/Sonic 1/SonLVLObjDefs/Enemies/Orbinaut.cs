@@ -56,7 +56,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Fire Orbs", typeof(int), "Extended",
 				"If the Orbinaut should fire its orbs or not.", null, new Dictionary<string, int>
@@ -65,12 +65,12 @@ namespace S1ObjectDefinitions.Enemies
 					{ "False", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties

@@ -27,6 +27,8 @@ namespace S1ObjectDefinitions.Enemies
 					break;
 			}
 			
+			sprite.Flip(true, false);
+			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Crabmeat is facing.", null, new Dictionary<string, int>
 				{

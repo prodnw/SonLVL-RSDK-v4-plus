@@ -179,7 +179,7 @@ namespace S1ObjectDefinitions.Enemies
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image

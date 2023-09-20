@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" description="How this Flicky will act." type="behaviours" startbit="0" length="2" />
+    <Property name="Behaviour" description="How this Flicky will act." type="behaviours" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="behaviours">

@@ -37,7 +37,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("On Roof", typeof(int), "Extended",
 				"If the Bomb is on a roof or not.", null, new Dictionary<string, int>
@@ -46,7 +46,7 @@ namespace S1ObjectDefinitions.Enemies
 					{ "True", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

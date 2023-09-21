@@ -6,16 +6,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Collapse From" type="collfrom" startbit="0" length="1" />
+    <Property name="Collapse From" description="Which side this platform should collapse from upon contact." type="collfrom" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="collfrom">
-      <EnumMember name="Right" />
+      <EnumMember name="Left" />
       <EnumMember name="Bottom" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Collapse From Right" image="frame" />
+    <Subtype id="00" name="Collapse From Left" image="frame" />
     <Subtype id="01" name="Collapse From Bottom" image="frame" />
   </Subtypes>
 </ObjDef>

@@ -12,18 +12,18 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Move Type" type="movetypes" startbit="0" length="3" />
-    <Property name="Start Direction" type="movedirs" startbit="3" length="1" />
-    <Property name="Frame ID" type="frames" startbit="4" length="2" />
+    <Property name="Behaviour" description="Which movement pattern this platform should follow." type="behaviours" startbit="0" length="3" />
+    <Property name="Start Direction" description="Which direction this platform should start from. Only affects moving platforms." type="movedirs" startbit="3" length="1" />
+    <Property name="Frame" description="Which type of platform this object should be." type="frames" startbit="4" length="2" />
   </Properties>
   <Enums>
-    <Enum name="movetypes">
+    <Enum name="behaviours">
       <EnumMember name="Static" />
       <EnumMember name="Move - Shorter" />
       <EnumMember name="Move - Short" />
       <EnumMember name="Move - Long" />
       <EnumMember name="Move - Longer" />
-      <EnumMember name="Dips with Fireballs" />
+      <EnumMember name="Dips (Fireballs)" />
     </Enum>
     <Enum name="movedirs">
       <EnumMember name="Down" />
@@ -37,15 +37,15 @@
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Frame ID" value="Arch" />
+      <Condition property="Frame" value="Arch" />
       <ImageRef image="arch" />
     </DisplayOption>
     <DisplayOption>
-      <Condition property="Frame ID" value="Curved" />
+      <Condition property="Frame" value="Curved" />
       <ImageRef image="curve" />
     </DisplayOption>
     <DisplayOption>
-      <Condition property="Frame ID" value="Rectangular" />
+      <Condition property="Frame" value="Rectangular" />
       <ImageRef image="rectangle" />
     </DisplayOption>
   </Display>

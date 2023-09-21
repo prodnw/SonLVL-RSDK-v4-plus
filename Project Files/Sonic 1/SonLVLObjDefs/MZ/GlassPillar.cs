@@ -43,7 +43,7 @@ namespace S1ObjectDefinitions.MZ
 					{ "Medium", 0x10 }
 				},
 				(obj) => obj.PropertyValue & 0x10,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x10) | ((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x10) | (int)value));
 			
 			properties[1] = new PropertySpec("Movement", typeof(bool), "Extended",
 				"What pattern this Pillar's movement should follow.", null, new Dictionary<string, int>
@@ -53,7 +53,7 @@ namespace S1ObjectDefinitions.MZ
 					{ "Vertical (Reverse)", 2 }
 				},
 				(obj) => ((obj.PropertyValue & 7) > 5) ? 0 : (obj.PropertyValue & 7), // where'd that 5 come from? yeah, i'm wondering the same thing too..
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | ((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

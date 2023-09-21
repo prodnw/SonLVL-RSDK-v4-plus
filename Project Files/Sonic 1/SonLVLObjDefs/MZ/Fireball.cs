@@ -61,6 +61,14 @@ namespace S1ObjectDefinitions.MZ
 				(obj) => obj.PropertyValue & 0xf0,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (int)value));
 			
+			/*
+			// maybe?
+			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
+				"The interval, in groups of 30 frames, at which the Fireball should fire.", null,
+				(obj) => ((obj.PropertyValue >> 4) + 1) * 30,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | ((((int)value / 30) - 1) << 4)));
+			*/
+			
 			// For the jumping fireballs, let's show how high they'll jump
 			int[] distances = {84, 131, 189, 258};
 			for (int i = 0; i < distances.Length; i++)
@@ -73,7 +81,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0x30, 0x41, 0x42, 0x43, 0x34, 0x35, 0x36, 0x37 }); } // some hidden intervals..
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -83,7 +91,8 @@ namespace S1ObjectDefinitions.MZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			string[] patterns = new string[]{ "Jump (84 px)", "Jump (131 px)", "Jump (189 px)", "Jump (258 px)", "Travel Up", "Travel Down", "Travel Left", "Travel Right" };
+			return patterns[subtype & 7];
 		}
 
 		public override Sprite Image

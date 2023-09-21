@@ -29,7 +29,7 @@ namespace S1ObjectDefinitions.MZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image

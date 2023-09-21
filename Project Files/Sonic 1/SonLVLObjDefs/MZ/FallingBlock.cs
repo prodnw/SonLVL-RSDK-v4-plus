@@ -31,6 +31,7 @@ namespace S1ObjectDefinitions.MZ
 					{ "Idle", 0 },
 					{ "Floating (Hover)", 1 },
 					{ "Floating (Drop)", 2 },
+					// 3 is the falling state, but we don't wanna spawn that
 					{ "Floating (In Lava)", 4 }
 				},
 				(obj) => ((obj.PropertyValue & 7) > 4) ? 0 : (obj.PropertyValue & 7),

@@ -8,25 +8,24 @@ namespace S2ObjectDefinitions.HPZ
 	class VBlock : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite sprite;
+		private Sprite[] sprites = new Sprite[3];
 		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("HPZ/Objects.gif").GetSection(353, 1, 64, 64), -32, -32);
+			sprites[2] = new Sprite(LevelData.GetSpriteSheet("HPZ/Objects.gif").GetSection(353, 1, 64, 64), -32, -32);
+			sprites[0] = new Sprite(sprites[2], 0, 64);
+			sprites[1] = new Sprite(sprites[2], 0, -64);
 			
-			// tagging this area with LevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(65, 193);
-			bitmap.DrawLine(6, 32, 32, 32, 160); // movement line
-			bitmap.DrawRectangle(6, 0, 0, 63, 63); // top box
-			bitmap.DrawRectangle(6, 0, 128, 63, 63); // bottom box
-			debug = new Sprite(bitmap, -32, -96);
+			BitmapBits bitmap = new BitmapBits(1, (64 * 2) + 1);
+			bitmap.DrawLine(6, 0, 0, 0 * 2, 64 * 2); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, 0, -64);
 			
-			properties[0] = new PropertySpec("Starting Direction", typeof(int), "Extended",
-				"Which direction the Vertical Block will travel in.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which side this block should start from.", null, new Dictionary<string, int>
 				{
-					{ "Downwards", 0 },
-					{ "Upwards", 1 }
+					{ "Bottom", 0 },
+					{ "Top", 1 }
 				},
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -49,22 +48,22 @@ namespace S2ObjectDefinitions.HPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return ((subtype == 1) ? "Start Upwards" : "Start Downwards");
+			return (subtype == 1) ? "Start From Top" : "Start From Bottom";
 		}
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[2]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[2];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[(obj.PropertyValue == 1) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

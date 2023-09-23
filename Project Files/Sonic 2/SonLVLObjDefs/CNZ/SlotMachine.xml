@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Reward" type="rewards" startbit="0" length="8" />
+    <Property name="Reward" description="Which prize type this object should have. Rings Machines should have a Slots Display object in the following object slot." type="rewards" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="rewards">

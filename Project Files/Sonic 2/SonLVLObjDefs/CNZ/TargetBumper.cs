@@ -53,7 +53,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

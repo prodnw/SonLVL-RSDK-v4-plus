@@ -31,8 +31,8 @@ namespace S2ObjectDefinitions.HPZ
 			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far this Rocket will go, in pixels.", null,
-				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
+				(obj) => ((obj.PropertyValue & 0x7f) == 0) ? 256 : ((obj.PropertyValue & 0x7f) << 5),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | ((int)value >> 5)));
 			
 			properties[1] = new PropertySpec("Travel Direction", typeof(int), "Extended",
 				"Which way the Lift will travel in.", null, new Dictionary<string, int>
@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.HPZ
 					{ "Right", 0x80 }
 				},
 				(obj) => (obj.PropertyValue & 0x80),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | ((int)value)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -84,11 +84,11 @@ namespace S2ObjectDefinitions.HPZ
 			int sy = ((obj.PropertyValue & 0x7f) == 0) ? 256 : ((obj.PropertyValue & 0x7f) << 5);
 			int sx = (sy / 8) * 4;
 			
-			// TODO: it's kinda hard to see the line, maybe make the end a little arrow so that it's more visible
+			// TODO: it's kinda hard to see the line, maybe make the end a little arrow so that it's more visible?
 			
 			BitmapBits bitmap = new BitmapBits(sx + 1, sy + 1);
 			bitmap.DrawLine(6, 0, 0, sx, sy); // LevelData.ColorWhite
-			bitmap.Flip((obj.PropertyValue & 0x80) == 0x80, false);
+			bitmap.Flip(obj.PropertyValue >= 0x80, false);
 			return new Sprite(bitmap, ((obj.PropertyValue & 0x80) == 0x00) ? -sx : 0, -sy);
 		}
 	}

@@ -6,16 +6,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Release Type" type="reltypes" startbit="0" length="8" />
+    <Property name="Lock Controls" description="If this Plunger should lock player controls upon launch." type="lockcontrols" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="reltypes">
-      <EnumMember name="Lock Controls" />
-      <EnumMember name="Release Controls" />
+    <Enum name="lockcontrols"> <!-- sounds cleaner this way compared to "disable lock" imo -->
+      <EnumMember name="True" />
+      <EnumMember name="False" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Lock Controls Upon Release" image="plunger" />
-    <Subtype id="01" name="Release Controls Upon Release" image="plunger" />
+    <Subtype id="00" name="Lock Controls Upon Launch" image="plunger" />
+    <Subtype id="01" name="Release Controls Upon Launch" image="plunger" />
   </Subtypes>
 </ObjDef>

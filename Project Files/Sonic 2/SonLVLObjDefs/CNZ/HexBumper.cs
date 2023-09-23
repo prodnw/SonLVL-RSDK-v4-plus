@@ -7,30 +7,25 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class HexBumper : ObjectDefinition
 	{
-		private Sprite img;
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
-
+		
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
-			{
-				img = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(99, 99, 48, 32), -24, -16);
-			}
+				sprite = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(99, 99, 48, 32), -24, -16);
 			else
-			{
-				img = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(581, 343, 48, 32), -24, -16);
-			}
-
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(581, 343, 48, 32), -24, -16);
+			
 			BitmapBits bitmap = new BitmapBits(193, 2);
 			bitmap.DrawLine(6, 0, 0, 192, 0); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -96, 0);
 			
-			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Moving", typeof(int), "Extended",
-				"If the Bumper will be Moving or not.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
+				"How this Bumper should behave.", null, new Dictionary<string, int>
 				{
-					{ "Static", 0 },
+					{ "Stationary", 0 },
 					{ "Moving", 1 }
 				},
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
@@ -49,31 +44,27 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Moving Bumper" : "Static Bumper";
+			return (subtype == 1) ? "Moving Bumper" : "Stationary Bumper";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 1)
-			{
-				return debug;
-			}
-			return new Sprite();
+			return (obj.PropertyValue == 1) ? debug : null;
 		}
 	}
 }

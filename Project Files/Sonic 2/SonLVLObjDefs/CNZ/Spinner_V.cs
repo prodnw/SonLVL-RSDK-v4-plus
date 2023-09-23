@@ -30,7 +30,7 @@ namespace S2ObjectDefinitions.CNZ
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Enter From", typeof(int), "Extended",
-				"Which plane is above.", null, new Dictionary<string, int>
+				"Which side the Spinner should have effect on.", null, new Dictionary<string, int>
 				{
 					{ "Left", 0 },
 					{ "Right", 4 }
@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.CNZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2, 4, 6, 1, 3, 5, 7 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -51,7 +51,7 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (1 << ((subtype & 3) + 2)) + " Nodes, " + (((subtype & 4) == 0) ? "Enter From Left" : "Enter From Right");
 		}
 
 		public override Sprite Image
@@ -66,12 +66,14 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int count = Math.Max((1 << ((obj.PropertyValue & 3) + 2)), 1);
+			int count = 1 << ((obj.PropertyValue & 3) + 2);
 			int sy = -(((count) * 16) / 2) + 8;
+			int frame = (obj.PropertyValue & 4) >> 2;
+			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < count; i++)
 			{
-				sprs.Add(new Sprite(sprites[(obj.PropertyValue & 4) >> 2], 0, sy + (i * 16)));
+				sprs.Add(new Sprite(sprites[frame], 0, sy + (i * 16)));
 			}
 			return new Sprite(sprs.ToArray());
 		}

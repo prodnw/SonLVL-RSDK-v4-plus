@@ -8,18 +8,17 @@ namespace S2ObjectDefinitions.HPZ
 {
 	class TubePath : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
-		private PropertySpec[] properties;
-
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Marker Type", typeof(int), "Extended",
-				"If this Tube Path is an enterance or an exit.", null, new Dictionary<string, int>
+				"If this Tube Path is an entrance or an exit.", null, new Dictionary<string, int>
 				{
-					{ "Enterance", 0 },
+					{ "Entrance", 0 },
 					{ "Exit", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
@@ -41,7 +40,7 @@ namespace S2ObjectDefinitions.HPZ
 			switch (subtype)
 			{
 				case 0:
-					return "Enterance";
+					return "Entrance";
 				case 1:
 					return "Exit";
 				default:
@@ -75,23 +74,32 @@ namespace S2ObjectDefinitions.HPZ
 				if (nodes.Count == 0)
 					return null;
 				
-				// Add one forward of final object to list
-				// (There's probably a better way to do this, don't look at me for that though!)
+				// add this obj itself to the start
+				nodes.Insert(0, obj);
+				
+				// and add the exit tube path obj to the end too
 				nodes.Add(LevelData.Objects[LevelData.Objects.IndexOf(nodes[nodes.Count - 1]) + 1]);
 				
 				short xmin = Math.Min(obj.X, nodes.Min(a => a.X));
 				short ymin = Math.Min(obj.Y, nodes.Min(a => a.Y));
 				short xmax = Math.Max(obj.X, nodes.Max(a => a.X));
 				short ymax = Math.Max(obj.Y, nodes.Max(a => a.Y));
-				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 				
-				if (obj.X != nodes[0].X || obj.Y != nodes[0].Y)
-					bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin); // LevelData.ColorWhite
+				// let's give the path line an outline to help make it more visible, white is high with black below
+				BitmapBits white = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+				BitmapBits black = new BitmapBits(white.Width + 1, white.Height + 1);
 				
 				for (int i = 0; i < nodes.Count - 1; i++)
-					bmp.DrawLine(6, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin); // LevelData.ColorWhite
+				{
+					white.DrawLine(6, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin); // LevelData.ColorWhite
+					
+					// black
+					black.DrawLine(1, nodes[i].X - xmin, nodes[i].Y - ymin + 1, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin + 1);
+					black.DrawLine(1, nodes[i].X - xmin + 1, nodes[i].Y - ymin, nodes[i + 1].X - xmin + 1, nodes[i + 1].Y - ymin);
+					black.DrawLine(1, nodes[i].X - xmin + 1, nodes[i].Y - ymin + 1, nodes[i + 1].X - xmin + 1, nodes[i + 1].Y - ymin + 1);
+				}
 				
-				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+				return new Sprite(new Sprite(black, xmin - obj.X, ymin - obj.Y), new Sprite(white, xmin - obj.X, ymin - obj.Y));
 			}
 			
 			return null;

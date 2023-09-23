@@ -127,18 +127,22 @@ namespace S2ObjectDefinitions.Global
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			int count = Math.Max((1 << ((obj.PropertyValue & 3) + 2)), 1);
-			int frame = (obj.PropertyValue >> 2) & 15;
-			if ((obj.PropertyValue & 64) != 0) frame = (frame >> 2) + 16;
 			int sx = -(((count) * 16) / 2) + 8;
+			
+			int index = (obj.PropertyValue >> 2) & 15;
+			if ((obj.PropertyValue & 64) == 64)
+				index = (index >> 2) + 16;
+			
+			Sprite frame = new Sprite(sprites[index]);
+			if (obj.PropertyValue > 0x7f) // Grounded, add back sprite
+				frame = new Sprite(sprites[20], frame);
+			
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < count; i++)
 			{
-				if (obj.PropertyValue > 0x7f) // Grounded, add back sprite
-					sprs.Add(new Sprite(sprites[16], sx + (i * 16), 0));
-				
-				sprs.Add(new Sprite(sprites[frame], sx + (i * 16), 0));
+				sprs.Add(new Sprite(frame, sx + (i * 16), 0));
 			}
-
+			
 			return new Sprite(sprs.ToArray());
 		}
 	}

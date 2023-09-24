@@ -8,29 +8,38 @@ namespace S2ObjectDefinitions.OOZ
 {
 	class CFloor : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite[] sprites = new Sprite[2];
-		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("OOZ/Objects.gif").GetSection(1, 207, 128, 48), -64, -24);
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
-			// prop val is unused btw, even if it is set in the scene
+			BitmapBits bitmap = new BitmapBits(128, 48);
+			bitmap.DrawRectangle(6, 0, 0, 127, 47); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -64, -24);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which way the Floor is facing.", null, new Dictionary<string, int>
+				"Which way the object is facing.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
 				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+			
+			// i don't think this is ever even used?
+			properties[1] = new PropertySpec("Solid", typeof(bool), "Extended",
+				"If this object should have solid collision, as opposed to platform collision.", null,
+				(obj) => obj.PropertyValue >= 2,
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 2 : 0));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -40,7 +49,7 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype < 2) ? "Platform" : "Solid";
 		}
 
 		public override Sprite Image
@@ -56,6 +65,11 @@ namespace S2ObjectDefinitions.OOZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprites[(((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

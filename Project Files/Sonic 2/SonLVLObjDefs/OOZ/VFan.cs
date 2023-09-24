@@ -33,7 +33,7 @@ namespace S2ObjectDefinitions.OOZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

@@ -21,10 +21,10 @@ namespace S2ObjectDefinitions.OOZ
 			sprites[4] = new Sprite(sheet.GetSection(189, 75, 16, 32), -8, -16);
 			sprites[5] = new Sprite(sheet.GetSection(189, 107, 48, 32), -24, -16);
 			
-			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
 				"How long this Oil Fall should run for.", null,
 				(obj) => obj.PropertyValue & 7,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (int)value));
 			
 			properties[1] = new PropertySpec("Frame", typeof(int), "Extended",
 				"Which sprite this Oil Fall should display.", null, new Dictionary<string, int>
@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.OOZ
 					{ "Wide (Double)", 3 }
 				},
 				(obj) => (obj.PropertyValue >> 3) & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~(3 << 3)) | (byte)(((int)value & 3) << 3)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~(3 << 3)) | ((int)value & 3) << 3));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -55,7 +55,7 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

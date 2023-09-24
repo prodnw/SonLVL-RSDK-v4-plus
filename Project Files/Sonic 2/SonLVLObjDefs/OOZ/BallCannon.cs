@@ -79,8 +79,8 @@ namespace S2ObjectDefinitions.OOZ
 				debug[i] = new Sprite(dbg, -45, -45);
 			}
 			
-			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
-				"Where this Cannon should point from and fire towards.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which direction this Cannon should point from and fire towards.", null, new Dictionary<string, int>
 				{
 					{ "Up -> Right", 0 },
 					{ "Right -> Down", 1 },
@@ -92,17 +92,17 @@ namespace S2ObjectDefinitions.OOZ
 					{ "Up -> Left", 7 }
 				},
 				(obj) => obj.PropertyValue & 7,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (int)value));
 			
-			properties[1] = new PropertySpec("No Control Lock", typeof(bool), "Extended",
-				"Whether or not this Cannon should apply a control lock after launching the player.", null,
+			properties[1] = new PropertySpec("Release Controls", typeof(bool), "Extended",
+				"Controls whether or not this Cannon will lock controls after launching the player.", null,
 				(obj) => obj.PropertyValue > 7,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 7) | ((bool)value ? 8 : 0)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -112,7 +112,10 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			string[] directions = {"Up -> Right", "Right -> Down", "Down -> Left", "Left -> Up", "Right -> Up", "Down -> Right", "Left -> Down", "Up -> Left"};
+			string name = directions[subtype & 7];
+			if (subtype > 7) name += " (Release Controls)";
+			return name;
 		}
 
 		public override Sprite Image

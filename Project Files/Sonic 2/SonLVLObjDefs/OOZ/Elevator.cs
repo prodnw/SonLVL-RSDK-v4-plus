@@ -1,4 +1,5 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -19,12 +20,12 @@ namespace S2ObjectDefinitions.OOZ
 			debug = new Sprite(overlay, -64, -12);
 
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
-				"How far the Elevator will go.", null,
-				(obj) => obj.PropertyValue & 0x7f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));
+				"How far, in pixels, the Elevator will go.", null,
+				(obj) => (obj.PropertyValue & 0x7f) << 3,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | ((int)value >> 3)));
 			
 			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
-				"Which side the Elevator will start from.", null, new Dictionary<string, int>
+				"Which direction the Elevator will start from.", null, new Dictionary<string, int>
 				{
 					{ "Bottom", 0 },
 					{ "Top", 0x80 }
@@ -65,27 +66,23 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int dist = (obj.PropertyValue & 127) << 2;
+			int dist = (obj.PropertyValue & 0x7f) << 2;
 			if ((obj.PropertyValue & 0x80) == 0)
-			{
 				dist *= -1;
-			}
+			
 			return new Sprite(sprite, 0, -dist + 4);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			int dist = (obj.PropertyValue & 127) << 2;
-			/*
+			int dist = (obj.PropertyValue & 0x7f) << 2;
 			BitmapBits bitmap = new BitmapBits(2, (2 * dist) + 1);
 			bitmap.DrawLine(6, 0, 0, 0, (2 * dist)); // LevelData.ColorWhite
-			return new Sprite(bitmap, 0, -dist);
-			*/
+			
 			if ((obj.PropertyValue & 0x80) == 0)
-			{
 				dist *= -1;
-			}
-			return new Sprite(debug, 0, dist + 4);
+			
+			return new Sprite(new Sprite(bitmap, 0, -Math.Abs(dist) + 4), new Sprite(debug, 0, dist + 4));
 		}
 	}
 }

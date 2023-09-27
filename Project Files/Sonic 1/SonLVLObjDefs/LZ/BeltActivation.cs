@@ -6,16 +6,18 @@ using System.Collections.ObjectModel;
 
 namespace S1ObjectDefinitions.LZ
 {
+	class CorkActivation : LZ.BeltActivation
+	{
+		public override string targetName { get { return "Cork"; } }
+	}
+	
 	class BeltActivation : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
+		public virtual string targetName { get { return "Belt Platform"; } }
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(239, 239, 16, 16), -8, -8);
@@ -24,6 +26,11 @@ namespace S1ObjectDefinitions.LZ
 				"How many of the following objects should be activated by this Activator.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 8, 10, 12 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -38,7 +45,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "Active " + subtype + " Objects";
 		}
 
 		public override Sprite Image
@@ -61,20 +68,32 @@ namespace S1ObjectDefinitions.LZ
 			if (obj.PropertyValue == 0)
 				return null;
 			
-			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
-			if (objs.Count == 0)
-				return null;
+			try
+			{
+				int index = LevelData.Objects.IndexOf(obj) + 1;
+				while (LevelData.Objects[index].Name != targetName)
+					index++;
+				index--;
+				List<ObjectEntry> objs = LevelData.Objects.Skip(index).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (index + obj.PropertyValue)).ToList();
+				if (objs.Count == 0)
+					return null;
+				
+				short xmin = Math.Min(obj.X, objs.Min(a => a.X));
+				short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
+				short xmax = Math.Max(obj.X, objs.Max(a => a.X));
+				short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
+				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+				
+				for (int i = 0; i < objs.Count - 1; i++)
+					bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
+				
+				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			}
+			catch
+			{
+			}
 			
-			short xmin = Math.Min(obj.X, objs.Min(a => a.X));
-			short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
-			short xmax = Math.Max(obj.X, objs.Max(a => a.X));
-			short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
-			
-			for (int i = 0; i < objs.Count - 1; i++)
-				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
-			
-			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			return null;
 		}
 	}
 }

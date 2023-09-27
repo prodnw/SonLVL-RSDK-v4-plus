@@ -11,30 +11,25 @@ namespace S1ObjectDefinitions.LZ
 		private readonly Sprite[] sprites = new Sprite[3];
 		private PropertySpec[] properties = new PropertySpec[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("LZ/Objects.gif");
-			sprites[0] = new Sprite(sheet.GetSection(84, 173, 16, 16), -8, -8);
-			sprites[1] = new Sprite(sheet.GetSection(101, 173, 16, 16), -8, -8);
-			sprites[2] = new Sprite(sheet.GetSection(84, 190, 32, 32), -16, -16);
+			sprites[0] = new Sprite(sheet.GetSection(84, 173, 16, 16), -8, -8); // post
+			sprites[1] = new Sprite(sheet.GetSection(101, 173, 16, 16), -8, -8); // chain
+			sprites[2] = new Sprite(sheet.GetSection(84, 190, 32, 32), -16, -16); // spike ball
 			
 			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
-				"How many chains this Spike should hang off of.", null,
+				"How many chains the Spike should hang off of.", null,
 				(obj) => obj.PropertyValue & 0x0f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (int)value));
 			
-			properties[1] = new PropertySpec("Spin Speed", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
 				"How fast the Spike Ball should swing. Positive values are clockwise, negative values are counter-clockwise.", null,
 				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - (((obj.PropertyValue & 0xf0) > 0x80) ? 0x10 : 0x00),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)(((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4))));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | ((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4)));
 			
-			properties[2] = new PropertySpec("Starting Angle", typeof(int), "Extended",
-				"Which angle the Spike Ball should start at.", null, new Dictionary<string, int>
+			properties[2] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which direction this Rotating Spike should start from.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Down", 1 },
@@ -45,9 +40,14 @@ namespace S1ObjectDefinitions.LZ
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
+		
 		public override byte DefaultSubtype
 		{
-			get { return 0x44; }
+			get { return 0xC4; } // length: 4, speed: -4
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -72,14 +72,15 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			double angle = (double)(((V4ObjectEntry)obj).Direction) * (Math.PI / 2);
-			int length = (obj.PropertyValue & 15) - 1;
 			List<Sprite> sprs = new List<Sprite>();
-			sprs.Add(new Sprite(sprites[0]));
 			
-			for (int i = 0; i <= length; i++)
+			int length = (obj.PropertyValue & 0x0f);
+			double angle = (int)(((V4ObjectEntry)obj).Direction) * (Math.PI / 2.0);
+			
+			for (int i = 0; i < length + 1; i++)
 			{
-				sprs.Add(new Sprite(sprites[(i == length) ? 2 : 1], (int)(Math.Cos(angle) * ((i+1) * 16)), (int)(Math.Sin(angle) * ((i+1) * 16))));
+				int frame = (i == 0) ? 0 : (i == length) ? 2 : 1;
+				sprs.Add(new Sprite(sprites[frame], (int)(Math.Cos(angle) * (i * 16)), (int)(Math.Sin(angle) * (i * 16))));
 			}
 			
 			return new Sprite(sprs.ToArray());

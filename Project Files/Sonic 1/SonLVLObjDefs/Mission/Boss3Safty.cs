@@ -10,14 +10,14 @@ namespace S1ObjectDefinitions.Mission
 	{
 		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -44,8 +44,8 @@ namespace S1ObjectDefinitions.Mission
 		{
 			// Draw a line from this object's position to its falling bounds, and then draw a line across those falling bounds
 			// (0x0580 is a value hardcoded in the script)
-			int ymin = Math.Min(obj.Y, 0x0580);
-			int ymax = Math.Max(obj.Y, 0x0580);
+			int ymin = Math.Min((int)obj.Y, 0x0580);
+			int ymax = Math.Max((int)obj.Y, 0x0580);
 			BitmapBits bmp = new BitmapBits(257, ymax - ymin + 1);
 			
 			// tagging this area with LevelData.ColorWhite

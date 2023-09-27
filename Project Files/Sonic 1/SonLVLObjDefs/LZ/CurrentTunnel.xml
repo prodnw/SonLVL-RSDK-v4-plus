@@ -6,10 +6,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Is End" description="If this Current Tunnel is to mark the end of a tunnel." type="bool" startbit="0" length="1" />
+    <Property name="Marker Type" description="Which type of marker this object is." type="markers" startbit="0" length="8" />
   </Properties>
+  <Enums>
+    <Enum name="markers">
+      <EnumMember name="Start Marker" />
+      <EnumMember name="End Marker" />
+    </Enum>
+  </Enums>
   <Subtypes>
-    <Subtype id="00" name="Start of Current" image="wcon" />
-	<Subtype id="01" name="End of Current" image="wcon" />
+    <Subtype id="00" name="Start Marker" image="wcon" />
+    <Subtype id="01" name="End Marker" image="wcon" />
   </Subtypes>
 </ObjDef>

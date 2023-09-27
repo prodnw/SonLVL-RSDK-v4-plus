@@ -19,10 +19,10 @@ namespace S1ObjectDefinitions.LZ
 				"Which way the Harpoon is pointing.", null, new Dictionary<string, int>
 				{
 					{ "Upwards", 0 },
-					{ "Downwards", 1 }
+					{ "Downwards", 2 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY) ? 1 : 0),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((int)value << 1));
+				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY) ? 2 : 0),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -37,7 +37,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -52,7 +52,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY) ? 1 : 0)];
+			return sprites[((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY) ? 1 : 0];
 		}
 	}
 }

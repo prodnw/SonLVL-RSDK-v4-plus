@@ -21,7 +21,7 @@ namespace S1ObjectDefinitions.LZ
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 
@@ -37,7 +37,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -52,7 +52,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0)];
+			return sprites[(((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0];
 		}
 	}
 }

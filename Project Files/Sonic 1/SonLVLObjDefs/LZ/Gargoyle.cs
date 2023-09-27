@@ -21,13 +21,13 @@ namespace S1ObjectDefinitions.LZ
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0),
+				(obj) => ((((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
-				"The internvals the Gargoyle should fire in.", null,
-				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				"The interval, in groups of 30 frames, at which the Gargoyle should fire at.", null,
+				(obj) => (obj.PropertyValue + 1) * 30,
+				(obj, value) => obj.PropertyValue = (byte)(((int)value / 30) - 1));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -42,7 +42,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -57,7 +57,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX) ? 1 : 0)];
+			return sprites[(((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1];
 		}
 	}
 }

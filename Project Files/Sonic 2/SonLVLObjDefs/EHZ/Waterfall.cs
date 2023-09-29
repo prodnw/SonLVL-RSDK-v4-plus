@@ -13,16 +13,21 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override void Init(ObjectData data)
 		{
+			// Set up the debug visualisation for when the current frame is an empty sprite
+			BitmapBits bitmap = new BitmapBits(65, 65);
+			bitmap.DrawRectangle(6, 0, 0, 64, 64); // LevelData.ColorWhite
+			sprites[9] = new Sprite(bitmap, -32, -32);
+			
 			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("EHZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(192, 0, 64, 16), -32, -128);
 				sprites[1] = new Sprite(sheet.GetSection(192, 0, 64, 256), -32, -128);
-				sprites[2] = new Sprite(sheet.GetSection(1, 1, 1, 1), 0, 0);
+				sprites[2] = sprites[9]; // normally blank, let's give it a box
 				sprites[3] = new Sprite(sheet.GetSection(192, 16, 64, 64), -32, -32);
-				sprites[4] = new Sprite(sheet.GetSection(1, 1, 1, 1), 0, 0);
+				sprites[4] = sprites[9]; // normally blank, let's give it a box
 				sprites[5] = new Sprite(sheet.GetSection(192, 16, 64, 160), -32, -64);
-				sprites[6] = new Sprite(sheet.GetSection(192, 0, 64, 16), -32, -128);
+				sprites[6] = new Sprite(sheet.GetSection(192, 0, 64, 16), -32, -128); // not used, but set it up anyways
 				sprites[7] = new Sprite(sheet.GetSection(192, 0, 64, 192), -32, -128);
 				sprites[8] = new Sprite(sheet.GetSection(192, 64, 64, 96), -32, -32);
 			}
@@ -31,30 +36,25 @@ namespace S2ObjectDefinitions.EHZ
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
 				sprites[0] = new Sprite(sheet.GetSection(1, 435, 64, 16), -32, -128);
 				sprites[1] = new Sprite(sheet.GetSection(1, 435, 64, 256), -32, -128);
-				sprites[2] = new Sprite(sheet.GetSection(1, 1, 1, 1), 0, 0);
+				sprites[2] = sprites[9]; // normally blank, let's give it a box
 				sprites[3] = new Sprite(sheet.GetSection(1, 451, 64, 64), -32, -32);
-				sprites[4] = new Sprite(sheet.GetSection(1, 1, 1, 1), 0, 0);
+				sprites[4] = sprites[9]; // normally blank, let's give it a box
 				sprites[5] = new Sprite(sheet.GetSection(1, 451, 64, 160), -32, -64);
-				sprites[6] = new Sprite(sheet.GetSection(1, 435, 64, 16), -32, -128);
+				sprites[6] = new Sprite(sheet.GetSection(1, 435, 64, 16), -32, -128); // not used, but set it up anyways
 				sprites[7] = new Sprite(sheet.GetSection(1, 435, 64, 192), -32, -128);
 				sprites[8] = new Sprite(sheet.GetSection(1, 499, 64, 96), -32, -32);
 			}
 			
-			// Set up the debug visualisation for when the current frame is an empty sprite
-			BitmapBits bitmap = new BitmapBits(65, 65);
-			bitmap.DrawRectangle(6, 0, 0, 64, 64); // LevelData.ColorWhite
-			sprites[9] = new Sprite(bitmap, -32, -32);
-			
-			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
-				"Which frame this Waterfall should display.", null, new Dictionary<string, int>
+			// we skip a few numbers in this list, 2 and 4 are skipped because they're blank, 6 is skipped because it's the same as 0
+			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
+				"How long this Waterfall is.", null, new Dictionary<string, int>
 				{
-					{ "Frame 0", 0 }, // yeah these names are kinda bad and don't make much sense but i don't got anything better, so
-					{ "Frame 1", 1 },
-					{ "Frame 3", 3 },
-					{ "Frame 5", 5 },
-					{ "Frame 6", 6 },
-					{ "Frame 7", 7 },
-					{ "Frame 8", 8 }
+					{ "Top", 0 },
+					{ "64 px", 3 },
+					{ "96 px", 8 },
+					{ "160 px", 5 },
+					{ "192 px", 7 },
+					{ "256 px", 1 }
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -62,7 +62,12 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 3, 5, 6, 7, 8 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 3, 8, 5, 7, 1 }); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 1; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -72,7 +77,8 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "Frame " + (subtype);
+			string[] names = {"Top", "256 px", "Blank", "64 px", "Blank", "160 px", "Top 2", "192 px", "96 px"}; // Blanks and Top 2 shouldn't be used
+			return names[subtype] + " Frame";
 		}
 
 		public override Sprite Image

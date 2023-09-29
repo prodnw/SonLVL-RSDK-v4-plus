@@ -59,7 +59,7 @@ namespace S2ObjectDefinitions.EHZ
 			bitmap.DrawLine(6, 0, 0, offset.X * 2, offset.Y * 2); // LevelData.ColorWhite
 			debug = new Sprite(bitmap, -offset.X, -offset.Y);
 			
-			properties[0] = new PropertySpec("Start From", typeof(bool), "Extended",
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
 				"Which side this platform should start from.", null, names,
 				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org">
+  <Images>
+    <ImageFromSheet id="door" sheet="R6/Objects.gif" sourcex="230" sourcey="1" width="8" height="64">
+      <Offset X="-4" Y="-32" />
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Open From" description="Which end the Door should open from." type="directions" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="directions">
+      <EnumMember name="Left" />
+      <EnumMember name="Right" />
+    </Enum>
+  </Enums>
+  <ImageSets>
+    <ImageSet id="left">
+      <ImageRef image="door" />
+    </ImageSet>
+    <ImageSet id="right">
+      <ImageRef image="door" xflip="AlwaysFlip" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="left" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Open From Left">
+      <ImageSetRef set="left" />
+    </Subtype>
+    <Subtype id="01" name="Open From Right">
+      <ImageSetRef set="right" />
+    </Subtype>
+  </Subtypes>
+</ObjDef>

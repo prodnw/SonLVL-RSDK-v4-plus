@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Image="good">
+  <Images>
+    <ImageFromSheet id="good" sheet="R6/Objects.gif" sourcex="82" sourcey="134" width="16" height="32">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+    <ImageFromSheet id="bad" sheet="R6/Objects.gif" sourcex="17" sourcey="184" width="16" height="32">
+      <Offset X="-8" Y="-8"/>
+    </ImageFromSheet>
+  </Images>
+  <Properties>
+    <Property name="Condition" description="What condition this Minomusi should be in. Only Good badniks can eject spikes." type="conditions" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="conditions">
+      <EnumMember name="Good" />
+      <EnumMember name="Bad" />
+    </Enum>
+  </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Good Condition" image="good" />
+    <Subtype id="01" name="Bad Condition" image="bad" />
+  </Subtypes>
+</ObjDef>

@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-// Not sure how I want to handle this object yet.. do I want to have 4 copies of the exact same def, since they're all separate objects in the scripts?
-// Or do I want to just go the actually sensible route and maybe just make a "Common" folder or something...
-
-namespace SCDObjectDefinitions.R3
+namespace SCDObjectDefinitions.R1
 {
 	class NoGripArea : ObjectDefinition
 	{
@@ -23,12 +20,17 @@ namespace SCDObjectDefinitions.R3
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {}); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
-
+		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image

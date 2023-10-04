@@ -4,12 +4,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-// Not sure how I want to handle this object yet.. do I want to have 5 copies of essentially the same def, since they're all separate objects in the scripts?
-// Or do I want to just go the actually sensible route and maybe just make a "Common" folder or something...
+// this obj is the same in every zone it's used, so all of them pull from this r1 file
+// (yeah it looks weird to have R6 stuff in the R1 folder, but it beats having the same script copied like 6 times)
+
+namespace SCDObjectDefinitions.R6
+{
+	class InvisibleBlockNK : R1.InvisibleBlock
+	{
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return null; }
+		}
+		
+		public override string SubtypeName(byte subtype)
+		{
+			return null;
+		}
+	}
+}
 
 namespace SCDObjectDefinitions.R1
 {
-	class InvisibleBlock : ObjectDefinition // yeah the object is called "InvisivleBlock" but let's just use the script name and not object name for this
+	class InvisibleBlock : ObjectDefinition // yeah the object is called "InvisivleBlock" in R1 but let's just use the standard name instead
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;

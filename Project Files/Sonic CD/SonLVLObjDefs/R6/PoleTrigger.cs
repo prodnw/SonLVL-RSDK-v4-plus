@@ -37,7 +37,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "Tiles Tall";
+			return subtype + " Tiles Tall";
 		}
 
 		public override Sprite Image

@@ -52,6 +52,9 @@ namespace SCDObjectDefinitions.Global
 				plus = false;
 			}
 			
+			// (let's replace the blank icon with a static one, looks better that way i'd say)
+			sprites[0] = sprites[11];
+			
 			if (plus)
 			{
 				// this part is kind of scuffed.. it sure would've been easier it plane was just the top 4 bits instead of whatever this is

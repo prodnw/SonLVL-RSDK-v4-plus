@@ -13,7 +13,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override void Init(ObjectData data)
 		{
-			if (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1] == 'C')
+			if (LevelData.StageInfo.folder.EndsWith("C"))
 				sprite = new Sprite(LevelData.GetSpriteSheet("R6/Objects4.gif").GetSection(98, 1, 96, 192), -48, -80);
 			else
 				sprite = new Sprite(LevelData.GetSpriteSheet("R6/Objects4.gif").GetSection(1, 1, 96, 192), -48, -80);

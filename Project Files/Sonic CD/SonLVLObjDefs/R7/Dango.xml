@@ -9,22 +9,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+    <Property name="Condition" description="What condition this Dango should be in. Affects speed." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="BadnikConditions">
+    <Enum name="conditions">
       <EnumMember name="Good" />
       <EnumMember name="Bad" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Condition" value="Good" />
-      <ImageRef image="good" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Condition" value="Bad" />
-      <ImageRef image="bad" />
-    </DisplayOption>
-  </Display>
+  <Subtypes>
+    <Subtype id="00" name="Good Condition" image="good" />
+    <Subtype id="01" name="Bad Condition" image="bad" />
+  </Subtypes>
 </ObjDef>

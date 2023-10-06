@@ -26,14 +26,9 @@ namespace SCDObjectDefinitions.R7
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -48,50 +43,45 @@ namespace SCDObjectDefinitions.R7
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			Sprite sprite = new Sprite(sprites[0]);
+			int index = 0;
 			
-			int index = Math.Max(0, LevelData.Objects.IndexOf(obj) - 1);
-			switch (LevelData.Objects[index].Name)
+			// If obj[-1] is a spring cage, then let's offset ourselves a little to match its position and match its rotation
+			ObjectEntry other = LevelData.Objects[Math.Max(0, LevelData.Objects.IndexOf(obj) - 1)];
+			switch (other.Name)
 			{
 				case "Spring Cage":
 				{
-					switch (LevelData.Objects[index].PropertyValue)
+					switch (other.PropertyValue)
 					{
 						case 0:
-						default:
-							sprite = new Sprite(sprites[0]);
-							break;
+							index = 0; break;
 						case 1:
-							sprite = new Sprite(sprites[2]);
-							break;
+							index = 2; break;
 						case 3:
-							sprite = new Sprite(sprites[4]);
-							break;
-						case 2:
+							index = 4; break;
 						case 4:
-							sprite = new Sprite(sprites[0]);
-							break;
+							index = 0; break;
 						case 5:
-							sprite = new Sprite(sprites[5]);
-							break;
+							index = 5; break;
+						case 2:
 						case 6:
-							sprite = new Sprite(sprites[1]);
-							break;
+						default:
+							index = 1; break;
 					}
 					
 					goto case "R Spring Cage";
 				}
 				case "R Spring Cage":
 				{
-					int xdiff = (LevelData.Objects[index].X - obj.X);
-					int ydiff = (LevelData.Objects[index].Y - obj.Y);
+					int xdiff = (other.X - obj.X);
+					int ydiff = (other.Y - obj.Y);
 					if (Math.Abs(xdiff) < 32 && Math.Abs(ydiff) < 32)
-						sprite.Offset(xdiff, ydiff);
+						return new Sprite(sprites[index], xdiff, ydiff);
 					break;
 				}
 			}
 			
-			return sprite;
+			return sprites[0];
 		}
 	}
 }

@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="frame">
+<ObjDef xmlns="http://www.sonicretro.org" Image="bouncepole">
   <Images>
-    <ImageFromSheet id="frame" sheet="R1/Objects.gif" sourcex="190" sourcey="34" width="32" height="16">
+    <ImageFromSheet id="bouncepole" sheet="R1/Objects.gif" sourcex="190" sourcey="34" width="32" height="16">
       <Offset X="-16" Y="-8"/>
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Direction" type="Directions" startbit="0" length="1" />
+    <Property name="Direction" description="Which way this Bounce Pole is facing." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="Directions">
+    <Enum name="directions">
       <EnumMember name="Left" />
       <EnumMember name="Right" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Direction" value="Left" />
-      <ImageRef image="frame" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Direction" value="Right" />
-      <ImageRef image="frame" xflip="AlwaysFlip" />
-    </DisplayOption>
-  </Display>
+  <ImageSets>
+    <ImageSet id="right">
+      <ImageRef image="bouncepole" xflip="AlwaysFlip" />
+    </ImageSet>
+  </ImageSets>
+  <Subtypes>
+    <Subtype id="00" name="Facing Left" image="bouncepole" />
+    <Subtype id="01" name="Facing Right">
+      <ImageSetRef set="right" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

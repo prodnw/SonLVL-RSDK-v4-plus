@@ -28,7 +28,7 @@ namespace S1ObjectDefinitions.Global
 					{ "Down", 3 }
 				},
 				(obj) => (obj.PropertyValue & 0x7f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));;
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));
 			
 			properties[1] = new PropertySpec("Enabled in Air", typeof(int), "Extended",
 				"If the Spring should be usable when the player is in the air already. Only affects horizontal springs.", null,

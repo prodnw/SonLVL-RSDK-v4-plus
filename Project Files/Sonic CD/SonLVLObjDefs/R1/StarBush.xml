@@ -1,38 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="sprite2">
+<ObjDef xmlns="http://www.sonicretro.org" Image="big">
   <Images>
-    <ImageFromSheet id="sprite1" sheet="R1/Objects2.gif" sourcex="115" sourcey="131" width="48" height="40">
+    <ImageFromSheet id="big" sheet="R1/Objects2.gif" sourcex="115" sourcey="131" width="48" height="40">
       <Offset X="-24" Y="-20"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite2" sheet="R1/Objects2.gif" sourcex="1" sourcey="229" width="24" height="24">
+    <ImageFromSheet id="small" sheet="R1/Objects2.gif" sourcex="1" sourcey="229" width="24" height="24">
       <Offset X="-12" Y="-12"/>
-    </ImageFromSheet>
-    <ImageFromSheet id="sprite3" sheet="R1/Objects2.gif" sourcex="115" sourcey="131" width="48" height="40">
-      <Offset X="-24" Y="-20"/>
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Sprite" type="Sprites" startbit="0" length="2" />
+    <Property name="Frame" description="Which frame this object should display." type="frames" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="Sprites">
+    <Enum name="frames">
       <EnumMember name="Big Bush (Foreground)" />
       <EnumMember name="Small Bush" />
       <EnumMember name="Big Bush (Background)" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Sprite" value="Big Bush (Foreground)" />
-      <ImageRef image="sprite1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Sprite" value="Small Bush" />
-      <ImageRef image="sprite2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Sprite" value="Big Bush (Background)" />
-      <ImageRef image="sprite3" />
-    </DisplayOption>
-  </Display>
+  <Subtypes>
+    <Subtype id="00" name="Big Bush (Foreground)" image="big" />
+    <Subtype id="01" name="Small Bush" image="small" />
+    <Subtype id="02" name="Big Bush (Background)" image="big" />
+  </Subtypes>
 </ObjDef>

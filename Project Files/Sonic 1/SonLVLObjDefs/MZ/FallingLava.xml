@@ -15,7 +15,7 @@
     <ImageSet id="fallinglava">
       <ImageRef image="lava" />
       <ImageRef image="end" />
-      <ImageRef image="end" flip="AlwaysFlip" />
+      <ImageRef image="end" yflip="AlwaysFlip" />
       <ImageRef image="splash"> <!-- it's technically the [Lava Splash] object and not this one, but still it helps show where the lava is going to end -->
         <Offset Y="128" />
       </ImageRef>

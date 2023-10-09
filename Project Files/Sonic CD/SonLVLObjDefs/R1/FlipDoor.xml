@@ -9,22 +9,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orientation" type="Orientations" startbit="0" length="1" />
+    <Property name="Direction" description="Which way this Door will open." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="Orientations">
-      <EnumMember name="Horizontal" />
-      <EnumMember name="Vertical" />
+    <Enum name="directions">
+      <EnumMember name="Upwards" />
+      <EnumMember name="Right" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Orientation" value="Horizontal" />
-      <ImageRef image="horiz" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Orientation" value="Vertical" />
-      <ImageRef image="vert" />
-    </DisplayOption>
-  </Display>
+  <Subtypes>
+    <Subtype id="00" name="Facing Upwards" image="horiz" />
+    <Subtype id="01" name="Facing Right" image="vert" />
+  </Subtypes>
 </ObjDef>

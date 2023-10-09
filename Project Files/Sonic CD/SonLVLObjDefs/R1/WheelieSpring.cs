@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace SCDObjectDefinitions.R8
+namespace SCDObjectDefinitions.R1
 {
-	class WheelieSpring2 : ObjectDefinition
+	class WheelieSpring : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;

@@ -36,7 +36,7 @@ namespace S1ObjectDefinitions.GHZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2 }); } // it can be any value, but why not give a few starting ones
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2 }); }
 		}
 		
 		public override byte DefaultSubtype

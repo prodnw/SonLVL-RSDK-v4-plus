@@ -8,7 +8,7 @@ namespace SCDObjectDefinitions.R4
 {
 	class HorizontalDoor : ObjectDefinition
 	{
-		private PropertySpec[] properties = new PropertySpec[1];
+		private PropertySpec[] properties = new PropertySpec[2];
 		private Sprite sprite;
 		private Sprite[] debug = new Sprite[2];
 		
@@ -30,13 +30,23 @@ namespace SCDObjectDefinitions.R4
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (int)obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => obj.PropertyValue & 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
+			
+			// TODO: these names suck, make 'em good
+			properties[1] = new PropertySpec("Close Height", typeof(int), "Extended",
+				"Origins only. How high the player should be for the door to close.", null, new Dictionary<string, int>
+				{
+					{ "48px", 0 },
+					{ "20px", 2 } // the box is -400, -100, 400, -20, but the only relevant bit is the 20px bit (and even then it's actually a bit less, cause it's a hitbox check and not a normal ypos check)
+				},
+				(obj) => obj.PropertyValue & 2,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -46,11 +56,13 @@ namespace SCDObjectDefinitions.R4
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype)
+			switch (subtype & 3)
 			{
-				case 0: return "Open Left";
-				case 1: return "Open Right";
-				default: return "Static"; // "Unknown" works too 
+				default:
+				case 0: return "Open Left (Close @ 48px)";
+				case 1: return "Open Right (Close @ 48px)";
+				case 2: return "Open Left (Close @ 20px)";
+				case 3: return "Open Right (Close @ 20px)";
 			}
 		}
 

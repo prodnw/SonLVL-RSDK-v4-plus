@@ -36,12 +36,12 @@ namespace SCDObjectDefinitions.R4
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {}); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image

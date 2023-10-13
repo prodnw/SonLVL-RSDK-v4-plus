@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org">
+<ObjDef xmlns="http://www.sonicretro.org" DefaultSubtype="2">
   <Images>
     <ImageFromSheet id="post" sheet="Global/Items2.gif" sourcex="0" sourcey="150" width="24" height="24">
       <Offset X="-12" Y="-12" />
@@ -9,14 +9,14 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" description="How this Signpost should behave." type="behaviours" startbit="0" length="2" />
+    <Property name="Behaviour" description="How this Signpost should behave." type="behaviours" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="behaviours">
-      <EnumMember name="Expand Stage - Normal" />
-	  <EnumMember name="Expand Stage - Wider" />
-	  <EnumMember name="Normal" />
-	  <EnumMember name="Normal (Handles Multiple Signposts)" />
+	  <EnumMember name="Normal" value="2" />
+      <EnumMember name="Expand Stage - 2 Chunks" value="0" />
+	  <EnumMember name="Expand Stage - 4 Chunks" value="1" />
+	  <EnumMember name="Extra (Multiple Signposts)" value="3" />
     </Enum>
   </Enums>
   <ImageSets>
@@ -29,16 +29,16 @@
     <ImageSetRef set="signpost" />
   </DefaultImage>
   <Subtypes>
+    <Subtype id="02" name="Normal">
+      <ImageSetRef set="signpost" />
+    </Subtype>
     <Subtype id="00" name="Expand Stage - 2 Chunks">
       <ImageSetRef set="signpost" />
     </Subtype>
     <Subtype id="01" name="Expand Stage - 4 Chunks">
       <ImageSetRef set="signpost" />
     </Subtype>
-    <Subtype id="02" name="Normal">
-      <ImageSetRef set="signpost" />
-    </Subtype>
-    <Subtype id="03" name="Normal (Handles Multiple Signposts)">
+    <Subtype id="03" name="Extra (Multiple Signposts)">
       <ImageSetRef set="signpost" />
     </Subtype>
   </Subtypes>

@@ -138,7 +138,7 @@ namespace SCDObjectDefinitions.Global
 		{
 			string[] contents = new string[]{ "Blank", "Rings", "Shield", "Invincibility", "Speed Shoes", "Sonic", "Clock", "Tails", "Super", "Knuckles", "Amy" };
 			string name = contents[subtype % (subtypes.Count / 2)];
-			if (subtype > (subtypes.Count / 2)) name += " (Low Plane)";
+			if (subtype >= (subtypes.Count / 2)) name += " (Low Plane)";
 			return name;
 		}
 

@@ -45,7 +45,7 @@ namespace SCDObjectDefinitions.R1
 			sprite = new Sprite(frame, new Sprite(bitmap, -16, -16));
 			
 			properties[0] = new PropertySpec("Climbable", typeof(bool), "Extended",
-				"If Knuckles should be able to climb this object. Only has effect in Origins.", null,
+				"Origins Only. If Knuckles should be able to climb this object.", null,
 				(obj) => obj.PropertyValue == 0,
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0 : 1));
 		}

@@ -4,6 +4,27 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
+namespace SCDObjectDefinitions.R7 // used by both R7 and R8, just ignore subtype
+{
+	class InvisibleBarrier : R6.InvisibleBarrier
+	{
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return null; }
+		}
+		
+		public override string SubtypeName(byte subtype)
+		{
+			return null;
+		}
+	}
+}
+
 namespace SCDObjectDefinitions.R6
 {
 	class InvisibleBarrier : ObjectDefinition
@@ -13,11 +34,11 @@ namespace SCDObjectDefinitions.R6
 		
 		public override void Init(ObjectData data)
 		{
-			Sprite frame = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
 			
 			BitmapBits bitmap = new BitmapBits(32, 30);
 			bitmap.DrawRectangle(24, 0, 0, 31, 29); // pink
-			sprite = new Sprite(frame, new Sprite(bitmap, -16, -16));
+			sprite = new Sprite(sprite, new Sprite(bitmap, -16, -16));
 			
 			properties[0] = new PropertySpec("Push Out", typeof(int), "Extended",
 				"Which direction this object should push the player.", null, new Dictionary<string, int>

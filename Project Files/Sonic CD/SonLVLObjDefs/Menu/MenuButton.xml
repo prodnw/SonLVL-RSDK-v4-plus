@@ -39,7 +39,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Button" type="buttons" startbit="0" length="4" />
+    <Property name="Button" description="Which selection this button is. Gets reset in-game." type="buttons" startbit="0" length="8" /> <!-- yeah this is kinda useless, but it's cool to see anyways -->
   </Properties>
   <Enums>
     <Enum name="buttons">
@@ -57,65 +57,86 @@
 	  <EnumMember name="More Games" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Button" value="None" />
-      <ImageRef image="button" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Start Game" />
+  <ImageSets>
+    <ImageSet id="startgame">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_2" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Time Attack" />
+    </ImageSet>
+    <ImageSet id="timeattack">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_3" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Achievements" />
+    </ImageSet>
+    <ImageSet id="achievements">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_4" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Leaderboards" />
+    </ImageSet>
+    <ImageSet id="leaderboards">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_5" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Help And Options" />
+    </ImageSet>
+    <ImageSet id="helpoptions">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_6" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Extras" />
+    </ImageSet>
+    <ImageSet id="extras">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_7" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Buy Full Game" />
+    </ImageSet>
+    <ImageSet id="buyfullgame">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_8" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Unlock Full Game" />
+    </ImageSet>
+    <ImageSet id="unlockfullgame">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_9" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Exit" />
+    </ImageSet>
+    <ImageSet id="exit">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_a" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="Soundtrack" />
+    </ImageSet>
+    <ImageSet id="soundtrack">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_b" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Button" value="More Games" />
+    </ImageSet>
+    <ImageSet id="moregames">
       <ImageRef image="button" />
 	  <ImageRef image="sprite_c" />
-    </DisplayOption>
-  </Display>
+    </ImageSet>
+  </ImageSets>
+  <Subtypes>
+    <Subtype id="00" name="None" image="button" />
+    <Subtype id="01" name="Start Game">
+      <ImageSetRef set="startgame" />
+    </Subtype>
+    <Subtype id="02" name="Time Attack">
+      <ImageSetRef set="timeattack" />
+    </Subtype>
+    <Subtype id="03" name="Achievements">
+      <ImageSetRef set="achievements" />
+    </Subtype>
+    <Subtype id="04" name="Leaderboards">
+      <ImageSetRef set="leaderboards" />
+    </Subtype>
+    <Subtype id="05" name="Help And Options">
+      <ImageSetRef set="helpoptions" />
+    </Subtype>
+    <Subtype id="06" name="Extras">
+      <ImageSetRef set="extras" />
+    </Subtype>
+    <Subtype id="07" name="Buy Full Game">
+      <ImageSetRef set="buyfullgame" />
+    </Subtype>
+    <Subtype id="08" name="Unlock Full Game">
+      <ImageSetRef set="unlockfullgame" />
+    </Subtype>
+    <Subtype id="09" name="Exit">
+      <ImageSetRef set="exit" />
+    </Subtype>
+    <Subtype id="0A" name="Soundtrack">
+      <ImageSetRef set="soundtrack" />
+    </Subtype>
+    <Subtype id="0B" name="More Games">
+      <ImageSetRef set="moregames" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

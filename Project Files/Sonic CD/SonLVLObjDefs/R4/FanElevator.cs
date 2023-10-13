@@ -30,6 +30,8 @@ namespace SCDObjectDefinitions.R4
 			sprites[3] = new Sprite(sprites[1], true, false);
 			
 			sprite = new Sprite(sprites);
+			
+			// a debug vis for this obj would probably be pretty cool, but this object's movement is so weird... what would it even be like? a line?
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

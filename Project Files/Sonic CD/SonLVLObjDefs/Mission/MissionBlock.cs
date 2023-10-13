@@ -8,14 +8,13 @@ namespace SCDObjectDefinitions.Mission
 {
 	class MissionBlock : ObjectDefinition
 	{
-		private PropertySpec[] properties;
-		private Sprite img;
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite sprite;
 
 		public override void Init(ObjectData data)
 		{
-			img = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
+			sprite = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Count", typeof(int), "Extended",
                 "How many Mission Blocks there should be.", null,
                 (obj) => Math.Max(1, (int)obj.PropertyValue),
@@ -27,11 +26,6 @@ namespace SCDObjectDefinitions.Mission
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 
-		public override byte DefaultSubtype
-		{
-			get { return 0; }
-		}
-		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }
@@ -39,29 +33,29 @@ namespace SCDObjectDefinitions.Mission
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype) + " blocks";
+			return subtype + " Blocks";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprite;
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
-			{
-				Sprite tmp = new Sprite(img);
-				tmp.Offset(i * 32, 0);
-				sprs.Add(tmp);
-			}
-			return new Sprite(sprs.ToArray());
+			if (obj.PropertyValue <= 1)
+				return sprite;
+			
+			List<Sprite> sprites = new List<Sprite>();
+			for (int i = 0; i < (int)obj.PropertyValue; i++)
+				sprites.Add(new Sprite(sprite, i * 32, 0));
+			
+			return new Sprite(sprites.ToArray());
 		}
 	}
 }

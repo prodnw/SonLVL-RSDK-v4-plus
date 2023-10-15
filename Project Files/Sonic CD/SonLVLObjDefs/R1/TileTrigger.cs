@@ -6,56 +6,53 @@ using System.Drawing;
 
 namespace SCDObjectDefinitions.R1
 {
-	class TileTriggerH : R1.TileTrigger
+	class TileTriggerH : R1.TileTriggerV
 	{
-		public override Sprite DrawSprite(ObjectEntry obj, Sprite spr)
+		public override Sprite DrawSprite(byte length)
 		{
+			if (length == 0)
+				return sprite;
+			
 			List<Sprite> sprites = new List<Sprite>();
-			int sx = -(((obj.PropertyValue) * 16) / 2) + 8;
-			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
-			{
-				Sprite sprite = new Sprite(spr);
-				sprite.Offset(sx + (i * 16), 0);
-				sprites.Add(sprite);
-			}
+			int sx = -((length * 16) / 2) + 8;
+			for (int i = 0; i < length; i++)
+				sprites.Add(new Sprite(sprite, sx + (i * 16), 0));
+			
 			return new Sprite(sprites.ToArray());
 		}
 	}
 	
-	class TileTriggerL : R1.TileTrigger
+	class TileTriggerL : R1.TileTriggerV
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(156, 67, 16, 16), -8, -8));
+			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(156, 67, 16, 16), -8, -8);
 		}
 	}
 	
-	class TileTriggerV : R1.TileTrigger
+	class TileTriggerV : ObjectDefinition
 	{
-	}
-}
-
-namespace SCDObjectDefinitions.R1
-{
-	abstract class TileTrigger : ObjectDefinition
-	{
-		private PropertySpec[] properties;
-		private Sprite img;
+		private PropertySpec[] properties = new PropertySpec[1];
+		public Sprite sprite;
+		
+		public virtual Sprite GetFrame()
+		{
+			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
+		}
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetFrame();
+			
+			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
+				"How long the Tile Trigger will be.", null,
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
-		public override void Init(ObjectData data)
-		{
-			img = GetSprite();
-			
-			properties = new PropertySpec[1];
-			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-				"How large the Tile Trigger will be.", null,
-				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 8, 12, 16 }); }
 		}
 		
 		public override byte DefaultSubtype
@@ -70,40 +67,35 @@ namespace SCDObjectDefinitions.R1
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " Nodes";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprite; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return DrawSprite(subtype);
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return DrawSprite(obj, img);
+			return DrawSprite(obj.PropertyValue);
 		}
 		
-		public virtual Sprite DrawSprite(ObjectEntry obj, Sprite spr)
+		public virtual Sprite DrawSprite(byte length)
 		{
+			if (length == 0)
+				return sprite;
+			
 			List<Sprite> sprites = new List<Sprite>();
-			int sy = -(((obj.PropertyValue) * 16) / 2) + 8;
-			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
-			{
-				Sprite sprite = new Sprite(img);
-				sprite.Offset(0, sy + (i * 16));
-				sprites.Add(sprite);
-			}
+			int sy = -((length * 16) / 2) + 8;
+			for (int i = 0; i < length; i++)
+				sprites.Add(new Sprite(sprite, 0, sy + (i * 16)));
+			
 			return new Sprite(sprites.ToArray());
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8));
 		}
 	}
 }

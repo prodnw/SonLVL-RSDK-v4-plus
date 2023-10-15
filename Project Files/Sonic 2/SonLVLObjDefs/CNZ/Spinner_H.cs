@@ -27,7 +27,7 @@ namespace S2ObjectDefinitions.CNZ
 					{ "32 Nodes", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (int)value));
 			
 			properties[1] = new PropertySpec("Enter From", typeof(int), "Extended",
 				"Which side the Spinner should have effect on.", null, new Dictionary<string, int>
@@ -36,7 +36,7 @@ namespace S2ObjectDefinitions.CNZ
 					{ "Bottom", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

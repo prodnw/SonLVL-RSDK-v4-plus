@@ -83,7 +83,7 @@ namespace S2ObjectDefinitions.CPZ
 			props[1] = new PropertySpec("Flip Movement", typeof(bool), "Extended",
 				"If this Platform's movement cycle should be flipped or not.", null,
 				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)(((bool)value == true) ? 1 : 0));
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
 			
 			return props;
 		}

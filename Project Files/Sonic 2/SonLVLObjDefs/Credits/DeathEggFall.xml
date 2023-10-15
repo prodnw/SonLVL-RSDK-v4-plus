@@ -89,6 +89,7 @@
   <Properties>
     <Property name="Frame ID" description="Which sprite this object will use." type="frameids" startbit="0" length="8" />
   </Properties>
+  <!-- in the scene, only BG, Death Egg, Angel Island, and clouds are placed, but RE2 all of these, and they technically work, so... -->
   <Enums>
     <Enum name="frameids">
       <EnumMember name="Sky BG" />

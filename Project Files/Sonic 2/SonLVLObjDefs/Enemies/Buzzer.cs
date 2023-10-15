@@ -37,17 +37,17 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Static", typeof(bool), "Extended",
-				"If the Buzzer should stay in one place, rather than hover around a spot. Only has effect in Origins' Mission Mode.", null,
+				"Mission Mode only. If the Buzzer should stay still, rather than fly around.", null,
 				(obj) => (obj.PropertyValue & 2) == 2,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | ((bool)value ? 2 : 0)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); } // not including Static here because it doesn't matter most of the time
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -57,7 +57,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return ((subtype & 1) == 0) ? "Facing Left" : "Facing Right";
 		}
 
 		public override Sprite Image

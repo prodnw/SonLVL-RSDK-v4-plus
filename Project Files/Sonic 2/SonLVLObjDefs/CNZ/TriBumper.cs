@@ -8,20 +8,21 @@ namespace S2ObjectDefinitions.CNZ
 	class TriBumper : ObjectDefinition
 	{
 		private Sprite sprite;
-		private Sprite[] debug = new Sprite[6];
+		private Sprite[] debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			// please do pardon the odd formatting..
-			int[] sizes = {-32, -32, 32, 32,  -32, -32, 32, 32,  -64, -8, 64, 8,  -64, -8, 64, 8,  -8, -64, 8, 64,  -8, -64, 8, 64};
-			for (int i = 0; i < sizes.Length; i += 4)
+			// values taken from the script
+			int[][] sizes = {new int[] {-32, -32, 32, 32}, new int[] {-32, -32, 32, 32}, new int[] {-64, -8, 64, 8}, new int[] {-64, -8, 64, 8}, new int[] {-8, -64, 8, 64}, new int[] {-8, -64, 8, 64}};
+			debug = new Sprite[sizes.Length];
+			for (int i = 0; i < sizes.Length; i++)
 			{
-				BitmapBits bitmap = new BitmapBits(sizes[i+2] - sizes[i] + 1, sizes[i+3] - sizes[i+1] + 1);
+				BitmapBits bitmap = new BitmapBits(sizes[i][2] - sizes[i][0] + 1, sizes[i][3] - sizes[i][1] + 1);
 				bitmap.DrawRectangle(6, 0, 0, bitmap.Width-1, bitmap.Height-1); // LevelData.ColorWhite
-				debug[i / 4] = new Sprite(bitmap, sizes[i], sizes[i+1]);
+				debug[i] = new Sprite(bitmap, sizes[i][0], sizes[i][1]);
 			}
 			
 			properties[0] = new PropertySpec("Size", typeof(bool), "Extended",

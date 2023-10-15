@@ -15,9 +15,9 @@ namespace S2ObjectDefinitions.CNZ
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(193, 34, 32, 16), -16, -8);
-			BitmapBits overlay = new BitmapBits(32, 16);
-			overlay.DrawRectangle(6, 0, 0, 31, 15); // LevelData.ColorWhite
-			debug = new Sprite(overlay, -16, -8);
+			BitmapBits bitmap = new BitmapBits(32, 16);
+			bitmap.DrawRectangle(6, 0, 0, 31, 15); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -16, -8);
 			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far, in pixels, the Elevator will go.", null,

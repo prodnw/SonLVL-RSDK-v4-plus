@@ -124,7 +124,7 @@ namespace S2ObjectDefinitions.CPZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image

@@ -14,24 +14,20 @@ namespace S2ObjectDefinitions.CNZ
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
-			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("CNZ/Objects.gif").GetSection(26, 185, 47, 26), -25, -9);
-			}
 			else
-			{
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(189, 402, 47, 26), -25, -9);
-			}
 			
 			sprites[1] = new Sprite(sprites[0], true, false);
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Where the Flipper is facing.", null, new Dictionary<string, int>
+				"Which way the Flipper is facing.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -56,12 +52,13 @@ namespace S2ObjectDefinitions.CNZ
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[Math.Min(subtype, (byte)1)];
+			return sprites[(subtype == 0) ? 0 : 1];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[Math.Min(obj.PropertyValue, (byte)1)];
+			// well technically you'd want to cast prop val to dir and then use that if you want to be accurate to in game.. but the obj will still act like a left flipper in-game, so let's keep it like this
+			return sprites[(obj.PropertyValue == 0) ? 0 : 1];
 		}
 	}
 }

@@ -43,7 +43,7 @@ namespace S2ObjectDefinitions.Credits
 				(obj, value) => {
 						obj.PropertyValue = (byte)((int)value);
 						
-						if (obj.PropertyValue == 9) ((V4ObjectEntry)obj).Frame = 20; // Knuckles uses object.frame
+						if (obj.PropertyValue == 9) ((V4ObjectEntry)obj).Frame = 20; // Knuckles needs object.frame set, otherwise reset it
 						else ((V4ObjectEntry)obj).Frame = 0;
 					}
 				);

@@ -51,7 +51,7 @@ namespace S2ObjectDefinitions.WFZ
 					{ "Short", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(bool), "Extended",
 				"Which direction this Chain should pull the player in.", null, new Dictionary<string, int>
@@ -60,12 +60,12 @@ namespace S2ObjectDefinitions.WFZ
 					{ "Upwards", 0x10 }
 				},
 				(obj) => obj.PropertyValue & 0x10,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x10) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x10) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 0x10, 0x11 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -75,7 +75,9 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			string name = ((subtype & 1) == 0) ? "Long" : "Short";
+			name += ((subtype & 0x10) == 0) ? " (Start Upwards)" : " (Start Downwards)"; // yeah the properties are which direction to go while this is which direction to start from, dunno if it's confuisng so maybe i'll change this later?
+			return name;
 		}
 
 		public override Sprite Image
@@ -85,7 +87,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[(subtype & 1) + ((subtype & 0x10) >> 3)];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)

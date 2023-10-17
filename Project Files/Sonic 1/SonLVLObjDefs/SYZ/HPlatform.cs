@@ -7,29 +7,28 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class HPlatform : ObjectDefinition
 	{
-		private Sprite sprite;
-		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite[] sprites = new Sprite[3];
+		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
+			sprites[2] = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
+			sprites[0] = new Sprite(sprites[2],  64, 0);
+			sprites[1] = new Sprite(sprites[2], -64, 0);
 			
-			// tagging this area withLevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(193, 33);
-			bitmap.DrawRectangle(6, 0, 0, 63, 31); // left box
-			bitmap.DrawRectangle(6, 128, 0, 63, 31); // right box
-			bitmap.DrawLine(6, 32, 10, 160, 10);
-			debug = new Sprite(bitmap, -96, -10);
+			BitmapBits bitmap = new BitmapBits(129, 2);
+			bitmap.DrawLine(6, 0, 0, 128, 0); // withLevelData.ColorWhite
+			debug = new Sprite(bitmap, -64, 0);
 			
-			properties[0] = new PropertySpec("Start Direction", typeof(int), "Extended",
-				"The starting direction of this Platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which side this platform should start from.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Right", 0 },
+					{ "Left", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -44,22 +43,22 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Start Right" : "Start Left";
+			return ((subtype & 1) == 1) ? "Start From Left" : "Start From Right";
 		}
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[2]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[2];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[((obj.PropertyValue & 1) == 1) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

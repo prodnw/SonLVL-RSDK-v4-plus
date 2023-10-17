@@ -23,10 +23,16 @@ namespace S2ObjectDefinitions.MCZ
 			
 			sprite = new Sprite(sprs.ToArray());
 			
-			BitmapBits bitmap = new BitmapBits(129, 65);
-			bitmap.DrawRectangle(6, 0, 0, 16, 64); // LevelData.ColorWhite
-			bitmap.DrawRectangle(6, 112, 0, 16, 64); // LevelData.ColorWhite
-			debug = new Sprite(bitmap, -64, -8);
+			// tagging this area with LevelData.ColorWhite
+			
+			BitmapBits rect = new BitmapBits(16, 64);
+			rect.DrawRectangle(6, 0, 0, 15, 63);
+			
+			BitmapBits circle = new BitmapBits(3 * 16 + 1, 3 * 16 + 1);
+			circle.DrawCircle(6, 0, 0, 3 * 16);
+			debug = new Sprite(new Sprite(rect, -64, -8), new Sprite(circle, -(3 * 16) - 8, 0));
+			
+			debug = new Sprite(debug, new Sprite(debug, true, false));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -36,7 +42,7 @@ namespace S2ObjectDefinitions.MCZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 		
 		public override Sprite Image

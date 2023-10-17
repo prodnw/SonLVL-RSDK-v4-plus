@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.ARZ
 	{
 		private Sprite sprite;
 		private Sprite debug;
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
 
 		public override void Init(ObjectData data)
 		{
@@ -26,8 +26,7 @@ namespace S2ObjectDefinitions.ARZ
 			bitmap.DrawLine(6, 0, 0x10, 0, 0x13);
 			bitmap.DrawLine(6, 0, 0x18, 0, 0x1B);
 			debug = new Sprite(bitmap, 0, 64);
-
-			properties = new PropertySpec[1];
+			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How this Falling Pillar should behave.", null, new Dictionary<string, int>
 				{
@@ -70,10 +69,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 1)
-				return null;
-			
-			return debug;
+			return (obj.PropertyValue == 1) ? null : debug;
 		}
 	}
 }

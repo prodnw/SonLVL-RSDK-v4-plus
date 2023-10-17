@@ -19,16 +19,16 @@ namespace S2ObjectDefinitions.MCZ
 			sprites[2] = new Sprite(sheet.GetSection(103, 0, 32, 32), -16, -16);  // spike ball
 			
 			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
-				"How many chains the Platform should hang off of.", null,
+				"How many chains the Spike should hang off of.", null,
 				(obj) => obj.PropertyValue & 0x0f,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | ((int)value & 0x0f)));
 			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
 				"How fast the Spike Ball should swing. Positive values are clockwise, negative values are counter-clockwise.", null,
 				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - (((obj.PropertyValue & 0xf0) > 0x80) ? 0x10 : 0x00),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (byte)(((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4))));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | ((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4)));
 			
-			properties[2] = new PropertySpec("Initial Direction", typeof(int), "Extended",
+			properties[2] = new PropertySpec("Start From", typeof(int), "Extended",
 				"Which direction this Rotating Spike should start from.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
@@ -75,7 +75,6 @@ namespace S2ObjectDefinitions.MCZ
 			List<Sprite> sprs = new List<Sprite>();
 			
 			int length = (obj.PropertyValue & 0x0f);
-			
 			double angle = (int)(((V4ObjectEntry)obj).Direction) * (Math.PI / 2.0);
 			
 			for (int i = 0; i < length + 1; i++)
@@ -91,9 +90,19 @@ namespace S2ObjectDefinitions.MCZ
 		{
 			int length = (obj.PropertyValue & 0x0f) * 16;
 			
-			var overlay = new BitmapBits(2 * length + 1, 2 * length + 1);
-			overlay.DrawCircle(6, length, length, length); // LevelData.ColorWhite
-			return new Sprite(overlay, -length, -length);
+			BitmapBits bitmap = new BitmapBits(2 * length + 1, 2 * length + 1);
+			bitmap.DrawCircle(6, length, length, length); // LevelData.ColorWhite
+			return new Sprite(bitmap, -length, -length);
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int length = obj.PropertyValue & 0x0f;
+			double angle = (int)(((V4ObjectEntry)obj).Direction) * (Math.PI / 2.0);
+			
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X + (int)(Math.Cos(angle) * (length * 16)), obj.Y + (int)(Math.Sin(angle) * (length * 16)));
+			return bounds;
 		}
 	}
 }

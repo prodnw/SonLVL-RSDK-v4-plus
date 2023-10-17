@@ -18,9 +18,8 @@ namespace S1ObjectDefinitions.SYZ
 			sprites[1] = new Sprite(sprites[0], 0, -1);
 			
 			// tagging this area with LevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(65, 128);
+			BitmapBits bitmap = new BitmapBits(65, 97);
 			bitmap.DrawRectangle(6, 0, 0, 63, 63); // top box
-			bitmap.DrawRectangle(6, 0, 64, 63, 63); // bottom box
 			bitmap.DrawLine(6, 32, 32, 32, 96); // movement line
 			debug[0] = new Sprite(bitmap, -32, -95); // a 1px difference in ranges between the two... is this really important? prolly not, but hey may as well anyways
 			debug[1] = new Sprite(bitmap, -32, -96);

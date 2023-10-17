@@ -8,33 +8,36 @@ namespace S1ObjectDefinitions.SYZ
 	class VPlatform : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[2];
-		private Sprite sprite;
+		private Sprite[] sprites = new Sprite[3];
 		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
+			sprites[2] = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
+			sprites[0] = new Sprite(sprites[2], 0,  48);
+			sprites[1] = new Sprite(sprites[2], 0, -48);
 			
-			// tagging this area with LevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(65, 129);
-			bitmap.DrawRectangle(6, 0, 0, 63, 32); // top box
-			bitmap.DrawRectangle(6, 0, 96, 63, 32); // bottom box
-			bitmap.DrawLine(6, 32, 10, 32, 106); // movement line
-			debug = new Sprite(bitmap, -32, -58);
+			BitmapBits bitmap = new BitmapBits(2, 97);
+			bitmap.DrawLine(6, 0, 0, 0, 96); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, 0, -48);
 			
-			properties[0] = new PropertySpec("Cycle", typeof(int), "Extended",
-				"Which Oscillation this Platform should follow.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which side this platform should start from.", null, new Dictionary<string, int>
 				{
-					{ "Use Stage Oscillation", 0 },
-					{ "Use Global Oscillation", 2 }
+					{ "Bottom", 0 },
+					{ "Top", 1 }
+				},
+				(obj) => obj.PropertyValue & 1,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
+			
+			properties[1] = new PropertySpec("Cycle", typeof(int), "Extended",
+				"Which cycle this Platform should follow.", null, new Dictionary<string, int>
+				{
+					{ "Stage Cycle", 0 },
+					{ "Global Cycle", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | ((int)value)));
-			
-			properties[1] = new PropertySpec("Reverse", typeof(bool), "Extended",
-				"If this Platform's movement should be inverse of the normal cycle.", null,
-				(obj) => (obj.PropertyValue & 1) == 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (((bool)value) ? 1 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -51,10 +54,10 @@ namespace S1ObjectDefinitions.SYZ
 		{
 			switch (subtype)
 			{
-				case 0: return "Use Stage Oscillation";
-				case 1: return "Use Stage Oscillation (Reversed)";
-				case 2: return "Use Global Oscillation";
-				case 3: return "Use Global Oscillation (Reversed)";
+				case 0: return "Start From Bottom (Stage Cycle)";
+				case 1: return "Start From Top (Stage Cycle)";
+				case 2: return "Start From Bottom (Global Cycle)";
+				case 3: return "Start From Top (Global Cycle)";
 				
 				default: return "Unknown"; // technically "static"
 			}
@@ -62,17 +65,17 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[2]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[2];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[((obj.PropertyValue & 1) == 1) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

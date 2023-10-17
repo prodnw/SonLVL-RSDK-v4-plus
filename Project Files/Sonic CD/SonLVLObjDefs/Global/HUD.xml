@@ -17,6 +17,11 @@
       <EnumMember name="Bad Future" />
     </Enum>
   </Enums>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="hud" />
+    </DisplayOption>
+  </Display>
   <Subtypes>
     <Subtype id="00" name="Present" image="present" />
     <Subtype id="01" name="Past" image="past" />

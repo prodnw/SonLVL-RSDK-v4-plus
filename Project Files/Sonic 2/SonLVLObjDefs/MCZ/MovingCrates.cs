@@ -21,15 +21,9 @@ namespace S2ObjectDefinitions.MCZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(797, 697, 64, 64), -32, -32);
 			}
 			
-			Sprite[] temp = new Sprite[3];
+			sprites[1] = new Sprite(sprites[0], new Sprite(sprites[0],  0x40, 0x40), new Sprite(sprites[0], -0x40, 0x40));
 			
-			temp[0] = new Sprite(sprites[0]);
-			temp[1] = new Sprite(sprites[0],  0x40, 0x40);
-			temp[2] = new Sprite(sprites[0], -0x40, 0x40);
-			
-			sprites[1] = new Sprite(temp);
-			
-			properties[0] = new PropertySpec("Rotate Direction", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction these Crates should rotate in.", null, new Dictionary<string, int>
 				{
 					{ "Clockwise", 0 },

@@ -24,8 +24,8 @@ namespace S2ObjectDefinitions.WFZ
 			
 			properties[0] = new PropertySpec("Set Bounds", typeof(bool), "Extended",
 				"If this Eggman object should set left stage bounds or not.", null,
-				(obj) => (obj.PropertyValue == 1),
-				(obj, value) => obj.PropertyValue = (byte)(((bool)value == true) ? 1 : 0));
+				(obj) => obj.PropertyValue == 1,
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

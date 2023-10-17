@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.Special
 {
 	class StartMessage : Special.Checkpoint
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("Special/Objects.gif").GetSection(367, 91, 144, 30), -72, -15); // start frame
 		}
@@ -20,18 +20,18 @@ namespace S2ObjectDefinitions.Special
 
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 			
 			// TODO: i think it'd be cool to make all these ring counts into a dropdown like Position or Advanced Properties
 			// but then if i do, the values won't immediately show, and the user might not even know they're editable...
 			
 			properties[0] = new PropertySpec("Ring Count - 2P", typeof(int), "Extended",
-				"How many rings the player should need to past the next checkpoint when two players are active.", null,
+				"How many rings the player should need to past the next checkpoint when two players are active (S&T, K&T, A&T).", null,
 				(obj) => ((V4ObjectEntry)obj).Value0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
 			
-			properties[1] = new PropertySpec("Ring Count - ST", typeof(int), "Extended",
-				"How many rings the player should need to past the next checkpoint if the current player is just Sonic/Tails solo.", null,
+			properties[1] = new PropertySpec("Ring Count - STA", typeof(int), "Extended",
+				"How many rings the player should need to past the next checkpoint if the current player is just Sonic/Tails/Amy alone.", null,
 				(obj) => ((V4ObjectEntry)obj).Value1,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)value);
 			
@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.Special
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = (int)value);
 		}
 		
-		public virtual Sprite GetSprite()
+		public virtual Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("Special/Objects.gif").GetSection(199, 165, 32, 16), -16, -8); // checkpoint sprite
 		}
@@ -58,7 +58,7 @@ namespace S2ObjectDefinitions.Special
 
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

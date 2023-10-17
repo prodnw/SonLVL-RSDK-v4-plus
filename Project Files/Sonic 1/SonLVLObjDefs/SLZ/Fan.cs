@@ -47,7 +47,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Left", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the sprite should face.", null, new Dictionary<string, int>
@@ -83,7 +83,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "True", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 			
 			// i kind of want to make it clearer that the range increase is toward's the fan's base and not away, but i'm not sure how to say that exactly..
 			// i hope the debug vis shows that good enough anyways?
@@ -94,7 +94,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Tall", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (int)value));
 		}
 		
 		// default subtypes can't really set dir so i'm not 100% sure on this.. but its' better than nothing ig?

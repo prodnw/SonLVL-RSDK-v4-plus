@@ -22,7 +22,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Bottom", 2 }
 				},
 				(obj) => (obj.PropertyValue == 2) ? 2 : 0,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction the Staircase will expand.", null, new Dictionary<string, int>

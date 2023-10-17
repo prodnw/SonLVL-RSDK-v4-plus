@@ -15,10 +15,9 @@ namespace S1ObjectDefinitions.SYZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 1, 64, 32), -32, -10);
 			
-			BitmapBits overlay = new BitmapBits(65, 522);
-			overlay.DrawRectangle(6, 0, 0, 64, 32); // LevelData.ColorWhite
-			overlay.DrawLine(6, 32, 10, 32, 521); // LevelData.ColorWhite
-			debug = new Sprite(overlay, -32, -521);
+			BitmapBits overlay = new BitmapBits(65, 512);
+			overlay.DrawLine(6, 32, 0, 32, 511); // LevelData.ColorWhite
+			debug = new Sprite(overlay, -32, -511);
 			
 			properties[0] = new PropertySpec("Button Triggered", typeof(bool), "Extended",
 				"If this Platform should rise vertically when button[-1] is pressed.", null,

@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1];
+			return sprites[(((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1];
 		}
 	}
 }

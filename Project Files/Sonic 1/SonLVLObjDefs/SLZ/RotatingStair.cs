@@ -34,7 +34,7 @@ namespace S1ObjectDefinitions.SLZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image

@@ -9,7 +9,8 @@ namespace S2ObjectDefinitions.HTZ
 	class BreakBlock : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[2];
-		private readonly Sprite[] sprites = new Sprite[5];
+		private Sprite[] sprites = new Sprite[5];
+		private Sprite[] debug = new Sprite[5];
 		
 		public override void Init(ObjectData data)
 		{
@@ -32,6 +33,14 @@ namespace S2ObjectDefinitions.HTZ
 				sprites[4] = new Sprite(sheet.GetSection(105, 751, 32, 16), -16, -8);
 			}
 			
+			for (int i = 0; i < sprites.Length; i++)
+			{
+				Rectangle bounds = sprites[i].Bounds;
+				BitmapBits bitmap = new BitmapBits(bounds.Size);
+				bitmap.DrawRectangle(6, 0, 0, bounds.Width - 1, bounds.Height - 1); // LevelData.ColorWhite
+				debug[i] = new Sprite(bitmap, bounds.X, bounds.Y);
+			}
+			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many blocks comprise this Break Block.", null, new Dictionary<string, int>
 				{
@@ -42,7 +51,7 @@ namespace S2ObjectDefinitions.HTZ
 					{ "1 Block", 4 }
 				},
 				(obj) => (obj.PropertyValue & 0x7f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));
 			
 			properties[1] = new PropertySpec("Collision Plane", typeof(int), "Extended",
 				"Which Collision Plane this Break Block is for.", null, new Dictionary<string, int>
@@ -51,7 +60,7 @@ namespace S2ObjectDefinitions.HTZ
 					{ "Plane B", 0x80 }
 				},
 				(obj) => (obj.PropertyValue & 0x80),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -84,6 +93,11 @@ namespace S2ObjectDefinitions.HTZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprites[Math.Min(obj.PropertyValue & 0x7f, 4)];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug[Math.Min(obj.PropertyValue & 0x7f, 4)];
 		}
 	}
 }

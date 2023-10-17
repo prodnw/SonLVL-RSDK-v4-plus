@@ -25,25 +25,25 @@ namespace S1ObjectDefinitions.SYZ
 				"How fast this Spike should spin.", null, new Dictionary<string, int>
 				{
 					{ "Fast", 0 },
-					{ "Slow", 2 },
-					{ "Medium", 4 }
+					{ "Medium", 4 },
+					{ "Slow", 2 }
 				},
 				(obj) => obj.PropertyValue & 6,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~6) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~6) | (int)value));
 			
-			properties[1] = new PropertySpec("Starting Side", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
 				"Which side this Spike should start at.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 4, 5, 2, 3 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -57,13 +57,14 @@ namespace S1ObjectDefinitions.SYZ
 			
 			switch (subtype & 6)
 			{
-				case 0: return "Fast";
-				case 2: return "Slow";
-				case 4: return "Medium";
-				default: return "Unknown";
+				case 0: name = "Fast"; break;
+				case 2: name = "Slow"; break;
+				case 4: name = "Medium"; break;
+				default: name = "Unknown"; break;
 			}
 			
-			name += ((subtype & 1) == 0) ? " (Right)" : " (Left)";
+			name += (((subtype & 1) == 0) ? " (Right)" : " (Left)");
+			return name;
 		}
 
 		public override Sprite Image

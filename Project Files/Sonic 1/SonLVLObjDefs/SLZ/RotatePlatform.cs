@@ -35,7 +35,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "270 Degrees", 2 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~3) | (int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>
@@ -44,7 +44,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Clockwise", 4 }
 				},
 				(obj) => obj.PropertyValue & 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~4) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

@@ -8,8 +8,6 @@ namespace S2ObjectDefinitions.MPZ
 {
 	class FPlatform : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, 0); }
-		
 		public override Sprite SetupDebugOverlay()
 		{
 			BitmapBits overlay = new BitmapBits(2, 62);
@@ -46,56 +44,30 @@ namespace S2ObjectDefinitions.MPZ
 	
 	class HPlatform : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(-63, 0); }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(64, 2);
-			overlay.DrawLine(6, 0, 0, 63, 0); // LevelData.ColorWhite
-			return new Sprite(overlay, -63, 0);
-		}
+		public override Point offset { get { return new Point(-63, 0); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Right", 0 }, { "Left", 1 }}; } }
 	}
 	
 	class HPlatform2 : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(-127, 0); }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(128, 2);
-			overlay.DrawLine(6, 0, 0, 127, 0); // LevelData.ColorWhite
-			return new Sprite(overlay, -127, 0);
-		}
+		public override Point offset { get { return new Point(-127, 0); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Right", 0 }, { "Left", 1 }}; } }
 	}
 	
 	class VPlatform : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, -63); }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 64);
-			overlay.DrawLine(6, 0, 0, 0, 63); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -63);
-		}
+		public override Point offset { get { return new Point(0, -63); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 	}
 	
 	class VPlatform2 : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, -127); }
-		
-		public override Sprite SetupDebugOverlay()
-		{
-			BitmapBits overlay = new BitmapBits(2, 128);
-			overlay.DrawLine(6, 0, 0, 0, 127); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, -127);
-		}
+		public override Point offset { get { return new Point(0, -127); } }
+		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Bottom", 0 }, { "Top", 1 }}; } }
 	}
 	
 	class EPlatform : MPZ.Platform
 	{
-		public override Point GetOffset() { return new Point(0, 0); }
-		
 		public override Sprite SetupDebugOverlay()
 		{
 			BitmapBits overlay = new BitmapBits(2, 226);
@@ -125,16 +97,26 @@ namespace S2ObjectDefinitions.MPZ
 		private Sprite[] sprites = new Sprite[2];
 		private Sprite debug;
 		
-		public virtual Point GetOffset() { return new Point(0, 0); }
-		public virtual Sprite SetupDebugOverlay() { return null; }
+		public virtual Point offset { get { return new Point(0, 0); } }
+		public virtual Dictionary<string, int> names { get { return new Dictionary<string, int>{}; } }
+		
+		public virtual Sprite SetupDebugOverlay()
+		{
+			if (offset.IsEmpty)
+				return null;
+			
+			BitmapBits bitmap = new BitmapBits(-offset.X + 1, -offset.Y + 1);
+			bitmap.DrawLine(6, 0, 0, -offset.X, -offset.Y); // LevelData.ColorWhite
+			return new Sprite(bitmap, offset.X, offset.Y);
+		}
 		
 		public virtual PropertySpec[] SetupProperties()
 		{
 			PropertySpec[] props = new PropertySpec[1];
-			props[0] = new PropertySpec("Flip Movement", typeof(bool), "Extended",
-				"Whether or not this Platform's movement cycle should be flipped or not.", null,
-				(obj) => (obj.PropertyValue == 1),
-				(obj, value) => obj.PropertyValue = (byte)(((bool)value) ? 1 : 0));
+			props[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which side this platform should start from.", null, names,
+				(obj) => (obj.PropertyValue == 1) ? 1 : 0,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
 			return props;
 		}
@@ -143,7 +125,7 @@ namespace S2ObjectDefinitions.MPZ
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("MPZ/Objects.gif");
 			sprites[0] = new Sprite(sheet.GetSection(383, 207, 64, 24), -32, -12);
-			sprites[1] = new Sprite(sprites[0], GetOffset());
+			sprites[1] = new Sprite(sprites[0], offset);
 			
 			debug = SetupDebugOverlay();
 			properties = SetupProperties();
@@ -161,7 +143,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 1) ? "Normal Movement" : "Inverted Movement";
+			return "Start From " + names.GetKey((subtype == 1) ? 1 : 0);
 		}
 
 		public override Sprite Image

@@ -20,7 +20,7 @@ namespace SCDObjectDefinitions.Global
 			sprites[2] = new Sprite(sheet.GetSection(50, 67, 32, 32), -16, -16);
 			sprites[3] = new Sprite(sheet.GetSection(50, 100, 32, 32), -16, -16);
 			
-			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
 				{
 					{ "Up", 0 },

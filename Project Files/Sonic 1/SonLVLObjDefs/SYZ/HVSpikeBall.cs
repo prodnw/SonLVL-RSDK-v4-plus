@@ -39,12 +39,12 @@ namespace S1ObjectDefinitions.SYZ
 					{ "Vertical", 2 }
 				},
 				(obj) => obj.PropertyValue & 2,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~2) | (int)value));
 			
 			properties[1] = new PropertySpec("Reverse", typeof(bool), "Extended",
 				"If this Spike Ball's movement should be inverse of the normal cycle.", null,
 				(obj) => (obj.PropertyValue & 1) == 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (((bool)value) ? 1 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | ((bool)value ? 1 : 0)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

@@ -22,7 +22,7 @@ namespace S2ObjectDefinitions.HPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 6, 8, 10, 12, 14, 16 }); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -32,7 +32,7 @@ namespace S2ObjectDefinitions.HPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype) + " orbs";
+			return subtype + " orbs";
 		}
 		
 		public override PropertySpec[] CustomProperties

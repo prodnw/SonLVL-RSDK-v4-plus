@@ -15,9 +15,9 @@ namespace S2ObjectDefinitions.MCZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
-			BitmapBits dbg = new BitmapBits(137, 5121);
-			dbg.DrawRectangle(6, 0, 0, 136, 5120); // yeah, the hitbox really is that large
-			debug = new Sprite(dbg, -68, 0);
+			BitmapBits bitmap = new BitmapBits(137, 5121);
+			bitmap.DrawRectangle(6, 0, 0, 136, 5120); // yeah, the hitbox really is that large
+			debug = new Sprite(bitmap, -68, 0);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

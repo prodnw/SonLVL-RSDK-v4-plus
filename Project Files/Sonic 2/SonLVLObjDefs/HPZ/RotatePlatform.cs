@@ -42,12 +42,12 @@ namespace S2ObjectDefinitions.HPZ
 			properties[1] = new PropertySpec("Rotate Speed", typeof(int), "Extended",
 				"What speed this Platform should spin at.", null,
 				(obj) => (obj.PropertyValue >> 3) & 15,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~120) | (byte)(((int)value & 15) << 3)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x78) | (byte)(((int)value & 15) << 3)));
 			
 			properties[2] = new PropertySpec("Use Spiked Ball", typeof(bool), "Extended",
 				"If this object should be a Spiked Ball, as opposed to a Platform.", null,
 				(obj) => (obj.PropertyValue & 0x80) == 0x80,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((bool)value ? 0x80 : 0x00)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((bool)value ? 0x80 : 0x00)));
 			
 			properties[3] = new PropertySpec("Dynamic", typeof(bool), "Extended",
 				"If this platform's radius should expand and contract.", null,
@@ -104,6 +104,20 @@ namespace S2ObjectDefinitions.HPZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return debug[(((V4ObjectEntry)obj).State == 1) ? 1 : 0];
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int length = ((((V4ObjectEntry)obj).State == 1) ? 5 : 4) + 1; // + 1 cause we're looking at the spike ball/platform, not the last chain
+			double angle = ((obj.PropertyValue & 7) * 0x2a)/128.0 * Math.PI;
+			
+			double xoffset = Math.Cos(angle) * (length * 16);
+			double yoffset = Math.Sin(angle) * (length * 16);
+			
+			int frame = ((obj.PropertyValue & 0x80) == 0x80) ? 5 : 4;
+			Rectangle bounds = sprites[frame].Bounds;
+			bounds.Offset(obj.X + (int)xoffset, obj.Y + (int)yoffset);
+			return bounds;
 		}
 	}
 }

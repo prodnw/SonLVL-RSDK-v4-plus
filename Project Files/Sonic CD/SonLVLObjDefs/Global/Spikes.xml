@@ -15,10 +15,10 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orientation" description="Which way the Spikes are facing." type="orientations" startbit="0" length="8" />
+    <Property name="Direction" description="Which way the Spikes are facing." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="orientations">
+    <Enum name="directions">
       <EnumMember name="Up" />
 	  <EnumMember name="Right" />
 	  <EnumMember name="Left" />

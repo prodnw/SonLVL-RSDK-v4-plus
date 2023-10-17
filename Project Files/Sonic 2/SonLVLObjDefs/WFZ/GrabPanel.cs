@@ -27,7 +27,7 @@ namespace S2ObjectDefinitions.WFZ
 			properties[1] = new PropertySpec("Cutscene Variant", typeof(bool), "Extended",
 				"If this Panel should be used for the ending cutscene.", null,
 				(obj) => (obj.PropertyValue == 0x7F),
-				(obj, value) => obj.PropertyValue = (byte)(((bool)value == false) ? 0 : 0x7F));
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0x7F : 0));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

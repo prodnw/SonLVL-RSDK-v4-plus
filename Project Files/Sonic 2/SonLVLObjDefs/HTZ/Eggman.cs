@@ -8,7 +8,8 @@ namespace S2ObjectDefinitions.HTZ
 	class Eggman : ObjectDefinition
 	{
 		private Sprite sprite;
-
+		private Sprite debug;
+		
 		public override void Init(ObjectData data)
 		{
 			Sprite[] sprites = new Sprite[3];
@@ -29,6 +30,14 @@ namespace S2ObjectDefinitions.HTZ
 			}
 			
 			sprite = new Sprite(sprites);
+			
+			// let's show the position of the pits Eggman will jump out of
+			// (LevelData.ColorWhite tag)
+			BitmapBits bitmap = new BitmapBits(257, 163);
+			bitmap.DrawLine(6, 0, 162, 0, 23); // Lava->Sky on left lava pit
+			bitmap.DrawLine(6, 256, 140, 256, 0); // Lava->Sky on right lava pit
+			bitmap.DrawLine(6, 0, 162, 256, 140); // Connect the two pits
+			debug = new Sprite(bitmap, -257, -125);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -38,7 +47,7 @@ namespace S2ObjectDefinitions.HTZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -54,6 +63,11 @@ namespace S2ObjectDefinitions.HTZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

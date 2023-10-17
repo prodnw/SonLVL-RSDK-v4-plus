@@ -65,7 +65,10 @@ namespace S2ObjectDefinitions.HPZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
+			if (obj.PropertyValue != 0)
+				return null;
+			
+			try
 			{
 				// p much copied directly from SCD UFO but hey, if it works it works
 				// Do note, in-game behaviour doesn't enforce that the path ends with a Tube Path exit - it just has to be a non-zero obj type
@@ -78,7 +81,8 @@ namespace S2ObjectDefinitions.HPZ
 				nodes.Insert(0, obj);
 				
 				// and add the exit tube path obj to the end too
-				nodes.Add(LevelData.Objects[LevelData.Objects.IndexOf(nodes[nodes.Count - 1]) + 1]);
+				if ((LevelData.Objects.IndexOf(nodes[nodes.Count - 1]) + 1) < LevelData.Objects.Count)
+					nodes.Add(LevelData.Objects[LevelData.Objects.IndexOf(nodes[nodes.Count - 1]) + 1]);
 				
 				short xmin = Math.Min(obj.X, nodes.Min(a => a.X));
 				short ymin = Math.Min(obj.Y, nodes.Min(a => a.Y));
@@ -100,6 +104,9 @@ namespace S2ObjectDefinitions.HPZ
 				}
 				
 				return new Sprite(new Sprite(black, xmin - obj.X, ymin - obj.Y), new Sprite(white, xmin - obj.X, ymin - obj.Y));
+			}
+			catch
+			{
 			}
 			
 			return null;

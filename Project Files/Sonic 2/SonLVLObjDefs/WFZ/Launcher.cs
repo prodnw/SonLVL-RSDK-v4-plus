@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.WFZ
 		private Sprite[] sprites = new Sprite[2];
 		private PropertySpec[] properties = new PropertySpec[2];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone11"))
@@ -42,6 +37,11 @@ namespace S2ObjectDefinitions.WFZ
 				},
 				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone) ? 0 : 1,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
 		
 		public override byte DefaultSubtype

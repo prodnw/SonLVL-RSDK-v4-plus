@@ -32,13 +32,13 @@
     <ImageSetRef set="left" />
   </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="From Left">
+    <Subtype id="00" name="Open From Left">
       <ImageSetRef set="left" />
     </Subtype>
-	<Subtype id="01" name="From Right">
+	<Subtype id="01" name="Open From Right">
       <ImageSetRef set="right" />
     </Subtype>
-	<Subtype id="02" name="From Left - Once">
+	<Subtype id="02" name="Open From Left - Once">
       <ImageSetRef set="left" />
     </Subtype>
   </Subtypes>

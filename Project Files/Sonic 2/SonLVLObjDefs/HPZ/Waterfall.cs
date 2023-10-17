@@ -38,13 +38,9 @@ namespace S2ObjectDefinitions.HPZ
 			{
 				sprites[i] = new Sprite(frames[(i & 15)]);
 				
-				if ((i & 0x10) == 0x10)
-				{
+				if ((i & 0x10) == 0x10) // splash?
 					sprites[i] = new Sprite(sprites[i], new Sprite(frames[16], 0, Math.Max(i & 7, 1) << 4));
-				}
 			}
-			
-			// TODO: these names are kinda weird...
 			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How long of a waterfall this object should be.", null, new Dictionary<string, int>
@@ -59,12 +55,12 @@ namespace S2ObjectDefinitions.HPZ
 					{ "112 pixels", 7 }
 				},
 				(obj) => obj.PropertyValue & 7,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | ((int)value)));
 			
-			properties[1] = new PropertySpec("No Ridge", typeof(bool), "Extended",
-				"If this Waterfall should have not have a ridge at its top. Used when Waterfalls objects are in chains", null,
-				(obj) => (obj.PropertyValue & 8) == 8,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~8) | ((bool)value ? 8 : 0)));
+			properties[1] = new PropertySpec("Has Ridge", typeof(bool), "Extended",
+				"If this Waterfall should have have a ridge at its top.", null,
+				(obj) => (obj.PropertyValue & 8) == 0,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~8) | ((bool)value ? 0 : 8)));
 			
 			properties[2] = new PropertySpec("Has Splash", typeof(bool), "Extended",
 				"If this Waterfall should make a splash at its bottom.", null,

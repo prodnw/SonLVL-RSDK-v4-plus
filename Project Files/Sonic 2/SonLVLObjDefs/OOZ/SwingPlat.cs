@@ -20,21 +20,17 @@ namespace S2ObjectDefinitions.OOZ
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
 				(obj) => (obj.PropertyValue & 0x7f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x80) | (byte)((int)value & 0x7f)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x80) | (int)value & 0x7f));
 			
-			properties[1] = new PropertySpec("Can Snap", typeof(int), "Extended",
-				"If the platform should detach and turn into a raft. Does not work when X-flipped.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => (obj.PropertyValue >> 7),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x7f) | (byte)((int)value << 7)));
+			properties[1] = new PropertySpec("Can Snap", typeof(bool), "Extended",
+				"If the platform should detach and turn into a raft. Has no effect on inverted platforms.", null,
+				(obj) => (obj.PropertyValue >= 0x80),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 0x7f) | ((bool)value ? 0x80 : 0x00)));;
 			
 			properties[2] = new PropertySpec("Inverted", typeof(bool), "Extended",
-				"If the Swinging Platform's movement should be inverted, compared to normal Swing Platforms.", null,
-				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
+				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0)); // could be more direct instead of bool>int>Direction but the whole class name is p long, so..
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -69,37 +65,30 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int chains = (obj.PropertyValue & 0x7f);
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i <= (chains + 1); i++)
+			List<Sprite> sprs = new List<Sprite>() { sprites[0] };
+			int sy = 16;
+			for (int i = 0; i < (obj.PropertyValue & 0x7f); i++)
 			{
-				int frame = (i == 0) ? 0 : (i == (chains + 1)) ? 2 : 1; // no reason to make the post use a separate frame as a chian when they're the same sprite anyways but may as well, y'know?
-				Sprite sprite = new Sprite(sprites[frame]);
-				if (i == (chains + 1))
-				{
-					sprite.Offset(0, (i * 16) - 8);
-				}
-				else
-				{
-					sprite.Offset(0, (i * 16));
-				}
-				sprs.Add(sprite);
+				sprs.Add(new Sprite(sprites[1], 0, sy));
+				sy += 16;
 			}
+			sy -= 8;
+			sprs.Add(new Sprite(sprites[2], 0, sy));
 			return new Sprite(sprs.ToArray());
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			int chains = (obj.PropertyValue & 0x7f);
-			BitmapBits overlay = new BitmapBits(2 * ((chains * 16) + 24) + 1, (chains * 16) + 25);
-			overlay.DrawCircle(6, ((chains * 16) + 24), 0, (chains * 16) + 8); // LevelData.ColorWhite
-			return new Sprite(overlay, -((chains * 16) + 24), 0);
+			int l = ((obj.PropertyValue & 0x7f) * 16) + 8;
+			var overlay = new BitmapBits(2 * l + 1, l + 1);
+			overlay.DrawCircle(6, l, 0, l); // LevelData.ColorWhite
+			return new Sprite(overlay, -l, 0);
 		}
 		
 		public override Rectangle GetBounds(ObjectEntry obj)
 		{
-			var bounds = sprites[2].Bounds;
-			bounds.Offset(obj.X, obj.Y + ((obj.PropertyValue & 0x7f) + 1) * 16 - 8);
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X, obj.Y + ((obj.PropertyValue & 0x7f) * 16) + 8);
 			return bounds;
 		}
 	}

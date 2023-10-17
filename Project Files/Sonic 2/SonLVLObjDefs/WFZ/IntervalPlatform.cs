@@ -53,7 +53,7 @@ namespace S2ObjectDefinitions.WFZ
 			properties[0] = new PropertySpec("Interval Offset", typeof(int), "Extended",
 				"The interval offset this Platform should use.", null,
 				(obj) => obj.PropertyValue >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xF0) | (byte)((int)value << 4)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xF0) | ((int)value << 4)));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

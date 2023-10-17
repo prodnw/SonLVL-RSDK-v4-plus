@@ -7,9 +7,10 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class LiftEnd : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[4];
 		private PropertySpec[] properties = new PropertySpec[1];
-
+		private Sprite[] sprites = new Sprite[4];
+		private Sprite[] debug = new Sprite[4];
+		
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
@@ -29,8 +30,16 @@ namespace S2ObjectDefinitions.HTZ
 				sprites[3] = new Sprite(sheet.GetSection(92, 888, 0, 0), -9, -24);
 			}
 			
-			properties[0] = new PropertySpec("Sprite ID", typeof(int), "Extended",
-				"What sprite this Lift End should use.", null, new Dictionary<string, int>
+			for (int i = 0; i < sprites.Length; i++)
+			{
+				Rectangle bounds = sprites[i].Bounds;
+				BitmapBits bitmap = new BitmapBits(bounds.Size);
+				bitmap.DrawRectangle(6, 0, 0, bounds.Width - 1, bounds.Height - 1); // LevelData.ColorWhite
+				debug[i] = new Sprite(bitmap, bounds.X, bounds.Y);
+			}
+			
+			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
+				"Which frame this object should use.", null, new Dictionary<string, int>
 				{
 					{ "Start Post", 0 },
 					{ "End Post", 1 },
@@ -38,7 +47,7 @@ namespace S2ObjectDefinitions.HTZ
 					{ "End Ground", 3 }
 				},
 				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -85,7 +94,12 @@ namespace S2ObjectDefinitions.HTZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return SubtypeImage(obj.PropertyValue);
+			return sprites[obj.PropertyValue & 3];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug[obj.PropertyValue & 3];
 		}
 	}
 }

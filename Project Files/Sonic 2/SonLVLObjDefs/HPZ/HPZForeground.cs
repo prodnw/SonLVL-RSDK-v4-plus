@@ -3,24 +3,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S1ObjectDefinitions.SYZ
+namespace S2ObjectDefinitions.HPZ
 {
-	class MovingBlock : ObjectDefinition
+	class HPZForeground : ObjectDefinition
 	{
 		private Sprite sprite;
 		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 99, 64, 52), -32, -26);
+			sprite = new Sprite(LevelData.GetSpriteSheet("HPZ/Objects.gif").GetSection(256, 1, 96, 112), -48, -56);
 			
-			// tagging this area withLevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(939, 53);
-			bitmap.DrawRectangle(6, 874, 0, 63, 51); // right box
-			bitmap.DrawLine(6, 0, 26, 906, 26); // movement line
-			debug = new Sprite(bitmap, 0, -26);
-			
-			// btw prop val is unused, even if it's 85 in the scene
+			BitmapBits bitmap = new BitmapBits(96, 112);
+			bitmap.DrawRectangle(6, 0, 0, 95, 111); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -48, -56);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

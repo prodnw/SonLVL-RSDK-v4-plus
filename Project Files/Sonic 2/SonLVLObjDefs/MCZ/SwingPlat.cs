@@ -20,8 +20,8 @@ namespace S2ObjectDefinitions.MCZ
 			
 			properties[0] = new PropertySpec("Length", typeof(int), "Extended",
 				"How many chains the Platform should hang off of.", null,
-				(obj) => (Math.Max(obj.PropertyValue, (byte)1) - 1) & 7,
-				(obj, value) => obj.PropertyValue = (byte)((((Math.Max(obj.PropertyValue, (byte)1) - 1) & ~7) | (byte)(((int)value))) + 1));
+				(obj) => (Math.Max((int)obj.PropertyValue, 1) - 1) & 7,
+				(obj, value) => obj.PropertyValue = (byte)((((Math.Max(obj.PropertyValue, (byte)1) - 1) & ~7) | (int)value) + 1));
 			
 			properties[1] = new PropertySpec("Swing Direction", typeof(int), "Extended",
 				"Which direction the Platform should swing in.", null, new Dictionary<string, int>
@@ -30,12 +30,12 @@ namespace S2ObjectDefinitions.MCZ
 					{ "Right", 8 }
 				},
 				(obj) => (Math.Max(obj.PropertyValue, (byte)1) - 1) & 8,
-				(obj, value) => obj.PropertyValue = (byte)((((Math.Max(obj.PropertyValue, (byte)1) - 1) & ~8) | (byte)(((int)value))) + 1));
+				(obj, value) => obj.PropertyValue = (byte)((((Math.Max(obj.PropertyValue, (byte)1) - 1) & ~8) | (int)value) + 1));
 			
 			properties[2] = new PropertySpec("Inverted", typeof(bool), "Extended",
-				"If the Swinging Platform's movement should be inverted, compared to normal Swing Platforms.", null,
-				(obj) => (((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX)),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
+				"If the Swinging Platform's movement should be inverted, compared to other Swing Platforms.", null,
+				(obj) => (((V4ObjectEntry)obj).Direction == RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX),
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0)); // could be more direct instead of bool>int>Direction but the whole class name is p long, so..
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -96,6 +96,15 @@ namespace S2ObjectDefinitions.MCZ
 				length = 0;
 			}
 			return new Sprite(overlay, -length, 0);
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int length = (((Math.Max(obj.PropertyValue, (byte)1) - 1) & 7) + 1);
+			
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X, obj.Y + (length * 16) + 8);
+			return bounds;
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -53,11 +53,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
-			{
-				return debug;
-			}
-			return new Sprite();
+			return (obj.PropertyValue == 0) ? debug : null;
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class RotatePlatform : ObjectDefinition
 	{
-		private PropertySpec[] properties = new PropertySpec[3];
+		private PropertySpec[] properties = new PropertySpec[2];
 		private readonly Sprite[] sprites = new Sprite[3];
 		private Sprite debug;
 
@@ -24,24 +24,37 @@ namespace S2ObjectDefinitions.ARZ
 			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -radius, -radius - 4);
 			
-			properties[0] = new PropertySpec("Offset", typeof(int), "Extended",
-				"The offset/starting angle of the platform.", null,
-				(obj) => (obj.PropertyValue & 0x0f),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (byte)((int)value)));
+			properties[0] = new PropertySpec("Angle", typeof(int), "Extended",
+				"The starting angle of this platform.", null, new Dictionary<string, int>
+				{
+					{ "Right", 0 },
+					{ "Top Right", 5 },
+					{ "Top Left", 8 },
+					{ "Left", 1 },
+					{ "Bottom Left", 4 },
+					{ "Bottom Right", 9 }
+				},
+				(obj) => obj.PropertyValue & 0x0f,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (int)value));
 			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
-				"The speed of the platform.", null,
-				(obj) => (obj.PropertyValue & 0x70) >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x70) | (byte)((int)value << 4)));
-			
-			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
-				"The direction in which the Platform moves.", null, new Dictionary<string, int>
-				{
-					{ "Clockwise", 0 },
-					{ "Counter-clockwise", 1 }
-				},
-				(obj) => (obj.PropertyValue >> 7),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value << 7)));
+				"The speed of this platform. Positive values are clockwise, negative values are counter-clockwise.", null,
+				(obj) => {
+						int speed = (obj.PropertyValue & 0xf0) >> 4;
+						if (speed >= 8)
+							speed = -(speed - 8);
+						return speed;
+					},
+				(obj, value) => {
+						int speed = (int)value;
+						if (speed < 0)
+							speed = (-speed + 8);
+						
+						speed &= 0x0f;
+						
+						obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (speed << 4));
+					}
+				);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -56,7 +69,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return subtype + "";
+			return null;
 		}
 
 		public override Sprite Image
@@ -68,47 +81,62 @@ namespace S2ObjectDefinitions.ARZ
 		{
 			return sprites[2];
 		}
-
-		public override Rectangle GetBounds(ObjectEntry obj)
-		{
-			var radians = 0.0;
-			if ((obj.PropertyValue & 1) == 1)
-			{
-				radians += Math.PI;
-			}
-			radians += ((obj.PropertyValue & 12) / 4) * (Math.PI * 2 / 3);
-			var xoffset = Math.Cos(radians) * 64.0;
-			var yoffset = Math.Sin(radians) * 64.0;
-
-			var bounds = sprites[2].Bounds;
-			bounds.Offset(obj.X + (int)xoffset, obj.Y + (int)yoffset);
-			return bounds;
-		}
-
+		
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			var radians = Math.PI * (obj.PropertyValue & 1);
-			radians += ((obj.PropertyValue & 12) / 4) * (Math.PI * 2 / 3);
-
-			//var radians = (Math.PI / 8) * (obj.PropertyValue & 0xf);
-			var xoffset = Math.Cos(radians) * 16.0;
-			var yoffset = Math.Sin(radians) * 16.0;
-
-			var sprite = new Sprite(sprites[2], (int)(xoffset * 4), (int)(yoffset * 4));
-
-			for (var index = 1; index < 4; index++)
+			List<Sprite> sprs = new List<Sprite>();
+			
+			int length = 3;
+			int angle = (obj.PropertyValue & 3) << 15;
+			
+			if ((obj.PropertyValue & 4) == 4)
+				angle += 0x5500;
+			
+			if ((obj.PropertyValue & 8) == 8)
+				angle -= 0x5500;
+			
+			angle = (angle & 0x1ffff) >> 8;
+			
+			double angleF = angle/128.0 * Math.PI;
+			
+			// cos:
+			// 0 - 0x100
+			// 0x40 - 0
+			
+			for (int i = 0; i <= length; i++)
 			{
-				var x = (int)(xoffset * index);
-				var y = (int)(yoffset * index);
-				sprite = new Sprite(new Sprite(sprites[1], x, y), sprite);
+				int frame = (i < length) ? 1 : 2;
+				sprs.Add(new Sprite(sprites[frame], (int)(Math.Cos(angleF) * ((i+1) * 16)), (int)(Math.Sin(angleF) * ((i+1) * 16))));
 			}
-
-			return new Sprite(sprite, new Sprite(sprites[0]));
+			
+			sprs.Add(new Sprite(sprites[0]));
+			
+			return new Sprite(sprs.ToArray());
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return debug;
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int length = 3 + 1; // + 1 because we want the platform, not the last chain
+			int angle = (obj.PropertyValue & 3) << 15;
+			
+			if ((obj.PropertyValue & 4) == 4)
+				angle += 0x5500;
+			
+			if ((obj.PropertyValue & 8) == 8)
+				angle -= 0x5500;
+			
+			angle = (angle & 0x1ffff) >> 8;
+			
+			double angleF = angle/128.0 * Math.PI;
+			
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X + (int)(Math.Cos(angleF) * (length * 16)), obj.Y + (int)(Math.Sin(angleF) * (length * 16)));
+			return bounds;
 		}
 	}
 }

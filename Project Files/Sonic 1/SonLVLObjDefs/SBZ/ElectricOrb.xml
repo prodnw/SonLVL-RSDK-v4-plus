@@ -6,13 +6,13 @@
 	</ImageFromSheet>
   </Images>
   <Properties>
-	<Property name="Direction" type="directions" startbit="0" length="1" />
-	<Property name="Interval" type="intervals" startbit="1" length="2" />
+	<Property name="Direction" description="Which direction this object is facing" type="directions" startbit="0" length="1" />
+	<Property name="Interval" description="Which interval this object should active with." type="intervals" startbit="1" length="2" />
   </Properties>
   <Enums>
 	<Enum name="directions">
-	  <EnumMember name="Up" />
-	  <EnumMember name="Down" />
+	  <EnumMember name="Upwards" />
+	  <EnumMember name="Downwards" />
 	</Enum>
 	<Enum name="intervals">
 	  <EnumMember name="Every 24 frames" />
@@ -22,12 +22,44 @@
   </Enums>
   <Display>
 	<DisplayOption>
-	  <Condition property="Direction" value="Up" />
-	  <ImageRef image="orb" />
+	  <Condition property="Direction" value="Upwards" />
+	  <ImageSetRef set="up" />
 	</DisplayOption>
 	<DisplayOption>
-	  <Condition property="Direction" value="Down" />
-	  <ImageRef image="orb" xflip="AlwaysFlip" />
+	  <Condition property="Direction" value="Downwards" />
+	  <ImageSetRef set="down" />
 	</DisplayOption>
   </Display>
+  <ImageSets>
+    <ImageSet id="up">
+      <ImageRef image="orb" yflip="NeverFlip" />
+    </ImageSet>
+    <ImageSet id="down">
+      <ImageRef image="orb" yflip="AlwaysFlip" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="up" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Up, 24 Frame Interval">
+      <ImageSetRef set="up" />
+    </Subtype>
+    <Subtype id="02" name="Up, 12 Frame Interval">
+      <ImageSetRef set="up" />
+    </Subtype>
+    <Subtype id="04" name="Up, 6 Frame Interval">
+      <ImageSetRef set="up" />
+    </Subtype>
+    <Subtype id="01" name="Down, 24 Frame Interval">
+      <ImageSetRef set="down" />
+    </Subtype>
+    <Subtype id="03" name="Down, 12 Frame Interval">
+      <ImageSetRef set="down" />
+    </Subtype>
+    <Subtype id="05" name="Down, 6 Frame Interval">
+      <ImageSetRef set="down" />
+    </Subtype>
+	<!-- there are a couple of subtype 08's in SBZ1, but the extra bit doesn't seem to mean anything? -->
+  </Subtypes>
 </ObjDef>

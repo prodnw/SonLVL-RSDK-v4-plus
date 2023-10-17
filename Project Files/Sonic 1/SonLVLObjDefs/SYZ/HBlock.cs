@@ -7,9 +7,9 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class HBlock : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		private Sprite[] debug = new Sprite[2];
-		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
 		{
@@ -19,13 +19,13 @@ namespace S1ObjectDefinitions.SYZ
 			
 			BitmapBits bitmap = new BitmapBits(161, 33);
 			bitmap.DrawRectangle(6, 0, 0, 31, 31); // left box
-			bitmap.DrawRectangle(6, 128, 0, 31, 31); // left box
+			bitmap.DrawRectangle(6, 128, 0, 31, 31); // right box
 			bitmap.DrawLine(6, 16, 16, 144, 16);
 			debug[0] = new Sprite(bitmap, -80, -16);
 			
 			bitmap = new BitmapBits(97, 33);
 			bitmap.DrawRectangle(6, 0, 0, 31, 31); // left box
-			bitmap.DrawRectangle(6, 64, 0, 31, 31); // left box
+			bitmap.DrawRectangle(6, 64, 0, 31, 31); // right box
 			bitmap.DrawLine(6, 16, 16, 80, 16);
 			debug[1] = new Sprite(bitmap, -48, -16);
 			

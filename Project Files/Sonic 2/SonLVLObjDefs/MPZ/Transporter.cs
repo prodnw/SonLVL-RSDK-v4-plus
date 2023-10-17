@@ -34,8 +34,8 @@ namespace S2ObjectDefinitions.MPZ
 					{ "Left, Up, Right", 11 },
 					{ "Right, Up, Left (Alt 2)", 12 }
 				},
-				(obj) => (obj.PropertyValue & 15),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~15) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 15,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~15) | (int)value));
 			
 			properties[1] = new PropertySpec("Exit Type", typeof(int), "Extended",
 				"How the player should exit this Transporter.", null, new Dictionary<string, int>
@@ -43,8 +43,8 @@ namespace S2ObjectDefinitions.MPZ
 					{ "Transporter Exit", 0 },
 					{ "Shoot Out Exit", 16 }
 				},
-				(obj) => (obj.PropertyValue & 16),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~16) | (byte)((int)value)));
+				(obj) => obj.PropertyValue & 16,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~16) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

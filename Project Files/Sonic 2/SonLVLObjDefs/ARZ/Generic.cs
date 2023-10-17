@@ -105,10 +105,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override bool Hidden { get { return true; } }
 	}
-}
-
-namespace S2ObjectDefinitions.ARZ
-{
+	
 	abstract class Generic : ObjectDefinition
 	{
 		private PropertySpec[] properties;

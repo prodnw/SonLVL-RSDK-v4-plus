@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.MCZ
 {
 	class BossRock : MCZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone06"))
 			{
@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.MCZ
 	
 	class Eggman : MCZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[2];
 			if (LevelData.StageInfo.folder.EndsWith("Zone06"))
@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.MCZ
 	
 	class EggmanDrill : MCZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone06"))
 			{
@@ -65,10 +65,11 @@ namespace S2ObjectDefinitions.MCZ
 	abstract class Generic : ObjectDefinition
 	{
 		private Sprite sprite;
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -94,11 +95,6 @@ namespace S2ObjectDefinitions.MCZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

@@ -18,15 +18,13 @@ namespace S2ObjectDefinitions.MCZ
 			
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("Global/Items.gif").GetSection(1, 1, 16, 16), -8, -8);
 			for (int i = 1; i < 6; i++)
-			{
 				sprites[i] = new Sprite(sprites[0], 0, i * 16);
-			}
 			
 			sprite = new Sprite(sprites);
 			
-			BitmapBits dbg = new BitmapBits(161, 161);
-			dbg.DrawCircle(6, 80, 80, 80); // LevelData.ColorWhite
-			debug = new Sprite(dbg, -80, -80);
+			BitmapBits bitmap = new BitmapBits(161, 161);
+			bitmap.DrawCircle(6, 80, 80, 80); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -80, -80);
 			
 			// not sure if this was a value intended to be set from editor or not, but hey if it works then it's fine
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",

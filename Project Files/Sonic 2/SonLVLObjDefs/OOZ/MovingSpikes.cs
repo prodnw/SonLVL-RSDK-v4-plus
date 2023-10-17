@@ -26,7 +26,7 @@ namespace S2ObjectDefinitions.OOZ
 					{ "Start From Right", 1 },
 					{ "Start at Current Position", 2 }
 				},
-				(obj) => (obj.PropertyValue == 0) ? 0 : (obj.PropertyValue == 1) ? 1 : 2,
+				(obj) => (obj.PropertyValue < 2) ? obj.PropertyValue : 2,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 

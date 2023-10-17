@@ -40,10 +40,10 @@ namespace S1ObjectDefinitions.SYZ
 		{
 			switch (subtype)
 			{
-				case 0: return "Speed: Fast, Length: Long";
-				case 1: return "Speed: Slow, Length: Long";
-				case 2: return "Speed: Slow, Length: Short";
-				case 3: return "Speed: Slow (Reverse), Length: Short";
+				case 0: return "Long, Fast";
+				case 1: return "Long, Slow";
+				case 2: return "Short, Slow";
+				case 3: return "Short, Slow (Reverse)";
 				default: return "Unknown";
 			}
 		}

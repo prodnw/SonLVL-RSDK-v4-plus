@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Open From" description="Which way the Door should open from." type="opendirs" startbit="0" length="1" />
+    <Property name="Open From" description="Which way the Door should open from." type="opendirs" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="opendirs">
@@ -26,10 +26,10 @@
     <ImageSetRef set="doorl" />
   </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="Left Only">
+    <Subtype id="00" name="Open From Left">
       <ImageSetRef set="doorl" />
     </Subtype>
-    <Subtype id="01" name="Right Only">
+    <Subtype id="01" name="Open From Right">
       <ImageSetRef set="doorr" />
     </Subtype>
   </Subtypes>

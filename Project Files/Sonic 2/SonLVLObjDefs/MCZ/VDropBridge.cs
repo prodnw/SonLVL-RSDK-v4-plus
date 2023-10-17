@@ -21,19 +21,25 @@ namespace S2ObjectDefinitions.MCZ
 			
 			sprite = new Sprite(sprs.ToArray());
 			
-			BitmapBits bitmap = new BitmapBits(129, 17);
-			bitmap.DrawRectangle(6, 0, 0, 128, 16); // LevelData.ColorWhite
-			debug[0] = new Sprite(bitmap, 8, -8);
-			debug[1] = new Sprite(bitmap, -136, -8);
+			// tagging this area with LevelData.ColorWhite
 			
-			properties[0] = new PropertySpec("Open Direction", typeof(int), "Extended",
+			BitmapBits rect = new BitmapBits(129, 17);
+			rect.DrawRectangle(6, 0, 0, 128, 16);
+			
+			BitmapBits circle = new BitmapBits(8 * 16 + 1, 7 * 16 + 1);
+			circle.DrawCircle(6, 0, 8 * 16, 8 * 16);
+			debug[0] = new Sprite(new Sprite(rect, 8, -8), new Sprite(circle, 0, -(7 * 16)));
+			
+			debug[1] = new Sprite(debug[0], true, false);
+			
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction this Bridge should open towards.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

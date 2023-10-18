@@ -6,12 +6,12 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" description="How this Tube Switch should act." type="behaviours" startbit="0" length="8" />
+    <Property name="Trigger" description="Which effect this Tube Switch should apply." type="triggers" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="behaviours">
-      <EnumMember name="Enter From Left" />
-      <EnumMember name="Enter From Right" />
+    <Enum name="triggers">
+      <EnumMember name="Tunnel On Right" />
+      <EnumMember name="Tunnel On Left" />
     </Enum>
   </Enums>
   <ImageSets>
@@ -34,10 +34,10 @@
     <ImageSetRef set="tubeswitch" />
   </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="Enter From Left">
+    <Subtype id="00" name="Tunnel On Right">
       <ImageSetRef set="tubeswitch" />
     </Subtype>
-    <Subtype id="01" name="Enter From Right">
+    <Subtype id="01" name="Tunnel On Left">
       <ImageSetRef set="tubeswitch" />
     </Subtype>
   </Subtypes>

@@ -10,8 +10,8 @@
   </Properties>
   <Enums>
     <Enum name="triggers"> <!-- honestly these names suck but i have no idea what else to call them, so i guess i'll just stick with this? -->
-      <EnumMember name="Tunnel To Right" />
-      <EnumMember name="Tunnel To Left" />
+      <EnumMember name="Tunnel On Right" />
+      <EnumMember name="Tunnel On Left" />
       <EnumMember name="Tunnel Below" />
       <EnumMember name="Tunnel Abvoe" />
       <EnumMember name="Roll Align" /> <!-- forces a roll/moves the player to the center of this object -->
@@ -45,10 +45,10 @@
     <ImageSetRef set="tubeswitch" />
   </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="Tunnel To Right">
+    <Subtype id="00" name="Tunnel On Right">
       <ImageSetRef set="tubeswitch" />
     </Subtype>
-    <Subtype id="01" name="Tunnel To Left">
+    <Subtype id="01" name="Tunnel On Left">
       <ImageSetRef set="tubeswitch" />
     </Subtype>
     <Subtype id="02" name="Tunnel Below">

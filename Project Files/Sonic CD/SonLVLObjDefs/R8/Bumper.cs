@@ -19,8 +19,8 @@ namespace SCDObjectDefinitions.R8
 			sprites[1] = new Sprite(sprites[0], -48, 0);
 			sprites[2] = new Sprite(sprites[0],  48, 0);
 			
-			sprites[3] = new Sprite(sprites[0], 0, -48);
-			sprites[4] = new Sprite(sprites[0], 0,  48);
+			sprites[3] = new Sprite(sprites[0], 0,  48);
+			sprites[4] = new Sprite(sprites[0], 0, -48);
 			
 			BitmapBits bitmap = new BitmapBits(97, 2);
 			bitmap.DrawLine(6, 0, 0, 96, 0);

@@ -1,4 +1,5 @@
 using SonicRetro.SonLVL.API;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -7,67 +8,95 @@ namespace SCDObjectDefinitions.R5
 {
 	class RotatingLog : ObjectDefinition
 	{
-		private Sprite img;
-		private PropertySpec[] properties;
-
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite[] sprites = new Sprite[10];
+		private Sprite debug;
+		
 		public override void Init(ObjectData data)
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
 				case 'A':
 				default:
-					img = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(35, 1, 16, 16), -8, -8);
+					sprites[9] = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(35, 1, 16, 16), -8, -8);
 					break;
 				case 'B':
-					img = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(67, 174, 16, 16), -8, -8);
+					sprites[9] = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(67, 174, 16, 16), -8, -8);
 					break;
 				case 'C':
-					img = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(83, 174, 16, 16), -8, -8);
+					sprites[9] = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(83, 174, 16, 16), -8, -8);
 					break;
 				case 'D':
-					img = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(83, 158, 16, 16), -8, -8);
+					sprites[9] = new Sprite(LevelData.GetSpriteSheet("R5/Objects.gif").GetSection(83, 158, 16, 16), -8, -8);
 					break;
 			}
 			
-			properties = new PropertySpec[2];
-			properties[0] = new PropertySpec("Is Leader", typeof(int), "Extended",
-				"If this Log is the lead of the set. Only the first one in a set should have this one set.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 1 }
-				},
-				(obj) => obj.PropertyValue & 1,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 254) | (byte)((int)value)));
+			BitmapBits bitmap = new BitmapBits(193, 193);
+			bitmap.DrawCircle(6, 96, 96, 96);
+			debug = new Sprite(bitmap, -96, -96);
+			
+			int[] angles = {504, 8, 120, 136, 248, 264, 376, 392, 0};
+			for (int i = 0; i < angles.Length; i++)
+			{
+				double angle = angles[i] / 256.0 * Math.PI;
+				sprites[i] = new Sprite(sprites[9], (int)(Math.Cos(angle) * 96), (int)(Math.Sin(angle) * 96));
+			}
+			
+			properties[0] = new PropertySpec("Leader", typeof(int), "Extended",
+				"If this Log is the lead of the set. Leaders should be followed by 7 normal Logs.", null,
+				(obj) => (obj.PropertyValue == 1),
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
-		public override byte DefaultSubtype
+		public override PropertySpec[] CustomProperties
 		{
-			get { return 0; }
+			get { return properties; }
 		}
-
+		
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype) + " logs";
+			return (subtype == 1) ? "Leader" : "Follower";
 		}
 
 		public override Sprite Image
 		{
-			get { return img; }
+			get { return sprites[9]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return img;
+			return sprites[9];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return img;
+			int index = LevelData.Objects.IndexOf(obj);
+			int offset = 0;
+			while (index > 0)
+			{
+				if ((LevelData.Objects[index].Type == obj.Type) && (LevelData.Objects[index].PropertyValue == 1))
+					break;
+				
+				index--;
+				offset++;
+				
+				if (offset == 8)
+				{
+					return sprites[8];
+				}
+			}
+			
+			return sprites[offset];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return debug;
 		}
 	}
 }

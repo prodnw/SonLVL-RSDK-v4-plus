@@ -22,22 +22,51 @@
     </ImageSet>
   </ImageSets>
   <Properties>
-    <Property name="Behaviour" type="AutoSpinTypes" startbit="0" length="4" />
+    <Property name="Trigger" description="Which effect this Tube Switch should apply." type="triggers" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="AutoSpinTypes">
-      <EnumMember name="Left Enterance, Right Exit" />
-      <EnumMember name="Right Enterance, Left Exit" />
-      <EnumMember name="Wall Unstick" />
-      <EnumMember name="Downwards Conveyor" />
-      <EnumMember name="Upwards Conveyor" />
-      <EnumMember name="Upwards Normal" />
-      <EnumMember name="Downwards Normal" />
-      <EnumMember name="Conveyor Tunnel Middle" />
-      <EnumMember name="Conveyor Tunnel Endpoints" />
+    <Enum name="triggers">
+      <EnumMember name="Tunnel On Right" />
+      <EnumMember name="Tunnel On Left" />
+      <EnumMember name="Tunnel Above" value="5" />
+      <EnumMember name="Tunnel Below" />
+      <EnumMember name="Wall Unstick" value="2" />
+      <EnumMember name="Conveyor - Downwards" value="3" />
+      <EnumMember name="Conveyor - Upwards" />
+      <EnumMember name="Conveyor - Tunnel Booster" value="7" />
+      <EnumMember name="Conveyor - Tunnel Enterance" />
     </Enum>
   </Enums>
   <DefaultImage>
     <ImageSetRef set="tubeswitch" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Tunnel On Right">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="01" name="Tunnel On Left">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="05" name="Tunnel Above">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="06" name="Tunnel Below">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="02" name="Wall Unstick">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="03" name="Conveyor - Downwards">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="04" name="Conveyor - Upwards">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="07" name="Conveyor - Tunnel Booster">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+    <Subtype id="08" name="Conveyor - Tunnel Enterance">
+      <ImageSetRef set="tubeswitch" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

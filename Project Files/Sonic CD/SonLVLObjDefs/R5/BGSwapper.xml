@@ -6,12 +6,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Type" type="switchtypes" startbit="0" length="1" />
+    <Property name="Trigger" description="Which backgrounds this object should trigger." type="triggers" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="switchtypes">
-      <EnumMember name="Inside on Left, Outside on Right" />
-      <EnumMember name="Outside on Left, Inside on Right" />
+    <Enum name="triggers">
+      <EnumMember name="Inside Left, Outside Right" />
+      <EnumMember name="Outside Left, Inside Right" />
     </Enum>
   </Enums>
+  <Subtypes>
+    <Subtype id="00" name="Inside on Left, Outside on Right" image="trigger" />
+    <Subtype id="01" name="Outside on Left, Inside on Right" image="trigger" />
+  </Subtypes>
 </ObjDef>

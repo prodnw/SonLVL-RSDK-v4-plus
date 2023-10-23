@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="head">
+<ObjDef xmlns="http://www.sonicretro.org">
   <Images>
     <ImageFromSheet id="head" sheet="R5/Objects.gif" sourcex="125" sourcey="50" width="16" height="24">
       <Offset X="-8" Y="-16"/>
@@ -12,17 +12,16 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" type="BadnikConditions" startbit="0" length="1" />
+    <Property name="Condition" description="What condition this Kemusi should be in. Affects whether or not this badnik has spikes." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
-    <Enum name="BadnikConditions">
+    <Enum name="conditions">
       <EnumMember name="Good" />
       <EnumMember name="Bad" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Condition" value="Good" />
+  <ImageSets>
+    <ImageSet id="good">
       <ImageRef image="good" >
         <Offset X="36" />
       </ImageRef>
@@ -33,9 +32,8 @@
         <Offset X="12" />
       </ImageRef>
       <ImageRef image="head" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Condition" value="Bad" />
+    </ImageSet>
+    <ImageSet id="bad">
       <ImageRef image="bad" >
         <Offset X="36" />
       </ImageRef>
@@ -46,6 +44,17 @@
         <Offset X="12" />
       </ImageRef>
       <ImageRef image="head" />
-    </DisplayOption>
-  </Display>
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="good" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Good Condition">
+      <ImageSetRef set="good" />
+    </Subtype>
+    <Subtype id="01" name="Bad Condition">
+      <ImageSetRef set="bad" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

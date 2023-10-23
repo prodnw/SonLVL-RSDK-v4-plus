@@ -8,37 +8,68 @@ namespace SCDObjectDefinitions.R5
 {
 	class RPlatform : ObjectDefinition
 	{
-		private readonly Sprite[] sprites = new Sprite[3];
-		private PropertySpec[] properties;
+		private PropertySpec[] properties = new PropertySpec[1];
+		private Sprite[] sprites = new Sprite[3];
+		private Sprite[] debug = new Sprite[3];
+		private Rectangle[] bounds = new Rectangle[3];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
+			Sprite[] frames = new Sprite[3];
 			BitmapBits sheet = LevelData.GetSpriteSheet("R5/Objects.gif");
-			sprites[0] = new Sprite(sheet.GetSection(1, 1, 16, 16), -8, -8);
-			sprites[1] = new Sprite(sheet.GetSection(18, 1, 16, 16), -8, -8);
-			sprites[2] = new Sprite(sheet.GetSection(1, 208, 64, 16), -32, -8);
+			frames[0] = new Sprite(sheet.GetSection(1, 1, 16, 16), -8, -8);
+			frames[1] = new Sprite(sheet.GetSection(18, 1, 16, 16), -8, -8);
+			frames[2] = new Sprite(sheet.GetSection(1, 208, 64, 16), -32, -8);
 			
-			properties = new PropertySpec[1];
+			int[] signs = {1, 0, 0, 1, 0, -1};
+			for (int i = 0; i < 3; i++)
+			{
+				List<Sprite> sprs = new List<Sprite>() { frames[0] };
+				for (int j = 0; j <= 5; j++)
+				{
+					int index = (j == 5) ? 2 : 1;
+					sprs.Add(new Sprite(frames[index], j * 16 * signs[i * 2], j * 16 * signs[i * 2 + 1]));
+					
+					if (j == 5)
+					{
+						bounds[i] = frames[2].Bounds;
+						bounds[i].Offset(j * 16 * signs[i * 2], j * 16 * signs[i * 2 + 1]);
+					}
+				}
+				
+				sprites[i] = new Sprite(sprs.ToArray());
+			}
+			
+			int l = 5 * 16;
+			BitmapBits bitmap = new BitmapBits(2 * l + 1, 2 * l + 1);
+			bitmap.DrawCircle(6, l, l, l); // LevelData.ColorWhite
+			debug[0] = new Sprite(bitmap, -l, -l);
+			
+			bitmap = bitmap.GetSection(0, l, 2 * l + 1, l);
+			debug[1] = new Sprite(bitmap, -l, 0);
+			
+			debug[2] = new Sprite(debug[1], false, true);
+			
 			properties[0] = new PropertySpec("Range", typeof(int), "Extended",
                 "The range the platform will swing in.", null, new Dictionary<string, int>
 				{
-					{ "Static", 0 }, // doesn't really exist, but functions as such so may as well add it here
-					{ "Full Rotation", 1 },
-					{ "Bottom Half", 2 },
-					{ "Top Half", 3 }
+					{ "180 Degrees (Downwards)", 2 },
+					{ "180 Degrees (Upwards)", 3 },
+					{ "360 Degrees", 1 },
+					{ "Static", 0 } // doesn't really exist, but functions as such so may as well add it here ig?
 				},
-                (obj) => obj.PropertyValue & 3,
-                (obj, value) => obj.PropertyValue = ((byte)((int)value)));
+                (obj) => (obj.PropertyValue > 3) ? 0 : (int)obj.PropertyValue,
+                (obj, value) => obj.PropertyValue = (byte)((int)value));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {2, 3, 1, 0}); }
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 1; }
+			get { return 2; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -48,52 +79,65 @@ namespace SCDObjectDefinitions.R5
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			switch (subtype)
+			{
+				default:
+				case 0: return "Static";
+				case 1: return "360 Degrees";
+				case 2: return "180 Degrees (Downwards)";
+				case 3: return "180 Degrees (Upwards)";
+			}
 		}
 
 		public override Sprite Image
 		{
-			get { return sprites[2]; }
+			get { return sprites[1]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return new Sprite();
+			int index = 0;
+			switch (subtype)
+			{
+				case 1:
+				case 2: index = 1; break;
+				case 3: index = 2; break;
+			}
+			
+			return sprites[index];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> spritesR = new List<Sprite>();
-			for (int i = 0; i <= 6; i++)
+			int index = 0;
+			switch (obj.PropertyValue)
 			{
-				int frame = (i == 0) ? 0 : (i == 6) ? 2 : 1;
-				Sprite sprite = new Sprite(sprites[frame]);
-				sprite.Offset(0, (i * ((obj.PropertyValue == 3) ? -16 : 16)));
-				spritesR.Add(sprite);
+				case 1:
+				case 2: index = 1; break;
+				case 3: index = 2; break;
 			}
-			return new Sprite(spritesR.ToArray());
+			
+			return sprites[index];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			var overlay = new BitmapBits(209, 209);
+			return (obj.PropertyValue > 0 && obj.PropertyValue < 4) ? debug[obj.PropertyValue - 1] : null;
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int index = 0;
 			switch (obj.PropertyValue)
 			{
-				case 0:
-				default:
-					return null;
 				case 1:
-					overlay.DrawCircle(LevelData.ColorWhite, 104, 104, 104);
-					return new Sprite(overlay, -104, -104);
-				case 2:
-					overlay.DrawCircle(LevelData.ColorWhite, 104, 0, 104);
-					return new Sprite(overlay, -104, 0);
-				case 3:
-					overlay.DrawCircle(LevelData.ColorWhite, 104, 0, 104);
-					Sprite rtr = new Sprite(overlay, -104, 0);
-					rtr.Flip(false, true);
-					return rtr;
+				case 2: index = 1; break;
+				case 3: index = 2; break;
 			}
+			
+			Rectangle bound = bounds[index];
+			bound.Offset(obj.X, obj.Y);
+			return bound;
 		}
 	}
 }

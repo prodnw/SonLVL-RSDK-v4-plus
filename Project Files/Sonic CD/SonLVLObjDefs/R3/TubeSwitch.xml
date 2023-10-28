@@ -13,7 +13,7 @@
       <EnumMember name="Tunnel On Right" />
       <EnumMember name="Tunnel On Left" />
       <EnumMember name="Tunnel Below" />
-      <EnumMember name="Tunnel Abvoe" />
+      <EnumMember name="Tunnel Above" />
       <EnumMember name="Roll Align" /> <!-- forces a roll/moves the player to the center of this object -->
       <EnumMember name="Downwards Tunnel" />
       <EnumMember name="Downwards Tunnel (Slow)" value="9" />

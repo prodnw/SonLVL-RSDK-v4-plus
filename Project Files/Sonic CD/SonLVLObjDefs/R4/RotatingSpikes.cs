@@ -26,7 +26,7 @@ namespace SCDObjectDefinitions.R4
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {5, 6, 7} ); } // it can be any value, but let's give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -56,11 +56,11 @@ namespace SCDObjectDefinitions.R4
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			List<Sprite> sprs = new List<Sprite>();
+			List<Sprite> sprs = new List<Sprite>() { sprites[0] };
 			
-			for (int i = 0; i < obj.PropertyValue + 2; i++)
+			for (int i = 1; i <= obj.PropertyValue; i++)
 			{
-				int frame = (i == 0) ? 0 : (i == obj.PropertyValue) ? 2 : 1;
+				int frame = (i == obj.PropertyValue) ? 2 : 1;
 				sprs.Add(new Sprite(sprites[frame], 0, i * 16));
 			}
 			
@@ -71,7 +71,7 @@ namespace SCDObjectDefinitions.R4
 		{
 			int length = obj.PropertyValue * 16;
 			
-			var overlay = new BitmapBits(2 * length + 1, 2 * length + 1);
+			BitmapBits overlay = new BitmapBits(2 * length + 1, 2 * length + 1);
 			overlay.DrawCircle(6, length, length, length); // LevelData.ColorWhite
 			return new Sprite(overlay, -length, -length);
 		}

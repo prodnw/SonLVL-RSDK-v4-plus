@@ -58,8 +58,8 @@ namespace SCDObjectDefinitions.Global
 			{
 				case 0: return "Erase - Touch";
 				case 1: return "Erase - Pass";
-				case 2: return "Erase - Ground";
-				case 3: return "Erase - Air";
+				case 2: return "Pos Fix - Ground";
+				case 3: return "Pos Fix - Air";
 				case 4: return "Force Erase - Touch (Origins)";
 				default: return "Unknown";
 			}

@@ -115,8 +115,8 @@ namespace S1ObjectDefinitions.Global
 			
 			properties[2] = new PropertySpec("Moving", typeof(bool), "Extended",
 				"If the Spikes should peek in and out.", null,
-				(obj) => (obj.PropertyValue > 15) ? 0x80 : 0x00,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (int)value));
+				(obj) => (obj.PropertyValue > 15),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | ((bool)value ? 0x80 : 0x00)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -162,7 +162,7 @@ namespace S1ObjectDefinitions.Global
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return ((obj.PropertyValue & 0x80) == 0) ? null : debug[obj.PropertyValue & 15];
+			return (obj.PropertyValue > 15) ? debug[obj.PropertyValue & 15] : null;
 		}
 	}
 }

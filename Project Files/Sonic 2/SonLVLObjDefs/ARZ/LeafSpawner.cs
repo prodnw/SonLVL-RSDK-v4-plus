@@ -18,7 +18,7 @@ namespace S2ObjectDefinitions.ARZ
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of this Leaf Spawner. Increases in powers of 2, based on this number.", null,
 				(obj) => obj.PropertyValue + 1,
-				(obj, value) => obj.PropertyValue = (byte)(Math.Min((int)value - 1, 0)));
+				(obj, value) => obj.PropertyValue = (byte)(Math.Max((int)value - 1, 0)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

@@ -17,14 +17,14 @@ namespace S2ObjectDefinitions.MPZ
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(168, 18, 16, 16), -8, -8);
 			
 			// Small hitbox
-			BitmapBits bitmap = new BitmapBits(384 + 1, 17);
-			bitmap.DrawRectangle(6, 0, 0, 384, 16); // LevelData.ColorWhite
-			debug[0] = new Sprite(bitmap, -(384 / 2), 60);
+			BitmapBits bitmap = new BitmapBits(384, 128);
+			bitmap.DrawRectangle(6, 0, 0, 383, 127); // LevelData.ColorWhite
+			debug[0] = new Sprite(bitmap, -(384 / 2), -64);
 			
 			// Large hitbox
-			bitmap = new BitmapBits(768 + 1, 17);
-			bitmap.DrawRectangle(6, 0, 0, 768, 16); // LevelData.ColorWhite
-			debug[1] = new Sprite(bitmap, -(768 / 2), 60);
+			bitmap = new BitmapBits(768, 128);
+			bitmap.DrawRectangle(6, 0, 0, 767, 127); // LevelData.ColorWhite
+			debug[1] = new Sprite(bitmap, -(768 / 2), -64);
 			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the Corkscrew Cylinder.", null, new Dictionary<string, int>

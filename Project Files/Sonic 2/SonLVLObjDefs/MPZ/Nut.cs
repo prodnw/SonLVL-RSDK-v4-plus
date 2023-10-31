@@ -59,6 +59,9 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
+			if ((obj.PropertyValue & 0x80) == 0) // if we can't fall, then there's no reason to show drop distance
+				return null;
+			
 			int height = (obj.PropertyValue & 0x7f) << 3;
 			BitmapBits bitmap = new BitmapBits(2, height + 1);
 			bitmap.DrawLine(6, 0, 0, 0, height); // LevelData.ColorWhite

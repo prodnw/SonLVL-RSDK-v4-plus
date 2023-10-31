@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.MPZ
 			debug[1, 1] = new Sprite(bitmap, -64, -12); // prop val 1, dir 1
 			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
-				"The size of the Corkscrew Cylinder.", null, new Dictionary<string, int>
+				"How this bridge should behave upon button[+1] being pressed.", null, new Dictionary<string, int>
 				{
 					{ "Show On Activate", 0 },
 					{ "Hide On Activate", 1 }

@@ -79,5 +79,12 @@ namespace S1ObjectDefinitions.MZ
 			overlay.DrawCircle(6, l, 0, l); // LevelData.ColorWhite
 			return new Sprite(overlay, -l, 0);
 		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X, obj.Y + (obj.PropertyValue * 16) + 8);
+			return bounds;
+		}
 	}
 }

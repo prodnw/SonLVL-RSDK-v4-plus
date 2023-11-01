@@ -8,6 +8,9 @@ namespace SCDObjectDefinitions.R8
 {
 	class ConveyorPlatforms : ObjectDefinition
 	{
+		// throwing this here - m094 sticks in a bunch of random extra Conveyor Platforms around its conveyor chains but those don't really do anything
+		// there's not much we can do about 'em either, so..
+		
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite[] sprites = new Sprite[7];
 		
@@ -107,7 +110,7 @@ namespace SCDObjectDefinitions.R8
 				index--;
 				offset++;
 				
-				if (offset == 6)
+				if (offset == 6) // there's no proper master obj for us to follow, let's just display the normal sprite at our current pos
 				{
 					return sprites[6];
 				}

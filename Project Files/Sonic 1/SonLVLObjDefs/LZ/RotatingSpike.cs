@@ -94,5 +94,15 @@ namespace S1ObjectDefinitions.LZ
 			overlay.DrawCircle(6, length, length, length); // LevelData.ColorWhite
 			return new Sprite(overlay, -length, -length);
 		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int length = obj.PropertyValue & 0x0f;
+			double angle = (int)(((V4ObjectEntry)obj).Direction) * (Math.PI / 2.0);
+			
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X + (int)(Math.Cos(angle) * (length * 16)), obj.Y + (int)(Math.Sin(angle) * (length * 16)));
+			return bounds;
+		}
 	}
 }

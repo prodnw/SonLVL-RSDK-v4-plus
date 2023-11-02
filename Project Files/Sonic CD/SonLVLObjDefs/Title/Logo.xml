@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org">
+<ObjDef xmlns="http://www.sonicretro.org" Hidden="true">
   <Images>
-    <ImageFromSheet id="side" sheet="Title/Title.gif" sourcex="381" sourcey="73" width="130" height="152">
+    <ImageFromSheet id="half" sheet="Title/Title.gif" sourcex="381" sourcey="73" width="130" height="152">
       <Offset X="-130" Y="0"/>
     </ImageFromSheet>
   </Images>
   <ImageSets>
-    <ImageSet id="enblem">
-      <ImageRef image="side" />
-      <ImageRef image="side" xflip="AlwaysFlip" />
+    <ImageSet id="logo">
+      <ImageRef image="half" />
+      <ImageRef image="half" xflip="AlwaysFlip" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>
-    <ImageSetRef set="enblem" />
+    <ImageSetRef set="logo" />
   </DefaultImage>
 </ObjDef>

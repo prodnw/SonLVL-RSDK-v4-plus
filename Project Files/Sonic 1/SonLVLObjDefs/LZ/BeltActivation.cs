@@ -45,7 +45,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "Active " + subtype + " Objects";
+			return "Active " + subtype + " " + targetName + "s";
 		}
 
 		public override Sprite Image

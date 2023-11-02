@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Size" description="The size of this Block." type="sizes" startbit="0" length="1" />
+    <Property name="Size" description="What size this Push Block should be." type="sizes" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="sizes">

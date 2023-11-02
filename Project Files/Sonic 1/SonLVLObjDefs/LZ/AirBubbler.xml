@@ -6,6 +6,6 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Num Duds" description="How many effect bubbles should spawn before a breathable bubble."  type="int" startbit="0" length="8" />
+    <Property name="Num Duds" description="How many small bubbles should spawn before a breathable bubble."  type="int" startbit="0" length="8" />
   </Properties>
 </ObjDef>

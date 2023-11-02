@@ -6,6 +6,6 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Grab Duration" description="How long the player is able to hang on this bar for."  type="int" startbit="0" length="8" />
+    <Property name="Grab Duration" description="How long, in seconds, the player is able to hang on this bar for."  type="int" startbit="0" length="8" />
   </Properties>
 </ObjDef>

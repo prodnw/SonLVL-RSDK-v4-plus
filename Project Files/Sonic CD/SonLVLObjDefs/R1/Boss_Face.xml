@@ -35,6 +35,10 @@
       <Offset X="-14" Y="-16" />
     </ImageFromSheet>
   </Images>
+  <Properties>
+    <Property name="Speed Multiplier" description="Mission Mode only. How many times faster this boss's speed should be than normal. 10 is normal speed." type="int" startbit="0" length="8" /> <!-- well "Mission Mode only" is a bit of a lie.. technically it's only used by Boss Face 2s.. but Boss Face 1s are automatically turned into Boss Face 2s when Boss Face 2s exist in the scene.. and those only exist in mission mode.. so.....
+      (btw min value is 5, anything less than that will just freeze the boss, dunno if that's worth noting in the desc though) -->
+  </Properties>
   <ImageSets>
     <ImageSet id="boss">
       <ImageRef image="eggman" />

@@ -21,6 +21,8 @@ namespace S2ObjectDefinitions.MCZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(797, 697, 64, 64), -32, -32);
 			}
 			
+			// sprites[0] - single crate (icon)
+			// sprites[1] - all three crates (used in-game)
 			sprites[1] = new Sprite(sprites[0], new Sprite(sprites[0],  0x40, 0x40), new Sprite(sprites[0], -0x40, 0x40));
 			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",

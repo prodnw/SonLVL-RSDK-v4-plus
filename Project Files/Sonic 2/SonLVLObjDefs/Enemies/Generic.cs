@@ -274,20 +274,14 @@ namespace S2ObjectDefinitions.Enemies
 				sprites[2] = new Sprite(sheet.GetSection(91, 105, 32, 16), -16, -8); // shell
 			}
 			
-			// Assemble the Rexon sprite now
-			
-			int[] offsets = {
-				-31,  4,  // piece 4, spr 1
-				-29, -11, // piece 3, spr 1
-				-25, -25, // piece 2, spr 1
-				-20, -39, // piece 1, spr 1
-				-16, -54, // head, spr 0
-				 0,   0   // shell, spr 2
-			};
-			
-			Sprite[] sprs = new Sprite[6];
-			for (int i = 0; i < 6; i++)
-				sprs[i] = new Sprite(sprites[((i == 5) ? 2 : (i == 4) ? 0 : 1)], offsets[i * 2], offsets[(i * 2) + 1]);
+			// (offset values pulled from in-game, there's not much of a reason to translate the entire drawing code to C#)
+			Sprite[] sprs = new Sprite[] {
+				new Sprite(sprites[1], -31,   4), // piece 4, spr 1
+				new Sprite(sprites[1], -29, -11), // piece 3, spr 1
+				new Sprite(sprites[1], -25, -25), // piece 2, spr 1
+				new Sprite(sprites[1], -20, -39), // piece 1, spr 1
+				new Sprite(sprites[0], -16, -54), // head, spr 0
+				sprites[2]}; // shell, spr 2
 			
 			return new Sprite(sprs);
 		}

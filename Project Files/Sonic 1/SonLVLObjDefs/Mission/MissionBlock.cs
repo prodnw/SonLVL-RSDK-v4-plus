@@ -14,20 +14,20 @@ namespace S1ObjectDefinitions.Mission
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 18, 32, 32), -16, -16);
 			
-			properties[0] = new PropertySpec("Disable Crush", typeof(bool), "Extended",
+			properties[0] = new PropertySpec("Can Crush", typeof(bool), "Extended",
 				"If this Mission Block should not be able to crush the player.", null,
-				(obj) => obj.PropertyValue != 0,
-				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));
+				(obj) => obj.PropertyValue == 0,
+				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0 : 1));
 			
-			properties[1] = new PropertySpec("Pull Up Flag", typeof(bool), "Extended", // TODO: name's a bit iffy
-				"If Knuckles is able to pull himself up on this Mission Block. Only the topmost Block in a pillar should have this set.", null,
+			properties[1] = new PropertySpec("Climbable Ledge", typeof(bool), "Extended", // TODO: name's a bit iffy
+				"If Knuckles is able to pull himself up on this Mission Block.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0 != 0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -37,7 +37,7 @@ namespace S1ObjectDefinitions.Mission
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype == 0) ? "Can Crush" : "Disable Crush";
 		}
 
 		public override Sprite Image

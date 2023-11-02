@@ -9,7 +9,7 @@ namespace SCDObjectDefinitions.R6
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
-		private Sprite[] debug = new Sprite[2];
+		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
@@ -21,14 +21,9 @@ namespace SCDObjectDefinitions.R6
 			                new Sprite(sprite, -8,  8),
 			                new Sprite(sprite,  8,  8));
 			
-			// (used to be boxes for all 3 hitboxes, but let's just show 8x8's as 16x16's anyways)
-			int[] sizes = {16, 48};
-			for (int i = 0; i < 2; i++)
-			{
-				BitmapBits bitmap = new BitmapBits(sizes[i] * 2, sizes[i] * 2);
-				bitmap.DrawRectangle(6, 0, 0, sizes[i] * 2 - 1, sizes[i] * 2 - 1); // LevelData.ColorWhite
-				debug[i] = new Sprite(bitmap, -sizes[i], -sizes[i]);
-			}
+			BitmapBits bitmap = new BitmapBits(96, 96);
+			bitmap.DrawRectangle(6, 0, 0, 95, 95); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -48, -48);
 			
 			properties[0] = new PropertySpec("Trigger", typeof(int), "Extended",
 				"Which effect this Tube Switch should apply.", null, new Dictionary<string, int>
@@ -86,12 +81,10 @@ namespace SCDObjectDefinitions.R6
 		// in act 2, however, the name is correct, so hitboxes are fine there
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue > 12)
-				return null;
+			if ((obj.PropertyValue == 5) || (obj.PropertyValue == 6) || (obj.PropertyValue == 8))
+				return debug;
 			
-			// btw Curves hitbox is normally 0, but let's just make it a 16x16 here
-			int[] sizes = {0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0};
-			return debug[sizes[obj.PropertyValue]];
+			return null;
 		}
 	}
 }

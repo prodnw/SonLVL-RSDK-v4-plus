@@ -6,6 +6,6 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Interval" description="The interval this Flapping Door should follow." type="int" startbit="0" length="8" />
+    <Property name="Interval" description="The interval, in seconds, this Flapping Door should follow." type="int" startbit="0" length="8" />
   </Properties>
 </ObjDef>

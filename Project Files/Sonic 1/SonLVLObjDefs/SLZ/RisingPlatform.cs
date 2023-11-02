@@ -70,7 +70,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Up-Right", 12 },
 					{ "Down-Left", 13 },
 					
-					// 14 is for a platform placed by a spawner, shouldn't be placed in the scene
+					// 14 is for a platform spawned by a spawner, shouldn't be placed in the scene
 					// 15 is technically static, but it unloads right as soon as it gets off screen, so
 					
 					{ "Spawner", 0x80 }
@@ -96,7 +96,7 @@ namespace S1ObjectDefinitions.SLZ
 			
 			properties[1] = new PropertySpec("Interval", typeof(int), "Extended",
 				"Used for Platform Spawners only. The interval, in frames, at which new platforms should spawn.", null,
-				(obj) => (obj.PropertyValue > 0x80) ? ((obj.PropertyValue & 0x7f) * 6) : 0, // only show it for Spawners, otherwise make it 0
+				(obj) => (obj.PropertyValue > 0x80) ? ((obj.PropertyValue & 0x7f) * 6) : -1, // only show it for Spawners, otherwise make it 0
 				(obj, value) => {
 						if (obj.PropertyValue >= 0x80) // only set it for spawners
 							obj.PropertyValue = (byte)(0x80 | ((int)value / 6));

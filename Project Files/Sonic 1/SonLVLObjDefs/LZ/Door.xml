@@ -10,9 +10,9 @@
   </Properties>
   <Enums>
     <Enum name="types">
-      <EnumMember name="Generic" />
-      <EnumMember name="Open LZ3 Path" />
-      <EnumMember name="Swap Belt Platform Dir" />
+      <EnumMember name="Stay Opened" />
+      <EnumMember name="Open Then Close" />
+      <EnumMember name="Current" />
     </Enum>
   </Enums>
   <Subtypes>

@@ -84,6 +84,11 @@ namespace S1ObjectDefinitions.SLZ
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0x30, 0x41, 0x42, 0x43, 0x34, 0x35, 0x36, 0x37 }); } // some hidden intervals..
 		}
 		
+		public override byte DefaultSubtype
+		{
+			get { return 0x30; }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

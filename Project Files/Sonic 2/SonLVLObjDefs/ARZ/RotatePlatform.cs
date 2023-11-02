@@ -20,12 +20,12 @@ namespace S2ObjectDefinitions.ARZ
 			sprites[2] = new Sprite(sheet.GetSection(126, 191, 64, 16), -32, -8);
 
 			int radius = 64;
-			var overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);
+			BitmapBits overlay = new BitmapBits(radius * 2 + 1, radius * 2 + 1);
 			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -radius, -radius - 4);
 			
-			properties[0] = new PropertySpec("Angle", typeof(int), "Extended",
-				"The starting angle of this platform.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which angle this platform should start at.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Top Right", 5 },
@@ -60,6 +60,11 @@ namespace S2ObjectDefinitions.ARZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 0x10; }
 		}
 		
 		public override PropertySpec[] CustomProperties

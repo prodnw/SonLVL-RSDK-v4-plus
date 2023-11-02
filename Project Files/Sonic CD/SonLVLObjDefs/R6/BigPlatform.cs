@@ -30,7 +30,7 @@ namespace SCDObjectDefinitions.R6
 			
 			bitmap = new BitmapBits(2, 192);
 			bitmap.DrawLine(6, 0, 0, 0, 191); // LevelData.ColorWhite
-			debug = new Sprite(debug, new Sprite(bitmap, 0, 0));
+			debug = new Sprite(debug, new Sprite(bitmap));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

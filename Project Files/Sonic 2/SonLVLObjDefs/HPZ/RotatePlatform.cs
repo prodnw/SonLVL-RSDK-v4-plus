@@ -34,8 +34,18 @@ namespace S2ObjectDefinitions.HPZ
 			bitmap.DrawCircle(6, 96, 96, 72); // Inner circle
 			debug[1] = new Sprite(bitmap, -96, -96);
 			
-			properties[0] = new PropertySpec("Angle", typeof(int), "Extended",
-				"What angle this Platform should start at.", null,
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which angle this platform should start at.", null, new Dictionary<string, int>
+				{
+					{ "Right", 0 },
+					{ "Bottom Right", 1 },
+					{ "Bottom Left", 2 },
+					{ "Left", 3 },
+					{ "Top Left", 4 },
+					{ "Top Right", 5 },
+					{ "Right (Up Lean)", 6 }, // the original plan was to not have 6/7 since they're like two degrees off from r/br, but then 7 is used once, so..
+					{ "Bottom Right (Up Lean)", 7 }
+				},
 				(obj) => obj.PropertyValue & 7,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (byte)((int)value)));
 			
@@ -44,7 +54,7 @@ namespace S2ObjectDefinitions.HPZ
 				(obj) => (obj.PropertyValue >> 3) & 15,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x78) | (byte)(((int)value & 15) << 3)));
 			
-			properties[2] = new PropertySpec("Use Spiked Ball", typeof(bool), "Extended",
+			properties[2] = new PropertySpec("Spiked Ball", typeof(bool), "Extended",
 				"If this object should be a Spiked Ball, as opposed to a Platform.", null,
 				(obj) => (obj.PropertyValue & 0x80) == 0x80,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((bool)value ? 0x80 : 0x00)));
@@ -58,6 +68,11 @@ namespace S2ObjectDefinitions.HPZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 0x10; }
 		}
 		
 		public override PropertySpec[] CustomProperties

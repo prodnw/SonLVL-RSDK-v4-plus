@@ -21,7 +21,7 @@ namespace S2ObjectDefinitions.Mission
 			properties[0] = new PropertySpec("Ring Count", typeof(int), "Extended",
 				"How many rings the player will start with.", 10,
 				(obj) => ((V4ObjectEntry)obj).Value0,
-				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
+				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
 		}
 		
 		public override bool Debug

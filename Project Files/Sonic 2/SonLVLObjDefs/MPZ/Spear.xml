@@ -6,6 +6,6 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Interval Offset" type="int" startbit="0" length="7" />
+    <Property name="Interval Offset" description="How offset this Spear should be from the global cycle." type="int" startbit="0" length="7" />
   </Properties>
 </ObjDef>

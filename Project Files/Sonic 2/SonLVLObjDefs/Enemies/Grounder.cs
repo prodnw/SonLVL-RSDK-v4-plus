@@ -5,12 +5,7 @@ using System.Drawing;
 
 namespace S2ObjectDefinitions.Enemies
 {
-	class Grounder : Enemies.GrounderShared
-	{
-		// empty lol
-	}
-	
-	class Grounder2 : Enemies.GrounderShared
+	class Grounder2 : Enemies.Grounder
 	{
 		public override Sprite[] GetSprites()
 		{
@@ -35,7 +30,7 @@ namespace S2ObjectDefinitions.Enemies
 		}
 	}
 	
-	abstract class GrounderShared : ObjectDefinition
+	class Grounder : ObjectDefinition
 	{
 		private Sprite[] sprites;
 		private PropertySpec[] properties = new PropertySpec[1];

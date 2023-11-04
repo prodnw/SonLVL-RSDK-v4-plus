@@ -68,7 +68,8 @@ namespace S2ObjectDefinitions.MPZ
 					 22, 246,
 					 32, 224,
 					 32,  32,
-					 22,  10
+					 22,  10,
+					  0,   0
 				},
 				new int[] {
 					  0,   0,
@@ -80,7 +81,8 @@ namespace S2ObjectDefinitions.MPZ
 					 22, 374,
 					 32, 352,
 					 32,  32,
-					 22,  10
+					 22,  10,
+					  0,   0
 				},
 				new int[] {
 					  0,   0,
@@ -92,7 +94,8 @@ namespace S2ObjectDefinitions.MPZ
 					 22, 502,
 					 32, 480,
 					 32,  32,
-					 22,  10
+					 22,  10,
+					  0,   0
 				}
 			};
 			
@@ -157,7 +160,7 @@ namespace S2ObjectDefinitions.MPZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			/*
-			// original idea was (in addition to what's here already) to draw an arrow based on the platform's `"Start From"
+			// original idea was (in addition to what's here already) to draw an arrow based on the platform's `"Start From", but that felt kind of too cluttered
 			int[][] movementTables = new int[][] {
 				new int[] {
 					  0,   0,

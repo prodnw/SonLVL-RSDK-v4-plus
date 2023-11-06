@@ -65,7 +65,7 @@ namespace SCDObjectDefinitions.R8
 				"Which direction this object should send the player.", null, new Dictionary<string, int>
 				{
 					{ "Junction", 0 },
-					{ "Entrance", 1 },
+					{ "Entrance", 1 }, // Entrance/Exit
 					{ "Tunnel", 10 },
 					{ "Up <-> Right", 2 },
 					{ "Down <-> Left", 3 },

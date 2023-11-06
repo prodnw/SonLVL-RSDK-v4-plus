@@ -24,8 +24,8 @@ namespace S2ObjectDefinitions.CNZ
 		private Sprite debug;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public virtual Point offset { get { return new Point(0, 0); } }
-		public virtual Dictionary<string, int> names { get { return new Dictionary<string, int>{}; } }
+		public abstract Point offset { get; }
+		public abstract Dictionary<string, int> names { get; }
 		
 		public override void Init(ObjectData data)
 		{

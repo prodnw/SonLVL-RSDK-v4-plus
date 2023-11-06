@@ -13,10 +13,10 @@
   </Properties>
   <Enums>
     <Enum name="behaviours">
-	  <EnumMember name="Normal" value="2" />
+      <EnumMember name="Normal" value="2" />
       <EnumMember name="Expand Stage - 2 Chunks" value="0" />
-	  <EnumMember name="Expand Stage - 4 Chunks" value="1" />
-	  <EnumMember name="Extra (Multiple Signposts)" value="3" />
+      <EnumMember name="Expand Stage - 4 Chunks" value="1" />
+      <EnumMember name="Extra (Multiple Signposts)" value="3" />
     </Enum>
   </Enums>
   <ImageSets>

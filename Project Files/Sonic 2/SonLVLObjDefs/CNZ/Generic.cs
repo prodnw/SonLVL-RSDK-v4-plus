@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.CNZ
 {
 	class Bumper : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
 			{
@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.CNZ
 	
 	class Eggman : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[2];
 			
@@ -48,7 +48,7 @@ namespace S2ObjectDefinitions.CNZ
 	
 	class EggmanBomb : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.CNZ
 	
 	class EggmanClaw : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
@@ -82,7 +82,7 @@ namespace S2ObjectDefinitions.CNZ
 	
 	class VFlipper : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
@@ -97,7 +97,7 @@ namespace S2ObjectDefinitions.CNZ
 	
 	class VPlunger : CNZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone04"))
 			{
@@ -114,14 +114,16 @@ namespace S2ObjectDefinitions.CNZ
 	{
 		private Sprite sprite;
 		
+		public abstract Sprite GetFrame();
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetFrame();
+		}
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
-		public override void Init(ObjectData data)
-		{
-			sprite = GetSprite();
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -142,11 +144,6 @@ namespace S2ObjectDefinitions.CNZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

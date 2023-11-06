@@ -166,7 +166,9 @@ namespace S1ObjectDefinitions.Enemies
 	abstract class Generic : ObjectDefinition
 	{
 		private Sprite sprite;
-
+		
+		public abstract Sprite GetFrame();
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = GetFrame();
@@ -195,11 +197,6 @@ namespace S1ObjectDefinitions.Enemies
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetFrame()
-		{
-			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 		}
 	}
 }

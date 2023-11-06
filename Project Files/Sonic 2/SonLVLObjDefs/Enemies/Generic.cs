@@ -78,6 +78,19 @@ namespace S2ObjectDefinitions.Enemies
 		public override bool Hidden { get { return true; } }
 	}
 	
+	class BeeShot : Enemies.Generic
+	{
+		public override Sprite GetFrame()
+		{
+			if (LevelData.StageInfo.folder.EndsWith("Zone01"))
+				return new Sprite(LevelData.GetSpriteSheet("EHZ/Objects.gif").GetSection(1, 50, 8, 10), -12, -3);
+			else
+				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 50, 8, 10), -12, -3); // broken frame btw
+		}
+		
+		public override bool Hidden { get { return true; } }
+	}
+	
 	class BuzzerShot : Enemies.Generic
 	{
 		public override Sprite GetFrame()
@@ -375,7 +388,9 @@ namespace S2ObjectDefinitions.Enemies
 	abstract class Generic : ObjectDefinition
 	{
 		private Sprite sprite;
-
+		
+		public abstract Sprite GetFrame();
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = GetFrame();
@@ -404,11 +419,6 @@ namespace S2ObjectDefinitions.Enemies
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetFrame()
-		{
-			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 		}
 	}
 }

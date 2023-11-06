@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Demo ID" description="Which Demo this object should play back." type="demos" startbit="0" length="8" />
+    <Property name="Demo" description="Which Demo this object should play back." type="demos" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="demos">

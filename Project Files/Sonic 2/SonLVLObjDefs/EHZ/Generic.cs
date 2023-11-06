@@ -113,10 +113,7 @@ namespace S2ObjectDefinitions.EHZ
 	{
 		private Sprite sprite;
 		
-		public virtual Sprite GetFrame()
-		{
-			return null;
-		}
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{

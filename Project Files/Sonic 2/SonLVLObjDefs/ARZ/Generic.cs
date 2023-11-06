@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.ARZ
 {
 	class Brick : ARZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.ARZ
 	
 	class Eggman : ARZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[4];
 			
@@ -57,7 +57,7 @@ namespace S2ObjectDefinitions.ARZ
 	
 	class EggmanHammer : ARZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
@@ -74,7 +74,7 @@ namespace S2ObjectDefinitions.ARZ
 	
 	class EggmanTotem : ARZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
@@ -91,7 +91,7 @@ namespace S2ObjectDefinitions.ARZ
 	
 	class EggmanArrow : ARZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone03"))
 			{
@@ -108,24 +108,20 @@ namespace S2ObjectDefinitions.ARZ
 	
 	abstract class Generic : ObjectDefinition
 	{
-		private PropertySpec[] properties;
 		private Sprite sprite;
+		
+		public abstract Sprite GetFrame();
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetFrame();
+		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
 		}
-
-		public override void Init(ObjectData data)
-		{
-			sprite = GetSprite();
-		}
 		
-		public override PropertySpec[] CustomProperties
-		{
-			get { return properties; }
-		}
-
 		public override string SubtypeName(byte subtype)
 		{
 			return null;
@@ -144,11 +140,6 @@ namespace S2ObjectDefinitions.ARZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

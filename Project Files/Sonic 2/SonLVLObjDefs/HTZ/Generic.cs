@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.HTZ
 {
 	class EggmanFireball1 : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	class EggmanFireball2 : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -42,7 +42,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	class EggmanSmokePuff : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -59,7 +59,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	class GroundFlame : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -76,7 +76,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	class LavaBubble : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -93,7 +93,7 @@ namespace S2ObjectDefinitions.HTZ
 	
 	class LavaJump : HTZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone05"))
 			{
@@ -112,14 +112,16 @@ namespace S2ObjectDefinitions.HTZ
 	{
 		private Sprite sprite;
 		
+		public abstract Sprite GetFrame();
+		
+		public override void Init(ObjectData data)
+		{
+			sprite = GetFrame();
+		}
+		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
-		public override void Init(ObjectData data)
-		{
-			sprite = GetSprite();
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -140,11 +142,6 @@ namespace S2ObjectDefinitions.HTZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

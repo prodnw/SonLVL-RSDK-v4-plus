@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.WFZ
 {
 	class TurretPlatform : WFZ.IntervalPlatform
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(130, 165, 64, 24), -32, -24);
 		}
@@ -15,7 +15,7 @@ namespace S2ObjectDefinitions.WFZ
 	
 	class TiltPlatformH : WFZ.IntervalPlatform
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(320, 99, 48, 8), -24, -4);
 		}
@@ -23,7 +23,7 @@ namespace S2ObjectDefinitions.WFZ
 	
 	class TiltPlatformV : WFZ.IntervalPlatform
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(311, 99, 8, 48), -4, -24);
 		}
@@ -31,24 +31,24 @@ namespace S2ObjectDefinitions.WFZ
 	
 	class TiltPlatformL : WFZ.IntervalPlatform
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			return new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(320, 99, 48, 8), -24, -4);
 		}
 	}
 	
-	// TiltPlatformM doesn't use its prop val
+	// TiltPlatformM doesn't use its prop val so we can leave it as a basic render
 	
 	abstract class IntervalPlatform : ObjectDefinition
 	{
 		private Sprite sprite;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public virtual Sprite GetSprite() { return null; }
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 			
 			properties[0] = new PropertySpec("Interval Offset", typeof(int), "Extended",
 				"The interval offset this Platform should use.", null,

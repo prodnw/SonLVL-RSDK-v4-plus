@@ -8,7 +8,7 @@ namespace S2ObjectDefinitions.OOZ
 {
 	class Eggman : OOZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[2];
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
@@ -30,7 +30,7 @@ namespace S2ObjectDefinitions.OOZ
 	
 	class EggmanHarpoon : OOZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.OOZ
 	
 	class EggmanCannon : OOZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
@@ -64,7 +64,7 @@ namespace S2ObjectDefinitions.OOZ
 	
 	class EggmanLaser : OOZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
@@ -81,7 +81,7 @@ namespace S2ObjectDefinitions.OOZ
 	
 	class EggmanFlame : OOZ.Generic
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 			{
@@ -100,9 +100,11 @@ namespace S2ObjectDefinitions.OOZ
 	{
 		private Sprite sprite;
 		
+		public abstract Sprite GetFrame();
+		
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -128,11 +130,6 @@ namespace S2ObjectDefinitions.OOZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetSprite()
-		{
-			return (new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16));
 		}
 	}
 }

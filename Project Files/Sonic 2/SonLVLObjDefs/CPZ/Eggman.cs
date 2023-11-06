@@ -107,10 +107,7 @@ namespace S2ObjectDefinitions.CPZ
 	{
 		private Sprite sprite;
 		
-		public virtual Sprite GetFrame()
-		{
-			return null;
-		}
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{

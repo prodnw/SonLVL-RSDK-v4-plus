@@ -54,12 +54,8 @@ namespace S1ObjectDefinitions.SBZ
 		private Sprite[] sprites;
 		private Sprite[] debug;
 		
-		public virtual Dictionary<string, int> names { get { return new Dictionary<string, int>{}; } }
-		
-		public virtual Sprite[] GetFrames()
-		{
-			return null;
-		}
+		public abstract Dictionary<string, int> names { get; }
+		public abstract Sprite[] GetFrames();
 		
 		public override void Init(ObjectData data)
 		{

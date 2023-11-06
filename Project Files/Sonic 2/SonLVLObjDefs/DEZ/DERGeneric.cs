@@ -129,14 +129,13 @@ namespace S2ObjectDefinitions.DEZ
 			// 	return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(808, 50, 7, 16), -4, -8);
 		}
 	}
-}
-
-namespace S2ObjectDefinitions.DEZ
-{
+	
 	abstract class DERGeneric : ObjectDefinition
 	{
 		private Sprite sprite;
-
+		
+		public abstract Sprite GetFrame();
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = GetFrame();
@@ -170,11 +169,6 @@ namespace S2ObjectDefinitions.DEZ
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
-		}
-		
-		public virtual Sprite GetFrame()
-		{
-			return new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(1, 143, 32, 32), -16, -16);
 		}
 	}
 }

@@ -27,10 +27,7 @@ namespace S1ObjectDefinitions.GHZ
 		private Sprite sprite;
 		private Sprite debug;
 		
-		public virtual Sprite GetFrame()
-		{
-			return null;
-		}
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{

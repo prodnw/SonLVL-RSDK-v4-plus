@@ -9,7 +9,7 @@ namespace S2ObjectDefinitions.MPZ
 	
 	class Eggman : MPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			Sprite[] sprites = new Sprite[3];
 			
@@ -34,7 +34,7 @@ namespace S2ObjectDefinitions.MPZ
 	
 	class EggmanBalloon : MPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
@@ -54,7 +54,7 @@ namespace S2ObjectDefinitions.MPZ
 	
 	class EggmanLaser : MPZ.EggmanShared
 	{
-		public override Sprite GetSprite()
+		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone09"))
 			{
@@ -76,14 +76,11 @@ namespace S2ObjectDefinitions.MPZ
 	{
 		private Sprite sprite;
 		
-		public virtual Sprite GetSprite()
-		{
-			return null;
-		}
+		public abstract Sprite GetFrame();
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = GetSprite();
+			sprite = GetFrame();
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

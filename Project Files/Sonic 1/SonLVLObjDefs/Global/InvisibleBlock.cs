@@ -33,7 +33,7 @@ namespace S1ObjectDefinitions.Global
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | Math.Min(Math.Max((int)value - 1, 0), 15)));
 			
 			properties[2] = new PropertySpec("Mode", typeof(int), "Extended",
-				"Which behaviour the Invisible Block will assume.", null, new Dictionary<string, int>
+				"How this Invisible Block will act.", null, new Dictionary<string, int>
 				{
 					{ "Solid", 0 },
 					{ "Eject Left", 1 },

@@ -69,8 +69,8 @@ namespace SCDObjectDefinitions.R4
 			properties[0] = new PropertySpec("Formation", typeof(int), "Extended",
 				"How this set of Blocks should be arranged.", null, new Dictionary<string, int>
 				{
-					{ "Single Block", 0 },
-					{ "Single Block (Alt Frame)", 1 },
+					{ "Single Block (Frame A)", 0 },
+					{ "Single Block (Frame B)", 1 },
 					{ "Two Blocks (Horizontal)", 2 },
 					{ "Two Blocks (Vertical)", 3 },
 					{ "Four Blocks (Cube)", 4 },
@@ -94,8 +94,8 @@ namespace SCDObjectDefinitions.R4
 		{
 			switch (subtype)
 			{
-				case 0: return "Single Block";
-				case 1: return "Single Block (Alt Frame)";
+				case 0: return "Single Block (Frame A)";
+				case 1: return "Single Block (Frame B)";
 				case 2: return "Two Blocks (Horizontal)";
 				case 3: return "Two Blocks (Vertical)";
 				case 4: return "Four Blocks (Cube)";

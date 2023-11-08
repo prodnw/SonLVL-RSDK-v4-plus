@@ -46,15 +46,15 @@ namespace SCDObjectDefinitions.R4
 				"Which direction these Spikes should rotate.", null, new Dictionary<string, int>
 				{
 					{ "Clockwise", 2 },
-					{ "Counter-Clockwise", 0x82 }
+					{ "Counter-Clockwise", 0xfe }
 				},
-				(obj) => (obj.PropertyValue < 0x80) ? 2 : 0x82,
+				(obj) => (obj.PropertyValue < 0x80) ? 2 : 0xfe,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {2, 0x82} ); } // well really it only matters if it's greater or less than 128, but these values are what the game uses
+			get { return new ReadOnlyCollection<byte>(new byte[] {2, 0xfe} ); } // well really it only matters if it's greater or less than 128, but these values are what the game uses
 		}
 		
 		public override byte DefaultSubtype

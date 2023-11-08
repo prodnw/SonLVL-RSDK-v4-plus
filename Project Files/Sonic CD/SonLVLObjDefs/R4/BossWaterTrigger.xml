@@ -13,7 +13,7 @@
   <Enums>
     <Enum name="triggers">
       <EnumMember name="Move Water" />
-      <EnumMember name="Adjust Stage Bounds" />
+      <EnumMember name="Stage Bounds" />
     </Enum>
   </Enums>
   <Subtypes>

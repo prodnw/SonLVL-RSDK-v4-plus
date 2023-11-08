@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="frame1">
+<ObjDef xmlns="http://www.sonicretro.org" Image="stray">
   <Images>
-    <ImageFromSheet id="frame1" sheet="SBZ/Objects.gif" sourcex="189" sourcey="1" width="64" height="92">
+    <ImageFromSheet id="post" sheet="SBZ/Objects.gif" sourcex="189" sourcey="1" width="64" height="92">
       <Offset X="-32" Y="-60" />
     </ImageFromSheet>
-    <ImageFromSheet id="frame2" sheet="SBZ/Objects.gif" sourcex="189" sourcey="1" width="64" height="92">
-      <Offset X="-32" Y="-60" />
-    </ImageFromSheet>
-    <ImageFromSheet id="frame3" sheet="SBZ/Objects.gif" sourcex="189" sourcey="1" width="64" height="92">
-      <Offset X="-32" Y="-60" />
-    </ImageFromSheet>
-    <ImageFromSheet id="frame4" sheet="SBZ/Objects.gif" sourcex="319" sourcey="50" width="64" height="64">
-      <Offset X="-32" Y="-32" />
-    </ImageFromSheet>
-    <ImageFromSheet id="frame5" sheet="SBZ/Objects.gif" sourcex="319" sourcey="50" width="64" height="64">
+    <ImageFromSheet id="stray" sheet="SBZ/Objects.gif" sourcex="319" sourcey="50" width="64" height="64">
       <Offset X="-32" Y="-32" />
     </ImageFromSheet>
   </Images>
@@ -22,7 +13,7 @@
   </Properties>
   <Enums>
     <Enum name="behaviours">
-      <EnumMember name="No Movement" />
+      <EnumMember name="Static" />
       <EnumMember name="Move Horizontally" />
       <EnumMember name="Move Vertically" />
       <EnumMember name="Stray (Moving Right)" />
@@ -30,10 +21,10 @@
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="No Movement" image="frame1" />
-    <Subtype id="01" name="Move Horizontally" image="frame2" />
-    <Subtype id="02" name="Move Vertically" image="frame3" />
-    <Subtype id="03" name="Stray (Moving Right)" image="frame4" />
-    <Subtype id="04" name="Stray (Moving Left)" image="frame5" />
+    <Subtype id="00" name="Static" image="post" />
+    <Subtype id="01" name="Move Horizontally" image="post" />
+    <Subtype id="02" name="Move Vertically" image="post" />
+    <Subtype id="03" name="Stray (Moving Right)" image="stray" />
+    <Subtype id="04" name="Stray (Moving Left)" image="stray" />
   </Subtypes>
 </ObjDef>

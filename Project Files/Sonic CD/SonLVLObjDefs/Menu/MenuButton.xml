@@ -4,37 +4,37 @@
     <ImageFromSheet id="button" sheet="Menu/MenuGfx2_EN.gif" sourcex="259" sourcey="71" width="144" height="21">
       <Offset X="0" Y="-10"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_2" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="18" width="128" height="16">
+    <ImageFromSheet id="startgame" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="18" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_3" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="35" width="128" height="16">
+    <ImageFromSheet id="timeattack" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="35" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_4" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="52" width="128" height="16">
+    <ImageFromSheet id="achievements" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="52" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_5" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="69" width="128" height="16">
+    <ImageFromSheet id="leaderboards" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="69" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_6" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="86" width="128" height="16">
+    <ImageFromSheet id="helpoptions" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="86" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_7" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="103" width="128" height="16">
+    <ImageFromSheet id="extras" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="103" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_8" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="547" width="128" height="16">
+    <ImageFromSheet id="buyfullgame" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="547" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_9" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="564" width="128" height="16">
+    <ImageFromSheet id="unlockfullgame" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="564" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_a" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="581" width="128" height="16">
+    <ImageFromSheet id="exit" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="581" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_b" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="598" width="128" height="16">
+    <ImageFromSheet id="soundtrack" sheet="Menu/MenuGfx2_EN.gif" sourcex="1" sourcey="598" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
-    <ImageFromSheet id="sprite_c" sheet="Menu/MenuGfx2_EN.gif" sourcex="162" sourcey="649" width="128" height="16">
+    <ImageFromSheet id="moregames" sheet="Menu/MenuGfx2_EN.gif" sourcex="162" sourcey="649" width="128" height="16">
       <Offset X="19" Y="-7"/>
     </ImageFromSheet>
   </Images>
@@ -60,47 +60,47 @@
   <ImageSets>
     <ImageSet id="startgame">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_2" />
+	  <ImageRef image="startgame" />
     </ImageSet>
     <ImageSet id="timeattack">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_3" />
+	  <ImageRef image="timeattack" />
     </ImageSet>
     <ImageSet id="achievements">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_4" />
+	  <ImageRef image="achievements" />
     </ImageSet>
     <ImageSet id="leaderboards">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_5" />
+	  <ImageRef image="leaderboards" />
     </ImageSet>
     <ImageSet id="helpoptions">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_6" />
+	  <ImageRef image="helpoptions" />
     </ImageSet>
     <ImageSet id="extras">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_7" />
+	  <ImageRef image="extras" />
     </ImageSet>
     <ImageSet id="buyfullgame">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_8" />
+	  <ImageRef image="buyfullgame" />
     </ImageSet>
     <ImageSet id="unlockfullgame">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_9" />
+	  <ImageRef image="unlockfullgame" />
     </ImageSet>
     <ImageSet id="exit">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_a" />
+	  <ImageRef image="exit" />
     </ImageSet>
     <ImageSet id="soundtrack">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_b" />
+	  <ImageRef image="soundtrack" />
     </ImageSet>
     <ImageSet id="moregames">
       <ImageRef image="button" />
-	  <ImageRef image="sprite_c" />
+	  <ImageRef image="moregames" />
     </ImageSet>
   </ImageSets>
   <Subtypes>

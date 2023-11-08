@@ -8,6 +8,7 @@ namespace SCDObjectDefinitions.R4
 {
 	class SolidBarrier : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		private Sprite debug;
 		
@@ -41,20 +42,38 @@ namespace SCDObjectDefinitions.R4
 			
 			sprite = new Sprite(sprites.ToArray());
 			
-			BitmapBits bitmap = new BitmapBits(224, 129);
-			bitmap.DrawRectangle(6, 160, 0, 63, 127); // LevelData.ColorWhite
-			bitmap.DrawLine(6, 0, 64, 192, 64); // LevelData.ColorWhite
-			debug = new Sprite(bitmap, 0, -64);
+			BitmapBits bitmap = new BitmapBits(128, 128);
+			bitmap.DrawRectangle(6, 0, 0, 127, 127); // LevelData.ColorWhite
+			debug = new Sprite(bitmap, -64, -64 + 64);
+			
+			properties[0] = new PropertySpec("Start", typeof(int), "Extended",
+				"How this door should start.", null, new Dictionary<string, int> // this is kind of iffy... but it's cleaner than all the other more in-depth stuff i can think of
+				{
+					{ "Start Closed", 0 },
+					{ "Start Open", 1 }
+				},
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
+		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
 		}
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			switch (subtype)
+			{
+				case 0: return "Start Closed";
+				case 1: return "Start Open";
+				default: return "Unknown";
+			}
 		}
 
 		public override Sprite Image
@@ -72,11 +91,9 @@ namespace SCDObjectDefinitions.R4
 			return sprite;
 		}
 		
-		/*
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug;
+			return (obj.PropertyValue == 1) ? debug : null;
 		}
-		*/
 	}
 }

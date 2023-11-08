@@ -33,20 +33,24 @@ namespace S2ObjectDefinitions.CPZ
 			// up, flip
 			debug[1, 0] = new Sprite(debug[0, 0], false, true);
 			
-			properties[0] = new PropertySpec("Open Towards", typeof(int), "Extended",
-				"Which way this staircase should open.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Extend", typeof(int), "Extended",
+				"Which way this staircase should extend upon contact.", null, new Dictionary<string, int>
 				{
-					{ "Open Downwards", 0 },
-					{ "Open Upwards", 4 } // and idk why this is 4 in the scene, any non 0/2 values work fine but may as well
+					{ "Downwards", 0 },
+					{ "Upwards", 4 } // and idk why this is 4 in the scene, any non 0/2 values work fine but may as well
 					// { "Blank", 2 } // ignoring this because it looks kinda useless, it doesn't do anything so may as well just use a blank obj at that point
 				},
 				(obj) => (obj.PropertyValue == 0) ? 0 : 4, // we turn 2's into 0's since 2's aren't accessible
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
-			properties[1] = new PropertySpec("Flip", typeof(bool), "Extended",
-				"If this staircase should face the other direction, X-wise.", null,
-				(obj) => (((V4ObjectEntry)obj).Direction != RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone),
-				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)((bool)value ? 1 : 0));
+			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which direction the Staircase will expand.", null, new Dictionary<string, int>
+				{
+					{ "Left", 0 },
+					{ "Right", 1 }
+				},
+				(obj) => ((int)(((V4ObjectEntry)obj).Direction) == 0) ? 0 : 1,
+				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

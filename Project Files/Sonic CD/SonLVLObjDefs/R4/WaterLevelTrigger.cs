@@ -19,16 +19,16 @@ namespace SCDObjectDefinitions.R4
 			Sprite[] frames = new Sprite[13];
 			
 			// this object's kinda weird and i wasn't sure what to do with it.. so i just copied RE2's render for it (thanks Leon :D)
-			frames[0] = new Sprite(sheet.GetSection(1, 50, 8, 11), 0, 0); // 0
-			frames[1] = new Sprite(sheet.GetSection(10, 50, 8, 11), 0, 0); // 1
-			frames[2] = new Sprite(sheet.GetSection(19, 50, 8, 11), 0, 0); // 2
-			frames[3] = new Sprite(sheet.GetSection(28, 50, 8, 11), 0, 0); // 3
-			frames[4] = new Sprite(sheet.GetSection(1, 62, 8, 11), 0, 0); // 4
-			frames[5] = new Sprite(sheet.GetSection(10, 62, 8, 11), 0, 0); // 5
-			frames[6] = new Sprite(sheet.GetSection(19, 62, 8, 11), 0, 0); // 6
-			frames[7] = new Sprite(sheet.GetSection(28, 62, 8, 11), 0, 0); // 7
-			frames[8] = new Sprite(sheet.GetSection(1, 74, 8, 11), 0, 0); // 8
-			frames[9] = new Sprite(sheet.GetSection(10, 74, 8, 11), 0, 0); // 9
+			frames[0] = new Sprite(sheet.GetSection(1, 50, 8, 11)); // 0
+			frames[1] = new Sprite(sheet.GetSection(10, 50, 8, 11)); // 1
+			frames[2] = new Sprite(sheet.GetSection(19, 50, 8, 11)); // 2
+			frames[3] = new Sprite(sheet.GetSection(28, 50, 8, 11)); // 3
+			frames[4] = new Sprite(sheet.GetSection(1, 62, 8, 11)); // 4
+			frames[5] = new Sprite(sheet.GetSection(10, 62, 8, 11)); // 5
+			frames[6] = new Sprite(sheet.GetSection(19, 62, 8, 11)); // 6
+			frames[7] = new Sprite(sheet.GetSection(28, 62, 8, 11)); // 7
+			frames[8] = new Sprite(sheet.GetSection(1, 74, 8, 11)); // 8
+			frames[9] = new Sprite(sheet.GetSection(10, 74, 8, 11)); // 9
 			
 			frames[10] = new Sprite(sheet.GetSection(10, 98, 8, 8), 0, 2); // Debug Y
 			

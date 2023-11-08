@@ -6,10 +6,10 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="GHZ Achievement" description="If this ring should count towards the Green Hill Zone achievement tally." type="bool" startbit="0" length="8" />
+    <Property name="Achievement" description="If this ring should count towards the Ramp Ring Acrobatics achievement tally." type="bool" startbit="0" length="8" />
   </Properties>
   <Subtypes>
     <Subtype id="00" name="Normal" image="ring" />
-    <Subtype id="01" name="Award GHZ Achievement" image="ring" />
+    <Subtype id="01" name="Award Achievement" image="ring" />
   </Subtypes>
 </ObjDef>

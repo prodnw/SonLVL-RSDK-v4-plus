@@ -16,9 +16,9 @@ namespace SCDObjectDefinitions.R4
 			sprite = new Sprite(LevelData.GetSpriteSheet("R4/Objects.gif").GetSection(1, 198, 16, 32), -8, -16);
 			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-                "How long the Ledge will be.", null,
-                (obj) => obj.PropertyValue,
-                (obj, value) => obj.PropertyValue = (byte)((int)value));
+				"How long the Ledge will be.", null,
+				(obj) => obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

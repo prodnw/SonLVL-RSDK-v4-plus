@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.HPZ
 			{
 				sprites[i] = new Sprite(frames[(i & 15)]);
 				
-				if ((i & 0x10) == 0x10) // splash?
+				if ((i & 0x10) == 0x10) // (splash?)
 					sprites[i] = new Sprite(sprites[i], new Sprite(frames[16], 0, Math.Max(i & 7, 1) << 4));
 			}
 			

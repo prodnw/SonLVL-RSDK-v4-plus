@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Frame" description="Which sprite this object should display." type="frames" startbit="0" length="1" />
+    <Property name="Frame" description="Which sprite this object should display." type="frames" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frames">
@@ -17,16 +17,6 @@
       <EnumMember name="Right Frame" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Frame" value="Left Frame" />
-      <ImageRef image="left" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame" value="Right Frame" />
-      <ImageRef image="right" />
-    </DisplayOption>
-  </Display>
   <Subtypes>
     <Subtype id="00" name="Left Frame" image="left" />
     <Subtype id="01" name="Right Frame" image="right" />

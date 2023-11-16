@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Variant" type="types" startbit="0" length="8" />
+    <Property name="Variant" description="Which type of Earthquake this object is." type="types" startbit="0" length="8" /> <!-- this object is half hardcoded so i'm not really sure what else to do here? -->
   </Properties>
   <Enums>
     <Enum name="types">

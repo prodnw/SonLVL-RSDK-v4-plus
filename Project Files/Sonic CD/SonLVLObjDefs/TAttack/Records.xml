@@ -18,7 +18,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Zone ID" type="frames" startbit="0" length="2" />
+    <Property name="Zone ID" description="Which Zone this object should represent." type="frames" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frames">
@@ -27,24 +27,35 @@
 	  <EnumMember name="Zone 3" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Zone ID" value="Zone 1" />
+  <ImageSets>
+    <ImageSet id="zone1">
       <ImageRef image="bg" />
-	  <ImageRef image="ppz" />
-	  <ImageRef image="zone1" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Zone 2" />
+      <ImageRef image="ppz" />
+      <ImageRef image="zone1" />
+    </ImageSet>
+    <ImageSet id="zone2">
       <ImageRef image="bg" />
-	  <ImageRef image="ppz" />
-	  <ImageRef image="zone2" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Zone 3" />
+      <ImageRef image="ppz" />
+      <ImageRef image="zone2" />
+    </ImageSet>
+    <ImageSet id="zone3">
       <ImageRef image="bg" />
-	  <ImageRef image="ppz" />
-	  <ImageRef image="zone3" />
-    </DisplayOption>
-  </Display>
+      <ImageRef image="ppz" />
+      <ImageRef image="zone3" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="zone1" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Zone 1">
+      <ImageSetRef set="zone1" />
+    </Subtype>
+    <Subtype id="01" name="Zone 2">
+      <ImageSetRef set="zone2" />
+    </Subtype>
+    <Subtype id="02" name="Zone 3">
+      <ImageSetRef set="zone3" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

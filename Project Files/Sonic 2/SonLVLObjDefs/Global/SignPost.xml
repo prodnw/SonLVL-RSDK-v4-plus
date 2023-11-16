@@ -28,23 +28,6 @@
     <ImageRef image="base" />
     <ImageRef image="robotnik" />
   </DefaultImage>
-  <Display>
-    <DisplayOption>
-      <Condition property="Mode" value="Normal" />
-      <ImageRef image="base" />
-      <ImageRef image="robotnik" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Mode" value="VS Only (Y Bounds)" />
-      <ImageRef image="base" />
-      <ImageRef image="sonic" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Mode" value="VS Only (No Y Bounds)" />
-      <ImageRef image="base" />
-      <ImageRef image="tails" />
-    </DisplayOption>
-  </Display>
   <ImageSets>
     <ImageSet id="robotnik">
       <ImageRef image="base" />

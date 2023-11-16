@@ -7,7 +7,7 @@ namespace S2ObjectDefinitions.Enemies
 {
 	class Grounder2 : Enemies.Grounder
 	{
-		public override Sprite[] GetSprites()
+		public override Sprite[] GetFrames()
 		{
 			// Overloading the red Grounder sprites with our new green Grounder sprites
 			
@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.Enemies
 		private Sprite[] sprites;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
-		public virtual Sprite[] GetSprites()
+		public virtual Sprite[] GetFrames()
 		{
 			Sprite[] frames = new Sprite[2];
 			
@@ -58,7 +58,7 @@ namespace S2ObjectDefinitions.Enemies
 		
 		public override void Init(ObjectData data)
 		{
-			sprites = GetSprites();
+			sprites = GetFrames();
 			
 			properties[0] = new PropertySpec("Behaviour", typeof(int), "Extended",
 				"How this Grounder should initially act.", null, new Dictionary<string, int>

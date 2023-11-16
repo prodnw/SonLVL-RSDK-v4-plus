@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.Global
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
 				"The object slot offset of this Spikes' parent, used for series of vertically retracting spikes.", null,
-				(obj) => ((V4ObjectEntry)obj).Value2,
+				(obj) => (((V4ObjectEntry)obj).State != 5) ? 0 : ((V4ObjectEntry)obj).Value2,
 				(obj, value) =>
 				{
 					((V4ObjectEntry)obj).Value2 = (int)value;

@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
 			
 			properties[1] = new PropertySpec("Cooldown", typeof(int), "Extended",
-				"How long this Buzzer's cooldown pauses should be, in frames.", null,
+				"How long, in frames, this Buzzer's cooldown pauses should be..", null,
 				(obj) => (((V4ObjectEntry)obj).Value0 > 0) ? ((V4ObjectEntry)obj).Value0 : 256,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 			

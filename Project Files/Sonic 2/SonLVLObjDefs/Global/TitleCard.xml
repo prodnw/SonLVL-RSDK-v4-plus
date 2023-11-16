@@ -15,7 +15,7 @@
       <EnumMember name="Show Act 2" />
       <EnumMember name="Show Act 3" />
       <EnumMember name="Show Zone Text" />
-      <EnumMember name="Show Zone Text (MBZ)" />
+      <EnumMember name="Marathon Base" />
     </Enum>
   </Enums>
   <Subtypes>
@@ -24,6 +24,6 @@
     <Subtype id="02" name="Show Act 2" image="titlecard" />
     <Subtype id="03" name="Show Act 3" image="titlecard" />
     <Subtype id="04" name="Show Zone Text" image="titlecard" />
-    <Subtype id="05" name="Show Zone Text (MBZ)" image="titlecard" />
+    <Subtype id="05" name="Marathon Base" image="titlecard" />
   </Subtypes>
 </ObjDef>

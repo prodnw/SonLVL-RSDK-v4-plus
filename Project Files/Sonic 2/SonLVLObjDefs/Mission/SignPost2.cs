@@ -25,18 +25,18 @@ namespace S2ObjectDefinitions.Mission
 					{ "VS Only (Y Bounds)", 1 },
 					{ "VS Only (No Y Bounds)", 2 }
 				},
-				(obj) => obj.PropertyValue,
+				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
-			properties[1] = new PropertySpec("Center Offset", typeof(int), "Extended",
-				"How offset the Signpost's camera will be. X-wise. Measured in pixels, to every 16th pixel.", null,
+			properties[1] = new PropertySpec("Lock Range", typeof(int), "Extended",
+				"How far to the left, in intervals of 16 pixels, that the screen lock should start to take effect. 0 is default Signpost bounds.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0 << 4,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value) >> 4);
 			
 			properties[2] = new PropertySpec("Exit Right", typeof(bool), "Extended",
-				"If the Signpost should make the player move right afterwards.", null,
-				(obj) => (((V4ObjectEntry)obj).Value1 == 1),
-				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value == false ? 0 : 1));
+				"If the Signpost should make the player move right after beating the level.", null,
+				(obj) => (((V4ObjectEntry)obj).Value1 != 0),
+				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value ? 1 : 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

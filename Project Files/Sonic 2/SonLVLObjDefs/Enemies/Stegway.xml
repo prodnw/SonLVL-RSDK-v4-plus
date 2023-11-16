@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Direction" type="dirs" description="Which way the Stegway will be facing initially." startbit="0" length="1" />
+    <Property name="Direction" description="Which way the Stegway will be facing initially." type="dirs" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="dirs">

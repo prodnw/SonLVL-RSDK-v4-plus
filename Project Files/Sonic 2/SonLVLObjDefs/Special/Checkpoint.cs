@@ -17,7 +17,12 @@ namespace S2ObjectDefinitions.Special
 	{
 		private Sprite sprite;
 		private PropertySpec[] properties = new PropertySpec[3];
-
+		
+		public virtual Sprite GetFrame()
+		{
+			return new Sprite(LevelData.GetSpriteSheet("Special/Objects.gif").GetSection(199, 165, 32, 16), -16, -8); // checkpoint sprite
+		}
+		
 		public override void Init(ObjectData data)
 		{
 			sprite = GetFrame();
@@ -39,11 +44,6 @@ namespace S2ObjectDefinitions.Special
 				"How many rings the player should need to past the next checkpoint if the current player is Knuckles solo.", null,
 				(obj) => ((V4ObjectEntry)obj).Value2,
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = (int)value);
-		}
-		
-		public virtual Sprite GetFrame()
-		{
-			return new Sprite(LevelData.GetSpriteSheet("Special/Objects.gif").GetSection(199, 165, 32, 16), -16, -8); // checkpoint sprite
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

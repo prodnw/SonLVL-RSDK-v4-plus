@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.Mission
 			properties[1] = new PropertySpec("Charge Decrease", typeof(int), "Extended",
 				"How many less cycles Eggman will inhale chemicals before being ready for release.", null,
 				(obj) => Math.Min(Math.Max(((V4ObjectEntry)obj).Value1, 0), 12),
-				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((int)value));
+				(obj, value) => ((V4ObjectEntry)obj).Value1 = Math.Max((int)value, 0));
 			
 			properties[2] = new PropertySpec("Dropper Speed", typeof(int), "Extended",
 				"The speed, in pixels, at which Eggman should follow the player while holding chemicals.", null,

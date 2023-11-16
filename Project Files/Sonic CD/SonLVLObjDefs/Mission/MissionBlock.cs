@@ -16,9 +16,9 @@ namespace SCDObjectDefinitions.Mission
 			sprite = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 1, 32, 32), -16, -16);
 			
 			properties[0] = new PropertySpec("Count", typeof(int), "Extended",
-                "How many Mission Blocks there should be.", null,
-                (obj) => Math.Max(1, (int)obj.PropertyValue),
-                (obj, value) => obj.PropertyValue = (byte)(((int)value) <= 1 ? 0 : (int)value));
+				"How many Mission Blocks there should be.", null,
+				(obj) => Math.Max(1, (int)obj.PropertyValue),
+				(obj, value) => obj.PropertyValue = (byte)((int)value <= 1 ? 0 : (int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

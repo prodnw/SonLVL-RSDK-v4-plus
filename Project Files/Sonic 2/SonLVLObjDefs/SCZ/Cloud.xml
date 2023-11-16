@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Size" type="types" startbit="0" length="2" />
+    <Property name="Size" description="How large this cloud is." type="types" startbit="0" length="2" />
   </Properties>
   <Enums>
     <Enum name="types">

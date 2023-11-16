@@ -51,7 +51,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Zone ID" type="frames" startbit="0" length="4" />
+    <Property name="Zone ID" description="Which Zone this object should represent." type="frames" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frames">
@@ -72,81 +72,116 @@
 	  <EnumMember name="Sonic CD" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Zone ID" value="Palmtree Panic" />
+  <ImageSets>
+    <ImageSet id="r1">
       <ImageRef image="frame" />
-	  <ImageRef image="r1" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Collision Chaos" />
+      <ImageRef image="r1" />
+    </ImageSet>
+    <ImageSet id="r3">
       <ImageRef image="frame" />
-	  <ImageRef image="r3" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Tidal Tempest" />
+      <ImageRef image="r3" />
+    </ImageSet>
+    <ImageSet id="r4">
       <ImageRef image="frame" />
-	  <ImageRef image="r4" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Quartz Quadrant" />
+      <ImageRef image="r4" />
+    </ImageSet>
+    <ImageSet id="r5">
       <ImageRef image="frame" />
-	  <ImageRef image="r5" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Wacky Workbench" />
+      <ImageRef image="r5" />
+    </ImageSet>
+    <ImageSet id="r6">
       <ImageRef image="frame" />
-	  <ImageRef image="r6" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Stardust Speedway" />
+      <ImageRef image="r6" />
+    </ImageSet>
+    <ImageSet id="r7">
       <ImageRef image="frame" />
-	  <ImageRef image="r7" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Metallic Madness" />
+      <ImageRef image="r7" />
+    </ImageSet>
+    <ImageSet id="r8">
       <ImageRef image="frame" />
-	  <ImageRef image="r8" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 1" />
+      <ImageRef image="r8" />
+    </ImageSet>
+    <ImageSet id="s1">
       <ImageRef image="frame" />
-	  <ImageRef image="s1" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 2" />
+      <ImageRef image="s1" />
+    </ImageSet>
+    <ImageSet id="s2">
       <ImageRef image="frame" />
-	  <ImageRef image="s2" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 3" />
+      <ImageRef image="s2" />
+    </ImageSet>
+    <ImageSet id="s3">
       <ImageRef image="frame" />
-	  <ImageRef image="s3" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 4" />
+      <ImageRef image="s3" />
+    </ImageSet>
+    <ImageSet id="s4">
       <ImageRef image="frame" />
-	  <ImageRef image="s4" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 5" />
+      <ImageRef image="s4" />
+    </ImageSet>
+    <ImageSet id="s5">
       <ImageRef image="frame" />
-	  <ImageRef image="s5" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 6" />
+      <ImageRef image="s5" />
+    </ImageSet>
+    <ImageSet id="s6">
       <ImageRef image="frame" />
-	  <ImageRef image="s6" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Special Zone 7" />
+      <ImageRef image="s6" />
+    </ImageSet>
+    <ImageSet id="s7">
       <ImageRef image="frame" />
-	  <ImageRef image="s7" />
-    </DisplayOption>
-	<DisplayOption>
-      <Condition property="Zone ID" value="Sonic CD" />
+      <ImageRef image="s7" />
+    </ImageSet>
+    <ImageSet id="s8">
       <ImageRef image="frame" />
-	  <ImageRef image="s8" />
-    </DisplayOption>
-  </Display>
+      <ImageRef image="s8" />
+    </ImageSet>
+  </ImageSets>
+  <DefaultImage>
+    <ImageSetRef set="r1" />
+  </DefaultImage>
+  <Subtypes>
+    <Subtype id="00" name="Palmtree Panic">
+      <ImageSetRef set="r1" />
+    </Subtype>
+    <Subtype id="01" name="Collision Chaos">
+      <ImageSetRef set="r3" />
+    </Subtype>
+    <Subtype id="02" name="Tidal Tempest">
+      <ImageSetRef set="r4" />
+    </Subtype>
+    <Subtype id="03" name="Quartz Quadrant">
+      <ImageSetRef set="r5" />
+    </Subtype>
+    <Subtype id="04" name="Wacky Workbench">
+      <ImageSetRef set="r6" />
+    </Subtype>
+    <Subtype id="05" name="Stardust Speedway">
+      <ImageSetRef set="r7" />
+    </Subtype>
+    <Subtype id="06" name="Metallic Madness">
+      <ImageSetRef set="r8" />
+    </Subtype>
+    <Subtype id="07" name="Special Stage 1">
+      <ImageSetRef set="s1" />
+    </Subtype>
+    <Subtype id="08" name="Special Stage 2">
+      <ImageSetRef set="s2" />
+    </Subtype>
+    <Subtype id="09" name="Special Stage 3">
+      <ImageSetRef set="s3" />
+    </Subtype>
+    <Subtype id="0A" name="Special Stage 4">
+      <ImageSetRef set="s4" />
+    </Subtype>
+    <Subtype id="0B" name="Special Stage 5">
+      <ImageSetRef set="s5" />
+    </Subtype>
+    <Subtype id="0C" name="Special Stage 6">
+      <ImageSetRef set="s6" />
+    </Subtype>
+    <Subtype id="0D" name="Special Stage 7">
+      <ImageSetRef set="s7" />
+    </Subtype>
+    <Subtype id="0E" name="Sonic CD">
+      <ImageSetRef set="s8" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

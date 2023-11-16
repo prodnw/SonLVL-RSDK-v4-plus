@@ -8,14 +8,14 @@ namespace S1ObjectDefinitions.Mission
 {
 	class MissionAreaTR : MissionAreaBL
 	{
-		public override bool GetSpriteFlip() { return true; }
+		public override bool flip { get { return true; } }
 	}
 	
 	class MissionAreaBL : ObjectDefinition
 	{
 		private Sprite sprite;
 		
-		public virtual bool GetSpriteFlip() { return false; }
+		public virtual bool flip { get { return false; } }
 		
 		public override void Init(ObjectData data)
 		{
@@ -26,7 +26,7 @@ namespace S1ObjectDefinitions.Mission
 			bitmap.FillRectangle(1, 3, 3, 3, 26); // black, vertical line
 			bitmap.FillRectangle(1, 3, 26, 26, 3); // black, horizontal line
 			sprite = new Sprite(bitmap, -16, -16);
-			sprite.Flip(GetSpriteFlip(), GetSpriteFlip());
+			sprite.Flip(flip, flip);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

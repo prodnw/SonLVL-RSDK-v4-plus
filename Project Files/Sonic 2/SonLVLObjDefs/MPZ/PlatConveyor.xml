@@ -17,16 +17,6 @@
       <EnumMember name="Frame 2" />
     </Enum>
   </Enums>
-  <Display>
-    <DisplayOption>
-      <Condition property="Frame" value="Frame 1" />
-      <ImageRef image="frame1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Frame" value="Frame 2" />
-      <ImageRef image="frame2" />
-    </DisplayOption>
-  </Display>
   <Subtypes>
     <Subtype id="00" name="Frame 1" image="frame1" />
     <Subtype id="01" name="Frame 2" image="frame2" />

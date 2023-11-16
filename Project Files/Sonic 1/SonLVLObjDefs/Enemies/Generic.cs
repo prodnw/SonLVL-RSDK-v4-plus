@@ -136,7 +136,7 @@ namespace S1ObjectDefinitions.Enemies
 		
 		// Despite them being set in m006 (that one GHZ Newtron mission), prop val & val1 are unused
 		// It may just be an oversight and they were intended to be used, as Newtron Shoots have *do* use it
-		// It seemginly would've had both x and y checks too, in contrast to Shoots who only have x
+		// It seemingly would've had both x and y checks too? (in contrast to Shoots who only have x)
 	}
 	
 	class NewtronShot : Enemies.Generic

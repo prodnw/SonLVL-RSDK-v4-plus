@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" type="behaviours" startbit="0" length="8" />
+    <Property name="Behaviour" description="How this platform should act upon coming into contact with a wall." type="behaviours" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="behaviours">

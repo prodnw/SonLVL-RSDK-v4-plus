@@ -33,7 +33,6 @@ namespace SCDObjectDefinitions.R4
 				(obj) => obj.PropertyValue & 1,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
-			// TODO: these names suck, make 'em good
 			properties[1] = new PropertySpec("Close Height", typeof(int), "Extended",
 				"Origins only. How high the player should be for the door to close.", null, new Dictionary<string, int>
 				{

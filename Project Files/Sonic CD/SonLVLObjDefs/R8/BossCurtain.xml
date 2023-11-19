@@ -22,7 +22,6 @@
   </Images>
   <ImageSets>
     <ImageSet id="bosscurtain">
-	  <!-- TODO: do we want to keep it closed? or should we open up the curtains a little bit?.. -->
       <ImageRef image="sprite1" />
       <ImageRef image="sprite1" xflip="AlwaysFlip" />
       <ImageRef image="sprite2" />

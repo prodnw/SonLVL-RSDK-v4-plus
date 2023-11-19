@@ -26,12 +26,11 @@ namespace SCDObjectDefinitions.R8
 			sprites[2] = new Sprite(sprites[1],  20, 0);
 			sprites[3] = new Sprite(sprites[1], -20, 0);
 			
-			// TODO: better name
 			properties[0] = new PropertySpec("Mode", typeof(int), "Extended",
-				"What type of object this Plane Shifter is. Parents should be followed by three child objects.", null, new Dictionary<string, int>
+				"What type of object this Plane Shifter is. Shifters should be followed by three pole objects.", null, new Dictionary<string, int>
 				{
-					{ "Parent", 0 },
-					{ "Child", 1 }
+					{ "Shifter", 0 },
+					{ "Pole", 1 }
 				},
 				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));

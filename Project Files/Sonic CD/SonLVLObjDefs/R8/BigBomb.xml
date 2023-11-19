@@ -24,10 +24,10 @@
   </Enums>
   <ImageSets>
     <ImageSet id="bigbomb">
-	  <!-- TODO: i'm half sure that these should be flipped? RE2 doesn't flip them though, and neither do all the MMZ2 maps i can find online either.. -->
-      <ImageRef image="body" />
-      <ImageRef image="legs" />
-      <ImageRef image="fuse" />
+	  <!-- everywhere else i've seen doesn't flip these, but they start facing right in-game so let's show that here too -->
+      <ImageRef image="body" xflip="AlwaysFlip" />
+      <ImageRef image="legs" xflip="AlwaysFlip" />
+      <ImageRef image="fuse" xflip="AlwaysFlip" />
     </ImageSet>
   </ImageSets>
   <DefaultImage>

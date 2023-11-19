@@ -21,7 +21,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orientation" description="Where the Spring will be facing." type="directions" startbit="0" length="8" />
+    <Property name="Direction" description="Which direction this Spring should face." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="directions">
@@ -38,7 +38,7 @@
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Up" image="up" />
+    <Subtype id="00" name="Upwards" image="up" />
     <Subtype id="01" name="Right" image="right" />
     <Subtype id="02" name="Left" image="left" />
     <Subtype id="03" name="Down" image="down" />

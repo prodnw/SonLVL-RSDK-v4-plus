@@ -27,21 +27,18 @@ namespace S2ObjectDefinitions.Special
 		{
 			sprite = GetFrame();
 			
-			// TODO: i think it'd be cool to make all these ring counts into a dropdown like Position or Advanced Properties
-			// but then if i do, the values won't immediately show, and the user might not even know they're editable...
-			
-			properties[0] = new PropertySpec("Ring Count - 2P", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Rings - 2P", typeof(int), "Extended",
 				"How many rings the player should need to past the next checkpoint when two players are active (S&T, K&T, A&T).", null,
 				(obj) => ((V4ObjectEntry)obj).Value0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
 			
-			properties[1] = new PropertySpec("Ring Count - STA", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Rings - STA", typeof(int), "Extended",
 				"How many rings the player should need to past the next checkpoint if the current player is just Sonic/Tails/Amy alone.", null,
 				(obj) => ((V4ObjectEntry)obj).Value1,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)value);
 			
-			properties[2] = new PropertySpec("Ring Count - K", typeof(int), "Extended",
-				"How many rings the player should need to past the next checkpoint if the current player is Knuckles solo.", null,
+			properties[2] = new PropertySpec("Rings - K", typeof(int), "Extended",
+				"How many rings the player should need to past the next checkpoint if the current player is Knuckles alone.", null,
 				(obj) => ((V4ObjectEntry)obj).Value2,
 				(obj, value) => ((V4ObjectEntry)obj).Value2 = (int)value);
 		}

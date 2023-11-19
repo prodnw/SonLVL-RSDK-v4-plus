@@ -38,6 +38,7 @@ namespace S1ObjectDefinitions.Global
 			
 			// RE2 has "extraVelocity" as a property.. but i don't think it's supposed to be set from editor?
 			// sure it works, but then it makes the "Up (Stronger)" option redundant too, so i'm not sure..
+			// i guess i could quietly convert "Up (Stronger)" springs from prop val to extraVelocity? feels kinda iffy, though
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

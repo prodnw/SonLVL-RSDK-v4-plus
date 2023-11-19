@@ -84,12 +84,12 @@ namespace S2ObjectDefinitions.HPZ
 			int sy = ((obj.PropertyValue & 0x7f) == 0) ? 256 : ((obj.PropertyValue & 0x7f) << 5);
 			int sx = (sy / 8) * 4;
 			
-			// TODO: it's kinda hard to see the line, maybe make the end a little arrow so that it's more visible?
-			
 			BitmapBits bitmap = new BitmapBits(sx + 1, sy + 1);
 			bitmap.DrawLine(6, 0, 0, sx, sy); // LevelData.ColorWhite
 			bitmap.Flip(obj.PropertyValue >= 0x80, false);
-			return new Sprite(bitmap, ((obj.PropertyValue & 0x80) == 0x00) ? -sx : 0, -sy);
+			Sprite debug = new Sprite(bitmap, (obj.PropertyValue <= 0x7f) ? -sx : 0, -sy);
+			debug = new Sprite(new Sprite(debug, -1, 0), debug, new Sprite(debug, 1, 0)); // let's make the line a bit thicker, tried an arrow out but this feels better
+			return debug;
 		}
 	}
 }

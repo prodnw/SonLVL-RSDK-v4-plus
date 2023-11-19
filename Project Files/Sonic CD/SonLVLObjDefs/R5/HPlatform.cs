@@ -145,7 +145,6 @@ namespace SCDObjectDefinitions.R5
 				(obj) => (obj.PropertyValue / 3) * 3,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue % 3) + (int)value));
 			
-			// todo: prolly should insert something about how carrying springs work
 			properties[1] = new PropertySpec("Modifier", typeof(int), "Extended",
 				"Which effects this platform should have.", null, new Dictionary<string, int>
 				{

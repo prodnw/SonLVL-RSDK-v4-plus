@@ -36,7 +36,6 @@ namespace SCDObjectDefinitions.R8
 			
 			BitmapBits bitmap;
 			
-			// TODO: this line is kind of hard to see..
 			for (int i = 0; i < angles.Length; i++)
 			{
 				bitmap = new BitmapBits(96, 96);

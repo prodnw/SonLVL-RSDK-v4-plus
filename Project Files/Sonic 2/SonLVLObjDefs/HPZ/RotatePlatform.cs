@@ -28,7 +28,6 @@ namespace S2ObjectDefinitions.HPZ
 			bitmap.DrawCircle(6, 80, 80, 80);
 			debug[0] = new Sprite(bitmap, -80, -80);
 			
-			// TODO: it's kinda half confusing ish what two circles mean, find some way to make it better
 			bitmap = new BitmapBits(193, 193);
 			bitmap.DrawCircle(6, 96, 96, 96); // Outer circle
 			bitmap.DrawCircle(6, 96, 96, 72); // Inner circle

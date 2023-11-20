@@ -37,15 +37,15 @@ namespace S2ObjectDefinitions.CPZ
 				debug[i] = new Sprite(bitmap);
 			}
 			
-			properties[0] = new PropertySpec("Entry Type", typeof(int), "Extended",
-				"What type of entrance this tube has. 4 Transporter objects should follow a main Entry object.", null, new Dictionary<string, int> // well really it's [playerCount], not necessarily 4, but that's what the base game does, so
+			properties[0] = new PropertySpec("Entry Size", typeof(int), "Extended",
+				"What type of entrance this tube has. A normal Entry object should be followed by 4 Transporters.", null, new Dictionary<string, int> // well really it's [playerCount], not necessarily 4, but that's what the base game does, so
 				{
-					{ "Entry 1", 0 },
-					{ "Entry 2", 1 },
-					{ "Entry 3", 2 },
+					{ "160 px", 0 },
+					{ "256 px", 1 },
+					{ "288 px", 2 },
 					{ "Transporter", 0xff }
 				},
-				(obj) => (obj.PropertyValue == 0xff) ? obj.PropertyValue : (obj.PropertyValue & 3),
+				(obj) => (obj.PropertyValue == 0xff) ? 0xff : (obj.PropertyValue & 3),
 				(obj, value) => {
 						// based off RE2's Transport Tube edit scripts
 						byte val = (byte)((int)value);
@@ -58,7 +58,7 @@ namespace S2ObjectDefinitions.CPZ
 							}
 							else {
 								// not transporter, keep our path value
-								obj.PropertyValue &= (byte)(obj.PropertyValue & ~3);
+								obj.PropertyValue = (byte)(obj.PropertyValue & ~3);
 							}
 							
 							obj.PropertyValue |= val;
@@ -126,14 +126,14 @@ namespace S2ObjectDefinitions.CPZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			// TODO:
-			// yeahhhh... this one's gonna be fun :(
-			// (i have no idea how i'm even gonna draw the main path..)
-			
 			if (obj.PropertyValue == 0xff)
 				return null;
 			
-			int[][] paths_A = {
+			// All these values are copied from the original script, so if you modified those (really it would've just been easier to use Tube Path, but it's up to you..)
+			// then you can just paste them here
+			
+			// these are relative
+			int[][] paths_enterance = {
 				new int[] {
 				0x900000, 0x100000,
 				0x900000, 0x700000,
@@ -458,7 +458,8 @@ namespace S2ObjectDefinitions.CPZ
 				0x1100000, 0x100000}
 			};
 			
-			int[][] paths_B = {
+			// while these are absolute
+			int[][] paths_tube = {
 				new int[] {
 				0x7900000, 0x3B00000,
 				0x7100000, 0x3B00000,
@@ -556,13 +557,31 @@ namespace S2ObjectDefinitions.CPZ
 				0x10F00000, 0x2300000}
 			};
 			
+			int[] nodeFlags = {
+					  2,   1, 0, 0,
+					 -1,   3, 0, 0,
+					  4,  -2, 0, 0,
+					 -3,  -4, 0, 0,
+					 -5,  -5, 0, 0,
+					  7,   6, 0, 0,
+					 -7,  -6, 0, 0,
+					  8,   9, 0, 0,
+					 -8,  -9, 0, 0,
+					 11,  10, 0, 0,
+					 12,   0, 0, 0,
+					-11, -10, 0, 0,
+					-12,   0, 0, 0,
+					  0,  13, 0, 0,
+					-13,  14, 0, 0,
+					  0, -14, 0, 0
+			};
+			
 			int[] paths = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 1, 2, 1};
 			int transportPath = paths[(obj.PropertyValue >> 2) & 0x0f];
 			int tubeType = (obj.PropertyValue & 3) << 2;
-			int index = ((transportPath == 2) ? 0 : transportPath) + tubeType;
+			int index = ((obj.PropertyValue >> 2) & 0x0f);
 			
-			if (index >= paths_A.Length)
-				index = paths_A.Length-1;
+			index <<= 2;
 			
 			Sprite dbg = debug[obj.PropertyValue & 3];
 			
@@ -570,11 +589,32 @@ namespace S2ObjectDefinitions.CPZ
 			{
 				if (transportPath == 2) // random, draw both paths
 				{
-					dbg = new Sprite(dbg, DrawPath(paths_A[tubeType], 191)); // green
-					dbg = new Sprite(dbg, DrawPath(paths_A[tubeType+1], 175)); // red
+					dbg = new Sprite(dbg, DrawPath(paths_enterance[tubeType], 191)); // green
+					dbg = new Sprite(dbg, DrawPath(paths_enterance[tubeType+1], 175)); // red
+					
+					if (nodeFlags[index] < 0)
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[-nodeFlags[index]], 191), -obj.X, -obj.Y)); // green
+					else
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[nodeFlags[index]], 191), -obj.X, -obj.Y)); // green
+					
+					index++;
+					
+					if (nodeFlags[index] < 0)
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[-nodeFlags[index]], 175), -obj.X, -obj.Y)); // red
+					else
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[nodeFlags[index]], 175), -obj.X, -obj.Y)); // red
 				}
 				else
-					dbg = new Sprite(dbg, DrawPath(paths_A[transportPath + tubeType], (transportPath == 0) ? 191 : 175)); // either green or red
+				{
+					int colour = (transportPath == 0) ? 191 : 175;
+					dbg = new Sprite(dbg, DrawPath(paths_enterance[transportPath + tubeType], colour)); // either green or red
+					
+					index += transportPath;
+					if (nodeFlags[index] < 0)
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[-nodeFlags[index]], colour), -obj.X, -obj.Y));
+					else
+						dbg = new Sprite(dbg, new Sprite(DrawPath(paths_tube[nodeFlags[index]], colour), -obj.X, -obj.Y));
+				}
 			}
 			catch
 			{

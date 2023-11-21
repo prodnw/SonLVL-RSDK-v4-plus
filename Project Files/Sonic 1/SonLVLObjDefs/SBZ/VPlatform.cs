@@ -15,11 +15,9 @@ namespace S1ObjectDefinitions.SBZ
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(318, 140, 64, 24), -32, -12);
 			
-			// tagging this area with LevelData.ColorWhite
-			BitmapBits bitmap = new BitmapBits(65, 141);
-			bitmap.DrawRectangle(6, 0, 0, 64, 24); // Object frame
-			bitmap.DrawLine(6, 32, 12, 32, 140); // Movement line
-			debug = new Sprite(bitmap, -32, -140); // Moving left ver
+			BitmapBits bitmap = new BitmapBits(2, 129);
+			bitmap.DrawLine(6, 0, 0, 0, 128);
+			debug = new Sprite(bitmap, 0, -128);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

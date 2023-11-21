@@ -58,9 +58,9 @@ namespace SCDObjectDefinitions.R4
 				for (double angle = Math.PI/4; angle < (2 * Math.PI); angle += (Math.PI / 2))
 				{
 					if (flip[i])
-						DrawArrow(bitmap, 6, (int)(Math.Cos(angle + 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle + 0.1) * radius[i]) - hitboxes[i][1], (int)(Math.Cos(angle - 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle - 0.1) * radius[i]) - hitboxes[i][1]);
+						bitmap.DrawArrow(6, (int)(Math.Cos(angle + 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle + 0.1) * radius[i]) - hitboxes[i][1], (int)(Math.Cos(angle - 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle - 0.1) * radius[i]) - hitboxes[i][1]);
 					else
-						DrawArrow(bitmap, 6, (int)(Math.Cos(angle - 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle - 0.1) * radius[i]) - hitboxes[i][1], (int)(Math.Cos(angle + 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle + 0.1) * radius[i]) - hitboxes[i][1]);
+						bitmap.DrawArrow(6, (int)(Math.Cos(angle - 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle - 0.1) * radius[i]) - hitboxes[i][1], (int)(Math.Cos(angle + 0.1) * radius[i]) - hitboxes[i][0], (int)(Math.Sin(angle + 0.1) * radius[i]) - hitboxes[i][1]);
 				}
 				
 				debug[i] = new Sprite(bitmap, hitboxes[i][0], hitboxes[i][1]);
@@ -86,16 +86,6 @@ namespace SCDObjectDefinitions.R4
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
-		}
-		
-		private BitmapBits DrawArrow(BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
-		{
-			bitmap.DrawLine(index, x1, y1, x2, y2);
-			double angle = Math.Atan2(y1 - y2, x1 - x2);
-			
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
-			return bitmap;
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -131,6 +121,18 @@ namespace SCDObjectDefinitions.R4
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return (obj.PropertyValue < debug.Length) ? debug[obj.PropertyValue] : null;
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

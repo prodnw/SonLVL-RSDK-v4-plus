@@ -45,7 +45,7 @@ namespace S1ObjectDefinitions.Global
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0x11}); }
 		}
 		
 		public override bool Debug
@@ -65,7 +65,7 @@ namespace S1ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return ((subtype >> 4) + 1) + " x " + ((subtype & 0x0f) + 1) + " blocks";
+			return ((subtype >> 4) + 1) + "x" + ((subtype & 0x0f) + 1) + " blocks";
 		}
 
 		public override Sprite Image
@@ -88,16 +88,15 @@ namespace S1ObjectDefinitions.Global
 			
 			int index = (((V4ObjectEntry)obj).State < 3) ? ((V4ObjectEntry)obj).State : 0;
 			
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					sprs.Add(new Sprite(sprites[index], -sx + (j * 16), -sy + (i * 16)));
-				}
-			}
+			Sprite row = new Sprite();
+			for (int i = 0; i < width; i++) // make a row, first
+				row = new Sprite(row, new Sprite(sprites[index], -sx + (i * 16), 0));
 			
-			return new Sprite(sprs.ToArray());
+			Sprite sprite = new Sprite();
+			for (int i = 0; i < height; i++) // now, combine all the rows
+				sprite = new Sprite(sprite, new Sprite(row, 0, -sy + (i * 16)));
+			
+			return sprite;
 		}
 	}
 }

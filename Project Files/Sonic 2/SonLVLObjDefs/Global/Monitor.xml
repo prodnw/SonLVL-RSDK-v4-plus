@@ -34,10 +34,10 @@
     <ImageFromSheet id="bubble" sheet="Global/Items.gif" sourcex="18" sourcey="141" width="16" height="14">
       <Offset X="-8" Y="-9" />
     </ImageFromSheet>
-    <ImageFromSheet id="lightning" sheet="Global/Items.gif" sourcex="18" sourcey="126" width="16" height="14">
+    <ImageFromSheet id="fire" sheet="Global/Items.gif" sourcex="35" sourcey="126" width="16" height="14">
       <Offset X="-8" Y="-9" />
     </ImageFromSheet>
-    <ImageFromSheet id="fire" sheet="Global/Items.gif" sourcex="35" sourcey="126" width="16" height="14">
+    <ImageFromSheet id="lightning" sheet="Global/Items.gif" sourcex="18" sourcey="126" width="16" height="14">
       <Offset X="-8" Y="-9" />
     </ImageFromSheet>
     <ImageFromSheet id="eggman" sheet="Global/Items.gif" sourcex="35" sourcey="141" width="16" height="14">
@@ -142,7 +142,7 @@
       <ImageRef image="monitor" />
       <ImageRef image="elements" />
     </ImageSet>
-	<!-- not doing debug emeralds or Amy because they're numerically >15 so they can't even be placed in the scene normally -->
+    <!-- not doing debug emeralds or Amy because they're numerically >15 so they can't even be placed in the scene normally -->
   </ImageSets>
   <DefaultImage>
     <ImageSetRef set="rings" />
@@ -250,6 +250,16 @@
     <Subtype id="2B" name="Lightning/Classic Shield">
       <ImageSetRef set="lightning" />
     </Subtype>
+    <!-- trying to distinguish elemental shields that can turn into classic ones as opposed to ones that just despawn with 3K shields disabled.. not sure if i did a good job with that? -->
+    <Subtype id="09" name="Bubble Shield (3K Shields Exclusive)">
+      <ImageSetRef set="bubble" />
+    </Subtype>
+    <Subtype id="0A" name="Fire Shield (3K Shields Exclusive)">
+      <ImageSetRef set="fire" />
+    </Subtype>
+    <Subtype id="0B" name="Lightning Shield (3K Shields Exclusive)">
+      <ImageSetRef set="lightning" />
+    </Subtype>
     <Subtype id="0C" name="Eggman">
       <ImageSetRef set="eggman" />
     </Subtype>
@@ -259,18 +269,8 @@
     <Subtype id="0E" name="Random">
       <ImageSetRef set="random" />
     </Subtype>
-    <Subtype id="0F" name="Shields Toggle">
+    <Subtype id="0F" name="Debug Shields">
       <ImageSetRef set="elements" />
-    </Subtype>
-	<!-- trying to distinguish elemental shields that can turn into classic ones as opposed to ones that just despawn with 3K shields disabled.. not sure if i did a good job with that? -->
-    <Subtype id="09" name="Bubble Shield (3K Shields Exclusive)">
-      <ImageSetRef set="bubble" />
-    </Subtype>
-    <Subtype id="0A" name="Fire Shield (3K Shields Exclusive)">
-      <ImageSetRef set="fire" />
-    </Subtype>
-    <Subtype id="0B" name="Lightning Shield (3K Shields Exclusive)">
-      <ImageSetRef set="lightning" />
     </Subtype>
   </Subtypes>
 </ObjDef>

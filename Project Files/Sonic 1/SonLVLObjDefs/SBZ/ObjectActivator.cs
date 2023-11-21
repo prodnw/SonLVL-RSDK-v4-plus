@@ -44,6 +44,9 @@ namespace S1ObjectDefinitions.SBZ
 		{
 			int index = LevelData.Objects.IndexOf(obj) - 1;
 			
+			if (index < 0)
+				return null;
+			
 			try
 			{
 				short xmin = Math.Min(obj.X, LevelData.Objects[index].X);
@@ -51,11 +54,11 @@ namespace S1ObjectDefinitions.SBZ
 				short xmax = Math.Max(obj.X, LevelData.Objects[index].X);
 				short ymax = Math.Max(obj.Y, LevelData.Objects[index].Y);
 				
-				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+				BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 				
-				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin); // LevelData.ColorWhite
+				bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, LevelData.Objects[index].X - xmin, LevelData.Objects[index].Y - ymin); // LevelData.ColorWhite
 				
-				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+				return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 			}
 			catch
 			{

@@ -18,7 +18,7 @@ namespace S1ObjectDefinitions.SBZ
 			// we can't make debug visualisations on startup because the start is dependant on the transporter's starting position, so
 			
 			properties[0] = new PropertySpec("Path", typeof(int), "Extended",
-				"Which path this Transporter should lead the player. Note that positions are coded within the script.", null, new Dictionary<string, int>
+				"Which path this Transporter should lead the player.", null, new Dictionary<string, int>
 				{
 					{ "Straight Down (Long)", 0 },
 					{ "Straight Down", 1 },
@@ -29,8 +29,8 @@ namespace S1ObjectDefinitions.SBZ
 					{ "Up, Left, Up", 6 },
 					{ "Straight Up (50 Rings)", 7 }
 				},
-				(obj) => (int)(obj.PropertyValue), // game doesn't enforce a limit but we may as well
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -133,16 +133,14 @@ namespace S1ObjectDefinitions.SBZ
 				ymax = Math.Max(ymax, movementTables[obj.PropertyValue][i+1] >> 16);
 			}
 			
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, (movementTables[obj.PropertyValue][0] >> 16) - xmin, (movementTables[obj.PropertyValue][1] >> 16) - ymin); // LevelData.ColorWhite
+			bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, (movementTables[obj.PropertyValue][0] >> 16) - xmin, (movementTables[obj.PropertyValue][1] >> 16) - ymin); // LevelData.ColorWhite
 			
 			for (int i = 2; i < movementTables[obj.PropertyValue].Length; i += 2)
-			{
-				bmp.DrawLine(6, (movementTables[obj.PropertyValue][i-2] >> 16) - xmin, (movementTables[obj.PropertyValue][i-1] >> 16) - ymin, (movementTables[obj.PropertyValue][i] >> 16) - xmin, (movementTables[obj.PropertyValue][i+1] >> 16) - ymin); // LevelData.ColorWhite
-			}
+				bitmap.DrawLine(6, (movementTables[obj.PropertyValue][i-2] >> 16) - xmin, (movementTables[obj.PropertyValue][i-1] >> 16) - ymin, (movementTables[obj.PropertyValue][i] >> 16) - xmin, (movementTables[obj.PropertyValue][i+1] >> 16) - ymin); // LevelData.ColorWhite
 			
-			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 		}
 	}
 }

@@ -29,10 +29,10 @@
       <EnumMember name="Right" />
       <EnumMember name="Left" />
       <EnumMember name="Down" />
-      <EnumMember name="Diagonal Up-Right" />
-      <EnumMember name="Diagonal Up-Left" />
-      <EnumMember name="Diagonal Down-Right" />
-      <EnumMember name="Diagonal Down-Left" />
+      <EnumMember name="Up Right" />
+      <EnumMember name="Up Left" />
+      <EnumMember name="Down Right" />
+      <EnumMember name="Down Left" />
     </Enum>
   </Enums>
   <Subtypes>
@@ -40,12 +40,12 @@
     <Subtype id="01" name="Right" image="right" />
     <Subtype id="02" name="Left" image="left" />
     <Subtype id="03" name="Down" image="down" />
-    <Subtype id="04" name="Diagonal Up-Right" image="diagright" />
-    <Subtype id="05" name="Diagonal Up-Left" image="diagleft" />
-    <Subtype id="06" name="Diagonal Down-Right">
+    <Subtype id="04" name="Up Right" image="diagright" />
+    <Subtype id="05" name="Up Left" image="diagleft" />
+    <Subtype id="06" name="Down Right">
         <ImageRef image="diagright" yflip="ReverseFlip" />
     </Subtype>
-    <Subtype id="07" name="Diagonal Down-Left">
+    <Subtype id="07" name="Down Left">
       <ImageRef image="diagleft" yflip="ReverseFlip" />
     </Subtype>
   </Subtypes>

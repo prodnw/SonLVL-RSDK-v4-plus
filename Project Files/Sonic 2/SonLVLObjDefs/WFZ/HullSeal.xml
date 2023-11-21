@@ -6,10 +6,10 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Update TileLayer" description="If this Hull Seal should update the Foreground Tile Layer upon player interaction." type="bool" startbit="0" length="8" />
+    <Property name="Edit Chunk" description="If this Hull Seal should alter the chunk it's in upon player interaction." type="bool" startbit="0" length="8" />
   </Properties>
   <Subtypes>
-    <Subtype id="00" name="Don't Update TileLayer" image="seal" />
-    <Subtype id="01" name="Update TileLayer" image="seal" />
+    <Subtype id="00" name="Normal" image="seal" />
+    <Subtype id="01" name="Edit Chunk" image="seal" />
   </Subtypes>
 </ObjDef>

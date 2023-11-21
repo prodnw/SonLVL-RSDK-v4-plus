@@ -34,7 +34,7 @@ namespace S2ObjectDefinitions.Global
 			properties[1] = new PropertySpec("Moving", typeof(bool), "Extended",
 				"If the Spikes should peek in and out.", null,
 				(obj) => obj.PropertyValue > 3,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 3) | ((bool)value ? 0x80 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 3) | ((bool)value ? 0x80 : 0))); // see note in Subtypes - the bit used for moving types isn't consistent but let's use the top bit
 			
 			properties[2] = new PropertySpec("Parent Offset", typeof(int), "Extended",
 				"The object slot offset of this Spikes' parent, used for series of vertically retracting spikes.", null,
@@ -45,7 +45,7 @@ namespace S2ObjectDefinitions.Global
 					((V4ObjectEntry)obj).State = ((int)value == 0) ? 0 : 5; // if non-zero value, then set state to 5, otherwise reset it
 				});
 			
-			BitmapBits bitmap = new BitmapBits(33, 33);
+			BitmapBits bitmap = new BitmapBits(32, 32);
 			bitmap.DrawRectangle(6, 0, 0, 31, 31); // LevelData.ColorWhite
 			debug[0] = new Sprite(bitmap, -16,  16);
 			debug[1] = new Sprite(bitmap, -48, -16);

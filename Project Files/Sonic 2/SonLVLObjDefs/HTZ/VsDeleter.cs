@@ -69,12 +69,12 @@ namespace S2ObjectDefinitions.HTZ
 			short ymin = Math.Min(obj.Y, objs.Min(a => a.Y));
 			short xmax = Math.Max(obj.X, objs.Max(a => a.X));
 			short ymax = Math.Max(obj.Y, objs.Max(a => a.Y));
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
 			for (int i = 0; i < objs.Count - 1; i++)
-				bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
+				bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, objs[i + 1].X - xmin, objs[i + 1].Y - ymin); // LevelData.ColorWhite
 			
-			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 		}
 	}
 }

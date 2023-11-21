@@ -19,7 +19,7 @@ namespace S1ObjectDefinitions.SBZ
 			// tagging this area with LevelData.ColorWhite
 			
 			// copy of Piston_moveDistances from the orignal script
-			int[] moveDistances = { 0x380000, 0x400000, 0x600000 };
+			int[] moveDistances = {0x380000, 0x400000, 0x600000};
 			
 			for (int i = 0; i < 3; i++)
 			{
@@ -31,7 +31,7 @@ namespace S1ObjectDefinitions.SBZ
 				debug[i] = new Sprite(bitmap, -28, 0);
 			}
 			
-			properties[0] = new PropertySpec("Move Distance", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far this Piston should extend.", null, new Dictionary<string, int>
 				{
 					{ "56 Pixels", 0 },
@@ -54,12 +54,13 @@ namespace S1ObjectDefinitions.SBZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype % 3)
+			switch (subtype)
 			{
-				default:
 				case 0: return "Travel 56 Pixels";
 				case 1: return "Travel 64 Pixels";
 				case 2: return "Travel 96 Pixels";
+				
+				default: return "Unknown";
 			}
 		}
 
@@ -80,7 +81,7 @@ namespace S1ObjectDefinitions.SBZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue % 3];
+			return (obj.PropertyValue > 2) ? null : debug[obj.PropertyValue % 3];
 		}
 	}
 }

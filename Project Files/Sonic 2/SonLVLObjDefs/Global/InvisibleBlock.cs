@@ -4,12 +4,23 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
+namespace S2ObjectDefinitions.WFZ
+{
+	class WFZInvBlock : Global.InvisibleBlock
+	{
+		public override bool WFZBlock { get { return true; } }
+	}
+}
+
 namespace S2ObjectDefinitions.Global
 {
 	class InvisibleBlock : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[3];
 		private readonly Sprite[] sprites = new Sprite[4];
+		
+		// there's a couple of things we have to change, instead of overriding entire functions let's just do this instead
+		public virtual bool WFZBlock { get { return false; } }
 		
 		public override void Init(ObjectData data)
 		{
@@ -32,20 +43,35 @@ namespace S2ObjectDefinitions.Global
 				(obj) => (obj.PropertyValue & 0x0f) + 1,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | Math.Min(Math.Max((int)value - 1, 0), 15)));
 			
-			properties[2] = new PropertySpec("Mode", typeof(int), "Extended",
-				"How this Invisible Block will act.", null, new Dictionary<string, int>
-				{
-					{ "Solid", 0 },
-					{ "Eject Left", 1 },
-					{ "Eject Right", 2 }
-				},
-				(obj) => ((V4ObjectEntry)obj).State,
-				(obj, value) => ((V4ObjectEntry)obj).State = (int)value);
+			if (WFZBlock)
+			{
+				properties[2] = new PropertySpec("Time Attack Only", typeof(bool), "Extended",
+					"If this Block should only be in Time Attack.", null,
+					(obj) => ((V4ObjectEntry)obj).Value0 == 1,
+					(obj, value) => ((V4ObjectEntry)obj).Value0 = ((bool)value ? 1 : 0));
+			}
+			else
+			{
+				properties[2] = new PropertySpec("Mode", typeof(int), "Extended",
+					"How this Invisible Block will act.", null, new Dictionary<string, int>
+					{
+						{ "Solid", 0 },
+						{ "Eject Left", 1 },
+						{ "Eject Right", 2 }
+					},
+					(obj) => ((V4ObjectEntry)obj).State,
+					(obj, value) => ((V4ObjectEntry)obj).State = (int)value);
+			}
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0x11}); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override byte DefaultSubtype
@@ -60,7 +86,7 @@ namespace S2ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return ((subtype >> 4) + 1) + " x " + ((subtype & 0x0f) + 1) + " blocks";
+			return ((subtype >> 4) + 1) + "x" + ((subtype & 0x0f) + 1) + " blocks";
 		}
 
 		public override Sprite Image
@@ -81,18 +107,17 @@ namespace S2ObjectDefinitions.Global
 			int sx = (obj.PropertyValue & 0xf0) >> 1;
 			int sy = (obj.PropertyValue & 0x0f) << 3;
 			
-			int index = (((V4ObjectEntry)obj).State < 3) ? ((V4ObjectEntry)obj).State : 0;
+			int index = (!WFZBlock && ((V4ObjectEntry)obj).State < 3) ? ((V4ObjectEntry)obj).State : 0;
 			
-			List<Sprite> sprs = new List<Sprite>();
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					sprs.Add(new Sprite(sprites[index], -sx + (j * 16), -sy + (i * 16)));
-				}
-			}
+			Sprite row = new Sprite();
+			for (int i = 0; i < width; i++) // make a row, first
+				row = new Sprite(row, new Sprite(sprites[index], -sx + (i * 16), 0));
 			
-			return new Sprite(sprs.ToArray());
+			Sprite sprite = new Sprite();
+			for (int i = 0; i < height; i++) // now, combine all the rows
+				sprite = new Sprite(sprite, new Sprite(row, 0, -sy + (i * 16)));
+			
+			return sprite;
 		}
 	}
 }

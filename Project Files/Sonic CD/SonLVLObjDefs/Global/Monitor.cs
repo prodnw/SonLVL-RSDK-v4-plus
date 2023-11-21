@@ -55,68 +55,60 @@ namespace SCDObjectDefinitions.Global
 			// (let's replace the blank icon with a static one, looks better that way i'd say)
 			sprites[0] = sprites[11];
 			
+			Dictionary<string, int> names;
+			
 			if (plus)
 			{
-				// this part is kind of scuffed.. it sure would've been easier it plane was just the top 4 bits instead of whatever this is
-				
-				properties[0] = new PropertySpec("Contents", typeof(int), "Extended",
-					"The Contents of this Monitor.", null, new Dictionary<string, int>
-					{
-						{ "Blank", 0 },
-						{ "Rings", 1 },
-						{ "Shield", 2 },
-						{ "Invincibility", 3 },
-						{ "Speed Shoes", 4 },
-						{ "Sonic", 5 },
-						{ "Clock", 6 },
-						{ "Tails", 7 },
-						{ "Super", 8 },
-						{ "Knuckles", 9 },
-						{ "Amy", 10 }
-					},
-					(obj) => (obj.PropertyValue % 11),
-					(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - (obj.PropertyValue % 11) + ((int)value)));
-				
-				properties[1] = new PropertySpec("Plane", typeof(int), "Extended",
-					"Which Plane this Monitor should be on.", null, new Dictionary<string, int>
-					{
-						{ "High Plane", 0 },
-						{ "Low Plane", 11 },
-					},
-					(obj) => (obj.PropertyValue > 11) ? 11 : 0,
-					(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue > 11) ? 11 : 0) + ((int)value)));
+				names = new Dictionary<string, int> {
+					{ "Static", 0 },
+					{ "Rings", 1 },
+					{ "Shield", 2 },
+					{ "Invincibility", 3 },
+					{ "Speed Shoes", 4 },
+					{ "Sonic 1UP", 5 },
+					{ "Clock", 6 },
+					{ "Tails 1UP", 7 },
+					{ "Super", 8 },
+					{ "Knuckles 1UP", 9 },
+					{ "Amy 1UP", 10 }
+				};
 				
 				subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 });
 			}
 			else
 			{
-				properties[0] = new PropertySpec("Contents", typeof(int), "Extended",
-					"The Contents of this Monitor.", null, new Dictionary<string, int>
-					{
-						{ "Blank", 0 },
-						{ "Rings", 1 },
-						{ "Shield", 2 },
-						{ "Invincibility", 3 },
-						{ "Speed Shoes", 4 },
-						{ "Sonic", 5 },
-						{ "Clock", 6 },
-						{ "Tails", 7 },
-						{ "Super", 8 }
-					},
-					(obj) => (obj.PropertyValue % 9),
-					(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - (obj.PropertyValue % 9) + ((int)value)));
-				
-				properties[1] = new PropertySpec("Plane", typeof(int), "Extended",
-					"Which Plane this Monitor should be on.", null, new Dictionary<string, int>
-					{
-						{ "High Plane", 0 },
-						{ "Low Plane", 9 },
-					},
-					(obj) => (obj.PropertyValue > 9) ? 9 : 0,
-					(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue > 9) ? 9 : 0) + ((int)value)));
+				names = new Dictionary<string, int> {
+					{ "Static", 0 },
+					{ "Rings", 1 },
+					{ "Shield", 2 },
+					{ "Invincibility", 3 },
+					{ "Speed Shoes", 4 },
+					{ "Sonic 1UP", 5 },
+					{ "Clock", 6 },
+					{ "Tails 1UP", 7 },
+					{ "Super", 8 }
+				};
 				
 				subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 });
 			}
+			
+			// this part is kind of scuffed.. it sure would've been easier it plane was just the top 4 bits instead of whatever this is
+			
+			int n = (subtypes.Count / 2);
+			
+			properties[0] = new PropertySpec("Contents", typeof(int), "Extended",
+				"The Contents of this Monitor.", null, names,
+				(obj) => (obj.PropertyValue % n),
+				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - (obj.PropertyValue % n) + (int)value));
+			
+			properties[1] = new PropertySpec("Plane", typeof(int), "Extended",
+				"Which Plane this Monitor should be on.", null, new Dictionary<string, int>
+				{
+					{ "High Plane", 0 },
+					{ "Low Plane", n },
+				},
+				(obj) => (obj.PropertyValue > n) ? n : 0,
+				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue > n) ? n : 0) + (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -136,8 +128,7 @@ namespace SCDObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			string[] contents = new string[]{ "Blank", "Rings", "Shield", "Invincibility", "Speed Shoes", "Sonic", "Clock", "Tails", "Super", "Knuckles", "Amy" };
-			string name = contents[subtype % (subtypes.Count / 2)];
+			string name = properties[0].Enumeration.GetKey(subtype % (subtypes.Count / 2));
 			if (subtype >= (subtypes.Count / 2)) name += " (Low Plane)";
 			return name;
 		}

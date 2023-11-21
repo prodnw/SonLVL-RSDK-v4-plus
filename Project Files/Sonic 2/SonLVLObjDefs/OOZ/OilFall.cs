@@ -75,7 +75,7 @@ namespace S2ObjectDefinitions.OOZ
 			if (obj.PropertyValue > 0)
 				frame += 2;
 			else
-				frame &= 1; // original code does this, i don't think this really means anything though..?
+				frame &= 1; // original code does this, i don't think this really means anything though..? it's not like prop val can be less than 0, and (0 & 1) is still just.. zero
 			
 			int length = Math.Max((int)(obj.PropertyValue & 7), 1);
 			int sy = -((length * 32) / 2) + 16;

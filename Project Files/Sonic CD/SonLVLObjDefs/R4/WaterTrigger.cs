@@ -43,7 +43,7 @@ namespace SCDObjectDefinitions.R4
 				bitmap.DrawRectangle(6, 0, 0, bitmap.Width - 1, bitmap.Height - 1);
 				
 				for (int j = 0; j < arrows[i].Length; j += 4)
-					DrawArrow(bitmap, 6, arrows[i][j], arrows[i][j+1], arrows[i][j+2], arrows[i][j+3]);
+					bitmap.DrawArrow(6, arrows[i][j], arrows[i][j+1], arrows[i][j+2], arrows[i][j+3]);
 				
 				debug[i] = new Sprite(bitmap, hitboxes[i][0], hitboxes[i][1]);
 			}
@@ -60,16 +60,6 @@ namespace SCDObjectDefinitions.R4
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
-		}
-		
-		private BitmapBits DrawArrow(BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
-		{
-			bitmap.DrawLine(index, x1, y1, x2, y2);
-			double angle = Math.Atan2(y1 - y2, x1 - x2);
-			
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
-			return bitmap;
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
@@ -105,6 +95,18 @@ namespace SCDObjectDefinitions.R4
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return (obj.PropertyValue < debug.Length) ? debug[obj.PropertyValue] : null;
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

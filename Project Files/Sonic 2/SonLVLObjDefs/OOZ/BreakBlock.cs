@@ -26,11 +26,11 @@ namespace S2ObjectDefinitions.OOZ
 				sprites[1] = new Sprite(sheet.GetSection(991, 876, 32, 32), -16, -16);
 			}
 			
-			properties[0] = new PropertySpec("Orientation", typeof(int), "Extended",
-				"Which way the Block will launch the player.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
+				"Which way this object will launch the player.", null, new Dictionary<string, int>
 				{
-					{ "Vertical", 0 },
-					{ "Horizontal", 1 }
+					{ "Upwards", 0 },
+					{ "Right", 1 }
 				},
 				(obj) => obj.PropertyValue & 1,
 				(obj, value) => obj.PropertyValue = (byte)(int)value);
@@ -48,14 +48,7 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			switch (subtype & 1)
-			{
-				case 0:
-				default:
-					return "Launch Vertically";
-				case 1:
-					return "Launch Horizontally";
-			}
+			return ((subtype & 1) == 0) ? "Upwards" : "Right";
 		}
 
 		public override Sprite Image

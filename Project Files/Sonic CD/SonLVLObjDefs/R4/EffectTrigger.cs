@@ -74,7 +74,7 @@ namespace SCDObjectDefinitions.R4
 			for (int i = 0; i < angles.Length; i++)
 			{
 				bitmap = new BitmapBits(64, 64);
-				DrawArrow(bitmap, 24, 32, 32, 32 + (int)(Math.Cos(angles[i] * Math.PI) * 32), 32 + (int)(Math.Sin(angles[i] * Math.PI) * 32));
+				bitmap.DrawArrow(24, 32, 32, 32 + (int)(Math.Cos(angles[i] * Math.PI) * 32), 32 + (int)(Math.Sin(angles[i] * Math.PI) * 32));
 				debug[i + 4] = new Sprite(bitmap, -32, -32);
 			}
 			
@@ -127,16 +127,6 @@ namespace SCDObjectDefinitions.R4
 			return sprite;
 		}
 		
-		private BitmapBits DrawArrow(BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
-		{
-			bitmap.DrawLine(index, x1, y1, x2, y2);
-			double angle = Math.Atan2(y1 - y2, x1 - x2);
-			
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
-			return bitmap;
-		}
-		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 13, 4, 5, 6, 7, 8, 9, 10, 11, 12}); }
@@ -173,6 +163,18 @@ namespace SCDObjectDefinitions.R4
 				return null;
 			
 			return debug[obj.PropertyValue];
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

@@ -51,16 +51,6 @@ namespace SCDObjectDefinitions.R4
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
-		private BitmapBits DrawArrow(BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
-		{
-			bitmap.DrawLine(index, x1, y1, x2, y2);
-			double angle = Math.Atan2(y1 - y2, x1 - x2);
-			
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
-			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
-			return bitmap;
-		}
-		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x10, 0x11, 0x12, 0x13, 0x14}); } // this is kinda iffy..
@@ -111,7 +101,7 @@ namespace SCDObjectDefinitions.R4
 				
 				if (length > 16)
 				{
-					DrawArrow(bitmap, 6, 32, length / 2, 32, (length / 2) + (int)(Math.Sin(angle * Math.PI) * (length / 3)));
+					bitmap.DrawArrow(6, 32, length / 2, 32, (length / 2) + (int)(Math.Sin(angle * Math.PI) * (length / 3)));
 				}
 				
 				debug = new Sprite(bitmap, -32, -length / 2);
@@ -123,13 +113,25 @@ namespace SCDObjectDefinitions.R4
 				
 				if (length > 16)
 				{
-					DrawArrow(bitmap, 6, (length / 2), 32, (length / 2) + (int)(Math.Cos(angle * Math.PI) * (length / 3)), 32);
+					bitmap.DrawArrow(6, (length / 2), 32, (length / 2) + (int)(Math.Cos(angle * Math.PI) * (length / 3)), 32);
 				}
 				
 				debug = new Sprite(bitmap, -length / 2, -32);
 			}
 			
 			return debug;
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

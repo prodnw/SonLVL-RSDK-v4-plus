@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="monitor" DefaultSubtype="01">
+<ObjDef xmlns="http://www.sonicretro.org" DefaultSubtype="01">
   <Images>
     <ImageFromSheet id="monitor" sheet="Global/Items.gif" sourcex="18" sourcey="1" width="32" height="32">
       <Offset X="-16" Y="-16"/>
@@ -10,7 +10,7 @@
     <ImageFromSheet id="rings" sheet="Global/Items.gif" sourcex="51" sourcey="16" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
-    <ImageFromSheet id="shieldb" sheet="Global/Items.gif" sourcex="68" sourcey="16" width="16" height="14">
+    <ImageFromSheet id="shield" sheet="Global/Items.gif" sourcex="68" sourcey="16" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
     <ImageFromSheet id="invincibility" sheet="Global/Items.gif" sourcex="51" sourcey="31" width="16" height="14">
@@ -34,7 +34,7 @@
     <ImageFromSheet id="bubble" sheet="Global/Items.gif" sourcex="51" sourcey="91" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
-    <ImageFromSheet id="flame" sheet="Global/Items.gif" sourcex="68" sourcey="76" width="16" height="14">
+    <ImageFromSheet id="fire" sheet="Global/Items.gif" sourcex="68" sourcey="76" width="16" height="14">
       <Offset X="-8" Y="-9"/>
     </ImageFromSheet>
     <ImageFromSheet id="lightning" sheet="Global/Items.gif" sourcex="51" sourcey="76" width="16" height="14">
@@ -89,9 +89,9 @@
       <ImageRef image="monitor" />
       <ImageRef image="rings" />
     </ImageSet>
-    <ImageSet id="shieldb">
+    <ImageSet id="shield">
       <ImageRef image="monitor" />
-      <ImageRef image="shieldb" />
+      <ImageRef image="shield" />
     </ImageSet>
     <ImageSet id="invincibility">
       <ImageRef image="monitor" />
@@ -121,9 +121,9 @@
       <ImageRef image="monitor" />
       <ImageRef image="bubble" />
     </ImageSet>
-    <ImageSet id="flame">
+    <ImageSet id="fire">
       <ImageRef image="monitor" />
-      <ImageRef image="flame" />
+      <ImageRef image="fire" />
     </ImageSet>
     <ImageSet id="lightning">
       <ImageRef image="monitor" />
@@ -161,7 +161,7 @@
       <ImageSetRef set="rings" />
     </Subtype>
     <Subtype id="02" name="Shield">
-      <ImageSetRef set="shieldb" />
+      <ImageSetRef set="shield" />
     </Subtype>
     <Subtype id="03" name="Invincibility">
       <ImageSetRef set="invincibility" />
@@ -185,7 +185,7 @@
       <ImageSetRef set="bubble" />
     </Subtype>
     <Subtype id="0a" name="Fire Shield">
-      <ImageSetRef set="flame" />
+      <ImageSetRef set="fire" />
     </Subtype>
     <Subtype id="0b" name="Lightning Shield">
       <ImageSetRef set="lightning" />

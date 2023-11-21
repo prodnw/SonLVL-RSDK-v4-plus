@@ -63,7 +63,7 @@ namespace S1ObjectDefinitions.SBZ
 			
 			debug = new Sprite[sprites.Length];
 			
-			// with how Trans Sprites are used in game, it kind of looks like their extensions of Transporter paths, but not too sure on what i can do about that
+			// with how Trans Sprites are used in game, it kind of looks like they're extensions of Transporter paths, but not too sure on what i can do about that
 			for (int i = 0; i < sprites.Length; i++)
 			{
 				Rectangle bounds = sprites[i].Bounds;

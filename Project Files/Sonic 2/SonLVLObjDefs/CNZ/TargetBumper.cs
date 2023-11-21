@@ -36,8 +36,8 @@ namespace S2ObjectDefinitions.CNZ
 				(obj) => obj.PropertyValue & 0x3f,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x3f) | (int)value));
 			
-			properties[1] = new PropertySpec("Combo Type", typeof(int), "Extended",
-				"The conditions needed for this Bumper's combo reward.", null, new Dictionary<string, int>
+			properties[1] = new PropertySpec("Combo", typeof(int), "Extended",
+				"Which other objects are needed for this Bumper's combo reward.", null, new Dictionary<string, int>
 				{
 					{ "obj[+1] & obj[+2]", 0x00 },
 					{ "obj[-1] & obj[+1]", 0x40 },

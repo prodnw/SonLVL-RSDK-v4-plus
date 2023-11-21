@@ -9,13 +9,13 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Open From" description="Which end the Door should open from." type="directions" startbit="0" length="8" />
+    <Property name="Open From" description="Which direction the Door should open from." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="directions">
       <EnumMember name="Left" />
       <EnumMember name="Right" />
-      <EnumMember name="Once - Left" />
+      <EnumMember name="Left (Start Open)" />
     </Enum>
   </Enums>
   <ImageSets>
@@ -38,7 +38,7 @@
 	<Subtype id="01" name="Open From Right">
       <ImageSetRef set="right" />
     </Subtype>
-	<Subtype id="02" name="Open From Left - Once">
+	<Subtype id="02" name="Open From Left (Start Open)">
       <ImageSetRef set="left" />
     </Subtype>
   </Subtypes>

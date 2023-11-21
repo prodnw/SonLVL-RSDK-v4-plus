@@ -25,7 +25,7 @@ namespace S2ObjectDefinitions.MCZ
 					{ "Left", 0 },
 					{ "Right", 1 }
 				},
-				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1,
+				(obj) => (int)((V4ObjectEntry)obj).Direction & 1,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 		}
 		
@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.MCZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(((V4ObjectEntry)obj).Direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1];
+			return sprites[(int)((V4ObjectEntry)obj).Direction & 1];
 		}
 	}
 }

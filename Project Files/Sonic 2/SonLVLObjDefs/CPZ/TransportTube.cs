@@ -644,12 +644,12 @@ namespace S2ObjectDefinitions.CPZ
 				ymax = Math.Max(ymax, path[i+1] >> 16);
 			}
 			
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
 			for (int i = 2; i < path.Length; i += 2)
-				bmp.DrawLine(index, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin);
+				bitmap.DrawLine(index, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin);
 			
-			return new Sprite(bmp, xmin, ymin);
+			return new Sprite(bitmap, xmin, ymin);
 		}
 	}
 }

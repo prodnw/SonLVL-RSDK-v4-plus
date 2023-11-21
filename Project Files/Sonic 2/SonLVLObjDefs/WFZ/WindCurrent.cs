@@ -59,17 +59,17 @@ namespace S2ObjectDefinitions.WFZ
 		{
 			try
 			{
-				ObjectEntry otherObj = LevelData.Objects[LevelData.Objects.IndexOf(obj) + ((obj.PropertyValue == 0) ? 1 : -1)];
+				ObjectEntry other = LevelData.Objects[LevelData.Objects.IndexOf(obj) + ((obj.PropertyValue == 0) ? 1 : -1)];
 				
-				short xmin = Math.Min(obj.X, otherObj.X);
-				short ymin = Math.Min(obj.Y, otherObj.Y);
-				short xmax = Math.Max(obj.X, otherObj.X);
-				short ymax = Math.Max(obj.Y, otherObj.Y);
-				BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+				short xmin = Math.Min(obj.X, other.X);
+				short ymin = Math.Min(obj.Y, other.Y);
+				short xmax = Math.Max(obj.X, other.X);
+				short ymax = Math.Max(obj.Y, other.Y);
+				BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 				
-				bmp.DrawRectangle(6, 0, 0, xmax - xmin, ymax - ymin); // LevelData.ColorWhite
+				bitmap.DrawRectangle(6, 0, 0, xmax - xmin, ymax - ymin); // LevelData.ColorWhite
 				
-				return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+				return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 			}
 			catch
 			{

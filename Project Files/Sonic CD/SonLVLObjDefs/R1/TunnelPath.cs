@@ -219,16 +219,14 @@ namespace SCDObjectDefinitions.R1
 				ymax = Math.Max(ymax, path[i+1] >> 16);
 			}
 			
-			BitmapBits bmp = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			bmp.DrawLine(6, obj.X - xmin, obj.Y - ymin, (path[0] >> 16) - xmin, (path[1] >> 16) - ymin); // LevelData.ColorWhite
+			bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, (path[0] >> 16) - xmin, (path[1] >> 16) - ymin); // LevelData.ColorWhite
 			
 			for (int i = 2; i < path.Length; i += 2)
-			{
-				bmp.DrawLine(6, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin); // LevelData.ColorWhite
-			}
+				bitmap.DrawLine(6, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin); // LevelData.ColorWhite
 			
-			return new Sprite(bmp, xmin - obj.X, ymin - obj.Y);
+			return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 		}
 	}
 }

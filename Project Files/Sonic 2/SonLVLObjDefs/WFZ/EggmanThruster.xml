@@ -16,6 +16,6 @@
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Interval A" image="thruster" />
-    <Subtype id="01" name="Interval A" image="thruster" />
+    <Subtype id="01" name="Interval B" image="thruster" />
   </Subtypes>
 </ObjDef>

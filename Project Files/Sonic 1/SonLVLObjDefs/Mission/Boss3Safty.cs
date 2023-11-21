@@ -43,16 +43,16 @@ namespace S1ObjectDefinitions.Mission
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			// Draw a line from this object's position to its falling bounds, and then draw a line across those falling bounds
-			// (0x0580 is a value hardcoded in the script)
-			int ymin = Math.Min((int)obj.Y, 0x0580);
-			int ymax = Math.Max((int)obj.Y, 0x0580);
-			BitmapBits bmp = new BitmapBits(257, ymax - ymin + 1);
+			// (1408 is a value hardcoded in the script)
+			int ymin = Math.Min((int)obj.Y, 1408);
+			int ymax = Math.Max((int)obj.Y, 1408);
+			BitmapBits bitmap = new BitmapBits(257, ymax - ymin + 1);
 			
 			// tagging this area with LevelData.ColorWhite
-			bmp.DrawLine(6, 128, obj.Y - ymin, 128, 0x0580 - ymin);
-			bmp.DrawLine(6, 0, 0x0580 - ymin, 256, 0x0580 - ymin);
+			bitmap.DrawLine(6, 128, obj.Y - ymin, 128, 1408 - ymin);
+			bitmap.DrawLine(6, 0, 1408 - ymin, 256, 1408 - ymin);
 			
-			return new Sprite(bmp, -128, ymin - obj.Y);
+			return new Sprite(bitmap, -128, ymin - obj.Y);
 		}
 	}
 }

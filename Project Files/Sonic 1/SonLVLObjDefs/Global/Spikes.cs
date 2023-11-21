@@ -82,7 +82,7 @@ namespace S1ObjectDefinitions.Global
 				overlay.DrawRectangle(6, 0, 0, bounds.Width - 1, bounds.Height - 1); // LevelData.ColorWhite
 				debug[i] = new Sprite(overlay, bounds.X, bounds.Y);
 				
-				switch (i & 3) // Orientation
+				switch (i & 3) // Direction
 				{
 					case 0: debug[i].Offset(0,  32); break; // Up
 					case 1: debug[i].Offset(-32, 0); break; // Right
@@ -102,7 +102,7 @@ namespace S1ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 12,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~12) | (int)value));
 			
-			properties[1] = new PropertySpec("Orientation", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Spikes are facing.", null, new Dictionary<string, int>
 				{
 					{ "Up", 0 },
@@ -133,11 +133,10 @@ namespace S1ObjectDefinitions.Global
 		{
 			// i don't really like this, but it's better than nothing ig
 			
-			string[] counts = {"3 ", " 1 ", "3 Spaced ", "6 Spaced"};
+			string[] counts = {"3 ", "1 ", "3 Spaced ", "6 Spaced "};
 			string[] directions = {"Upwards", "Right", "Left", "Downwards"}; // not too major, but should it be "Upward" or "Upwards"? i'm honestly not sure...
 			
 			string name = counts[(subtype & 12) >> 2];
-			if (((subtype & 12) >> 2) > 1) name += "Spaced ";
 			name += directions[subtype & 3];
 			
 			if (subtype > 15) name += " (Moving)";

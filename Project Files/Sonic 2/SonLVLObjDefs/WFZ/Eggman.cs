@@ -14,13 +14,9 @@ namespace S2ObjectDefinitions.WFZ
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone11"))
-			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("SCZ/Objects.gif").GetSection(398, 203, 32, 52), -16, -28);
-			}
 			else
-			{
 				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(737, 58, 32, 52), -16, -28);
-			}
 			
 			properties[0] = new PropertySpec("Set Bounds", typeof(bool), "Extended",
 				"If this Eggman object should set left stage bounds or not.", null,

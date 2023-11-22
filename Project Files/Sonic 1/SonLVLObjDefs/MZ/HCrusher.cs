@@ -82,8 +82,8 @@ namespace S1ObjectDefinitions.MZ
 				"How far the crusher should extend.", null, new Dictionary<string, int>
 				{
 					{ "56 px", 0 },
-					{ "159 px", 1 },
-					{ "80 px", 2 }
+					{ "80 px", 2 },
+					{ "159 px", 1 }
 					// { "56 px (Use Button)", 3 } // RE2 has this but i don't think this is actually any different from the normal 56px?
 				},
 				(obj) => obj.PropertyValue & 3,
@@ -110,7 +110,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 0x80, 0x81, 0x82 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2, 1, 0x80, 0x82, 0x81 }); }
 		}
 		
 		public override PropertySpec[] CustomProperties

@@ -8,8 +8,8 @@ namespace S1ObjectDefinitions.MZ
 	class ChainedCrusher : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[3];
-		private Sprite[,,] sprites = new Sprite[3,7,2]; // style, length, triggered
-		private Sprite[,,] debug = new Sprite[3,7,2]; // style, length, triggered
+		private Sprite[,,] sprites = new Sprite[3,7,2]; // size, length, triggered
+		private Sprite[,,] debug = new Sprite[3,7,2]; // size, length, triggered
 		
 		public override void Init(ObjectData data)
 		{
@@ -36,7 +36,7 @@ namespace S1ObjectDefinitions.MZ
 			
 			for (int i = 0; i < lengths.Length; i++)
 			{
-				for (int j = 0; j < crushers.Length; j++) // style
+				for (int j = 0; j < crushers.Length; j++) // size
 				{
 					// normal ver
 					chain = new Sprite(sheet.GetSection(308, 257 - 4, 8, 4), -4, -(18 + 4));
@@ -55,18 +55,18 @@ namespace S1ObjectDefinitions.MZ
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the crusher should drop.", null, new Dictionary<string, int>
 				{
-					{ "112 px", 0 },
-					{ "160 px", 1 },
-					{ "80 px", 2 },
-					{ "120 px", 3 },
 					{ "56 px", 4 },
+					{ "80 px", 2 },
 					{ "88 px", 5 },
+					{ "112 px", 0 },
+					{ "120 px", 3 },
+					{ "160 px", 1 },
 					{ "184 px", 6 }
 				}, GetDistance,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~7) | (int)value));
 			
-			properties[1] = new PropertySpec("Style", typeof(int), "Extended",
-				"The style of the crusher.", null, new Dictionary<string, int>
+			properties[1] = new PropertySpec("Size", typeof(int), "Extended",
+				"How large the crusher will be.", null, new Dictionary<string, int>
 				{
 					{ "Large Crusher", 0 },
 					{ "Medium Crusher", 1 },
@@ -76,7 +76,7 @@ namespace S1ObjectDefinitions.MZ
 					{ "Small (Drop On Visible)", 3 }
 					*/
 					{ "Small Block", 2 }
-				}, GetStyle,
+				}, GetSize,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | ((int)value << 4)));
 			
 			properties[2] = new PropertySpec("Triggered", typeof(int), "Extended", // not a bool because we use the get method for getting array index
@@ -90,7 +90,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6 }); } // just chuckin' everything
+			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 2, 5, 0, 3, 1, 6, 0x14, 0x12, 0x15, 0x10, 0x13, 0x11, 0x16, 0x24, 0x22, 0x25, 0x20, 0x23, 0x21, 0x26, 0x24, 0x82, 0x85, 0x80, 0x83, 0x81, 0x86, 0x94, 0x92, 0x95, 0x90, 0x93, 0x91, 0x96, 0xa4, 0xa2, 0xa5, 0xa0, 0xa3, 0xa1, 0xa6 }); } // just chuckin' everything
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -103,7 +103,7 @@ namespace S1ObjectDefinitions.MZ
 			return (((obj.PropertyValue & 7) > 6) ? 0 : obj.PropertyValue & 7);
 		}
 		
-		static object GetStyle(ObjectEntry obj)
+		static object GetSize(ObjectEntry obj)
 		{
 			return (((obj.PropertyValue & 0x7f) >> 4) % 3);
 		}
@@ -115,10 +115,10 @@ namespace S1ObjectDefinitions.MZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			string[] styles = {"Large", "Medium", "Small"};
+			string[] sizes = {"Large", "Medium", "Small"};
 			int[] lengths = {112, 160, 80, 120, 56, 88, 184};
 			
-			string name = styles[((subtype & 0x7f) >> 4) % 3] + ", " + lengths[((subtype & 7) > 6) ? 0 : subtype & 7] + " px"; // "px" alone is kind of weird.. but "pixels downwards" sounds even weirder imo, so
+			string name = sizes[((subtype & 0x7f) >> 4) % 3] + ", " + lengths[((subtype & 7) > 6) ? 0 : subtype & 7] + " px"; // "px" alone is kind of weird.. but "pixels downwards" sounds even weirder imo, so
 			
 			if ((subtype & 0x80) == 0x80)
 				name += " (Button Triggered)";
@@ -138,19 +138,19 @@ namespace S1ObjectDefinitions.MZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[(int)GetStyle(obj),(int)GetDistance(obj),(int)GetTriggered(obj)];
+			return sprites[(int)GetSize(obj),(int)GetDistance(obj),(int)GetTriggered(obj)];
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			if ((obj.PropertyValue & 0x80) == 0x80) return null; // since triggered ones are already shown as extended, let's not show anything
-			return debug[(int)GetStyle(obj),(int)GetDistance(obj),(int)GetTriggered(obj)]; // (still leaving in the triggered bit here in case i want to revert this in the future)
+			return debug[(int)GetSize(obj),(int)GetDistance(obj),(int)GetTriggered(obj)]; // (still leaving in the triggered bit here in case i want to revert this in the future)
 		}
 		
 		public override Rectangle GetBounds(ObjectEntry obj)
 		{
 			// let's make the selection bounds just be the crusher part, ignoring the rod and the base
-			Rectangle bounds = debug[(int)GetStyle(obj),(int)GetDistance(obj),(int)GetTriggered(obj)^1].Bounds; // note that we flip the triggered part
+			Rectangle bounds = debug[(int)GetSize(obj),(int)GetDistance(obj),(int)GetTriggered(obj)^1].Bounds; // note that we flip the triggered part
 			bounds.Offset(obj.X, obj.Y);
 			return bounds;
 		}

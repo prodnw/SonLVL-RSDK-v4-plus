@@ -31,7 +31,7 @@ namespace S2ObjectDefinitions.ARZ
 						return result;
 					},
 				(obj, value) => {
-						obj.PropertyValue = (byte)((int)value & 1);
+						obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | ((int)value & 1));
 						if ((int)value > 1)
 							((V4ObjectEntry)obj).Direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX;
 						else
@@ -39,10 +39,14 @@ namespace S2ObjectDefinitions.ARZ
 					}
 				);
 			
-			properties[1] = new PropertySpec("Solid", typeof(bool), "Extended",
-				"If this object should have solid collision, as opposed to platform collision.", null,
-				(obj) => obj.PropertyValue >= 2,
-				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 2 : 0));
+			properties[1] = new PropertySpec("Solidity", typeof(int), "Extended",
+				"What collision type this platform should have.", null, new Dictionary<string, int>
+				{
+					{ "Top Solid", 0 },
+					{ "All Solid", 2 },
+				},
+				(obj) => (obj.PropertyValue < 2) ? 0 : 2,
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 1) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

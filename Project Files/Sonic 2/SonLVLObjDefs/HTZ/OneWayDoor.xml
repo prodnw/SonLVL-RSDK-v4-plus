@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org">
+<ObjDef xmlns="http://www.sonicretro.org" Image="door">
   <Images>
     <ImageFromSheet id="door" sheet="HTZ/Objects.gif" sourcex="91" sourcey="157" width="16" height="64">
       <Offset X="-8" Y="-32"/>
@@ -15,20 +15,12 @@
     </Enum>
   </Enums>
   <ImageSets>
-    <ImageSet id="doorl">
-      <ImageRef image="door" />
-    </ImageSet>
     <ImageSet id="doorr">
       <ImageRef image="door" xflip="AlwaysFlip" />
     </ImageSet>
   </ImageSets>
-  <DefaultImage>
-    <ImageSetRef set="doorl" />
-  </DefaultImage>
   <Subtypes>
-    <Subtype id="00" name="Open From Left">
-      <ImageSetRef set="doorl" />
-    </Subtype>
+    <Subtype id="00" name="Open From Left" image="door" />
     <Subtype id="01" name="Open From Right">
       <ImageSetRef set="doorr" />
     </Subtype>

@@ -8,6 +8,7 @@ namespace SCDObjectDefinitions.Special
 {
 	public class UFO : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private readonly Sprite[] sprites = new Sprite[3];
 		private ReadOnlyCollection<byte> subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2 });
 		
@@ -17,11 +18,26 @@ namespace SCDObjectDefinitions.Special
 			sprites[0] = new Sprite(sheet.GetSection(1, 1, 80, 56), -40, -28);
 			sprites[1] = new Sprite(sheet.GetSection(82, 1, 80, 56), -40, -28);
 			sprites[2] = new Sprite(sheet.GetSection(163, 1, 80, 56), -40, -28);
+			
+			properties[0] = new PropertySpec("Contents", typeof(int), "Extended",
+				"Which item this UFO contains.", null, new Dictionary<string, int>
+				{
+					{ "Rings", 0 },
+					{ "Speed Shoes", 1 },
+					{ "Time", 2 }
+				},
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return subtypes; }
+		}
+		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -46,9 +62,7 @@ namespace SCDObjectDefinitions.Special
 		
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			if (subtype < sprites.Length)
-				return sprites[subtype];
-			return new Sprite(LevelData.UnknownSprite);
+			return (subtype < sprites.Length) ? sprites[subtype] : new Sprite(LevelData.UnknownSprite);
 		}
 		
 		public override Sprite GetSprite(ObjectEntry obj)

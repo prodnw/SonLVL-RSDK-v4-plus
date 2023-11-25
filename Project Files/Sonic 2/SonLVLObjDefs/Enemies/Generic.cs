@@ -70,7 +70,7 @@ namespace S2ObjectDefinitions.Enemies
 		public override Sprite GetFrame()
 		{
 			if (LevelData.StageInfo.folder.EndsWith("Zone02"))
-				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(190, 141, 14, 14), 2, -2);
+				return new Sprite(LevelData.GetSpriteSheet("CPZ/Objects.gif").GetSection(141, 33, 24, 15), -12, -15);
 			else
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(166, 1, 24, 24), -12, -12); // broken frame btw
 		}

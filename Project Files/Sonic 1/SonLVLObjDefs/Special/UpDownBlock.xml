@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Mode" description="The Change this Block will apply upon contact." type="modes" startbit="0" length="1" />
+    <Property name="Effect" description="The Change this Block will apply upon contact." type="modes" startbit="0" length="1" />
   </Properties>
   <Enums>
     <Enum name="modes">

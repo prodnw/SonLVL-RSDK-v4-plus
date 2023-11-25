@@ -7,16 +7,16 @@
   </Images>
   <Properties>
 	<Property name="Collapse From" description="Which end that this platform should start collapsing from. Note that collision is the same between both types." type="cfrom" startbit="0" length="1" />
-	<Property name="Collision" description="What collision type this platform should be." type="collisiontypes" startbit="1" length="1" />
+	<Property name="Solidity" description="What collision type this platform should have." type="solidity" startbit="1" length="1" />
   </Properties>
   <Enums>
 	<Enum name="cfrom">
 	  <EnumMember name="Left" />
 	  <EnumMember name="Bottom" />
 	</Enum>
-	<Enum name="collisiontypes">
-	  <EnumMember name="Platform" />
-	  <EnumMember name="Solid" />
+	<Enum name="solidity">
+	  <EnumMember name="Top Solid" />
+	  <EnumMember name="All Solid" />
 	</Enum>
   </Enums>
   <Subtypes>

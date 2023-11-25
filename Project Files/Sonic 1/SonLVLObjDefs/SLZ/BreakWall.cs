@@ -22,7 +22,7 @@ namespace S1ObjectDefinitions.SLZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {}); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		// even if it's 1 in the scene normally, prop val is reset on startup in-game so we don't need a DefaultSubtype here

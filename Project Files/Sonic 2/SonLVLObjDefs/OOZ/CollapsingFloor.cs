@@ -30,11 +30,15 @@ namespace S2ObjectDefinitions.OOZ
 				(obj) => (((V4ObjectEntry)obj).Direction == (RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipNone)) ? 0 : 1,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 			
-			// i don't think this is ever even used?
-			properties[1] = new PropertySpec("Solid", typeof(bool), "Extended",
-				"If this object should have solid collision, as opposed to platform collision.", null,
-				(obj) => obj.PropertyValue >= 2,
-				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 2 : 0));
+			// i don't think this is ever even used? the hitbox doesn't really line up either, but may as well..
+			properties[1] = new PropertySpec("Solidity", typeof(int), "Extended",
+				"What collision type this platform should have.", null, new Dictionary<string, int>
+				{
+					{ "Top Solid", 0 },
+					{ "All Solid", 2 },
+				},
+				(obj) => (obj.PropertyValue < 2) ? 0 : 2,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

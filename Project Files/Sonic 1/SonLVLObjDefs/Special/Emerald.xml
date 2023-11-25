@@ -24,7 +24,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Emerald ID" description="The Emerald type to be displayed. Named after order ID rather than colour for clarity." type="emeralds" startbit="0" length="4" />
+    <Property name="Emerald ID" description="The Emerald type to be displayed." type="emeralds" startbit="0" length="8" /> <!-- had "Named after order ID rather than colour for clarity." in the desc before but mehhhh-->
   </Properties>
   <Enums>
     <Enum name="emeralds">

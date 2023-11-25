@@ -22,13 +22,6 @@ namespace S2ObjectDefinitions.CPZ
 				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(469, 692, 48, 14), -24, -8);
 			}
 			
-			// (copy of BumpingPlatform_offsetTable from the game's script)
-			int[] offsetTable = new int[8] {
-				-0x680000, 0x000000,
-				-0xB00000, 0x400000,
-				-0x780000, 0x800000,
-				 0x670000, 0x000000 };
-			
 			sprites[1] = new Sprite(new Sprite(sprites[0], -24, 0), new Sprite(sprites[0], 25, 0));
 
 			BitmapBits overlay = new BitmapBits(1024, 2);
@@ -95,12 +88,12 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return new Sprite(sprites[(obj.PropertyValue == 1 | obj.PropertyValue == 2) ? 1 : 0]);
+			return sprites[(obj.PropertyValue == 1 | obj.PropertyValue == 2) ? 1 : 0];
 		}
 
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return new Sprite(debug[(obj.PropertyValue == 1 | obj.PropertyValue == 2) ? obj.PropertyValue : 0]);
+			return debug[(obj.PropertyValue == 1 | obj.PropertyValue == 2) ? obj.PropertyValue : 0];
 		}
 	}
 }

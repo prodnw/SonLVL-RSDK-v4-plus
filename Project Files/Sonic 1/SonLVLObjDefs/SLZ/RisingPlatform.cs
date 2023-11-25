@@ -70,7 +70,7 @@ namespace S1ObjectDefinitions.SLZ
 					{ "Up-Right", 12 },
 					{ "Down-Left", 13 },
 					
-					// 14 is for a platform spawned by a spawner, shouldn't be placed in the scene
+					// 14 is for a platform spawned by a spawner, but those shouldn't be placed in the scene
 					// 15 is technically static, but it unloads right as soon as it gets off screen, so
 					
 					{ "Spawner", 0x80 }

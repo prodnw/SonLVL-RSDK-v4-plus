@@ -52,7 +52,7 @@ namespace SCDObjectDefinitions.R1
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 8, 12, 16 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {4, 8, 12, 16}); }
 		}
 		
 		public override byte DefaultSubtype

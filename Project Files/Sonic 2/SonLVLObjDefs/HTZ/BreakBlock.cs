@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.HTZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 0x80, 0x81, 0x82, 0x83, 0x84 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 0x80, 0x81, 0x82, 0x83, 0x84}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

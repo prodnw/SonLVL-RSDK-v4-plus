@@ -20,16 +20,16 @@
       <ImageRef image="platform" />
       <ImageRef image="platform">
         <Offset X="32" />
-	  </ImageRef>
+      </ImageRef>
     </ImageSet>
     <ImageSet id="triple">
       <ImageRef image="platform" />
       <ImageRef image="platform">
         <Offset X="32" Y="16" />
-	  </ImageRef>
+      </ImageRef>
       <ImageRef image="platform">
         <Offset X="64" Y="32" />
-	  </ImageRef>
+      </ImageRef>
     </ImageSet>
   </ImageSets>
   <Subtypes>

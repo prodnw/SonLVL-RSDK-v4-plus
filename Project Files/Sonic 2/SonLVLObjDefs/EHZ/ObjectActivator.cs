@@ -23,7 +23,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2}); }
 		}
 		
 		public override byte DefaultSubtype
@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "Active object [+" + subtype + "]";
 		}
 
 		public override Sprite Image

@@ -18,7 +18,7 @@
     <ImageSet id="left">
       <ImageRef image="flipper" />
     </ImageSet>
-	<ImageSet id="right">
+    <ImageSet id="right">
       <ImageRef image="flipper" xflip="AlwaysFlip" />
     </ImageSet>
   </ImageSets>

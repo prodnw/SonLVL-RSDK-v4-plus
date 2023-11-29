@@ -20,15 +20,15 @@
   <Enums>
     <Enum name="directions">
       <EnumMember name="Up" />
-	  <EnumMember name="Right" />
-	  <EnumMember name="Left" />
-	  <EnumMember name="Down" />
+      <EnumMember name="Right" />
+      <EnumMember name="Left" />
+      <EnumMember name="Down" />
     </Enum>
   </Enums>
   <Subtypes>
-    <Subtype id="00" name="Up" image="up" />
-    <Subtype id="01" name="Right" image="right" />
-    <Subtype id="02" name="Left" image="left" />
-    <Subtype id="03" name="Down" image="down" />
+    <Subtype id="00" name="Facing Up" image="up" />
+    <Subtype id="01" name="Facing Right" image="right" />
+    <Subtype id="02" name="Facing Left" image="left" />
+    <Subtype id="03" name="Facing Down" image="down" />
   </Subtypes>
 </ObjDef>

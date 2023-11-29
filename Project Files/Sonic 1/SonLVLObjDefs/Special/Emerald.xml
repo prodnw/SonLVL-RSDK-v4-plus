@@ -29,12 +29,12 @@
   <Enums>
     <Enum name="emeralds">
       <EnumMember name="Emerald 1" />
-	  <EnumMember name="Emerald 2" />
-	  <EnumMember name="Emerald 3" />
-	  <EnumMember name="Emerald 4" />
-	  <EnumMember name="Emerald 5" />
-	  <EnumMember name="Emerald 6" />
-	  <EnumMember name="Emerald 7" />
+      <EnumMember name="Emerald 2" />
+      <EnumMember name="Emerald 3" />
+      <EnumMember name="Emerald 4" />
+      <EnumMember name="Emerald 5" />
+      <EnumMember name="Emerald 6" />
+      <EnumMember name="Emerald 7" />
     </Enum>
   </Enums>
   <Subtypes>

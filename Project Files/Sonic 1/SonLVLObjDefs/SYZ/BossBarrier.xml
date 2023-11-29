@@ -11,26 +11,26 @@
   <ImageSets>
     <ImageSet id="bossbarrier">
       <ImageRef image="barrier" >
-		<Offset Y="-32" />
-	  </ImageRef>
+        <Offset Y="-32" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-64" />
-	  </ImageRef>
+        <Offset Y="-64" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-96" />
-	  </ImageRef>
+        <Offset Y="-96" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-128" />
-	  </ImageRef>
+        <Offset Y="-128" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-160" />
-	  </ImageRef>
+        <Offset Y="-160" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-192" />
-	  </ImageRef>
+        <Offset Y="-192" />
+      </ImageRef>
       <ImageRef image="barrier" >
-		<Offset Y="-224" />
-	  </ImageRef>
+        <Offset Y="-224" />
+      </ImageRef>
       <ImageRef image="base" />
     </ImageSet>
   </ImageSets>

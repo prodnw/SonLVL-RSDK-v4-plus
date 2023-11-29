@@ -43,7 +43,7 @@ namespace S1ObjectDefinitions.Global
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 5 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 5}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

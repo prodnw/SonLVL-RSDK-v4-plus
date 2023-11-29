@@ -14,11 +14,11 @@
   <Enums>
     <Enum name="sizes">
       <EnumMember name="Small" />
-	  <EnumMember name="Large" />
+      <EnumMember name="Large" />
     </Enum>
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Small Block" image="small" />
-	<Subtype id="01" name="Large Block" image="large" />
+    <Subtype id="01" name="Large Block" image="large" />
   </Subtypes>
 </ObjDef>

@@ -23,7 +23,7 @@ namespace SCDObjectDefinitions.R7
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -73,9 +73,9 @@ namespace SCDObjectDefinitions.R7
 				}
 				case "R Spring Cage":
 				{
-					int xdiff = (other.X - obj.X);
-					int ydiff = (other.Y - obj.Y);
-					if (Math.Abs(xdiff) < 32 && Math.Abs(ydiff) < 32)
+					int xdiff = other.X - obj.X;
+					int ydiff = other.Y - obj.Y;
+					if (Math.Abs(xdiff) < 64 && Math.Abs(ydiff) < 64) // in-game it doesn't matter how far it is, but let's have a limit here
 						return new Sprite(sprites[index], xdiff, ydiff);
 					break;
 				}

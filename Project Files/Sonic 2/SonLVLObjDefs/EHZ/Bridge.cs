@@ -29,7 +29,7 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 6, 8, 10, 12, 14, 16 }); } // it can be any value, but why not give a few starting ones
+			get { return new ReadOnlyCollection<byte>(new byte[] {6, 8, 10, 12, 14, 16}); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -59,15 +59,14 @@ namespace S2ObjectDefinitions.EHZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			if (obj.PropertyValue == 0)
+			if (obj.PropertyValue <= 1)
 				return sprite;
 			
 			int st = -(((obj.PropertyValue) * 16) / 2) + 8;
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < obj.PropertyValue; i++)
-			{
 				sprs.Add(new Sprite(sprite, st + (i * 16), 0));
-			}
+			
 			return new Sprite(sprs.ToArray());
 		}
 	}

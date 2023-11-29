@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Orb" description="If this SeeSaw should have an orb or not." type="orbs" startbit="0" length="8" />
+    <Property name="Has Orb" description="If this SeeSaw should have an orb or not." type="orbs" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="orbs">

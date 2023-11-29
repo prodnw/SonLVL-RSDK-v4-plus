@@ -10,6 +10,11 @@ namespace S1ObjectDefinitions.SBZ
 	{
 		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Wall Frame", 0 }, { "Roof Frame", 1 }}; } }
 		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
+		}
+		
 		public override Sprite[] GetFrames()
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("SBZ/Objects.gif");
@@ -24,6 +29,11 @@ namespace S1ObjectDefinitions.SBZ
 	{
 		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Left Frame", 0 }, { "Right Frame", 1 }}; } }
 		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
+		}
+		
 		public override Sprite[] GetFrames()
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("SBZ/Objects.gif");
@@ -34,9 +44,23 @@ namespace S1ObjectDefinitions.SBZ
 		}
 	}
 	
+	class TubeCover : SBZ.DecoSprite
+	{
+		public override Sprite[] GetFrames()
+		{
+			// well yeah it's technically two frames in-game but the tube frame completely covers the device frame, so..
+			return new Sprite[] { new Sprite(LevelData.GetSpriteSheet("SBZ/Objects.gif").GetSection(317, 339, 64, 64), -32, -32) };
+		}
+	}
+	
 	class RoofCover : SBZ.DecoSprite
 	{
 		public override Dictionary<string, int> names { get { return new Dictionary<string, int>{{ "Left Frame", 0 }, { "Right Frame", 1 }}; } }
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
+		}
 		
 		public override Sprite[] GetFrames()
 		{
@@ -54,7 +78,7 @@ namespace S1ObjectDefinitions.SBZ
 		private Sprite[] sprites;
 		private Sprite[] debug;
 		
-		public abstract Dictionary<string, int> names { get; }
+		public virtual Dictionary<string, int> names { get { return null; } }
 		public abstract Sprite[] GetFrames();
 		
 		public override void Init(ObjectData data)
@@ -63,7 +87,6 @@ namespace S1ObjectDefinitions.SBZ
 			
 			debug = new Sprite[sprites.Length];
 			
-			// with how Trans Sprites are used in game, it kind of looks like they're extensions of Transporter paths, but not too sure on what i can do about that
 			for (int i = 0; i < sprites.Length; i++)
 			{
 				Rectangle bounds = sprites[i].Bounds;
@@ -72,25 +95,28 @@ namespace S1ObjectDefinitions.SBZ
 				debug[i] = new Sprite(overlay, bounds.X, bounds.Y);
 			}
 			
-			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
-				"Which sprite this object should display.", null, names,
-				(obj) => (int)obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+			if (sprites.Length > 1)
+			{
+				properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
+					"Which sprite this object should display.", null, names,
+					(obj) => (int)obj.PropertyValue,
+					(obj, value) => obj.PropertyValue = (byte)((int)value));
+			}
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override PropertySpec[] CustomProperties
 		{
-			get { return properties; }
+			get { return (sprites.Length > 1) ? properties : null; }
 		}
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return names.GetKey(subtype);
+			return (sprites.Length > 1) ? names.GetKey(subtype) : null;
 		}
 
 		public override Sprite Image
@@ -105,7 +131,7 @@ namespace S1ObjectDefinitions.SBZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return sprites[(sprites.Length > 1) ? obj.PropertyValue : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

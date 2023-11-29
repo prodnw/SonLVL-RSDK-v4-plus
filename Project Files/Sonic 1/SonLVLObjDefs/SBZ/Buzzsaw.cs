@@ -10,7 +10,7 @@ namespace S1ObjectDefinitions.SBZ
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite[] sprites = new Sprite[4];
-		private Sprite[] debug = new Sprite[4]; // not sure if i should give strays little arrows of their own, too?
+		private Sprite[] debug = new Sprite[4];
 		
 		public override void Init(ObjectData data)
 		{
@@ -20,18 +20,22 @@ namespace S1ObjectDefinitions.SBZ
 			sprites[2] = new Sprite(sprites[1], -96, 0); // start from left
 			sprites[3] = new Sprite(sprites[1], 0, -50); // start from top
 			
+			// h hover line
 			BitmapBits bitmap = new BitmapBits(97, 2);
 			bitmap.DrawLine(6, 0, 0, 96, 0);
 			debug[0] = new Sprite(bitmap, -96, 0);
 			
+			// v hover line
 			bitmap = new BitmapBits(2, 51);
 			bitmap.DrawLine(6, 0, 0, 0, 50);
 			debug[1] = new Sprite(bitmap, 0, -50);
 			
+			// stray - right arrow
 			bitmap = new BitmapBits(56, 10);
 			bitmap.DrawArrow(6, 0, 5, 55, 5);
 			debug[2] = new Sprite(bitmap, 0, -8);
 			
+			// stray - left arrow
 			debug[3] = new Sprite(debug[2], true, false);
 			
 			// let's combine prop val and dir for this
@@ -62,7 +66,7 @@ namespace S1ObjectDefinitions.SBZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2, 3, 4}); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2, 3, 4}); } // can't stick in dir attr in here, 
 		}
 		
 		public override byte DefaultSubtype

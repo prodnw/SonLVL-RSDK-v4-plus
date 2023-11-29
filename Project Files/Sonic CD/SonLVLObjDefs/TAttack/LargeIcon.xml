@@ -46,7 +46,7 @@
     <ImageFromSheet id="s8" sheet="TAttack/TimeAttack.gif" sourcex="384" sourcey="432" width="128" height="144">
       <Offset X="-64" Y="-72"/>
     </ImageFromSheet>
-	<ImageFromSheet id="frame" sheet="TAttack/TimeAttack.gif" sourcex="306" sourcey="873" width="134" height="150">
+    <ImageFromSheet id="frame" sheet="TAttack/TimeAttack.gif" sourcex="306" sourcey="873" width="134" height="150">
       <Offset X="-67" Y="-75"/>
     </ImageFromSheet>
   </Images>
@@ -55,21 +55,21 @@
   </Properties>
   <Enums>
     <Enum name="frames">
-	  <EnumMember name="Palmtree Panic" />
-	  <EnumMember name="Collision Chaos" />
-	  <EnumMember name="Tidal Tempest" />
-	  <EnumMember name="Quartz Quadrant" />
-	  <EnumMember name="Wacky Workbench" />
-	  <EnumMember name="Stardust Speedway" />
-	  <EnumMember name="Metallic Madness" />
-	  <EnumMember name="Special Zone 1" />
-	  <EnumMember name="Special Zone 2" />
-	  <EnumMember name="Special Zone 3" />
-	  <EnumMember name="Special Zone 4" />
-	  <EnumMember name="Special Zone 5" />
-	  <EnumMember name="Special Zone 6" />
-	  <EnumMember name="Special Zone 7" />
-	  <EnumMember name="Sonic CD" />
+      <EnumMember name="Palmtree Panic" />
+      <EnumMember name="Collision Chaos" />
+      <EnumMember name="Tidal Tempest" />
+      <EnumMember name="Quartz Quadrant" />
+      <EnumMember name="Wacky Workbench" />
+      <EnumMember name="Stardust Speedway" />
+      <EnumMember name="Metallic Madness" />
+      <EnumMember name="Special Zone 1" />
+      <EnumMember name="Special Zone 2" />
+      <EnumMember name="Special Zone 3" />
+      <EnumMember name="Special Zone 4" />
+      <EnumMember name="Special Zone 5" />
+      <EnumMember name="Special Zone 6" />
+      <EnumMember name="Special Zone 7" />
+      <EnumMember name="Sonic CD" />
     </Enum>
   </Enums>
   <ImageSets>

@@ -11,28 +11,27 @@ namespace S1ObjectDefinitions.Global
 		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(222, 239, 16, 16), -8, -8);
 			
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
-				"How tall the Plane Switch will be.", null, new Dictionary<string, int>
-				{
-					{ "4 Nodes", 0 },
-					{ "8 Nodes", 1 },
-					{ "16 Nodes", 2 },
-					{ "32 Nodes", 3 }
-				},
-				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				"How tall the Plane Switch should be.", null,
+				(obj) => (obj.PropertyValue + 1),
+				(obj, value) => obj.PropertyValue = (byte)(Math.Min((int)value - 1, 0)));
 		}
 		
-		// this obj doesn't have much reason to exist, so... maybe?
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {3, 5, 7, 9, 11}); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 3; }
+		}
+		
+		// this obj doesn't have much reason to exist, so...
 		public override bool Hidden
 		{
 			get { return true; }
@@ -50,7 +49,7 @@ namespace S1ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype + 1) + " Nodes";
 		}
 
 		public override Sprite Image
@@ -65,8 +64,11 @@ namespace S1ObjectDefinitions.Global
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			int count = Math.Max((1 << ((obj.PropertyValue & 3) + 2)), 1);
-			int sy = -(((count) * 16) / 2) + 8;
+			if (obj.PropertyValue <= 1)
+				return sprite;
+			
+			int count = obj.PropertyValue + 1;
+			int sy = -(count * 8) + 8;
 			List<Sprite> sprs = new List<Sprite>();
 			for (int i = 0; i < count; i++)
 				sprs.Add(new Sprite(sprite, 0, sy + (i * 16)));

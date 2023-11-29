@@ -11,7 +11,7 @@
   <Enums>
     <Enum name="pbonus"> <!-- p much just the normal "booL" type except flipped and 2 instead of 1 -->
       <EnumMember name="True" />
-	  <!-- the code looks like a "not needed by sonic but needed by all other characters" type of thing is supposed to be prop val 1.. but the perfect bonus programming itself looks kind of off.. -->
+      <!-- the code looks like a "not needed by sonic but needed by all other characters" type of thing is supposed to be prop val 1.. but the perfect bonus programming itself looks kind of off.. -->
       <EnumMember name="False" value="2" />
     </Enum>
   </Enums>

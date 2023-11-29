@@ -40,7 +40,7 @@ namespace S1ObjectDefinitions.MZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 4 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 4}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

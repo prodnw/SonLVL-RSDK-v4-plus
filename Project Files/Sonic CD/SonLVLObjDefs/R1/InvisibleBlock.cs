@@ -45,14 +45,14 @@ namespace SCDObjectDefinitions.R1
 			sprite = new Sprite(frame, new Sprite(bitmap, -16, -16));
 			
 			properties[0] = new PropertySpec("Climbable", typeof(bool), "Extended",
-				"Origins Only. If Knuckles should be able to climb this object.", null,
+				"Origins only. If Knuckles should be able to climb this object.", null,
 				(obj) => obj.PropertyValue == 0,
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0 : 1));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 
 		public override PropertySpec[] CustomProperties

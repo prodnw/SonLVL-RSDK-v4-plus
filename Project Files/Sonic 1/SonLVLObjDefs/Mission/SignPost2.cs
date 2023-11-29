@@ -36,7 +36,7 @@ namespace S1ObjectDefinitions.Mission
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); } // we're not putting Follow Bounds in here because it's not really used anyways
+			get { return new ReadOnlyCollection<byte>(new byte[0]); } // we're not putting Follow Bounds in here because it's not really used anyways
 		}
 		
 		public override PropertySpec[] CustomProperties

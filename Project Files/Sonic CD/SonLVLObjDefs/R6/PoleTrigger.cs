@@ -22,7 +22,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0x18, 0x19, 0x1a, 0x1b, 0x1c }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0x18, 0x19, 0x1a, 0x1b, 0x1c}); }
 		}
 		
 		public override byte DefaultSubtype

@@ -100,7 +100,7 @@ namespace S1ObjectDefinitions.SLZ
 		// default subtypes can't really set dir so i'm not 100% sure on this.. but its' better than nothing ig?
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

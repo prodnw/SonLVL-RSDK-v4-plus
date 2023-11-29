@@ -38,7 +38,7 @@ namespace SCDObjectDefinitions.TAttack
 			sprites[7] = new Sprite(frames[0], frames[11], frames[13]);
 			
 			properties[0] = new PropertySpec("Round", typeof(int), "Extended",
-                "Which Round this Icon is for.", null, new Dictionary<string, int>
+				"Which Round this Icon is for.", null, new Dictionary<string, int>
 				{
 					{ "Palmtree Panic", 0 },
 					{ "Collision Chaos", 1 },
@@ -49,8 +49,8 @@ namespace SCDObjectDefinitions.TAttack
 					{ "Metallic Madness", 6 },
 					{ "Total Time", 7 }
 				},
-                (obj) => obj.PropertyValue,
-                (obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => (int)obj.PropertyValue,
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

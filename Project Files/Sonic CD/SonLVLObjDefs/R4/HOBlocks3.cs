@@ -34,9 +34,9 @@ namespace SCDObjectDefinitions.R4
 			}
 			
 			sprites[0] = new Sprite(block, -16, -16);
-			sprites[1] = new Sprite(new Sprite[] { new Sprite(block, -32, -16), new Sprite(block, 0, -16) });
-			sprites[2] = new Sprite(new Sprite[] { new Sprite(block, -48, -16), new Sprite(block, -16, -16), new Sprite(block, 16, -16) });
-			sprites[3] = new Sprite(new Sprite[] { new Sprite(block, -64, -16), new Sprite(block, -32, -16), new Sprite(block, 0, -16), new Sprite(block, 32, -16) });
+			sprites[1] = new Sprite(new Sprite[] {new Sprite(block, -32, -16), new Sprite(block, 0, -16)});
+			sprites[2] = new Sprite(new Sprite[] {new Sprite(block, -48, -16), new Sprite(block, -16, -16), new Sprite(block, 16, -16)});
+			sprites[3] = new Sprite(new Sprite[] {new Sprite(block, -64, -16), new Sprite(block, -32, -16), new Sprite(block, 0, -16), new Sprite(block, 32, -16)});
 			
 			// (these lines are kind of useless tbh, you can hardly even see them..)
 			int[] amplitudes = {0x800, 0x1000, 0x1800, 0x2000};

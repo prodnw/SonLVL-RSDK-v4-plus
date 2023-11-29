@@ -36,6 +36,6 @@
     <Subtype id="02" name="Frame 3" image="frame3" />
     <Subtype id="03" name="Frame 4" image="frame4" />
     <Subtype id="04" name="Frame 5" image="frame5" />
-	<Subtype id="05" name="Frame 5 (Follow water surface)" image="frame5" />
+    <Subtype id="05" name="Frame 5 (Follow water surface)" image="frame5" />
   </Subtypes>
 </ObjDef>

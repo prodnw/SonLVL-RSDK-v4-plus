@@ -44,7 +44,7 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
 		public override string SubtypeName(byte subtype)

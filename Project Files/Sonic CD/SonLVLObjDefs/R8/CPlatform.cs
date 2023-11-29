@@ -23,7 +23,7 @@ namespace SCDObjectDefinitions.R8
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 6, 8, 10, 12 }); } // assorted starting values :D
+			get { return new ReadOnlyCollection<byte>(new byte[] {4, 6, 8, 10, 12}); } // assorted starting values :D
 		}
 		
 		public override byte DefaultSubtype

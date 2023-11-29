@@ -106,7 +106,7 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 6, 1, 7, 8, 2, 3, 9, 4, 10, 11, 5, 12, 13, 0x85, 0x8A, 0x8F, 0x94, 0x99 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 6, 1, 7, 8, 2, 3, 9, 4, 10, 11, 5, 12, 13, 0x85, 0x8A, 0x8F, 0x94, 0x99}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

@@ -57,7 +57,7 @@ namespace S2ObjectDefinitions.Global
 		{
 			// moving spikes are iffy, in ported zones they use the top bit while in new scenes (hpz, probably some origins missions) they use the 3rd bit
 			// since most levels use the top bit, let's stick with that
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 0x80, 0x81, 0x82, 0x83 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 0x80, 0x81, 0x82, 0x83}); }
 		}
 
 		public override PropertySpec[] CustomProperties

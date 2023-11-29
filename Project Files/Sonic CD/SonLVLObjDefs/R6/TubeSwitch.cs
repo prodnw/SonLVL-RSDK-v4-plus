@@ -48,7 +48,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 9, 10, 11, 5, 6, 8, 7, 12 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 9, 10, 11, 5, 6, 8, 7, 12}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

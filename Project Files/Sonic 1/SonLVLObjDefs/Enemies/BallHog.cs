@@ -36,7 +36,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 6, 0x86, 7, 0x87, 8,0x88 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {6, 0x86, 7, 0x87, 8, 0x88}); }
 		}
 		
 		public override byte DefaultSubtype

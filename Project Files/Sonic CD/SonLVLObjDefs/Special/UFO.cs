@@ -10,7 +10,7 @@ namespace SCDObjectDefinitions.Special
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
 		private readonly Sprite[] sprites = new Sprite[3];
-		private ReadOnlyCollection<byte> subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2 });
+		private ReadOnlyCollection<byte> subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2});
 		
 		public override void Init(ObjectData data)
 		{

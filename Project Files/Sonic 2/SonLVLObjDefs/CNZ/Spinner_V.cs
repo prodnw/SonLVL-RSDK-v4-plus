@@ -41,7 +41,7 @@ namespace S2ObjectDefinitions.CNZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2, 4, 6, 1, 3, 5, 7 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2, 4, 6, 1, 3, 5, 7}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

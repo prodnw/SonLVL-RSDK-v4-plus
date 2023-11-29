@@ -24,7 +24,7 @@
   </Enums>
   <ImageSets>
     <ImageSet id="bigbomb">
-	  <!-- everywhere else i've seen doesn't flip these, but they start facing right in-game so let's show that here too -->
+      <!-- everything else i've seen (in terms of other MMZ maps online-) doesn't flip these, but they start facing right in-game so let's show that here too -->
       <ImageRef image="body" xflip="AlwaysFlip" />
       <ImageRef image="legs" xflip="AlwaysFlip" />
       <ImageRef image="fuse" xflip="AlwaysFlip" />

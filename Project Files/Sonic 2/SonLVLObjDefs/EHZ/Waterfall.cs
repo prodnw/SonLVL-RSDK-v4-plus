@@ -62,7 +62,7 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 3, 8, 5, 7, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 3, 8, 5, 7, 1}); }
 		}
 		
 		public override byte DefaultSubtype

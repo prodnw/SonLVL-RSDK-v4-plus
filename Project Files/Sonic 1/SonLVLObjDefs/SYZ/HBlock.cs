@@ -7,43 +7,97 @@ namespace S1ObjectDefinitions.SYZ
 {
 	class HBlock : ObjectDefinition
 	{
-		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite sprite;
+		private PropertySpec[] properties = new PropertySpec[2];
+		private Sprite[] sprites = new Sprite[5];
 		private Sprite[] debug = new Sprite[2];
 		
 		public override void Init(ObjectData data)
 		{
-			sprite = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 34, 32, 32), -16, -16);
+			sprites[4] = new Sprite(LevelData.GetSpriteSheet("SYZ/Objects.gif").GetSection(119, 34, 32, 32), -16, -16);
+			
+			int[] offsets = {64, 32, -32, -64};
+			for (int i = 0; i < offsets.Length; i++)
+			{
+				sprites[i] = new Sprite(sprites[4], offsets[i], 0);
+			}
 			
 			// tagging this area withLevelData.ColorWhite
 			
-			BitmapBits bitmap = new BitmapBits(161, 33);
-			bitmap.DrawRectangle(6, 0, 0, 31, 31); // left box
-			bitmap.DrawRectangle(6, 128, 0, 31, 31); // right box
-			bitmap.DrawLine(6, 16, 16, 144, 16);
-			debug[0] = new Sprite(bitmap, -80, -16);
+			BitmapBits bitmap = new BitmapBits(129, 2);
+			bitmap.DrawLine(6, 0, 0, 128, 0);
+			debug[0] = new Sprite(bitmap, -64, 0);
 			
-			bitmap = new BitmapBits(97, 33);
-			bitmap.DrawRectangle(6, 0, 0, 31, 31); // left box
-			bitmap.DrawRectangle(6, 64, 0, 31, 31); // right box
-			bitmap.DrawLine(6, 16, 16, 80, 16);
-			debug[1] = new Sprite(bitmap, -48, -16);
+			bitmap = new BitmapBits(65, 2);
+			bitmap.DrawLine(6, 0, 0, 64, 0);
+			debug[1] = new Sprite(bitmap, -32, 0);
 			
-			properties[0] = new PropertySpec("Range", typeof(int), "Extended",
+			// i'm sure there's a better way to do this but i've been on this for like an hour and still can't think of anything better, so
+			// (i give up-)
+			
+			Dictionary<byte, byte> startfrom = new Dictionary<byte, byte>
+			{
+				{0, 3},
+				{1, 2}
+			};
+			
+			properties[0] = new PropertySpec("Start From", typeof(int), "Extended", // well technically yeah it doesn't really start from here but this is still cleaner imo
+				"Which side this Block should start from.", null, new Dictionary<string, int>
+				{
+					{ "Right", 0 },
+					{ "Left", 1 }
+				},
+				(obj) => (startfrom.ContainsKey(obj.PropertyValue)) ? 0 : 1,
+				(obj, value) => {
+						int val = (int)value;
+						if (obj.PropertyValue > 3)
+							obj.PropertyValue = 0;
+						if (val == 0)
+						{
+							if (!startfrom.ContainsKey(obj.PropertyValue))
+								obj.PropertyValue = startfrom.GetKey(obj.PropertyValue);
+						}
+						else
+						{
+							if (startfrom.ContainsKey(obj.PropertyValue))
+								obj.PropertyValue = startfrom[obj.PropertyValue];
+						}
+					}
+				);
+			
+			Dictionary<byte, byte> distance = new Dictionary<byte, byte>
+			{
+				{0, 1},
+				{3, 2}
+			};
+			
+			properties[1] = new PropertySpec("Distance", typeof(int), "Extended",
 				"The distance that this Block should travel.", null, new Dictionary<string, int>
 				{
 					{ "Far", 0 },
-					{ "Close", 1 },
-					{ "Close (Reverse)", 2 },
-					{ "Far (Reverse)", 3 }
+					{ "Close", 1 }
 				},
-				(obj) => obj.PropertyValue & 3,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => (distance.ContainsKey(obj.PropertyValue)) ? 0 : 1,
+				(obj, value) => {
+						int val = (int)value;
+						if (obj.PropertyValue > 3)
+							obj.PropertyValue = 0;
+						if (val == 0)
+						{
+							if (!distance.ContainsKey(obj.PropertyValue))
+								obj.PropertyValue = distance.GetKey(obj.PropertyValue);
+						}
+						else
+						{
+							if (distance.ContainsKey(obj.PropertyValue))
+								obj.PropertyValue = distance[obj.PropertyValue];
+						}
+					}
+				);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -56,27 +110,27 @@ namespace S1ObjectDefinitions.SYZ
 			// names sound weird but i can't think of much better
 			switch (subtype)
 			{
-				case 0: return "Far Movement";
-				case 2: return "Close Movement";
-				case 1: return "Far Movement, Reverse";
-				case 3: return "Close Movement, Reverse";
-				default: return "Unknown";
+				case 0: return "Start From Right (Far)";
+				case 1: return "Start From Right";
+				case 2: return "Start From Left";
+				case 3: return "Start From Left (Far)";
+				default: return "Static";
 			}
 		}
 
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[4]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[4];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[(obj.PropertyValue <= 3) ? obj.PropertyValue : 4];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

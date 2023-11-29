@@ -75,7 +75,7 @@ namespace S2ObjectDefinitions.OOZ
 				
 				BitmapBits dbg = new BitmapBits(91, 91);
 				dbg.DrawLine(6, 45, 45, debugInfo[inType * 2] * 45 + 45, debugInfo[(inType * 2) + 1] * 45 + 45); // LevelData.ColorWhite
-				dbg.DrawLine(6, 45, 45, debugInfo[outType * 2] * 32 + 45, debugInfo[(outType * 2) + 1] * 32 + 45);
+				dbg.DrawArrow(6, 45, 45, debugInfo[outType * 2] * 38 + 45, debugInfo[(outType * 2) + 1] * 38 + 45);
 				debug[i] = new Sprite(dbg, -45, -45);
 			}
 			
@@ -102,7 +102,7 @@ namespace S2ObjectDefinitions.OOZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -136,6 +136,18 @@ namespace S2ObjectDefinitions.OOZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return debug[obj.PropertyValue & 7];
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

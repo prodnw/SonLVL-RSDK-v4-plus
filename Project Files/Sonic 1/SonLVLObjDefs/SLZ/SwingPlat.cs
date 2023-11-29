@@ -30,7 +30,7 @@ namespace S1ObjectDefinitions.SLZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 4, 5, 6, 7, 8, 9, 10 }); } // it can be any value, but why not give a few starting ones
+			get { return new ReadOnlyCollection<byte>(new byte[] {4, 5, 6, 7, 8, 9, 10}); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype

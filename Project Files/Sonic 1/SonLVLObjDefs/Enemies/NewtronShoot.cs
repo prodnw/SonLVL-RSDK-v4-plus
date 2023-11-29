@@ -41,7 +41,7 @@ namespace S1ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); } // not putting Fire Direction here because it needs val1 to be set
+			get { return new ReadOnlyCollection<byte>(new byte[0]); } // not putting Fire Direction here because it needs val1 to be set
 		}
 		
 		public override PropertySpec[] CustomProperties

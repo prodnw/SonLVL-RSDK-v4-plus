@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.MPZ
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			// it would be nice to have default subtypes.. but this object doesn't even use its property value, so
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override PropertySpec[] CustomProperties

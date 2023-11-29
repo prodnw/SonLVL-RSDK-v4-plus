@@ -31,7 +31,7 @@ namespace S2ObjectDefinitions.OOZ
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);
 			
 			// i don't think this is ever even used? the hitbox doesn't really line up either, but may as well..
-			properties[1] = new PropertySpec("Solidity", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Collision", typeof(int), "Extended",
 				"What collision type this platform should have.", null, new Dictionary<string, int>
 				{
 					{ "Top Solid", 0 },
@@ -43,7 +43,7 @@ namespace S2ObjectDefinitions.OOZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

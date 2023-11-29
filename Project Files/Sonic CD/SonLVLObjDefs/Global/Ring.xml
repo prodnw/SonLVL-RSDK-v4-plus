@@ -16,6 +16,6 @@
   </Enums>
   <Subtypes>
     <Subtype id="00" name="High Plane" image="ring" />
-	<Subtype id="01" name="Low Plane" image="ring" />
+    <Subtype id="01" name="Low Plane" image="ring" />
   </Subtypes>
 </ObjDef>

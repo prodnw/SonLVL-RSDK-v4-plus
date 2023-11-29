@@ -29,12 +29,12 @@
   <Enums>
     <Enum name="zones">
       <EnumMember name="Zone 1" />
-	  <EnumMember name="Zone 2" />
-	  <EnumMember name="Zone 3" />
-	  <EnumMember name="Zone 4" />
-	  <EnumMember name="Zone 5" />
-	  <EnumMember name="Zone 6" />
-	  <EnumMember name="Zone 7" />
+      <EnumMember name="Zone 2" />
+      <EnumMember name="Zone 3" />
+      <EnumMember name="Zone 4" />
+      <EnumMember name="Zone 5" />
+      <EnumMember name="Zone 6" />
+      <EnumMember name="Zone 7" />
     </Enum>
   </Enums>
   <Subtypes>

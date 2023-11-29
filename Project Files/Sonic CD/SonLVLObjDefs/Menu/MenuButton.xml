@@ -44,63 +44,63 @@
   <Enums>
     <Enum name="buttons">
       <EnumMember name="None" />
-	  <EnumMember name="Start Game" />
-	  <EnumMember name="Time Attack" />
-	  <EnumMember name="Achievements" />
-	  <EnumMember name="Leaderboards" />
-	  <EnumMember name="Help And Options" />
-	  <EnumMember name="Extras" />
-	  <EnumMember name="Buy Full Game" /> <!-- Unlock Full Game on Steam -->
-	  <EnumMember name="Unlock Full Game" /> <!-- Return To Arcade on Steam -->
-	  <EnumMember name="Exit" />  <!-- Exit Game on Steam -->
-	  <EnumMember name="Soundtrack" />
-	  <EnumMember name="More Games" /> <!-- invalid frame on Steam -->
+      <EnumMember name="Start Game" />
+      <EnumMember name="Time Attack" />
+      <EnumMember name="Achievements" />
+      <EnumMember name="Leaderboards" />
+      <EnumMember name="Help And Options" />
+      <EnumMember name="Extras" />
+      <EnumMember name="Buy Full Game" /> <!-- Unlock Full Game on Steam -->
+      <EnumMember name="Unlock Full Game" /> <!-- Return To Arcade on Steam -->
+      <EnumMember name="Exit" />  <!-- Exit Game on Steam -->
+      <EnumMember name="Soundtrack" />
+      <EnumMember name="More Games" /> <!-- invalid frame on Steam -->
     </Enum>
   </Enums>
   <ImageSets>
     <ImageSet id="startgame">
       <ImageRef image="button" />
-	  <ImageRef image="startgame" />
+      <ImageRef image="startgame" />
     </ImageSet>
     <ImageSet id="timeattack">
       <ImageRef image="button" />
-	  <ImageRef image="timeattack" />
+      <ImageRef image="timeattack" />
     </ImageSet>
     <ImageSet id="achievements">
       <ImageRef image="button" />
-	  <ImageRef image="achievements" />
+      <ImageRef image="achievements" />
     </ImageSet>
     <ImageSet id="leaderboards">
       <ImageRef image="button" />
-	  <ImageRef image="leaderboards" />
+      <ImageRef image="leaderboards" />
     </ImageSet>
     <ImageSet id="helpoptions">
       <ImageRef image="button" />
-	  <ImageRef image="helpoptions" />
+      <ImageRef image="helpoptions" />
     </ImageSet>
     <ImageSet id="extras">
       <ImageRef image="button" />
-	  <ImageRef image="extras" />
+      <ImageRef image="extras" />
     </ImageSet>
     <ImageSet id="buyfullgame">
       <ImageRef image="button" />
-	  <ImageRef image="buyfullgame" />
+      <ImageRef image="buyfullgame" />
     </ImageSet>
     <ImageSet id="unlockfullgame">
       <ImageRef image="button" />
-	  <ImageRef image="unlockfullgame" />
+      <ImageRef image="unlockfullgame" />
     </ImageSet>
     <ImageSet id="exit">
       <ImageRef image="button" />
-	  <ImageRef image="exit" />
+      <ImageRef image="exit" />
     </ImageSet>
     <ImageSet id="soundtrack">
       <ImageRef image="button" />
-	  <ImageRef image="soundtrack" />
+      <ImageRef image="soundtrack" />
     </ImageSet>
     <ImageSet id="moregames">
       <ImageRef image="button" />
-	  <ImageRef image="moregames" />
+      <ImageRef image="moregames" />
     </ImageSet>
   </ImageSets>
   <Subtypes>

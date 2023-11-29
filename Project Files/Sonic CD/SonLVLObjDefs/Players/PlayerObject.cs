@@ -31,7 +31,7 @@ namespace SCDObjectDefinitions.Players
 			}
 			catch
 			{
-				// one or more of the ani files doesn't exist, we're likely on a pre-plus file that doesn't have knux or amy
+				// one or more of the ani files doesn't exist, we're likely on a pre-plus file that doesn't have knux or amy (so we don't have character-specific spawns)
 				
 				// let's clear all sprites after Sonic
 				for (int i = 1; i < 4; i++)
@@ -41,7 +41,7 @@ namespace SCDObjectDefinitions.Players
 			}
 			
 			properties[0] = new PropertySpec("Character", typeof(int), "Extended",
-				"Which characters should start here. Only has effect in Origins.", null, new Dictionary<string, int>
+				"Origins only. Which character should start here.", null, new Dictionary<string, int>
 				{
 					{ "Default", 0 },
 					{ "Tails", 1 },
@@ -54,7 +54,7 @@ namespace SCDObjectDefinitions.Players
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 5 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 5}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -81,7 +81,7 @@ namespace SCDObjectDefinitions.Players
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			// looks really goofy lol
+			// looks really goofy on standalone lol
 			int index = (subtype > 2) ? 3 : subtype;
 			return sprites[(sprites[index] != null) ? index : 0];
 		}

@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.WFZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 0x10, 0x11 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 0x10, 0x11}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

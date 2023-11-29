@@ -58,7 +58,7 @@ namespace S1ObjectDefinitions.MZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 0x10, 0x11, 0x12 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 0x10, 0x11, 0x12}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

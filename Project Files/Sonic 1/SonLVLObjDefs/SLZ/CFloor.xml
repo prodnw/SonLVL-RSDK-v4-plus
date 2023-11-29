@@ -16,10 +16,10 @@
   </Enums>
   <!-- i kind of want to make a Subtypes section but i'm not sure..
        only the first bit in the prop val does anything
-	   in the scene, however, most platforms have their top bit set
-	   it looks like it did something in the original game, but it doesn't mean much in 2013
-	   so.. should we include that bit in the subtypes, even if it does nothing? or do we just want 00/01 as subtypes and not 80/81.. i'm not sure
-	   for now i'll stick with 00/01, but maybe i'll change it in the future?-->
+       in the scene, however, most platforms have their top bit set
+       it looks like it did something in the original game, but it doesn't mean much in 2013
+       so.. should we include that bit in the subtypes, even if it does nothing? or do we just want 00/01 as subtypes and not 80/81.. i'm not sure
+       for now i'll stick with 00/01, but maybe i'll change it in the future?-->
   <Subtypes>
     <Subtype id="00" name="Collapse From Left" image="frame" />
     <Subtype id="01" name="Collapse From Bottom" image="frame" />

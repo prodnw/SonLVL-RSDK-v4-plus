@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); } // not including Static here because it doesn't matter most of the time
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); } // not including Static here because it doesn't matter most of the time
 		}
 		
 		public override PropertySpec[] CustomProperties

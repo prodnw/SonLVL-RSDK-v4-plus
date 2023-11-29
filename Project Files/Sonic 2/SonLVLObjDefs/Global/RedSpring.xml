@@ -72,7 +72,7 @@
     </DisplayOption>
     <DisplayOption>
       <Condition property="Direction" value="Down Right" />
-	  <ImageSetRef set="downr" />
+      <ImageSetRef set="downr" />
     </DisplayOption>
     <DisplayOption>
       <Condition property="Direction" value="Down Left" />
@@ -86,10 +86,10 @@
     <Subtype id="03" name="Down" image="down" />
     <Subtype id="04" name="Up Right" image="upr" />
     <Subtype id="05" name="Up Left" image="upl" />
-	<Subtype id="06" name="Down Right">
+    <Subtype id="06" name="Down Right">
       <ImageSetRef set="downr" />
     </Subtype>
-	<Subtype id="07" name="Down Left">
+    <Subtype id="07" name="Down Left">
       <ImageSetRef set="downl" />
     </Subtype>
     <Subtype id="09" name="Right (Enabled in Air)" image="right" />

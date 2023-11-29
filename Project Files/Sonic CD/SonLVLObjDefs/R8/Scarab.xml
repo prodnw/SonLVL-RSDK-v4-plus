@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-	<!-- If only there was a facing left version of holding an object, then "Direction" and "Behaviour" could be separate things.. -->
+    <!-- If only there was a facing left version of holding a monitor, then "Direction" and "Behaviour" could be separate things.. -->
     <Property name="Direction" description="How direction this Scarab should face." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>

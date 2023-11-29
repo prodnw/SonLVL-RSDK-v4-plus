@@ -1,5 +1,7 @@
 using SonicRetro.SonLVL.API;
-using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 
 namespace S2ObjectDefinitions.DEZ
 {
@@ -141,9 +143,9 @@ namespace S2ObjectDefinitions.DEZ
 			sprite = GetFrame();
 		}
 		
-		public override System.Collections.ObjectModel.ReadOnlyCollection<byte> Subtypes
+		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new System.Collections.ObjectModel.ReadOnlyCollection<byte>(new System.Collections.Generic.List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override bool Hidden

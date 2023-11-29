@@ -56,7 +56,7 @@ namespace S2ObjectDefinitions.Global
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 0x80, 0x84, 0x85 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 0x80, 0x84, 0x85}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

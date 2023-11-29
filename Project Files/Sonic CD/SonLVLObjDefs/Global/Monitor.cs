@@ -73,7 +73,7 @@ namespace SCDObjectDefinitions.Global
 					{ "Amy 1UP", 10 }
 				};
 				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 });
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21});
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace SCDObjectDefinitions.Global
 					{ "Super", 8 }
 				};
 				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 });
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
 			}
 			
 			// this part is kind of scuffed.. it sure would've been easier it plane was just the top 4 bits instead of whatever this is

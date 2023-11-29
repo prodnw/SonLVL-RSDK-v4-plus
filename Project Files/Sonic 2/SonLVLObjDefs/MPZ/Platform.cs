@@ -82,7 +82,7 @@ namespace S2ObjectDefinitions.MPZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new List<byte>()); }
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override string SubtypeName(byte subtype)
@@ -133,7 +133,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

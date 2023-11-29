@@ -14,11 +14,11 @@
   <Enums>
     <Enum name="behaviours">
       <EnumMember name="Solid" />
-	  <EnumMember name="Entrance (from Top)" />
-	  <EnumMember name="Entrance (From Left)" />
-	  <EnumMember name="Entrance (From Right)" />
-	  <EnumMember name="Entrance (From Bottom)" />
-	  <EnumMember name="Entrance (From Right, Small)" />
+      <EnumMember name="Entrance (From Top)" />
+      <EnumMember name="Entrance (From Left)" />
+      <EnumMember name="Entrance (From Right)" />
+      <EnumMember name="Entrance (From Bottom)" />
+      <EnumMember name="Entrance (From Right, Small)" />
     </Enum>
   </Enums>
   <Subtypes>

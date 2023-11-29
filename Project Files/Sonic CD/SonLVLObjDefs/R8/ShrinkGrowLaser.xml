@@ -19,6 +19,6 @@
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Shrink Laser" image="shrink" />
-	<Subtype id="01" name="Growth Laser" image="grow" />
+    <Subtype id="01" name="Growth Laser" image="grow" />
   </Subtypes>
 </ObjDef>

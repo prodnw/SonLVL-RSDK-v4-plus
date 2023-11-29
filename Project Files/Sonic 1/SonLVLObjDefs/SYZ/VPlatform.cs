@@ -42,7 +42,7 @@ namespace S1ObjectDefinitions.SYZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -75,7 +75,7 @@ namespace S1ObjectDefinitions.SYZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[((obj.PropertyValue & 1) == 1) ? 1 : 0];
+			return sprites[obj.PropertyValue & 1];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

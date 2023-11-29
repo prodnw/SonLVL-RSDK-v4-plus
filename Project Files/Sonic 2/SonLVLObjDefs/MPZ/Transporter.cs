@@ -49,7 +49,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 2, 6, 11, 12, 0x11, 0x13, 0x14, 5, 7, 9, 8, 10 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2, 6, 11, 12, 0x11, 0x13, 0x14, 5, 7, 9, 8, 10}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

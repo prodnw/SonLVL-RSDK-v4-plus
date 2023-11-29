@@ -36,7 +36,7 @@
     <Subtype id="00" name="Eggmobile">
       <ImageSetRef set="eggmobile" />
     </Subtype>
-	<Subtype id="01" name="Seat">
+    <Subtype id="01" name="Seat">
       <ImageSetRef set="seat" />
     </Subtype>
   </Subtypes>

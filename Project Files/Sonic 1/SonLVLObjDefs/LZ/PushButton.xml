@@ -6,18 +6,18 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Behaviour" description="How this button should behave." type="types" startbit="0" length="8" />
+    <Property name="Trigger" description="What effect this button should trigger." type="types" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="types">
       <EnumMember name="Generic" />
-	  <EnumMember name="Open LZ3 Path" />
-	  <EnumMember name="Swap Belt Platform Dir" value="3" />
+      <EnumMember name="Open LZ3 Path" />
+      <EnumMember name="Swap Belt Platform Dir" value="3" />
     </Enum>
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Generic" image="button" />
-	<Subtype id="01" name="Open LZ3 Path" image="button" />
-	<Subtype id="03" name="Swap Belt Platform Dir" image="button" />
+    <Subtype id="01" name="Open LZ3 Path" image="button" />
+    <Subtype id="03" name="Swap Belt Platform Dir" image="button" />
   </Subtypes>
 </ObjDef>

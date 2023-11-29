@@ -51,7 +51,7 @@ namespace S2ObjectDefinitions.Credits
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

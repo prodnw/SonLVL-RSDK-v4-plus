@@ -24,15 +24,15 @@ namespace S1ObjectDefinitions.SYZ
 			properties[0] = new PropertySpec("Speed", typeof(int), "Extended",
 				"How fast this Spike should spin.", null, new Dictionary<string, int>
 				{
-					{ "Fast", 0 },
+					{ "Slow", 2 },
 					{ "Medium", 4 },
-					{ "Slow", 2 }
+					{ "Fast", 0 }
 				},
 				(obj) => obj.PropertyValue & 6,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~6) | (int)value));
 			
 			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
-				"Which side this Spike should start at.", null, new Dictionary<string, int>
+				"Which side this Spike should start from.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
 					{ "Left", 1 }
@@ -43,7 +43,7 @@ namespace S1ObjectDefinitions.SYZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] { 0, 1, 4, 5, 2, 3 }); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 4, 5, 2, 3}); }
 		}
 		
 		public override PropertySpec[] CustomProperties

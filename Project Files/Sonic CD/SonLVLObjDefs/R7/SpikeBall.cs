@@ -15,7 +15,7 @@ namespace SCDObjectDefinitions.R7
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(1, 199, 32, 32), -16, -16);
 			
-			// btw even if every time period has its own movement values, they all multiply to be the same thing (ie 2 * 24 and 4 * 12 and 1 * 48 all end up as 48)
+			// btw even if every time period has its own movement values, they all multiply to be the same thing (2 * 24 and 4 * 12 and 1 * 48 all end up as 48)
 			
 			// Horizontal
 			BitmapBits bitmap = new BitmapBits(97, 2);

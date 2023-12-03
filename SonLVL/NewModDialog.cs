@@ -15,13 +15,16 @@ namespace SonicRetro.SonLVL.GUI
 				case EngineVersion.V3:
 					checkBox1.Text = "Disable Save INI Override";
 					checkBox1.Visible = true;
+					forceSonic1.Visible = false;
 					break;
 				case EngineVersion.V4:
 					checkBox1.Text = "Skip Start Menu";
 					checkBox1.Visible = true;
+					forceSonic1.Visible = true;
 					break;
 				default:
 					checkBox1.Visible = false;
+					forceSonic1.Visible = false;
 					break;
 			}
 		}
@@ -66,6 +69,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case EngineVersion.V4:
 						newMod.SkipStartMenu = checkBox1.Checked;
+						newMod.ForceSonic1 = forceSonic1.Checked;
 						break;
 				}
 

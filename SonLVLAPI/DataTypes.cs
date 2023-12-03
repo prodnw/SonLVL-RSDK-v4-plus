@@ -906,6 +906,7 @@ namespace SonicRetro.SonLVL.API
 		public bool RedirectSaveRAM { get; set; }
 		public bool DisableSaveIniOverride { get; set; }
 		public bool SkipStartMenu { get; set; }
+		public bool ForceSonic1 { get; set; }
 
 		public static IEnumerable<string> GetModFiles(DirectoryInfo directoryInfo)
 		{

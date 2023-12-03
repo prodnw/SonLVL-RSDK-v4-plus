@@ -1103,7 +1103,7 @@ namespace SonicRetro.SonLVL.API
 			{ Tiles128x128.Block.Tile.Solidities.SolidTop, 0 },
 			{ Tiles128x128.Block.Tile.Solidities.SolidAllButTop, 1 },
 			{ Tiles128x128.Block.Tile.Solidities.SolidAll, 2 },
-			{ (Tiles128x128.Block.Tile.Solidities)4, 0 }
+			{ Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip, 0 }
 		};
 		public static void RedrawChunk(int chunk)
 		{

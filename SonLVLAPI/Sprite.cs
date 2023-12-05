@@ -227,6 +227,22 @@ namespace SonicRetro.SonLVL.API
 			strips.Sort();
 		}
 
+		public void Flip(RSDKv3_4.Tiles128x128.Block.Tile.Directions dir)
+		{
+			switch (dir)
+			{
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX:
+					Flip(true, false);
+					break;
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY:
+					Flip(false, true);
+					break;
+				case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY:
+					Flip(true, true);
+					break;
+			}
+		}
+
 		public BitmapBits GetBitmap()
 		{
 			BitmapBits result = new BitmapBits(Size);

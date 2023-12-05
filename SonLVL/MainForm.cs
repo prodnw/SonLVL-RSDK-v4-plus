@@ -440,11 +440,11 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					if (grp.Count > 1)
 					{
-						string basename = grp[0].name.Substring(0, grp[0].name.Length - grp.Skip(1).Max(a => a.name.Length));
+						string basename = grp[0].name.Substring(0, Math.Max(0, grp[0].name.Length - grp.Skip(1).Max(a => a.name.Length)));
 						var par2 = new ToolStripMenuItem(basename.Trim());
 						parent.DropDownItems.Add(par2);
 						foreach (var item in grp)
-							if (!string.IsNullOrEmpty(item.name))
+							if (item.name != null)
 							{
 								string name = item.name;
 								string text = item.name;
@@ -472,20 +472,9 @@ namespace SonicRetro.SonLVL.GUI
 			scriptFiles = new List<string>();
 			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
 				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
-			if (LevelData.ModFolder != null)
+			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
 			{
-				string modscr = null;
-				switch (LevelData.Game.RSDKVer)
-				{
-					case EngineVersion.V3:
-						modscr = Path.Combine(LevelData.ModFolder, "Data/Scripts");
-						break;
-					case EngineVersion.V4:
-						modscr = Path.Combine(LevelData.ModFolder, "Scripts");
-						break;
-				}
-				if (Directory.Exists(modscr))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), modscr), "*.txt").Where(a => !scriptFiles.Contains(a)));
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
 			}
 			objectScriptBox.AutoCompleteCustomSource.Clear();
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
@@ -2440,6 +2429,16 @@ namespace SonicRetro.SonLVL.GUI
 				case Keys.NumPad4:
 					if (e.Control)
 						CurrentTab = Tab.Art;
+					break;
+				case Keys.D5:
+				case Keys.NumPad5:
+					if (e.Control)
+						CurrentTab = Tab.Palette;
+					break;
+				case Keys.D6:
+				case Keys.NumPad6:
+					if (e.Control)
+						CurrentTab = Tab.Settings;
 					break;
 				case Keys.Y:
 					if (e.Control && undoSystem.CanRedo)

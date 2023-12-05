@@ -175,7 +175,8 @@ namespace SonicRetro.SonLVL
 		Foreground,
 		Background,
 		Art,
-		Palette
+		Palette,
+		Settings
 	}
 
 	public enum ArtTab

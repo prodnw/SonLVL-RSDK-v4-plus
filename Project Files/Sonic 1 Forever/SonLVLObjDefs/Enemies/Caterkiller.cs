@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace S1ObjectDefinitions.Enemies
+namespace S1FObjectDefinitions.Enemies
 {
 	class Caterkiller : ObjectDefinition
 	{

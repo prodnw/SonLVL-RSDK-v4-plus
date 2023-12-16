@@ -14,7 +14,7 @@ namespace S1FObjectDefinitions.GHZ
 		{
 			// #Forever - "BossRush" folder check
 			if (LevelData.StageInfo.folder.EndsWith("BossRush")) // not sure if we should keep using EndsWith since Forever is based off of pre-Origins? may as well keep it like this anyways though, in case they update it
-				sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(1, 1, 16, 16), -8, -8);
+				sprite = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(198, 233, 16, 16), -8, -8);
 			else
 				sprite = new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(1, 1, 16, 16), -8, -8);
 			

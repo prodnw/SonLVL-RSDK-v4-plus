@@ -4,7 +4,7 @@ using System;
 // mostly just projeciles and other basic renders which only need MBZ checks
 // sorted alphabetically
 
-namespace S1ObjectDefinitions.Enemies
+namespace S1FObjectDefinitions.Enemies
 {
 	class BallHogBomb : Enemies.Generic
 	{

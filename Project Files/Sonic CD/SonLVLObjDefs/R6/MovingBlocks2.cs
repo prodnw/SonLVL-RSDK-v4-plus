@@ -23,8 +23,7 @@ namespace SCDObjectDefinitions.R6
 			                new Sprite(block, 0, -64),
 			                new Sprite(block, 0, -32),
 			                new Sprite(block, 0,  32),
-			                new Sprite(block, 0,  64)
-			);
+			                new Sprite(block, 0,  64));
 			
 			bitmap = new BitmapBits(2, (4 * 32) + 1);
 			bitmap.DrawLine(6, 0, 0, 0, 4 * 32);

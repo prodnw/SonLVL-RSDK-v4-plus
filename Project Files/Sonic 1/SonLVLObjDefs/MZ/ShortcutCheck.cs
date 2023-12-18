@@ -13,8 +13,8 @@ namespace S1ObjectDefinitions.MZ
 		{
 			sprites[0] = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(239, 239, 16, 16), -8, -8);
 			
-			BitmapBits bitmap = new BitmapBits(33, 129);
-			bitmap.DrawRectangle(6, 0, 0, 32, 128); // LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(32, 128);
+			bitmap.DrawRectangle(6, 0, 0, 31, 127); // LevelData.ColorWhite
 			sprites[1] = new Sprite(sprites[0], new Sprite(bitmap, -16, -64));
 		}
 		

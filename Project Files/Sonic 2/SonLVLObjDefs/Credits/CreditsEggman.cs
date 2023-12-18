@@ -25,8 +25,8 @@ namespace S2ObjectDefinitions.Credits
 			sprites[8] = new Sprite(sheet.GetSection(1, 86, 16, 16), -8, -8);
 			sprites[9] = new Sprite(new Sprite(sheet.GetSection(52, 211, 170, 44), -85, -22), new Sprite(sheet.GetSection(128, 203, 12, 7), 38, -5)); // knux uses two frames
 			
-			properties[0] = new PropertySpec("Frame", typeof(bool), "Extended",
-				"Which sprite this prop will use.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
+				"Which sprite this object will use.", null, new Dictionary<string, int>
 				{
 					{ "Eggman - Juggling", 0 },
 					{ "Eggman - Tantrum", 1 },
@@ -43,8 +43,17 @@ namespace S2ObjectDefinitions.Credits
 				(obj, value) => {
 						obj.PropertyValue = (byte)((int)value);
 						
-						if (obj.PropertyValue == 9) ((V4ObjectEntry)obj).Frame = 20; // Knuckles needs object.frame set, otherwise reset it
-						else ((V4ObjectEntry)obj).Frame = 0;
+						// Knuckles needs object.frame and object.inkEffect set, otherwise reset them
+						if (obj.PropertyValue == 9)
+						{
+							((V4ObjectEntry)obj).Frame = 20;
+							((V4ObjectEntry)obj).InkEffect = RSDKv4.Scene.Entity.InkEffects.Add;
+						}
+						else
+						{
+							((V4ObjectEntry)obj).Frame = 0;
+							((V4ObjectEntry)obj).InkEffect = RSDKv4.Scene.Entity.InkEffects.None;
+						}
 					}
 				);
 		}

@@ -31,7 +31,7 @@ namespace S1ObjectDefinitions.Global
 			get { return 3; }
 		}
 		
-		// this obj doesn't have much reason to exist, so...
+		// this obj is unused and almost directly inferior to PSwitch_V's anyways, so..
 		public override bool Hidden
 		{
 			get { return true; }

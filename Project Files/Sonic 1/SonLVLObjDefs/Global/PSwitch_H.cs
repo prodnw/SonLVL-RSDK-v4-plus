@@ -26,7 +26,7 @@ namespace S1ObjectDefinitions.Global
 				sprites[index++] = new Sprite(sheet.GetSection(46 + (i * 17), 175, 16, 16), -8, -8);
 			}
 			
-			sprites[16] = new Sprite(sheet.GetSection(182, 141, 16, 16), -8, -8);
+			sprites[index++] = new Sprite(sheet.GetSection(182, 141, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[6];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",

@@ -43,7 +43,7 @@ namespace SCDObjectDefinitions.R8
 			bitmap.DrawRectangle(6, (32 + 32 + 24) + (24 + 24), 0, 24, 24);
 			outlines[2] = new Sprite(bitmap, -80, -8);
 			
-			// Taken from SpikePuzzle_Reset, just 
+			// Taken from the end of SpikePuzzle_Reset, with each ID subtracted by 1
 			int[,] patterns = {{0, 1, 0, 2, 0}, {0, 2, 0, 1, 0}};
 			for (int i = 0; i < 2; i++)
 			{

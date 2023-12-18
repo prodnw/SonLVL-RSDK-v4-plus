@@ -58,7 +58,7 @@ namespace SCDObjectDefinitions.R3
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6}); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 5, 6, 3, 4}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -94,7 +94,7 @@ namespace SCDObjectDefinitions.R3
 			if ((obj.PropertyValue == 0) || (obj.PropertyValue > 6))
 				return null;
 			
-			return debug[((obj.PropertyValue == 1) || (obj.PropertyValue == 2)) ? 0 : 1];
+			return debug[(obj.PropertyValue - 1) >> 1];
 		}
 	}
 }

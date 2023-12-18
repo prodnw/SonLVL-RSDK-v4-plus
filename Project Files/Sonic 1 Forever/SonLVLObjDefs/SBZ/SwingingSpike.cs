@@ -16,7 +16,7 @@ namespace S1FObjectDefinitions.SBZ
 			if (LevelData.StageInfo.folder.EndsWith("BossRush")) // not sure if we should keep using EndsWith since Forever is based off of pre-Origins? may as well keep it like this anyways though, in case they update it
 			{
 				BitmapBits sheet = LevelData.GetSpriteSheet("MBZ/Objects.gif");
-				sprites[0] = new Sprite(sheet.GetSection(76, 330, 30, 30), -8, -9); // (note the different offset)
+				sprites[0] = new Sprite(sheet.GetSection(76, 330, 16, 16), -8, -9); // (note the different offset)
 				sprites[1] = new Sprite(sheet.GetSection(93, 330, 16, 16), -8, -8);
 				sprites[2] = new Sprite(sheet.GetSection(44, 412, 48, 48), -24, -24);
 			}

@@ -109,6 +109,8 @@ namespace SCDObjectDefinitions.Global
 				},
 				(obj) => (obj.PropertyValue > n) ? n : 0,
 				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue > n) ? n : 0) + (int)value));
+			
+			// maybe there could be like a `Mode` thing here or something? not a real object property, but a way for the user to switch between Standalone and Plus monitor configs
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

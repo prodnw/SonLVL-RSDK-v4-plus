@@ -60,7 +60,7 @@ namespace S1ObjectDefinitions.SLZ
 		// unlike the main property, we can use normal directions here rather than angles, so let's do that
 		public override string SubtypeName(byte subtype)
 		{
-			string[] names = { "Left (Counter-Clockwise)", "Right (Counter-Clockwise)", "Downwards (Counter-Clockwise)", "Upwards (Counter-Clockwise)", 
+			string[] names = {"Left (Counter-Clockwise)", "Right (Counter-Clockwise)", "Downwards (Counter-Clockwise)", "Upwards (Counter-Clockwise)", 
 			                   "Right (Clockwise)", "Left (Clockwise)", "Upwards (Clockwise)", "Downwards (Clockwise)"};
 			return "Start From " + names[subtype & 7];
 		}

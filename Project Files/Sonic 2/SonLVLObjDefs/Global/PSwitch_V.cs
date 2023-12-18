@@ -11,11 +11,6 @@ namespace S2ObjectDefinitions.Global
 		private PropertySpec[] properties;
 		private readonly Sprite[] sprites = new Sprite[21];
 		
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
-		}
-
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Display.gif");
@@ -94,14 +89,20 @@ namespace S2ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 64,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~64) | (int)value));
 			
-			properties[6] = new PropertySpec("Grounded", typeof(int), "Extended",
-				"If only grounded players should be affected.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 128 }
-				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (int)value));
+			properties[6] = new PropertySpec("Grounded", typeof(bool), "Extended",
+				"If only grounded players should be affected.", null,
+				(obj) => (obj.PropertyValue > 128),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | ((bool)value ? 128 : 0)));
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties

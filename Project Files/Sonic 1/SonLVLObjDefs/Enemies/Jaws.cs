@@ -12,16 +12,10 @@ namespace S1ObjectDefinitions.Enemies
 		
 		public override void Init(ObjectData data)
 		{
-			switch (LevelData.StageInfo.folder[LevelData.StageInfo.folder.Length-1])
-			{
-				case '4':
-				default:
-					sprites[0] = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(1, 105, 48, 24), -16, -12);
-					break;
-				case '7':
-					sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 264, 48, 24), -16, -12);
-					break;
-			}
+			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(1, 264, 48, 24), -16, -12);
+			else
+				sprites[0] = new Sprite(LevelData.GetSpriteSheet("LZ/Objects.gif").GetSection(1, 105, 48, 24), -16, -12);
 			
 			sprites[1] = new Sprite(sprites[0], true, false);
 			

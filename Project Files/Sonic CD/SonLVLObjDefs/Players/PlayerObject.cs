@@ -17,7 +17,7 @@ namespace SCDObjectDefinitions.Players
 		{
 			try
 			{
-				string[] anis = new string[]{ "Sonic.ani", "Tails.ani", "Knuckles.ani", "Amy.ani" };
+				string[] anis = {"Sonic.ani", "Tails.ani", "Knuckles.ani", "Amy.ani"};
 				
 				for (int i = 0; i < anis.Length; i++)
 				{

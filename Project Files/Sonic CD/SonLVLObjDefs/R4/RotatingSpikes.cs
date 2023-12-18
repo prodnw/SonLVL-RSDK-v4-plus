@@ -75,5 +75,12 @@ namespace SCDObjectDefinitions.R4
 			overlay.DrawCircle(6, length, length, length); // LevelData.ColorWhite
 			return new Sprite(overlay, -length, -length);
 		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			Rectangle bounds = sprites[2].Bounds;
+			bounds.Offset(obj.X, obj.Y + (obj.PropertyValue * 16));
+			return bounds;
+		}
 	}
 }

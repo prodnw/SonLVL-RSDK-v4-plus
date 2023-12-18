@@ -81,11 +81,11 @@ namespace SCDObjectDefinitions.Special
 			short ymax = Math.Max(obj.Y, nodes.Max(a => a.Y));
 			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			if (obj.X != nodes[0].X || obj.Y != nodes[0].Y)
-				bitmap.DrawLine(LevelData.ColorWhite, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);
+				bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);
 			for (int i = 0; i < nodes.Count - 1; i++)
-				bitmap.DrawLine(LevelData.ColorYellow, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin);
+				bitmap.DrawLine(15, nodes[i].X - xmin, nodes[i].Y - ymin, nodes[i + 1].X - xmin, nodes[i + 1].Y - ymin);
 			if (nodes.Count > 2)
-				bitmap.DrawLine(LevelData.ColorYellow, nodes[nodes.Count - 1].X - xmin, nodes[nodes.Count - 1].Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);
+				bitmap.DrawLine(15, nodes[nodes.Count - 1].X - xmin, nodes[nodes.Count - 1].Y - ymin, nodes[0].X - xmin, nodes[0].Y - ymin);
 			return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
 		}
 	}

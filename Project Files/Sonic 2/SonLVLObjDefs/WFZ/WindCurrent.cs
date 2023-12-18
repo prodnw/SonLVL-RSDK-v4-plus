@@ -27,7 +27,7 @@ namespace S2ObjectDefinitions.WFZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1}); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -37,7 +37,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype > 0) ? "Use Previous Slot" : "Use Next Slot";
 		}
 
 		public override Sprite Image
@@ -55,6 +55,8 @@ namespace S2ObjectDefinitions.WFZ
 			return sprite;
 		}
 		
+		bool updateOverlay = false;
+		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			try
@@ -69,12 +71,30 @@ namespace S2ObjectDefinitions.WFZ
 				
 				bitmap.DrawRectangle(6, 0, 0, xmax - xmin, ymax - ymin); // LevelData.ColorWhite
 				
-				return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
+				Sprite debug = new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
+				
+				// yeah this is kinda iffy, but it's the best i can think of for now..
+				// (we don't want an unlimited loop where the two objects keep calling each other's UpdateDebugOverlay())
+				if ((other.Type == obj.Type) && !updateOverlay)
+				{
+					if (other.DebugOverlay == null)
+						updateOverlay = true;
+					else if (!other.DebugOverlay.Size.Equals(debug.Width))
+						updateOverlay = true;
+					
+					if (updateOverlay)
+						other.UpdateDebugOverlay();
+				}
+				
+				updateOverlay = false;
+				
+				return debug;
 			}
 			catch
 			{
 			}
 			
+			updateOverlay = false;
 			return null;
 		}
 	}

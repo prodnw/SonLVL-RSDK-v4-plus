@@ -31,6 +31,11 @@ namespace S2ObjectDefinitions.MPZ
 			return props;
 		}
 		
+		public override byte DefaultSubtype
+		{
+			get { return 1; }
+		}
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return (subtype == 0) ? "Fall" : "Static";

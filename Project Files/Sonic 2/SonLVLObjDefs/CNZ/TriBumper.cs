@@ -53,7 +53,7 @@ namespace S2ObjectDefinitions.CNZ
 		{
 			if (subtype > 5) subtype = 6;
 			
-			string[] names = new string[]{ "Small (Bounce Left)", "Small (Bounce Right)", "Large (Bounce Upwards)", "Large (Bounce Downwards)", "Large (Bounce Left)", "Large (Bounce Right)", "Unknown" };
+			string[] names = {"Small (Bounce Left)", "Small (Bounce Right)", "Large (Bounce Upwards)", "Large (Bounce Downwards)", "Large (Bounce Left)", "Large (Bounce Right)", "Unknown"};
 			return names[subtype];
 		}
 

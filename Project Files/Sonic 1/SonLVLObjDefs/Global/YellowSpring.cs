@@ -53,7 +53,7 @@ namespace S1ObjectDefinitions.Global
 
 		public override string SubtypeName(byte subtype)
 		{
-			string[] directions = { "Upwards", "Right", "Left", "Down", "Upwards (Stronger)" };
+			string[] directions = {"Upwards", "Right", "Left", "Down", "Upwards (Stronger)"};
 			string name = directions[(subtype == 5) ? 4 : subtype & 3];
 			if ((subtype > 3) && (subtype != 5)) name += " (Enabled in Air)";
 			return name;

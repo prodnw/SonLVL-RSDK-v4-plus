@@ -31,11 +31,11 @@ namespace S2ObjectDefinitions.CPZ
 				(obj) => obj.PropertyValue & 0x3F,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x3F) | (byte)((int)value)));
 			
-			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
-				"Which direction this Chemical Ball should go in.", null, new Dictionary<string, int>
+			properties[1] = new PropertySpec("Start From", typeof(int), "Extended",
+				"Which direction this Chemical Ball should start from.", null, new Dictionary<string, int>
 				{
-					{ "No Flip", 0 },
-					{ "X Flip", 0x40 }
+					{ "Left", 0 },
+					{ "Right", 0x40 }
 				},
 				(obj) => obj.PropertyValue & 0x40,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x40) | (byte)((int)value)));
@@ -44,7 +44,7 @@ namespace S2ObjectDefinitions.CPZ
 				"How this Chemical Ball should act.", null, new Dictionary<string, int>
 				{
 					{ "Arc", 0x00 },
-					{ "Vertical", 0x80 }
+					{ "Straight", 0x80 }
 				},
 				(obj) => obj.PropertyValue & 0x80,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | (byte)((int)value)));

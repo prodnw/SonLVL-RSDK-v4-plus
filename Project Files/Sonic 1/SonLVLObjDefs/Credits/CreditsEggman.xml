@@ -30,7 +30,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Frame ID" description="Which sprite this object will use." type="frameids" startbit="0" length="8" />
+    <Property name="Frame" description="Which sprite this object will use." type="frameids" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="frameids">

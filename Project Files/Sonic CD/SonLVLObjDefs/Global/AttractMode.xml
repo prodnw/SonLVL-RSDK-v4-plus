@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="demo">
+<ObjDef xmlns="http://www.sonicretro.org" Image="demo" Debug="true">
   <Images>
     <ImageFromSheet id="demo" sheet="Global/Display.gif" sourcex="1" sourcey="176" width="34" height="11"> <!-- always using the global sheet and not the special sheet in special stages on purpose -->
       <Offset X="-17" Y="-5"/>
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Demo" description="Which Demo this object should play back." type="demos" startbit="0" length="8" />
+    <Property name="Demo" description="Which Demo this object should play." type="demos" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="demos">

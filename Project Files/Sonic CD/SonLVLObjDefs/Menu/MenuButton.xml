@@ -39,7 +39,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Button" description="Which selection this button is. Gets reset in-game." type="buttons" startbit="0" length="8" /> <!-- yeah this is kinda useless, but it's cool to see anyways -->
+    <Property name="Button" description="Which selection this button is. Gets reset in-game." type="buttons" startbit="0" length="8" /> <!-- yeah this is kinda useless, but it's cool to see in the editor anyways -->
   </Properties>
   <Enums>
     <Enum name="buttons">

@@ -20,6 +20,8 @@ namespace SCDObjectDefinitions.R6
 			Sprite block = new Sprite(bitmap, -16, -16);
 			
 			// yeah this kinda looks p messy, but i don't have any better ideas, so..
+			
+			// block positions
 			int[][] offsets = {
 				new int[] {
 					0, -32,
@@ -75,6 +77,7 @@ namespace SCDObjectDefinitions.R6
 					-96, 0}
 			};
 			
+			// line points
 			int[][] points = {
 				new int[] {
 					0, 0,
@@ -118,7 +121,7 @@ namespace SCDObjectDefinitions.R6
 					
 					32, -32,
 					32, -64},
-				new int[] {},
+				new int[0],
 				new int[] {
 					0, 0,
 					0, -96,

@@ -26,7 +26,7 @@ namespace S1ObjectDefinitions.Global
 				sprites[index++] = new Sprite(sheet.GetSection(46 + (i * 17), 175, 16, 16), -8, -8);
 			}
 			
-			sprites[16] = new Sprite(sheet.GetSection(182, 141, 16, 16), -8, -8);
+			sprites[index++] = new Sprite(sheet.GetSection(182, 141, 16, 16), -8, -8);
 			
 			properties = new PropertySpec[6];
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
@@ -76,14 +76,10 @@ namespace S1ObjectDefinitions.Global
 				(obj) => obj.PropertyValue & 32,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~32) | (int)value));
 			
-			properties[5] = new PropertySpec("Grounded", typeof(int), "Extended",
-				"If only grounded players should be affected.", null, new Dictionary<string, int>
-				{
-					{ "False", 0 },
-					{ "True", 128 }
-				},
-				(obj) => obj.PropertyValue & 128,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | (int)value));
+			properties[5] = new PropertySpec("Grounded", typeof(bool), "Extended",
+				"If only grounded players should be affected.", null,
+				(obj) => (obj.PropertyValue > 128),
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~128) | ((bool)value ? 128 : 0)));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

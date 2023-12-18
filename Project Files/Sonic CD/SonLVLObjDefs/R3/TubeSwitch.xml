@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Debug="true" >
+<ObjDef xmlns="http://www.sonicretro.org" Debug="true">
   <Images>
     <ImageFromSheet id="icon" sheet="Global/Display.gif" sourcex="173" sourcey="67" width="16" height="16">
       <Offset X="-8" Y="-8"/>
@@ -21,8 +21,8 @@
       <EnumMember name="Left Wall Grip" /> <!-- forces left wall grip (no way) -->
       <EnumMember name="Force Roll" /> <!-- forces a roll, nothing else -->
       <EnumMember name="Unstick" value="10" /> <!-- unsticks the player from the floor -->
-      <EnumMember name="Edge Smoother" /> <!-- smoothes out those weird bumps -->
-      <EnumMember name="Roll Mask" /> <!-- forces a roll if moving right (used on the bumper in the intro segment -->
+      <EnumMember name="Edge Smoother" /> <!-- smoothes out those weird bumps in the ccz3 boss -->
+      <EnumMember name="Roll Mask" /> <!-- forces a roll if moving right (used on the bumper in the ccz3 intro) -->
     </Enum>
   </Enums>
   <ImageSets>

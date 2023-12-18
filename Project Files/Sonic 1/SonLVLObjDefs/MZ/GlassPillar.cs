@@ -68,7 +68,7 @@ namespace S1ObjectDefinitions.MZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			string[] styles = {"Static", "Vertical", "Reverse Vertical"};
+			string[] styles = {"Static", "Vertical", "Vertical (Reverse)"};
 			string name = styles[((subtype & 7) > 5) ? 0 : (subtype & 7)];
 			name += ((subtype & 0x10) == 0x10) ? " (Medium)" : " (Long)";
 			return name;

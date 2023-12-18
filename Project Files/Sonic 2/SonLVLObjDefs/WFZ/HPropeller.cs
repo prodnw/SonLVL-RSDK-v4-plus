@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
+namespace S2ObjectDefinitions.SCZ
+{
+	class HPropeller : WFZ.HPropeller
+	{
+		// in WFZ we're just a deco sprite with no interaction at all, so we don't need the debug vis
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return null;
+		}
+	}
+}
+
 namespace S2ObjectDefinitions.WFZ
 {
 	class HPropeller : ObjectDefinition

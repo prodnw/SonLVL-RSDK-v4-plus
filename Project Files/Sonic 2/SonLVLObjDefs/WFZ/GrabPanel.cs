@@ -19,13 +19,13 @@ namespace S2ObjectDefinitions.WFZ
 			sprite.DrawRectangle(6, 0, 0, 64, 64); // LevelData.ColorWhite
 			sprites[1] = new Sprite(sprite, -64, -32);
 			
-			properties[0] = new PropertySpec("Delay", typeof(int), "Extended",
-				"How long Sonic should be able to grab onto this Panel, in seconds.", null,
+			properties[0] = new PropertySpec("Grab Duration", typeof(int), "Extended",
+				"How long, in seconds, Sonic should be able to grab onto this Panel for.", null,
 				(obj) => obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 			
-			properties[1] = new PropertySpec("Cutscene Variant", typeof(bool), "Extended",
-				"If this Panel should be used for the ending cutscene.", null,
+			properties[1] = new PropertySpec("Cutscene", typeof(bool), "Extended",
+				"If this Panel is used for the ending cutscene.", null,
 				(obj) => (obj.PropertyValue == 0x7F),
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0x7F : 0));
 		}

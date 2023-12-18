@@ -96,7 +96,7 @@ namespace S1ObjectDefinitions.SLZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			string[] patterns = new string[]{ "Jump (84 px)", "Jump (131 px)", "Jump (189 px)", "Jump (258 px)", "Travel Up", "Travel Down", "Travel Left", "Travel Right" };
+			string[] patterns = {"Jump (84 px)", "Jump (131 px)", "Jump (189 px)", "Jump (258 px)", "Travel Up", "Travel Down", "Travel Left", "Travel Right"};
 			return patterns[subtype & 7];
 		}
 

@@ -40,8 +40,8 @@ namespace SCDObjectDefinitions.R6
 			bitmap.DrawRectangle(24, 0, 0, 31, 29); // pink
 			sprite = new Sprite(sprite, new Sprite(bitmap, -16, -16));
 			
-			properties[0] = new PropertySpec("Push Out", typeof(int), "Extended",
-				"Which direction this object should push the player.", null, new Dictionary<string, int>
+			properties[0] = new PropertySpec("Push Direction", typeof(int), "Extended",
+				"Which direction this object should push the player out.", null, new Dictionary<string, int>
 				{
 					{ "None", 0 },
 					{ "Upwards", 1 },

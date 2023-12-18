@@ -52,7 +52,7 @@ namespace S1ObjectDefinitions.MZ
 		{
 			if (subtype > 4) subtype = 0;
 			
-			string[] names = new string[]{ "Idle", "Floating (Hover)", "Floating (Drop)", "Falling", "Floating (In Lava)" }; // falling shouldn't be used
+			string[] names = {"Idle", "Floating (Hover)", "Floating (Drop)", "Falling", "Floating (In Lava)"}; // falling shouldn't be used
 			return names[subtype];
 		}
 

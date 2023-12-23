@@ -52,7 +52,7 @@ namespace S2ObjectDefinitions.Enemies
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 0) ? "Start Facing Left" : "Start Facing Right";
+			return (subtype == 0) ? "Facing Left" : "Facing Right";
 		}
 
 		public override Sprite Image

@@ -10,7 +10,6 @@ namespace SCDObjectDefinitions.Players
 	class PlayerObject : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private ReadOnlyCollection<byte> subtypes;
 		private Sprite[] sprites = new Sprite[4];
 		
 		public override void Init(ObjectData data)

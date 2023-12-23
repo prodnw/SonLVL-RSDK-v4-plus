@@ -24,14 +24,14 @@ namespace S1ObjectDefinitions.Mission
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 		}
 		
-		public override bool Debug
-		{
-			get { return true; }
-		}
-
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties

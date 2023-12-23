@@ -9,6 +9,7 @@ namespace S2AObjectDefinitions.EHZ
 	class Waterfall : ObjectDefinition
 	{
 		private readonly Sprite[] sprites = new Sprite[10];
+		private ReadOnlyCollection<byte> subtypes;
 		private PropertySpec[] properties = new PropertySpec[1];
 		
 		public override void Init(ObjectData data)
@@ -48,6 +49,8 @@ namespace S2AObjectDefinitions.EHZ
 					},
 					(obj) => (int)obj.PropertyValue,
 					(obj, value) => obj.PropertyValue = (byte)((int)value));
+				
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 7, 2, 3, 8, 5, 6});
 			}
 			else
 			{
@@ -75,12 +78,14 @@ namespace S2AObjectDefinitions.EHZ
 					},
 					(obj) => (int)obj.PropertyValue,
 					(obj, value) => obj.PropertyValue = (byte)((int)value));
+				
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 3, 8, 5, 7, 1});
 			}
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {0, 3, 8, 5, 7, 1}); }
+			get { return subtypes; }
 		}
 		
 		public override byte DefaultSubtype
@@ -96,7 +101,7 @@ namespace S2AObjectDefinitions.EHZ
 		public override string SubtypeName(byte subtype)
 		{
 			if (properties[0].Enumeration.ContainsValue(subtype))
-				return properties[0].Enumeration.GetKey(subtype);
+				return properties[0].Enumeration.GetKey(subtype) + " Frame";
 			
 			return "Blank"; // well technically MBZ's "Top 2" falls under here too, but let's just ignore that since it's not on the subtypes list anyways (and MBZ isn't even real in S2A either-)
 		}

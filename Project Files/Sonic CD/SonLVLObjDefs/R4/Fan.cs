@@ -56,7 +56,7 @@ namespace SCDObjectDefinitions.R4
 					{ "Always On", 1 }
 				},
 				(obj) => (obj.PropertyValue & 1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction this Fan should face.", null, new Dictionary<string, int>
@@ -66,7 +66,7 @@ namespace SCDObjectDefinitions.R4
 					{ "Left", 4 },
 				},
 				(obj) => (obj.PropertyValue & ~1),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 1) | (byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & 1) | (int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

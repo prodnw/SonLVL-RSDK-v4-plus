@@ -24,9 +24,21 @@ namespace S1ObjectDefinitions.LZ
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0f) | (int)value));
 			
 			properties[1] = new PropertySpec("Speed", typeof(int), "Extended",
-				"How fast the Spike Ball should swing. Positive values are clockwise, negative values are counter-clockwise.", null,
-				(obj) => ((obj.PropertyValue & 0xf0) >> 4) - (((obj.PropertyValue & 0xf0) > 0x80) ? 0x10 : 0x00),
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | ((int)value + (((int)value < 0) ? 0x10 : 0x00) << 4)));
+				"The speed of this Spike Ball. Positive values are clockwise, negative values are counter-clockwise.", null,
+				(obj) => {
+						int speed = (obj.PropertyValue & 0xf0) >> 4;
+						if (speed >= 8)
+							speed -= 16;
+						return speed;
+					},
+				(obj, value) => {
+						int speed = Math.Min(Math.Max((int)value, -8), 7);
+						if (speed < 0)
+							speed += 16;
+						
+						obj.PropertyValue = (byte)((obj.PropertyValue & ~0xf0) | (speed << 4));
+					}
+				);
 			
 			properties[2] = new PropertySpec("Start From", typeof(int), "Extended",
 				"Which direction this Rotating Spike should start from.", null, new Dictionary<string, int>
@@ -42,12 +54,12 @@ namespace S1ObjectDefinitions.LZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0x34, 0x35, 0xd4, 0xd5}); }
 		}
 		
 		public override byte DefaultSubtype
 		{
-			get { return 0xC4; } // length: 4, speed: -4
+			get { return 0x34; } // length: 4, speed: 3
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -57,7 +69,7 @@ namespace S1ObjectDefinitions.LZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (subtype & 0x0f) + " chains" + ((subtype < 0x80) ? " (Clockwise)" : " (Counter-Clockwise)");
 		}
 
 		public override Sprite Image

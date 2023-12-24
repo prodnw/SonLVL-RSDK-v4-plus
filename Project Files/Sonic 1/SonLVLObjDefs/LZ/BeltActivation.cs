@@ -9,6 +9,16 @@ namespace S1ObjectDefinitions.LZ
 	class CorkActivation : LZ.BeltActivation
 	{
 		public override string targetName { get { return "Cork"; } }
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] {3}); }
+		}
+		
+		public override byte DefaultSubtype
+		{
+			get { return 3; }
+		}
 	}
 	
 	class BeltActivation : ObjectDefinition

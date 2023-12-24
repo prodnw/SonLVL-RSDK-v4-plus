@@ -35,7 +35,7 @@ namespace S2ObjectDefinitions.ARZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {4, 5, 6, 7, 8, 9, 10}); } // it can be any value, but why not give a few starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -50,7 +50,7 @@ namespace S2ObjectDefinitions.ARZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " chains";
 		}
 
 		public override Sprite Image

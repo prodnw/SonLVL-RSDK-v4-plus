@@ -82,9 +82,12 @@ namespace S1ObjectDefinitions.LZ
 			{
 				int index = LevelData.Objects.IndexOf(obj) + 1;
 				while (LevelData.Objects[index].Name != targetName)
-					index++;
-				index--;
-				List<ObjectEntry> objs = LevelData.Objects.Skip(index).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (index + obj.PropertyValue)).ToList();
+				{
+					if (++index >= LevelData.Objects.Count)
+						return null;
+				}
+				
+				List<ObjectEntry> objs = LevelData.Objects.Skip(index - 1).Take(obj.PropertyValue + 1).ToList();
 				if (objs.Count == 0)
 					return null;
 				

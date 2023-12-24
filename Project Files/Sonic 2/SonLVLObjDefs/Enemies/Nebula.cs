@@ -22,7 +22,7 @@ namespace S2ObjectDefinitions.Enemies
 			}
 			
 			properties[0] = new PropertySpec("Initial State", typeof(int), "Extended",
-				"How the Nebula will start off. If Inactive, a Object Activator should be used to trigger this Nebula.", null, new Dictionary<string, int>
+				"How the Nebula will start. If Inactive, an Object Activator should be used to trigger this Nebula.", null, new Dictionary<string, int>
 				{
 					{ "Active", 0 },
 					{ "Inactive", 1 }
@@ -59,6 +59,25 @@ namespace S2ObjectDefinitions.Enemies
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			for (int i = LevelData.Objects.IndexOf(obj); i >= 0; --i)
+			{
+				switch (LevelData.Objects[i].Name)
+				{
+					case "Object Activator": // well technically any object can work.. but how about we don't loop around the entire object list every time
+						LevelData.Objects[i].UpdateDebugOverlay();
+						break;
+					case "Nebula":
+						break;
+					default:
+						return null;
+				}
+			}
+			
+			return null;
 		}
 	}
 }

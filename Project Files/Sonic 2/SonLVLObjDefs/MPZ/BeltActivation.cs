@@ -23,7 +23,7 @@ namespace S2ObjectDefinitions.MPZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {8}); }
 		}
 		
 		public override byte DefaultSubtype
@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.MPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return "Activate " + subtype + " Object" + (subtype == 1 ? "" : "s");
 		}
 
 		public override Sprite Image
@@ -65,7 +65,7 @@ namespace S2ObjectDefinitions.MPZ
 			// its activator's count, so now a random invis block far across the level is activated by this object too in that mission
 			// This isn't this render breaking, it's just how it is :(
 			
-			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).TakeWhile(a => LevelData.Objects.IndexOf(a) <= (LevelData.Objects.IndexOf(obj) + obj.PropertyValue)).ToList();
+			List<ObjectEntry> objs = LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj)).Take(obj.PropertyValue + 1).ToList();
 			if (objs.Count == 0)
 				return null;
 			

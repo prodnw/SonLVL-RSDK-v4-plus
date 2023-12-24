@@ -71,11 +71,26 @@ namespace S2ObjectDefinitions.OOZ
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
+			
 			return sprite;
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
+			for (int i = LevelData.Objects.IndexOf(obj); i >= 0; --i)
+			{
+				switch (LevelData.Objects[i].Name)
+				{
+					case "Spikes Activator": // well technically any non-Moving Spikes object can work.. but how about we don't loop around the entire object list every time
+						LevelData.Objects[i].UpdateDebugOverlay();
+						break;
+					case "Moving Spikes":
+						break;
+					default:
+						return sprite;
+				}
+			}
+			
 			return debug;
 		}
 	}

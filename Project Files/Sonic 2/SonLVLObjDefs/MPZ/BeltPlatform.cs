@@ -207,7 +207,23 @@ namespace S2ObjectDefinitions.MPZ
 			int sx = ((V4ObjectEntry)obj).Value0 - obj.X;
 			int sy = ((V4ObjectEntry)obj).Value1 - obj.Y;
 			
-			return new Sprite(debug[obj.PropertyValue >> 4], sx, sy);
+			Sprite dbg = new Sprite(debug[obj.PropertyValue >> 4], sx, sy);
+			
+			for (int i = LevelData.Objects.IndexOf(obj); i >= 0; --i)
+			{
+				switch (LevelData.Objects[i].Name)
+				{
+					case "Belt Activation": // well technically any object can work.. but how about we don't loop around the entire object list every time
+						LevelData.Objects[i].UpdateDebugOverlay();
+						break;
+					case "Belt Platform":
+						break;
+					default:
+						return dbg;
+				}
+			}
+			
+			return dbg;
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace S2ObjectDefinitions.WFZ
 					{ "Top", 0x30 }
 				},
 				(obj) => (obj.PropertyValue & 0x30) ^ (((obj.PropertyValue & 0x40) == 0x40) ? 0x20 : 0x00), // (we need to flip 'em around, depending on the direction of the platform)
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x30) | (int)value));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x30) | ((int)value ^ (((obj.PropertyValue & 0x40) == 0x40) ? 0x20 : 0x00))));
 			
 			properties[2] = new PropertySpec("Direction", typeof(int), "Extended",
 				"The direction in which the Platform moves.", null, new Dictionary<string, int>

@@ -80,6 +80,18 @@ namespace S2ObjectDefinitions.EHZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
+			for (int i = LevelData.Objects.IndexOf(obj) - 1; i >= 0; --i)
+			{
+				switch (LevelData.Objects[i].Name)
+				{
+					case "Object Activator": // well technically any object can work.. but how about we don't loop around the entire object list every time
+						LevelData.Objects[i].UpdateDebugOverlay();
+						break;
+					default:
+						return debug;
+				}
+			}
+			
 			return debug;
 		}
 	}

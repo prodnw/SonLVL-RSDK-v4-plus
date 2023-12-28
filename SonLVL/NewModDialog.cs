@@ -31,7 +31,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			string moddir = Path.Combine(Path.Combine(Environment.CurrentDirectory, "mods"), ValidateFilename(textModName.Text));
+			string moddir = Path.Combine(Path.Combine(LevelData.EXEFolder, "mods"), ValidateFilename(textModName.Text));
 
 			if (textModName.Text.Length <= 0)
 			{

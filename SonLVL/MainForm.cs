@@ -6397,6 +6397,7 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				LevelData.NewChunks.chunkList[i] = new RSDKv3_4.Tiles128x128.Block();
 				LevelData.RedrawChunk(i);
+				++numdel;
 			}
 			ChunkSelector.Invalidate();
 			SaveState("Delete Unused Chunks");

@@ -1058,9 +1058,9 @@ namespace SonicRetro.SonLVL.GUI
 		List<ObjectEntry> foundobjs;
 		int lastfoundobj;
 		Point? lastfoundfgchunk;
-		byte searchfgchunk;
+		ushort searchfgchunk;
 		Point? lastfoundbgchunk;
-		byte searchbgchunk;
+		ushort searchbgchunk;
 		private void findToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			switch (CurrentTab)
@@ -1124,7 +1124,7 @@ namespace SonicRetro.SonLVL.GUI
 									if (LevelData.Scene.layout[y][x] == findFGChunksDialog.chunkSelect.Value)
 									{
 										lastfoundfgchunk = new Point(x, y);
-										searchfgchunk = (byte)findFGChunksDialog.chunkSelect.Value;
+										searchfgchunk = (ushort)findFGChunksDialog.chunkSelect.Value;
 										findNextToolStripMenuItem.Enabled = true;
 										findPreviousToolStripMenuItem.Enabled = false;
 										FGSelection = new Rectangle(x, y, 1, 1);
@@ -1161,7 +1161,7 @@ namespace SonicRetro.SonLVL.GUI
 									if (LevelData.Background.layers[bglayer].layout[y][x] == findBGChunksDialog.chunkSelect.Value)
 									{
 										lastfoundbgchunk = new Point(x, y);
-										searchbgchunk = (byte)findBGChunksDialog.chunkSelect.Value;
+										searchbgchunk = (ushort)findBGChunksDialog.chunkSelect.Value;
 										findNextToolStripMenuItem.Enabled = true;
 										findPreviousToolStripMenuItem.Enabled = false;
 										BGSelection = new Rectangle(x, y, 1, 1);

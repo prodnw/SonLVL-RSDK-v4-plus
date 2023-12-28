@@ -22,9 +22,9 @@
   </Properties>
   <Enums>
     <Enum name="frames">
-	  <EnumMember name="Zone 1" />
-	  <EnumMember name="Zone 2" />
-	  <EnumMember name="Zone 3" />
+      <EnumMember name="Zone 1" />
+      <EnumMember name="Zone 2" />
+      <EnumMember name="Zone 3" />
     </Enum>
   </Enums>
   <ImageSets>

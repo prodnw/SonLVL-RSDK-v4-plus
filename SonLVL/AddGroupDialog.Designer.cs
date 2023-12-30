@@ -49,7 +49,7 @@ namespace SonicRetro.SonLVL.GUI
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(15, 148);
-            this.okButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.okButton.Margin = new System.Windows.Forms.Padding(4);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(100, 28);
             this.okButton.TabIndex = 0;
@@ -62,7 +62,7 @@ namespace SonicRetro.SonLVL.GUI
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(123, 148);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(100, 28);
             this.cancelButton.TabIndex = 1;
@@ -73,9 +73,8 @@ namespace SonicRetro.SonLVL.GUI
             // XDist
             // 
             this.XDist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.XDist.Hexadecimal = true;
             this.XDist.Location = new System.Drawing.Point(104, 15);
-            this.XDist.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.XDist.Margin = new System.Windows.Forms.Padding(4);
             this.XDist.Maximum = new decimal(new int[] {
             4095,
             0,
@@ -108,9 +107,8 @@ namespace SonicRetro.SonLVL.GUI
             // YDist
             // 
             this.YDist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.YDist.Hexadecimal = true;
             this.YDist.Location = new System.Drawing.Point(104, 47);
-            this.YDist.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.YDist.Margin = new System.Windows.Forms.Padding(4);
             this.YDist.Maximum = new decimal(new int[] {
             4095,
             0,
@@ -134,7 +132,7 @@ namespace SonicRetro.SonLVL.GUI
             // 
             this.Rows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Rows.Location = new System.Drawing.Point(104, 79);
-            this.Rows.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Rows.Margin = new System.Windows.Forms.Padding(4);
             this.Rows.Minimum = new decimal(new int[] {
             1,
             0,
@@ -163,7 +161,7 @@ namespace SonicRetro.SonLVL.GUI
             // 
             this.Columns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Columns.Location = new System.Drawing.Point(104, 111);
-            this.Columns.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Columns.Margin = new System.Windows.Forms.Padding(4);
             this.Columns.Minimum = new decimal(new int[] {
             1,
             0,
@@ -195,7 +193,7 @@ namespace SonicRetro.SonLVL.GUI
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddGroupDialog";

@@ -3872,22 +3872,30 @@ namespace SonicRetro.SonLVL.GUI
 		private void DrawChunkPicture()
 		{
 			if (!loaded) return;
-			BitmapBits bmp = new BitmapBits(128, 128);
+			BitmapBits32 bmp = new BitmapBits32(128, 128);
+			LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
+			bmp.FillRectangle(LevelImgPalette.Entries[0xA0], 0, 0, 128, 128);
 			if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
 				bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (lowToolStripMenuItem.Checked)
 				bmp.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (highToolStripMenuItem.Checked)
 				bmp.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+
+			bmp.Palette[LevelData.ColorWhite] = Color.White;
+			bmp.Palette[LevelData.ColorYellow] = Color.Yellow;
+			bmp.Palette[LevelData.ColorBlack] = Color.Black;
+
 			if (path1ToolStripMenuItem.Checked)
-				bmp.DrawBitmapComposited(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
+				bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
 			if (path2ToolStripMenuItem.Checked)
-				bmp.DrawBitmapComposited(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
-			bmp.DrawRectangle(LevelData.ColorWhite, SelectedChunkBlock.X * 16 - 1, SelectedChunkBlock.Y * 16 - 1, SelectedChunkBlock.Width * 16 + 1, SelectedChunkBlock.Height * 16 + 1);
+				bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
+
+			bmp.DrawRectangle(Color.White, SelectedChunkBlock.X * 16 - 1, SelectedChunkBlock.Y * 16 - 1, SelectedChunkBlock.Width * 16 + 1, SelectedChunkBlock.Height * 16 + 1);
 			using (Graphics gfx = ChunkPicture.CreateGraphics())
 			{
 				gfx.SetOptions();
-				gfx.DrawImage(bmp.ToBitmap(LevelImgPalette), 0, 0, 128, 128);
+				gfx.DrawImage(bmp.ToBitmap(), 0, 0, 128, 128);
 			}
 		}
 

@@ -4625,13 +4625,13 @@ namespace SonicRetro.SonLVL.GUI
 				gfx.SetOptions();
 				if (showBlockBehindCollisionCheckBox.Checked)
 				{
-					BitmapBits bmp = new BitmapBits(16, 16);
-					bmp.Bits.FastFill(0xA0);
-					bmp.DrawBitmapComposited(LevelData.NewTiles[SelectedTile], 0, 0);
-					BitmapBits tmp = new BitmapBits(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex]);
-					tmp.IncrementIndexes(LevelData.ColorWhite - 1);
-					bmp.DrawBitmapComposited(tmp, 0, 0);
-					gfx.DrawImage(bmp.Scale(8).ToBitmap(LevelImgPalette), 0, 0, 128, 128);
+					BitmapBits32 bmp = new BitmapBits32(16, 16);
+					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
+					bmp.FillRectangle(LevelImgPalette.Entries[0xA0], 0, 0, 16, 16);
+					bmp.DrawBitmap(LevelData.NewTiles[SelectedTile], 0, 0);
+					bmp.Palette[1] = Color.White;
+					bmp.DrawBitmap(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex], 0, 0);
+					gfx.DrawImage(bmp.Scale(8).ToBitmap(), 0, 0, 128, 128);
 				}
 				else
 					gfx.DrawImage(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex].Scale(8).ToBitmap(Color.Black, Color.White), 0, 0, 128, 128);

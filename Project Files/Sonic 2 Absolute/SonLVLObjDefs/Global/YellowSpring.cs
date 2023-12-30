@@ -38,7 +38,7 @@ namespace S2ObjectDefinitions.Global
 				(obj) => (obj.PropertyValue & 0x7f),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x7f) | (int)value));;
 			
-			properties[1] = new PropertySpec("Twirl", typeof(int), "Extended",
+			properties[1] = new PropertySpec("Twirl", typeof(bool), "Extended",
 				"If this Spring should trigger the Twirl animation upon launch. Only affects upwards springs.", null,
 				(obj) => (obj.PropertyValue >= 0x80),
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x80) | ((bool)value ? 0x80 : 0x00)));

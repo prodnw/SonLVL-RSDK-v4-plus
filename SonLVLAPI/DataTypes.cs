@@ -509,7 +509,7 @@ namespace SonicRetro.SonLVL.API
 		[Browsable(false)]
 		public RSDKv4.Scene.Entity.Priorities Priority
 		{
-			get => entity.priority ?? RSDKv4.Scene.Entity.Priorities.ActiveBounds;
+			get => entity.priority ?? RSDKv4.Scene.Entity.Priorities.Bounds;
 			set
 			{
 				if (value == 0)
@@ -706,10 +706,10 @@ namespace SonicRetro.SonLVL.API
 		}
 
 		[DefaultValue(0)]
-		[Description("The object’s priority value, determines how the engine handles object activity, by default it’s set to PRIORITY_ACTIVE_BOUNDS.")]
+		[Description("The object’s priority value, determines how the engine handles object activity, by default it’s set to PRIORITY_BOUNDS.")]
 		public RSDKv4.Scene.Entity.Priorities Priority
 		{
-			get => entity.priority ?? RSDKv4.Scene.Entity.Priorities.ActiveBounds;
+			get => entity.priority ?? RSDKv4.Scene.Entity.Priorities.Bounds;
 			set
 			{
 				if (value == 0)

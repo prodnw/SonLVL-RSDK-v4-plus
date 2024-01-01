@@ -1,4 +1,5 @@
 ﻿using SonicRetro.SonLVL.API;
+using SonicRetro.SonLVL.GUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -396,6 +397,8 @@ namespace SonicRetro.SonLVL
 			stageName.Enabled = false;
 			stageHighlight.Enabled = false;
 			stageBrowseButton.Enabled = false;
+			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
+			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 		}
 
 		private void stageListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -409,6 +412,8 @@ namespace SonicRetro.SonLVL
 				stageName.Enabled = false;
 				stageHighlight.Enabled = false;
 				stageBrowseButton.Enabled = false;
+				stageUpButton.Enabled = false;
+				stageDownButton.Enabled = false;
 			}
 			else
 			{
@@ -418,6 +423,8 @@ namespace SonicRetro.SonLVL
 				stageName.Enabled = true;
 				stageHighlight.Enabled = true;
 				stageBrowseButton.Enabled = true;
+				stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
+				stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 				loaded = false;
 				stageFolder.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].folder;
 				stageAct.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].id;
@@ -441,6 +448,32 @@ namespace SonicRetro.SonLVL
 			stages[stageCategory.SelectedIndex].RemoveAt(stageListBox.SelectedIndex);
 			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex);
 			stageAddButton.Enabled = stages[stageCategory.SelectedIndex].Count < 255;
+		}
+
+		private void stageUpButton_Click(object sender, EventArgs e)
+		{
+			stages[stageCategory.SelectedIndex].Swap(stageListBox.SelectedIndex, stageListBox.SelectedIndex - 1);
+
+			loaded = false;
+			stageListBox.Items.Insert(stageListBox.SelectedIndex - 1, stageListBox.Items[stageListBox.SelectedIndex]);
+			stageListBox.SelectedIndex -= 2;
+			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex + 2);
+			loaded = true;
+
+			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
+		}
+
+		private void stageDownButton_Click(object sender, EventArgs e)
+		{
+			stages[stageCategory.SelectedIndex].Swap(stageListBox.SelectedIndex, stageListBox.SelectedIndex + 1);
+
+			loaded = false;
+			stageListBox.Items.Insert(stageListBox.SelectedIndex + 2, stageListBox.Items[stageListBox.SelectedIndex]);
+			stageListBox.SelectedIndex += 2;
+			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex - 2);
+			loaded = true;
+
+			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 		}
 
 		private void stageFolder_TextChanged(object sender, EventArgs e)

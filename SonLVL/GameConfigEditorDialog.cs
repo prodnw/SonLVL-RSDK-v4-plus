@@ -112,6 +112,10 @@ namespace SonicRetro.SonLVL
 				gameName.Enabled = false;
 				gameDescription.Enabled = false;
 				objectForceLoad.Visible = true;
+				objectTypeID.Visible = false;
+				variableID.Visible = false;
+				soundID.Visible = false;
+				playerID.Visible = false;
 			}
 			else
 			{
@@ -119,6 +123,10 @@ namespace SonicRetro.SonLVL
 				gameName.Enabled = true;
 				gameDescription.Enabled = true;
 				objectForceLoad.Visible = false;
+				objectTypeID.Visible = true;
+				variableID.Visible = true;
+				soundID.Visible = true;
+				playerID.Visible = true;
 			}
 			objectListBox.BeginUpdate();
 			objectListBox.Items.Clear();
@@ -174,6 +182,8 @@ namespace SonicRetro.SonLVL
 				objectForceLoad.Checked = objects[objectListBox.SelectedIndex].forceLoad;
 				loaded = true;
 			}
+
+			objectTypeID.Text = $"Object Type ID: {objectListBox.SelectedIndex}";
 		}
 
 		private void objectAddButton_Click(object sender, EventArgs e)
@@ -239,6 +249,8 @@ namespace SonicRetro.SonLVL
 				variableValue.Value = variables[variableListBox.SelectedIndex].value;
 				loaded = true;
 			}
+
+			variableID.Text = $"Variable ID: {variableListBox.SelectedIndex}";
 		}
 
 		private void variableAddButton_Click(object sender, EventArgs e)
@@ -293,6 +305,8 @@ namespace SonicRetro.SonLVL
 				sfxFileBox.Text = sounds[sfxListBox.SelectedIndex].path;
 				loaded = true;
 			}
+
+			soundID.Text = $"Sound ID: {sfxListBox.SelectedIndex}";
 		}
 
 		private void sfxAddButton_Click(object sender, EventArgs e)
@@ -351,6 +365,8 @@ namespace SonicRetro.SonLVL
 				playerName.Text = players[playerListBox.SelectedIndex];
 				loaded = true;
 			}
+
+			playerID.Text = $"Player ID: {playerListBox.SelectedIndex}";
 		}
 
 		private void playerAddButton_Click(object sender, EventArgs e)

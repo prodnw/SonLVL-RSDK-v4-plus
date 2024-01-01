@@ -87,6 +87,10 @@ namespace SonicRetro.SonLVL
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
+            this.objectTypeID = new System.Windows.Forms.Label();
+            this.variableID = new System.Windows.Forms.Label();
+            this.soundID = new System.Windows.Forms.Label();
+            this.playerID = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -178,6 +182,7 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.objectTypeID);
             this.tabPage2.Controls.Add(this.objectForceLoad);
             this.tabPage2.Controls.Add(this.browseScriptButton);
             this.tabPage2.Controls.Add(this.objectScriptBox);
@@ -305,6 +310,7 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.variableID);
             this.tabPage3.Controls.Add(this.variableValue);
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.variableName);
@@ -412,6 +418,7 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.soundID);
             this.tabPage4.Controls.Add(this.sfxBrowseButton);
             this.tabPage4.Controls.Add(this.sfxFileBox);
             this.tabPage4.Controls.Add(this.label24);
@@ -525,6 +532,7 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.playerID);
             this.tabPage5.Controls.Add(this.playerName);
             this.tabPage5.Controls.Add(this.label6);
             this.tabPage5.Controls.Add(this.playerDeleteButton);
@@ -837,6 +845,46 @@ namespace SonicRetro.SonLVL
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
+            // objectTypeID
+            // 
+            this.objectTypeID.AutoSize = true;
+            this.objectTypeID.Location = new System.Drawing.Point(257, 171);
+            this.objectTypeID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.objectTypeID.Name = "objectTypeID";
+            this.objectTypeID.Size = new System.Drawing.Size(114, 16);
+            this.objectTypeID.TabIndex = 9;
+            this.objectTypeID.Text = "Object Type ID: -1";
+            // 
+            // variableID
+            // 
+            this.variableID.AutoSize = true;
+            this.variableID.Location = new System.Drawing.Point(281, 171);
+            this.variableID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.variableID.Name = "variableID";
+            this.variableID.Size = new System.Drawing.Size(91, 16);
+            this.variableID.TabIndex = 7;
+            this.variableID.Text = "Variable ID: -1";
+            // 
+            // soundID
+            // 
+            this.soundID.AutoSize = true;
+            this.soundID.Location = new System.Drawing.Point(281, 171);
+            this.soundID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.soundID.Name = "soundID";
+            this.soundID.Size = new System.Drawing.Size(79, 16);
+            this.soundID.TabIndex = 8;
+            this.soundID.Text = "Sound ID: -1";
+            // 
+            // playerID
+            // 
+            this.playerID.AutoSize = true;
+            this.playerID.Location = new System.Drawing.Point(281, 171);
+            this.playerID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.playerID.Name = "playerID";
+            this.playerID.Size = new System.Drawing.Size(79, 16);
+            this.playerID.TabIndex = 5;
+            this.playerID.Text = "Player ID: -1";
+            // 
             // GameConfigEditorDialog
             // 
             this.AcceptButton = this.okButton;
@@ -934,5 +982,9 @@ namespace SonicRetro.SonLVL
 		private System.Windows.Forms.Button convertButton;
 		private System.Windows.Forms.Button stageDownButton;
 		private System.Windows.Forms.Button stageUpButton;
+		private System.Windows.Forms.Label objectTypeID;
+		private System.Windows.Forms.Label variableID;
+		private System.Windows.Forms.Label soundID;
+		private System.Windows.Forms.Label playerID;
 	}
 }

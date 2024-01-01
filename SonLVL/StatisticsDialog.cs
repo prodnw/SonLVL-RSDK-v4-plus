@@ -28,7 +28,7 @@ namespace SonicRetro.SonLVL
 			listView1.BeginUpdate();
 			foreach (KeyValuePair<int, int> item in counts)
 			{
-				ListViewItem lvi = new ListViewItem(item.Key.ToString("X2"));
+				ListViewItem lvi = new ListViewItem((item.Key == 0) ? "Blank Object" : LevelData.GetObjectDefinition((byte)item.Key).Name);
 				lvi.SubItems[0].Tag = item.Key;
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value.ToString()) { Tag = item.Value });
 				listView1.Items.Add(lvi);

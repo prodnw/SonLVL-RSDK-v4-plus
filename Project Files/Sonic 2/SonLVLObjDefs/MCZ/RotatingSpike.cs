@@ -44,9 +44,9 @@ namespace S2ObjectDefinitions.MCZ
 				"Which direction this Rotating Spike should start from.", null, new Dictionary<string, int>
 				{
 					{ "Right", 0 },
-					{ "Down", 1 },
+					{ "Bottom", 1 },
 					{ "Left", 2 },
-					{ "Up", 3 }
+					{ "Top", 3 }
 				},
 				(obj) => (int)(((V4ObjectEntry)obj).Direction),
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);

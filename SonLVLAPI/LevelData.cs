@@ -1789,10 +1789,7 @@ namespace SonicRetro.SonLVL.API
 		public static bool HasFreeChunks()
 		{
 			return Enumerable.Range(0, NewChunks.chunkList.Length).Except(Scene.layout.SelectMany(a => a).Union(Background.layers.SelectMany(a => a.layout.SelectMany(b => b))).Select(a => (int)a))
-				.Any(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b =>
-				  b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.solidityA == Tiles128x128.Block.Tile.Solidities.SolidNone
-				  && b.solidityB == Tiles128x128.Block.Tile.Solidities.SolidNone && b.tileIndex == 0 && b.visualPlane == Tiles128x128.Block.Tile.VisualPlanes.Low
-			));
+				.Any(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b => b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.tileIndex == 0));
 		}
 
 		public static IEnumerable<ushort> GetFreeTiles()
@@ -1804,10 +1801,7 @@ namespace SonicRetro.SonLVL.API
 		public static IEnumerable<ushort> GetFreeChunks()
 		{
 			return Enumerable.Range(0, NewChunks.chunkList.Length).Select(a => (ushort)a).Except(Scene.layout.SelectMany(a => a).Union(Background.layers.SelectMany(a => a.layout.SelectMany(b => b))))
-				.Where(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b =>
-				  b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.solidityA == Tiles128x128.Block.Tile.Solidities.SolidNone
-				  && b.solidityB == Tiles128x128.Block.Tile.Solidities.SolidNone && b.tileIndex == 0 && b.visualPlane == Tiles128x128.Block.Tile.VisualPlanes.Low
-			));
+				.Where(c => NewChunks.chunkList[c].tiles.SelectMany(a => a).All(b => b.direction == Tiles128x128.Block.Tile.Directions.FlipNone && b.tileIndex == 0));
 		}
 
 		public static void CalcAngles(this TileConfig.CollisionMask mask)

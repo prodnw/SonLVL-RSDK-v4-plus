@@ -10,10 +10,12 @@ namespace S2ObjectDefinitions.MPZ
 	{
 		public override Sprite SetupDebugOverlay()
 		{
-			BitmapBits overlay = new BitmapBits(2, 62);
-			for (int i = 0; i < 62; i += 12)
-				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, 0);
+			// tagging this area with LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(1, 40);
+			for (int i = 0; i < bitmap.Height; i += 8)
+				bitmap.DrawLine(6, 0, i, 0, i + 3);
+			
+			return new Sprite(bitmap);
 		}
 		
 		public override PropertySpec[] SetupProperties()
@@ -23,7 +25,7 @@ namespace S2ObjectDefinitions.MPZ
 				"How this Platform should act upon player contact.", null, new Dictionary<string, int>
 				{
 					{ "Fall", 0 },
-					{ "Static", 1 }
+					{ "Hover", 1 }
 				},
 				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -38,7 +40,7 @@ namespace S2ObjectDefinitions.MPZ
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 0) ? "Fall" : "Static";
+			return (subtype == 0) ? "Fall Platform" : "Hover Platform";
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

@@ -10,10 +10,12 @@ namespace SCDObjectDefinitions.R1
 	{
 		public override Sprite SetupDebugOverlay()
 		{
-			BitmapBits overlay = new BitmapBits(2, 62);
-			for (int i = 0; i < 62; i += 12)
-				overlay.DrawLine(6, 0, i, 0, i + 6); // LevelData.ColorWhite
-			return new Sprite(overlay, 0, 0);
+			// tagging this area with LevelData.ColorWhite
+			BitmapBits bitmap = new BitmapBits(1, 40);
+			for (int i = 0; i < bitmap.Height; i += 8)
+				bitmap.DrawLine(6, 0, i, 0, i + 3);
+			
+			return new Sprite(bitmap);
 		}
 		
 		public override PropertySpec[] SetupProperties()
@@ -38,7 +40,7 @@ namespace SCDObjectDefinitions.R1
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype == 0) ? "Fall" : "Hover";
+			return (subtype == 0) ? "Fall Platform" : "Hover Platform";
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

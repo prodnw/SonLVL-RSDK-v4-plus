@@ -6394,6 +6394,8 @@ namespace SonicRetro.SonLVL.GUI
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 			SaveState("Delete Unused Tiles");
 			MessageBox.Show(this, $"Deleted {numdel} unused tiles.", "SonLVL-RSDK");
+
+			drawTileToolStripButton.Enabled = importTilesToolStripButton.Enabled = LevelData.HasFreeTiles();
 		}
 
 		private void deleteUnusedChunksToolStripButton_Click(object sender, EventArgs e)
@@ -6410,6 +6412,8 @@ namespace SonicRetro.SonLVL.GUI
 			ChunkSelector.Invalidate();
 			SaveState("Delete Unused Chunks");
 			MessageBox.Show(this, $"Deleted {numdel} unused chunks.", "SonLVL-RSDK");
+
+			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
 		}
 
 		private void clearForegroundToolStripButton_Click(object sender, EventArgs e)

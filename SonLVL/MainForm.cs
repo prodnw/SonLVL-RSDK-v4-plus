@@ -1640,11 +1640,10 @@ namespace SonicRetro.SonLVL.GUI
 						pal.Entries[0] = Color.Transparent;
 					for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 					{
-						BitmapBits bits = null;
 						string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
 						if (exportArtcollisionpriorityToolStripMenuItem.Checked)
 						{
-							bits = new BitmapBits(128, 128);
+							BitmapBits bits = new BitmapBits(128, 128);
 							bits.DrawSprite(LevelData.ChunkSprites[i]);
 							bits.ToBitmap(pal).Save(pathBase + ".png");
 							LevelData.ChunkColBmpBits[i][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
@@ -1695,18 +1694,43 @@ namespace SonicRetro.SonLVL.GUI
 						}
 						else
 						{
-							bits = new BitmapBits(128, 128);
-							if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
-								bits.DrawSprite(LevelData.ChunkSprites[i]);
-							else if (lowToolStripMenuItem.Checked)
-								bits.DrawSpriteLow(LevelData.ChunkSprites[i]);
-							else if (highToolStripMenuItem.Checked)
-								bits.DrawSpriteHigh(LevelData.ChunkSprites[i]);
-							if (path1ToolStripMenuItem.Checked)
-								bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][0], 0, 0);
-							else if (path2ToolStripMenuItem.Checked)
-								bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][1], 0, 0);
-							bits.ToBitmap(pal).Save(pathBase + ".png");
+							if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+							{
+								BitmapBits32 bits = new BitmapBits32(128, 128);
+								LevelImgPalette.Entries.CopyTo(bits.Palette, 0);
+								bits.FillRectangle(LevelImgPalette.Entries[0], 0, 0, 128, 128);
+								if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
+									bits.DrawSprite(LevelData.ChunkSprites[i]);
+								else if (lowToolStripMenuItem.Checked)
+									bits.DrawSpriteLow(LevelData.ChunkSprites[i]);
+								else if (highToolStripMenuItem.Checked)
+									bits.DrawSpriteHigh(LevelData.ChunkSprites[i]);
+
+								bits.Palette[LevelData.ColorWhite] = Color.White;
+								bits.Palette[LevelData.ColorYellow] = Color.Yellow;
+								bits.Palette[LevelData.ColorBlack] = Color.Black;
+
+								if (path1ToolStripMenuItem.Checked)
+									bits.DrawBitmap(LevelData.ChunkColBmpBits[i][0], 0, 0);
+								else if (path2ToolStripMenuItem.Checked)
+									bits.DrawBitmap(LevelData.ChunkColBmpBits[i][1], 0, 0);
+								bits.ToBitmap().Save(pathBase + ".png");
+							}
+							else
+							{
+								BitmapBits bits = new BitmapBits(128, 128);
+								if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
+									bits.DrawSprite(LevelData.ChunkSprites[i]);
+								else if (lowToolStripMenuItem.Checked)
+									bits.DrawSpriteLow(LevelData.ChunkSprites[i]);
+								else if (highToolStripMenuItem.Checked)
+									bits.DrawSpriteHigh(LevelData.ChunkSprites[i]);
+								if (path1ToolStripMenuItem.Checked)
+									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][0], 0, 0);
+								else if (path2ToolStripMenuItem.Checked)
+									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][1], 0, 0);
+								bits.ToBitmap(pal).Save(pathBase + ".png");
+							}
 						}
 					}
 				}
@@ -1803,9 +1827,18 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					else
 					{
-						BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
-						using (Bitmap res = bmp.ToBitmap(LevelImgPalette))
-							res.Save(a.FileName);
+						if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+						{
+							BitmapBits32 bmp = LevelData.DrawForeground32(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							using (Bitmap res = bmp.ToBitmap())
+								res.Save(a.FileName);
+						}
+						else
+						{
+							BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
+								res.Save(a.FileName);
+						}
 					}
 				}
 		}
@@ -1888,9 +1921,18 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					else
 					{
-						BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
-						using (Bitmap res = bmp.ToBitmap(LevelImgPalette))
-							res.Save(a.FileName);
+						if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+						{
+							BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							using (Bitmap res = bmp.ToBitmap())
+								res.Save(a.FileName);
+						}
+						else
+						{
+							BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
+								res.Save(a.FileName);
+						}
 					}
 				}
 		}

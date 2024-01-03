@@ -19,7 +19,7 @@ namespace S1ObjectDefinitions.Mission
 				(obj) => obj.PropertyValue == 0,
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0 : 1));
 			
-			properties[1] = new PropertySpec("Climbable Ledge", typeof(bool), "Extended", // name's weird but it's the best i can think of, so..
+			properties[1] = new PropertySpec("Pull Up", typeof(bool), "Extended", // name's weird but it's the best i can think of, so..
 				"If Knuckles is able to pull himself up on this Mission Block.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0 != 0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((bool)value ? 1 : 0));

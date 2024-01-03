@@ -1697,8 +1697,8 @@ namespace SonicRetro.SonLVL.GUI
 							if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 							{
 								BitmapBits32 bits = new BitmapBits32(128, 128);
-								LevelImgPalette.Entries.CopyTo(bits.Palette, 0);
-								bits.FillRectangle(LevelImgPalette.Entries[0], 0, 0, 128, 128);
+								pal.Entries.CopyTo(bits.Palette, 0);
+								bits.FillRectangle(pal.Entries[0], 0, 0, 128, 128);
 								if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
 									bits.DrawSprite(LevelData.ChunkSprites[i]);
 								else if (lowToolStripMenuItem.Checked)
@@ -1725,10 +1725,6 @@ namespace SonicRetro.SonLVL.GUI
 									bits.DrawSpriteLow(LevelData.ChunkSprites[i]);
 								else if (highToolStripMenuItem.Checked)
 									bits.DrawSpriteHigh(LevelData.ChunkSprites[i]);
-								if (path1ToolStripMenuItem.Checked)
-									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][0], 0, 0);
-								else if (path2ToolStripMenuItem.Checked)
-									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[i][1], 0, 0);
 								bits.ToBitmap(pal).Save(pathBase + ".png");
 							}
 						}
@@ -6739,11 +6735,10 @@ namespace SonicRetro.SonLVL.GUI
 					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalIndexesToolStripMenuItem.Checked ? SelectedChunk.ToString("X2") : SelectedChunk.ToString()) + ".png", Filter = "PNG Images|*.png" })
 						if (a.ShowDialog() == DialogResult.OK)
 						{
-							BitmapBits bits;
 							string pathBase = Path.ChangeExtension(a.FileName, null);
 							if (exportArtcollisionpriorityToolStripMenuItem.Checked)
 							{
-								bits = new BitmapBits(128, 128);
+								BitmapBits bits = new BitmapBits(128, 128);
 								bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
 								bits.ToBitmap(pal).Save(pathBase + ".png");
 								LevelData.ChunkColBmpBits[SelectedChunk][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
@@ -6757,18 +6752,38 @@ namespace SonicRetro.SonLVL.GUI
 							}
 							else
 							{
-								bits = new BitmapBits(128, 128);
-								if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
-									bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
-								else if (lowToolStripMenuItem.Checked)
-									bits.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk]);
-								else if (highToolStripMenuItem.Checked)
-									bits.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk]);
-								if (path1ToolStripMenuItem.Checked)
-									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
-								else if (path2ToolStripMenuItem.Checked)
-									bits.DrawBitmapComposited(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
-								bits.ToBitmap(pal).Save(pathBase + ".png");
+								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+								{
+									BitmapBits32 bits = new BitmapBits32(128, 128);
+									pal.Entries.CopyTo(bits.Palette, 0);
+									if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
+										bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
+									else if (lowToolStripMenuItem.Checked)
+										bits.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk]);
+									else if (highToolStripMenuItem.Checked)
+										bits.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk]);
+
+									bits.Palette[LevelData.ColorWhite] = Color.White;
+									bits.Palette[LevelData.ColorYellow] = Color.Yellow;
+									bits.Palette[LevelData.ColorBlack] = Color.Black;
+
+									if (path1ToolStripMenuItem.Checked)
+										bits.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
+									else if (path2ToolStripMenuItem.Checked)
+										bits.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
+									bits.ToBitmap().Save(pathBase + ".png");
+								}
+								else
+								{
+									BitmapBits bits = new BitmapBits(128, 128);
+									if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
+										bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
+									else if (lowToolStripMenuItem.Checked)
+										bits.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk]);
+									else if (highToolStripMenuItem.Checked)
+										bits.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk]);
+									bits.ToBitmap(pal).Save(pathBase + ".png");
+								}
 							}
 						}
 					break;

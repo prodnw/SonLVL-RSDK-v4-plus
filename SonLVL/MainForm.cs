@@ -2501,7 +2501,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Down:
 					if (!loaded) return;
-					objectPanel.VScrollValue = Math.Max((int)Math.Min(objectPanel.VScrollValue + vstep, objectPanel.VScrollMaximum - 128 + 1), objectPanel.VScrollMinimum);
+					objectPanel.VScrollValue = Math.Max((int)Math.Min(objectPanel.VScrollValue + vstep, objectPanel.VScrollMaximum), objectPanel.VScrollMinimum);
 					break;
 				case Keys.Left:
 					if (!loaded) return;
@@ -2509,7 +2509,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Right:
 					if (!loaded) return;
-					objectPanel.HScrollValue = Math.Max((int)Math.Min(objectPanel.HScrollValue + hstep, objectPanel.HScrollMaximum - 128 + 1), objectPanel.HScrollMinimum);
+					objectPanel.HScrollValue = Math.Max((int)Math.Min(objectPanel.HScrollValue + hstep, objectPanel.HScrollMaximum), objectPanel.HScrollMinimum);
 					break;
 				case Keys.Delete:
 					if (!loaded) return;
@@ -2716,7 +2716,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Down:
 					if (!loaded) return;
-					foregroundPanel.VScrollValue = Math.Max((int)Math.Min(foregroundPanel.VScrollValue + vstep, foregroundPanel.VScrollMaximum - 128 + 1), foregroundPanel.VScrollMinimum);
+					foregroundPanel.VScrollValue = Math.Max((int)Math.Min(foregroundPanel.VScrollValue + vstep, foregroundPanel.VScrollMaximum), foregroundPanel.VScrollMinimum);
 					break;
 				case Keys.Left:
 					if (!loaded) return;
@@ -2724,7 +2724,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Right:
 					if (!loaded) return;
-					foregroundPanel.HScrollValue = Math.Max((int)Math.Min(foregroundPanel.HScrollValue + hstep, foregroundPanel.HScrollMaximum - 128 + 1), foregroundPanel.HScrollMinimum);
+					foregroundPanel.HScrollValue = Math.Max((int)Math.Min(foregroundPanel.HScrollValue + hstep, foregroundPanel.HScrollMaximum), foregroundPanel.HScrollMinimum);
 					break;
 				case Keys.A:
 					if (!loaded) return;
@@ -2775,7 +2775,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.Down:
 						if (!loaded) return;
-						backgroundPanel.VScrollValue = Math.Max((int)Math.Min(backgroundPanel.VScrollValue + vstep, backgroundPanel.VScrollMaximum - 128 + 1), backgroundPanel.VScrollMinimum);
+						backgroundPanel.VScrollValue = Math.Max((int)Math.Min(backgroundPanel.VScrollValue + vstep, backgroundPanel.VScrollMaximum), backgroundPanel.VScrollMinimum);
 						break;
 					case Keys.Left:
 						if (!loaded) return;
@@ -2783,7 +2783,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.Right:
 						if (!loaded) return;
-						backgroundPanel.HScrollValue = Math.Max((int)Math.Min(backgroundPanel.HScrollValue + hstep, backgroundPanel.HScrollMaximum - 128 + 1), backgroundPanel.HScrollMinimum);
+						backgroundPanel.HScrollValue = Math.Max((int)Math.Min(backgroundPanel.HScrollValue + hstep, backgroundPanel.HScrollMaximum), backgroundPanel.HScrollMinimum);
 						break;
 					case Keys.A:
 						if (!loaded) return;

@@ -42,7 +42,7 @@ namespace SCDObjectDefinitions.R5
 				sprites[i] = new Sprite(sprites[9], (int)(Math.Cos(angle) * 96), (int)(Math.Sin(angle) * 96));
 			}
 			
-			properties[0] = new PropertySpec("Leader", typeof(int), "Extended",
+			properties[0] = new PropertySpec("Leader", typeof(bool), "Extended",
 				"If this Log is the lead of the set. Leaders should be followed by 7 normal Logs.", null,
 				(obj) => (obj.PropertyValue == 1),
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 1 : 0));

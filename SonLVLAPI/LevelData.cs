@@ -612,8 +612,9 @@ namespace SonicRetro.SonLVL.API
 		{
 			string fullpath = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder, name);
 			bool isnew = !File.Exists(fullpath);
+			bool noModExists = (DataFile != null && DataFile.FileExists($"Data/Stages/{StageInfo.folder}/{name}")) || File.Exists($"Data/Stages/{StageInfo.folder}/{name}");
 			action(fullpath);
-			if (isnew && ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}").FastArrayEqual(File.ReadAllBytes(fullpath)))
+			if (isnew && noModExists && ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}").FastArrayEqual(File.ReadAllBytes(fullpath)))
 				File.Delete(fullpath);
 		}
 

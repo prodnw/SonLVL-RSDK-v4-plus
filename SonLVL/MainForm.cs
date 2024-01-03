@@ -2530,7 +2530,7 @@ namespace SonicRetro.SonLVL.GUI
 						}
 					}
 					DrawLevel();
-					SaveState("Change Objects ID");
+					SaveState("Change Objects Type");
 					break;
 				case Keys.C:
 					if (!loaded) return;
@@ -2605,7 +2605,7 @@ namespace SonicRetro.SonLVL.GUI
 							}
 						}
 						DrawLevel();
-						SaveState("Change Objects ID");
+						SaveState("Change Objects Type");
 					}
 					break;
 				case Keys.NumPad1:

@@ -2228,7 +2228,7 @@ namespace SonicRetro.SonLVL.GUI
 								height = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
 							else
 								height = dispRect.Bottom - scrollData.StartPos;
-							LevelImg8bpp.DrawLine(Color.Yellow, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
+							LevelImg8bpp.DrawLine((scrollList.SelectedIndex == scrlind) ? Color.Blue : Color.Yellow, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
 						}
 						break;
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
@@ -2245,7 +2245,7 @@ namespace SonicRetro.SonLVL.GUI
 								width = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
 							else
 								width = dispRect.Right - scrollData.StartPos;
-							LevelImg8bpp.DrawLine(Color.Yellow, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
+							LevelImg8bpp.DrawLine((scrollList.SelectedIndex == scrlind) ? Color.Blue : Color.Yellow, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
 						}
 						break;
 				}
@@ -7224,6 +7224,9 @@ namespace SonicRetro.SonLVL.GUI
 			scrollEnableDeformation.Checked = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].Deform;
 			scrollParallaxFactor.Value = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ParallaxFactor;
 			scrollScrollSpeed.Value = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ScrollSpeed;
+
+			if (LevelData.BGScroll[bglayer].Count > 0 && showScrollAreas.Checked)
+				DrawLevel();
 		}
 
 		private void addScrollButton_Click(object sender, EventArgs e)

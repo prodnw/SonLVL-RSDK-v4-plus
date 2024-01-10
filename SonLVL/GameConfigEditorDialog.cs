@@ -43,7 +43,7 @@ namespace SonicRetro.SonLVL
 					origConf = LevelData.ReadFileNoMod<RSDKv3.GameConfig>("Data/Game/GameConfig.bin");
 					break;
 			}
-			gameName.Text = LevelData.GameConfig.gameTitle;
+			gameName.Text = LevelData.GameTitle;
 			StringBuilder sb = new StringBuilder(LevelData.GameConfig.gameDescription);
 			for (int i = 0; i < sb.Length; i++)
 				switch (sb[i])
@@ -68,6 +68,8 @@ namespace SonicRetro.SonLVL
 			if (LevelData.GameXML != null)
 			{
 				isxml = true;
+				if (LevelData.GameXML.title.name != null)
+					gameName.Text = LevelData.GameXML.title.name;
 				objects = new List<ObjectXML>(LevelData.GameXML.objects.Select(a => a.Clone()));
 				origgcobjs = new List<ObjectXML>(LevelData.GameConfig.objects.Select(a => (ObjectXML)a));
 				origobjs = new List<ObjectXML>(origgcobjs.Concat(objects.Where(a => !a.forceLoad)));
@@ -109,7 +111,6 @@ namespace SonicRetro.SonLVL
 			if (isxml)
 			{
 				convertButton.Text = "Convert to BIN";
-				gameName.Enabled = false;
 				gameDescription.Enabled = false;
 				objectForceLoad.Visible = true;
 				objectTypeID.Visible = false;
@@ -120,7 +121,6 @@ namespace SonicRetro.SonLVL
 			else
 			{
 				convertButton.Text = "Convert to XML";
-				gameName.Enabled = true;
 				gameDescription.Enabled = true;
 				objectForceLoad.Visible = false;
 				objectTypeID.Visible = true;
@@ -713,6 +713,7 @@ namespace SonicRetro.SonLVL
 							break;
 					}
 				}
+				LevelData.GameXML.title = new TitleXML((origConf.gameTitle != gameName.Text) ? gameName.Text : null);
 				LevelData.GameXML.objects = objects;
 				LevelData.GameXML.variables = variables;
 				LevelData.GameXML.sounds = sounds;

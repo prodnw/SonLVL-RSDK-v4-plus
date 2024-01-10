@@ -9,6 +9,8 @@ namespace SonicRetro.SonLVL.API
 	[XmlRoot("game")]
 	public class GameXML
 	{
+		[XmlElement]
+		public TitleXML title;
 		[XmlArrayItem("color")]
 		public List<ColorXML> palette = new List<ColorXML>();
 		[XmlArrayItem("object")]
@@ -62,6 +64,16 @@ namespace SonicRetro.SonLVL.API
 			using (StreamWriter textWriter = File.CreateText(filename))
 				xmlSerializer.Serialize(textWriter, this);
 		}
+	}
+
+	public class TitleXML
+	{
+		[XmlAttribute]
+		public string name;
+
+		public TitleXML() { }
+
+		public TitleXML(string name) => this.name = name;
 	}
 
 	public class ColorXML

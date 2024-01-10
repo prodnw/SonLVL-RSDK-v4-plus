@@ -21,6 +21,7 @@ namespace SonicRetro.SonLVL.API
 		public static string ModFolder;
 		public static GameConfig GameConfig;
 		public static GameXML GameXML;
+		public static string GameTitle;
 		public static GameConfig.StageList.StageInfo StageInfo;
 		public static StageConfig StageConfig;
 		public static Color[] NewPalette = new Color[256];
@@ -147,6 +148,7 @@ namespace SonicRetro.SonLVL.API
 			for (int i = 0; i < 4; i++)
 				StageLists[i] = new List<GameConfig.StageList.StageInfo>(GameConfig.stageLists[i].list);
 			GlobalObjects = new List<GameConfig.ObjectInfo>(GameConfig.objects);
+			GameTitle = GameConfig.gameTitle;
 			GameXML = null;
 			if (ModFolder != null)
 			{
@@ -161,6 +163,9 @@ namespace SonicRetro.SonLVL.API
 					StageLists[2].AddRange(GameXML.specialStages.Select(a => (GameConfig.StageList.StageInfo)a));
 					StageLists[3].AddRange(GameXML.bonusStages.Select(a => (GameConfig.StageList.StageInfo)a));
 					GlobalObjects.AddRange(GameXML.objects.Where(a => !a.forceLoad).Select(a => (GameConfig.ObjectInfo)a));
+
+					if (GameXML.title.name != null)
+						GameTitle = GameXML.title.name;
 				}
 			}
 		}

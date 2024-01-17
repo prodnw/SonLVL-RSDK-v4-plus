@@ -477,6 +477,7 @@ namespace SonicRetro.SonLVL
 			loaded = true;
 
 			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
+			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 		}
 
 		private void stageDownButton_Click(object sender, EventArgs e)
@@ -489,6 +490,7 @@ namespace SonicRetro.SonLVL
 			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex - 2);
 			loaded = true;
 
+			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
 			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 		}
 

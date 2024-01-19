@@ -4871,11 +4871,23 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								case ArtTab.Chunks:
 									if ((Clipboard.ContainsData(typeof(ChunkCopyData).AssemblyQualifiedName) || Clipboard.ContainsData(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName)))
+									{
 										pasteOverToolStripMenuItem_Click(sender, EventArgs.Empty);
-									break;
+										LevelData.RedrawChunk(SelectedChunk);
+										ChunkSelector.Invalidate();
+										DrawChunkPicture();
+										chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+									}
+										break;
 								case ArtTab.Tiles:
 									if (Clipboard.ContainsData("SonLVLRSDKTile"))
+									{
 										pasteOverToolStripMenuItem_Click(sender, EventArgs.Empty);
+										TileSelector.Invalidate();
+										DrawTilePicture();
+										chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+										LevelData.RedrawBlock(SelectedTile, true);
+									}
 									break;
 							}
 						break;

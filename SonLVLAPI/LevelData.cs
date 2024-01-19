@@ -164,7 +164,7 @@ namespace SonicRetro.SonLVL.API
 					StageLists[3].AddRange(GameXML.bonusStages.Select(a => (GameConfig.StageList.StageInfo)a));
 					GlobalObjects.AddRange(GameXML.objects.Where(a => !a.forceLoad).Select(a => (GameConfig.ObjectInfo)a));
 
-					if (GameXML.title.name != null)
+					if (GameXML.title != null && GameXML.title.name != null)
 						GameTitle = GameXML.title.name;
 				}
 			}

@@ -68,7 +68,7 @@ namespace SonicRetro.SonLVL
 			if (LevelData.GameXML != null)
 			{
 				isxml = true;
-				if (LevelData.GameXML.title.name != null)
+				if (LevelData.GameXML.title != null && LevelData.GameXML.title.name != null)
 					gameName.Text = LevelData.GameXML.title.name;
 				objects = new List<ObjectXML>(LevelData.GameXML.objects.Select(a => a.Clone()));
 				origgcobjs = new List<ObjectXML>(LevelData.GameConfig.objects.Select(a => (ObjectXML)a));

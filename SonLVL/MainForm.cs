@@ -4277,6 +4277,7 @@ namespace SonicRetro.SonLVL.GUI
 				rightAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].rWallAngle;
 				ceilingAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].roofAngle;
 				leftAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].lWallAngle;
+				colFlags.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flags;
 				DrawColPicture();
 			}
 			else

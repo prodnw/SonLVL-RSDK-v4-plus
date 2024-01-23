@@ -32,7 +32,7 @@ namespace SCDObjectDefinitions.Mission
 				);
 			
 			properties[1] = new PropertySpec("Exit Right", typeof(bool), "Extended",
-				"If the Signpost should make the player move right after beating the level.", null,
+				"If the Signpost should make the player exit stage right after beating the level.", null,
 				(obj) => (obj.PropertyValue > 0x7f),
 				(obj, value) => {
 						// kinda hacky, but honestly it's the best thing we can do without being too weird about it

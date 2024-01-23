@@ -34,7 +34,7 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value) >> 4);
 			
 			properties[2] = new PropertySpec("Exit Right", typeof(bool), "Extended",
-				"If the Signpost should make the player move right after beating the level.", null,
+				"If the Signpost should make the player exit stage right after beating the level.", null,
 				(obj) => (((V4ObjectEntry)obj).Value1 != 0),
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = ((bool)value ? 1 : 0));
 		}

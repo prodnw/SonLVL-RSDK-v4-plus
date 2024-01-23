@@ -64,7 +64,6 @@ namespace S1ObjectDefinitions.SLZ
 			get { return properties; }
 		}
 		
-		// unlike the main property, we can use normal directions here rather than angles, so let's do that
 		public override string SubtypeName(byte subtype)
 		{
 			string[] directions = {"Left", "Right", "Bottom", "Top"};

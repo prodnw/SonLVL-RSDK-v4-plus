@@ -72,7 +72,7 @@ namespace SCDObjectDefinitions.R1
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			List<Sprite> sprites = new List<Sprite>();
-			int sx = -(((obj.PropertyValue) * 16) / 2) + 8;
+			int sx = -((obj.PropertyValue * 16) / 2) + 8;
 			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
 				sprites.Add(new Sprite(sprite, sx + (i * 16), 0));
 			return new Sprite(sprites.ToArray());

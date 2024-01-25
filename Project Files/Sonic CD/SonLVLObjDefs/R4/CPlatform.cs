@@ -23,7 +23,7 @@ namespace SCDObjectDefinitions.R4
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {4, 6, 8, 10}); } // can be any value, but let's give some starting ones
 		}
 		
 		public override byte DefaultSubtype
@@ -38,7 +38,7 @@ namespace SCDObjectDefinitions.R4
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " Blocks";
 		}
 
 		public override Sprite Image
@@ -54,7 +54,7 @@ namespace SCDObjectDefinitions.R4
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			List<Sprite> sprites = new List<Sprite>();
-			int sx = -(((obj.PropertyValue) * 16) / 2) + 8;
+			int sx = -((obj.PropertyValue * 16) / 2) + 8;
 			for (int i = 0; i < Math.Max(1, (int)obj.PropertyValue); i++)
 				sprites.Add(new Sprite(sprite, sx + (i * 16), 0));
 			return new Sprite(sprites.ToArray());

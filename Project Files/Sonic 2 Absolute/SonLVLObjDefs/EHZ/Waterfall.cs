@@ -34,7 +34,7 @@ namespace S2AObjectDefinitions.EHZ
 				sprites[7] = new Sprite(sheet.GetSection(192, 0, 64, 192), -32, -128);
 				sprites[8] = new Sprite(sheet.GetSection(192, 64, 64, 96), -32, -32);
 				
-				// we skip a few numbers in this list, 2 and 4 are skipped because they're blank, 6 is skipped because it's the same as 0
+				// (we skip 4 because it's blank)
 				properties[0] = new PropertySpec("Length", typeof(int), "Extended",
 					"How long this Waterfall is.", null, new Dictionary<string, int>
 					{

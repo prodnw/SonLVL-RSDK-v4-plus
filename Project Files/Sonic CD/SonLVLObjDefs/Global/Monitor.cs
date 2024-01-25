@@ -66,14 +66,14 @@ namespace SCDObjectDefinitions.Global
 					{ "Invincibility", 3 },
 					{ "Speed Shoes", 4 },
 					{ "Sonic 1UP", 5 },
-					{ "Clock", 6 },
 					{ "Tails 1UP", 7 },
-					{ "Super", 8 },
 					{ "Knuckles 1UP", 9 },
-					{ "Amy 1UP", 10 }
+					{ "Amy 1UP", 10 },
+					{ "Clock", 6 },
+					{ "Super", 8 }
 				};
 				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21});
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 7, 9, 10, 6, 8, 11, 12, 13, 14, 15, 16, 18, 20, 21, 17, 19});
 			}
 			else
 			{
@@ -84,12 +84,12 @@ namespace SCDObjectDefinitions.Global
 					{ "Invincibility", 3 },
 					{ "Speed Shoes", 4 },
 					{ "Sonic 1UP", 5 },
-					{ "Clock", 6 },
 					{ "Tails 1UP", 7 },
+					{ "Clock", 6 },
 					{ "Super", 8 }
 				};
 				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 7, 6, 8, 9, 10, 11, 12, 13, 14, 16, 15, 17});
 			}
 			
 			// this part is kind of scuffed.. it sure would've been easier it plane was just the top 4 bits instead of whatever this is

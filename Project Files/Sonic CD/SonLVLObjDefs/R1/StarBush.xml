@@ -14,13 +14,13 @@
   <Enums>
     <Enum name="frames">
       <EnumMember name="Big Bush (Foreground)" />
-      <EnumMember name="Small Bush" />
-      <EnumMember name="Big Bush (Background)" />
+      <EnumMember name="Big Bush (Background)" value="2" />
+      <EnumMember name="Small Bush" value="1" />
     </Enum>
   </Enums>
   <Subtypes>
     <Subtype id="00" name="Big Bush (Foreground)" image="big" />
-    <Subtype id="01" name="Small Bush" image="small" />
     <Subtype id="02" name="Big Bush (Background)" image="big" />
+    <Subtype id="01" name="Small Bush" image="small" />
   </Subtypes>
 </ObjDef>

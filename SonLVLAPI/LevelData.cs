@@ -267,13 +267,13 @@ namespace SonicRetro.SonLVL.API
 				case EngineVersion.V4:
 					Background = ReadFile<RSDKv4.Backgrounds>(stgfol + "Backgrounds.bin");
 					Scene = ReadFile<RSDKv4.Scene>($"{stgfol}Act{stage.actID}.bin");
-					foreach (var astg in StageLists.SelectMany(a => a).Where(a => a != stage && a.folder.Equals(stage.folder, StringComparison.OrdinalIgnoreCase)))
+					foreach (var astg in StageLists.SelectMany(a => a).Where(a => a != stage && a.folder.Equals(stage.folder, StringComparison.OrdinalIgnoreCase) && a.actID != stage.actID))
 						AdditionalScenes.Add(new AdditionalScene(astg, ReadFile<RSDKv4.Scene>($"{stgfol}Act{astg.actID}.bin")));
 					break;
 				case EngineVersion.V3:
 					Background = ReadFile<RSDKv3.Backgrounds>(stgfol + "Backgrounds.bin");
 					Scene = ReadFile<RSDKv3.Scene>($"{stgfol}Act{stage.actID}.bin");
-					foreach (var astg in StageLists.SelectMany(a => a).Where(a => a != stage && a.folder.Equals(stage.folder, StringComparison.OrdinalIgnoreCase)))
+					foreach (var astg in StageLists.SelectMany(a => a).Where(a => a != stage && a.folder.Equals(stage.folder, StringComparison.OrdinalIgnoreCase) && a.actID != stage.actID))
 						AdditionalScenes.Add(new AdditionalScene(astg, ReadFile<RSDKv3.Scene>($"{stgfol}Act{astg.actID}.bin")));
 					break;
 			}

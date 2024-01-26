@@ -2909,19 +2909,23 @@ namespace SonicRetro.SonLVL.GUI
 				case MouseButtons.Left:
 					if (e.Clicks == 2)
 					{
-						if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE && ObjectSelect.ShowDialog(this) == DialogResult.OK)
+						if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
 						{
-							ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
-							objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
-							ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
-							ent.X = gridx;
-							ent.Y = gridy;
-							ent.UpdateSprite();
-							SelectedItems.Clear();
-							SelectedItems.Add(ent);
-							SelectedObjectChanged();
-							DrawLevel();
-							SaveState("Add Object");
+							if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
+							{
+								ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
+								objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
+								ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
+								ent.X = gridx;
+								ent.Y = gridy;
+								ent.UpdateSprite();
+								SelectedItems.Clear();
+								SelectedItems.Add(ent);
+								SelectedObjectChanged();
+								DrawLevel();
+								SaveState("Add Object");
+							}
+							return;
 						}
 					}
 					Entry entry = GetEntryAtPoint(new Point(curx, cury));

@@ -3139,6 +3139,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void foregroundPanel_MouseUp(object sender, MouseEventArgs e)
 		{
+			if (!loaded) return;
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
@@ -3411,7 +3412,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void backgroundPanel_MouseUp(object sender, MouseEventArgs e)
 		{
-			if (scrollPreviewButton.Checked) return;
+			if (!loaded || scrollPreviewButton.Checked) return;
 			if (tabControl3.SelectedIndex == 2)
 			{
 				if (selectedScrollLine != -1)

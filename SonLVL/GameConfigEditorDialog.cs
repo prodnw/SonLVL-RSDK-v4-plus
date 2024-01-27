@@ -413,8 +413,8 @@ namespace SonicRetro.SonLVL
 			stageName.Enabled = false;
 			stageHighlight.Enabled = false;
 			stageBrowseButton.Enabled = false;
-			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
-			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
+			stageUpButton.Enabled = false;
+			stageDownButton.Enabled = false;
 		}
 
 		private void stageListBox_SelectedIndexChanged(object sender, EventArgs e)

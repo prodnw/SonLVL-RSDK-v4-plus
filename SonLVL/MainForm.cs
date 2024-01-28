@@ -1477,11 +1477,13 @@ namespace SonicRetro.SonLVL.GUI
 		private void lowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			DrawLevel();
+			DrawChunkPicture();
 		}
 
 		private void highToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			DrawLevel();
+			DrawChunkPicture();
 		}
 
 		private void collisionToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -1495,6 +1497,7 @@ namespace SonicRetro.SonLVL.GUI
 				((ToolStripMenuItem)e.ClickedItem).Checked = true;
 				anglesToolStripMenuItem.Checked = angles;
 				DrawLevel();
+				DrawChunkPicture();
 			}
 		}
 

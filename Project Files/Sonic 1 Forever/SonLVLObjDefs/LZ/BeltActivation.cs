@@ -43,6 +43,11 @@ namespace S1ObjectDefinitions.LZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {8, 9, 10, 11, 12}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 8; }

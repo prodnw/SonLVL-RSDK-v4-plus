@@ -38,23 +38,31 @@ namespace SCDObjectDefinitions.R5
 				debug[i] = new Sprite(overlay, bounds.X, bounds.Y);
 			}
 			
+			// These names are.. kinda bad tbh
+			// i think this is the only time i ever refer to the "GF" and "BF" as such?
+			// ("Good Future" and "Bad Future" btw, not, like, "girlfriend" and "boyfriend"-)
+			// And then each frame is sorted by letters.. this kinda sucks but i'm not really sure what else to do about it?
+			// it used to just be "Frame 1"-"Frame 14", honestly i think that might've been better then trying to organise them based on time period?
+			// i kind of have an idea to restrict the sprites to the ones only appropriate for the time period and silently leave the rest off the list, but that feels like
+			// i might be overstepping the bounds of a level editor, so..
+			// i guess we're just stuck with this for now..?
 			properties[0] = new PropertySpec("Frame", typeof(int), "Extended",
 				"Which sprite this object should display.", null, new Dictionary<string, int>
 				{
-					{ "Frame 1", 0 },
-					{ "Frame 2", 1 },
-					{ "Frame 3", 2 },
-					{ "Frame 4", 3 },
-					{ "Frame 5", 4 },
-					{ "Frame 6", 5 },
-					{ "Frame 7", 6 },
-					{ "Frame 8", 7 },
-					{ "Frame 9", 8 },
-					{ "Frame 10", 9 },
-					{ "Frame 11", 10 },
-					{ "Frame 12", 11 },
-					{ "Frame 13", 12 },
-					{ "Frame 14", 13 }
+					{ "Present: H", 0 }, // Horizontal
+					{ "Present: V", 1 }, // Vertical
+					{ "Past: H", 2 }, // Horizontal
+					{ "Past: H (Small)", 3 }, // Horizontal (Small)
+					{ "Past: V", 4 }, // Vertical
+					{ "Past: V (Small)", 5 }, // Vertical (Small)
+					{ "GF: H", 6 }, // Horizontal
+					{ "GF: H (Flip)", 7 }, // Horizontal (Flipped)
+					{ "GF: V", 8 }, // Vertical
+					{ "GF: V (Flip)", 9 }, // Vertical (Flipped)
+					{ "BF: H", 10 }, // Horizontal
+					{ "BF: H (Flip)", 11 }, // Horizontal (Flipped)
+					{ "BF: V", 12 }, // Vertical
+					{ "BF: V (Flip)", 13 } // Vertical (Flipped)
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -72,7 +80,7 @@ namespace SCDObjectDefinitions.R5
 		
 		public override string SubtypeName(byte subtype)
 		{
-			return "Frame " + (subtype + 1);
+			return properties[0].Enumeration.GetKey(subtype);
 		}
 
 		public override Sprite Image

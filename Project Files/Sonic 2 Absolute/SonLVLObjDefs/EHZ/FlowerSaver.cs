@@ -26,6 +26,11 @@ namespace S2AObjectDefinitions.EHZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {2, 4, 6, 8, 10}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 4; }

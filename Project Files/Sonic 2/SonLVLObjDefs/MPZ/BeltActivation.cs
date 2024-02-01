@@ -26,6 +26,11 @@ namespace S2ObjectDefinitions.MPZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {8}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 8; }

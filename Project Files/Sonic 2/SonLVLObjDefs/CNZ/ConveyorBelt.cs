@@ -26,6 +26,11 @@ namespace S2ObjectDefinitions.CNZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {8, 10, 12, 14, 16, 18, 20}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

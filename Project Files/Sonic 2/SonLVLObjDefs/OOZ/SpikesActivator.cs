@@ -26,6 +26,11 @@ namespace S2ObjectDefinitions.OOZ
 			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2, 3, 4}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 1; }

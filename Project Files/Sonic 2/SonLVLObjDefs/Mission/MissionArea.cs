@@ -34,6 +34,11 @@ namespace S2ObjectDefinitions.Mission
 			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override string SubtypeName(byte subtype)
 		{
 			return null;

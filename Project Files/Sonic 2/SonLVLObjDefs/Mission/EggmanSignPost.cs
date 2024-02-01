@@ -20,7 +20,7 @@ namespace S2ObjectDefinitions.Mission
 			properties[0] = new PropertySpec("Inhale Time", typeof(int), "Extended",
 				"How long the Eggman should spend sucking in chemicals.", null,
 				(obj) => Math.Min(Math.Max(((V4ObjectEntry)obj).Value0, 0), 18),
-				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
+				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
 			
 			properties[1] = new PropertySpec("Charge Decrease", typeof(int), "Extended",
 				"How many less cycles Eggman will inhale chemicals before being ready for release.", null,
@@ -30,17 +30,22 @@ namespace S2ObjectDefinitions.Mission
 			properties[2] = new PropertySpec("Dropper Speed", typeof(int), "Extended",
 				"The speed, in pixels, at which Eggman should follow the player while holding chemicals.", null,
 				(obj) => Math.Max(((V4ObjectEntry)obj).Value2, 0) + 1,
-				(obj, value) => ((V4ObjectEntry)obj).Value2 = Math.Max(((int)value - 1), 0));
+				(obj, value) => ((V4ObjectEntry)obj).Value2 = Math.Max((int)value - 1, 0));
 			
 			properties[3] = new PropertySpec("Base Speed", typeof(int), "Extended",
 				"The speed, in pixels, at which Eggman should cross the arena.", null,
 				(obj) => Math.Max(((V4ObjectEntry)obj).Value3, 0) + 3,
-				(obj, value) => ((V4ObjectEntry)obj).Value3 = Math.Max(((int)value - 3), 0));
+				(obj, value) => ((V4ObjectEntry)obj).Value3 = Math.Max((int)value - 3, 0));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties

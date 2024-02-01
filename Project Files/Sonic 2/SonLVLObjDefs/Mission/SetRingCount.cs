@@ -19,19 +19,19 @@ namespace S2ObjectDefinitions.Mission
 			sprite = new Sprite(frame, new Sprite(bitmap, -9, -9));
 			
 			properties[0] = new PropertySpec("Ring Count", typeof(int), "Extended",
-				"How many rings the player will start with.", 10,
+				"How many rings the player will start with.", null,
 				(obj) => ((V4ObjectEntry)obj).Value0,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override bool Debug
 		{
 			get { return true; }
-		}
-
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
 		public override PropertySpec[] CustomProperties

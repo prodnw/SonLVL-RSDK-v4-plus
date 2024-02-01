@@ -26,6 +26,11 @@ namespace S2ObjectDefinitions.WFZ
 			get { return new ReadOnlyCollection<byte>(new byte[0]); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 0x10; }

@@ -61,8 +61,8 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			string name = ((subtype & 1) == 0) ? "199 px" : "455 px";
-			name += ((subtype & 2) == 0) ? " (Start Downwards)" : " (Start Upwards)"; // yeah the properties are which direction to go while this is which direction to start from, dunno if it's confuisng so maybe i'll change this later?
+			string name = ((subtype & 2) == 0) ? "Upwards" : "Downwards";
+			name += ((subtype & 1) == 0) ? " (199 px)" : " (455 px)";
 			return name;
 		}
 

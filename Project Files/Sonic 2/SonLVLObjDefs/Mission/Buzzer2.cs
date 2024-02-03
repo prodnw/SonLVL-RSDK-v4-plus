@@ -48,7 +48,7 @@ namespace S2ObjectDefinitions.Mission
 			properties[2] = new PropertySpec("Speed", typeof(decimal), "Extended",
 				"The speed at which this Buzzer should move horizontally, in pixels per frame.", null,
 				(obj) => ((((V4ObjectEntry)obj).Value1 > 0) ? ((V4ObjectEntry)obj).Value1 : 100)/100m,
-				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)(((decimal)value) * 100m));
+				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)((decimal)value * 100m));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

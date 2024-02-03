@@ -72,7 +72,7 @@ namespace S2ObjectDefinitions.WFZ
 					{ "93.75%", 15 }
 				},
 				(obj) => obj.PropertyValue >> 4,
-				(obj, value) => obj.PropertyValue = (byte)((int)value << 4)); // (we're not preserving the bottom four bits on purpose, having them set means the platform will never do move)
+				(obj, value) => obj.PropertyValue = (byte)((int)value << 4)); // (we're discarding the bottom four bits on purpose, having them set means the platform will never move)
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

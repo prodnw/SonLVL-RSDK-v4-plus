@@ -1014,8 +1014,22 @@ namespace SonicRetro.SonLVL.API
 				def = new XMLObjectDefinition();
 			else
 				def = new DefaultObjectDefinition();
-			def.Init(objinf);
-			def.Init(data);
+#if !DEBUG
+			try
+#endif
+			{
+				def.Init(objinf);
+				def.Init(data);
+			}
+#if !DEBUG
+			catch (Exception ex)
+			{
+				Log("Object definition " + objinf.script + " failed to initialize!");
+				Log(ex.ToString());
+				def = new DefaultObjectDefinition();
+				def.Init(new ObjectData());
+			}
+#endif
 			return def;
 		}
 

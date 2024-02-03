@@ -3860,19 +3860,22 @@ namespace SonicRetro.SonLVL.GUI
 						return;
 					break;
 				case Keys.S:
-					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-						if (e.Shift)
-							item.solidityA--;
-						else
-							item.solidityA++;
-					SaveState("Change Chunk Blocks Solidity A");
+					if (!e.Control)
+					{
+						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+							if (e.Shift)
+								item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityA + 1);
+							else
+								item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityA - 1);
+						SaveState("Change Chunk Blocks Solidity A");
+					}
 					break;
 				case Keys.T:
 					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
 						if (e.Shift)
-							item.solidityB--;
+							item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityB + 1);
 						else
-							item.solidityB++;
+							item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityB - 1);
 					SaveState("Change Chunk Blocks Solidity B");
 					break;
 				case Keys.Up:
@@ -3893,9 +3896,12 @@ namespace SonicRetro.SonLVL.GUI
 					SaveState("Change Chunk Blocks X Flip");
 					break;
 				case Keys.Y:
-					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-						item.direction ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY;
-					SaveState("Change Chunk Blocks Y Flip");
+					if (!e.Control)
+					{
+						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+							item.direction ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY;
+						SaveState("Change Chunk Blocks Y Flip");
+					}
 					break;
 				default:
 					return;

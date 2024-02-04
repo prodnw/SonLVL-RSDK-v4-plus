@@ -771,7 +771,7 @@ namespace SonicRetro.SonLVL.GUI
 			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
 			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled =
-				removeDuplicateTilesToolStripButton.Enabled = removeDuplicateChunksToolStripButton.Enabled =
+				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = removeDuplicateChunksToolStripButton.Enabled =
 				replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = replaceBackgroundToolStripButton.Enabled = replaceForegroundToolStripButton.Enabled =
 				clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled = usageCountsToolStripMenuItem.Enabled =
 				titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
@@ -1701,7 +1701,7 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								BitmapBits32 bits = new BitmapBits32(128, 128);
 								pal.Entries.CopyTo(bits.Palette, 0);
-								bits.FillRectangle(pal.Entries[0], 0, 0, 128, 128);
+								bits.Clear(pal.Entries[0]);
 								if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
 									bits.DrawSprite(LevelData.ChunkSprites[i]);
 								else if (lowToolStripMenuItem.Checked)
@@ -3926,7 +3926,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			BitmapBits32 bmp = new BitmapBits32(128, 128);
 			LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-			bmp.FillRectangle(LevelImgPalette.Entries[0xA0], 0, 0, 128, 128);
+			bmp.Clear(LevelImgPalette.Entries[0xA0]);
 			if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
 				bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (lowToolStripMenuItem.Checked)
@@ -4688,7 +4688,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					BitmapBits32 bmp = new BitmapBits32(16, 16);
 					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-					bmp.FillRectangle(LevelImgPalette.Entries[0xA0], 0, 0, 16, 16);
+					bmp.Clear(LevelImgPalette.Entries[0xA0]);
 					bmp.DrawBitmap(LevelData.NewTiles[SelectedTile], 0, 0);
 					bmp.Palette[1] = Color.White;
 					bmp.DrawBitmap(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex], 0, 0);
@@ -4714,6 +4714,8 @@ namespace SonicRetro.SonLVL.GUI
 			leftAngle.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].lWallAngle;
 			colFlags.Value = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flags;
 			DrawColPicture();
+
+			copyCollisionSingleButton.Text = $"Copy to Layer {(collisionLayerSelector.SelectedIndex ^ 1) + 1}";
 		}
 
 		private void ColPicture_MouseDown(object sender, MouseEventArgs e)
@@ -6512,6 +6514,15 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState("Calculate Collision Angles");
 		}
 
+		private void copyCollisionSingleButton_Click(object sender, EventArgs e)
+		{
+			if (LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex ^ 1][SelectedTile].Equals(LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile])) return;
+
+			LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex ^ 1][SelectedTile] = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].Clone();
+			LevelData.RedrawCol(SelectedTile, true);
+			SaveState($"Copy Tile Collision to Path {(collisionLayerSelector.SelectedIndex ^ 1) + 1}");
+		}
+
 		private void usageCountsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			using (StatisticsDialog dlg = new StatisticsDialog())
@@ -7761,6 +7772,43 @@ namespace SonicRetro.SonLVL.GUI
 			using (FileSelectDialog dlg = new FileSelectDialog("Sound Effects", sfxFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 					sfxFileBox.Text = dlg.SelectedPath;
+		}
+
+		private void copyCollisionAllButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show(this, "Are you sure you want to replace all of Path 2's collision with Path 1's?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
+				return;
+			
+			RSDKv3_4.TileConfig.CollisionMask[] prevCol = LevelData.Collision.collisionMasks[1].Select(a => a.Clone()).ToArray();
+
+			LevelData.Collision.collisionMasks[1] = LevelData.Collision.collisionMasks[0].Select(a => a.Clone()).ToArray();
+
+			var redrawblocks = new SortedSet<int>();
+			for (int i = 0; i < LevelData.Collision.collisionMasks[0].Length; i++)
+				if (!prevCol[i].Equal(LevelData.Collision.collisionMasks[1][i]))
+				{
+					LevelData.RedrawCol(i, false);
+					redrawblocks.Add(i);
+				}
+
+			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
+			{
+				bool redraw = false;
+				foreach (RSDKv3_4.Tiles128x128.Block.Tile tile in LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a))
+				{
+					redraw = redrawblocks.Contains(tile.tileIndex) || (tile.solidityA != tile.solidityB);
+					tile.solidityB = tile.solidityA;
+				}
+
+				if (redraw)
+				{
+					LevelData.RedrawChunk(i);
+					if (i == SelectedChunk)
+						DrawChunkPicture();
+				}
+			}
+
+			SaveState("Copy Path 1 Collision to Path 2");
 		}
 
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)

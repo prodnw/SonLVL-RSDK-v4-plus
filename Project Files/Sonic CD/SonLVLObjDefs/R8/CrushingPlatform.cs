@@ -83,8 +83,8 @@ namespace SCDObjectDefinitions.R8
 			
 			Dictionary<byte, byte> size = new Dictionary<byte, byte>
 			{
-				{0, 5},
-				{72, 69}
+				{5, 0},
+				{69, 72}
 			};
 			
 			properties[1] = new PropertySpec("Size", typeof(int), "Extended",
@@ -93,20 +93,20 @@ namespace SCDObjectDefinitions.R8
 					{ "Small", 0 },
 					{ "Large", 1 }
 				},
-				(obj) => (size.ContainsKey(obj.PropertyValue)) ? 0 : 1,
+				(obj) => (size.ContainsKey(obj.PropertyValue)) ? 1 : 0,
 				(obj, value) => {
 						int val = (int)value;
 						if (!indexes.ContainsKey(obj.PropertyValue))
-							obj.PropertyValue = 72;
+							obj.PropertyValue = 69;
 						if (val == 0)
-						{
-							if (!size.ContainsKey(obj.PropertyValue))
-								obj.PropertyValue = size.GetKey(obj.PropertyValue);
-						}
-						else
 						{
 							if (size.ContainsKey(obj.PropertyValue))
 								obj.PropertyValue = size[obj.PropertyValue];
+						}
+						else
+						{
+							if (!size.ContainsKey(obj.PropertyValue))
+								obj.PropertyValue = size.GetKey(obj.PropertyValue);
 						}
 					}
 				);
@@ -157,16 +157,8 @@ namespace SCDObjectDefinitions.R8
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			Dictionary<byte, int> indexes = new Dictionary<byte, int>
-			{
-				{0, 0},
-				{72, 1},
-				{5, 0},
-				{69, 1}
-			};
-			
 			if (indexes.ContainsKey(obj.PropertyValue))
-				return debug[indexes[obj.PropertyValue]];
+				return debug[indexes[obj.PropertyValue] & 1];
 			else
 				return debug[1];
 		}

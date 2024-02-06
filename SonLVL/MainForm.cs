@@ -6907,9 +6907,18 @@ namespace SonicRetro.SonLVL.GUI
 							}
 							else
 							{
-								BitmapBits bmp = LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
-								using (Bitmap res = bmp.ToBitmap(LevelImgPalette))
-									res.Save(a.FileName);
+								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+								{
+									BitmapBits32 bmp = LevelData.DrawForeground32(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									using (Bitmap res = bmp.ToBitmap())
+										res.Save(a.FileName);
+								}
+								else
+								{
+									BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
+										res.Save(a.FileName);
+								}
 							}
 							break;
 						case Tab.Background:
@@ -6947,9 +6956,18 @@ namespace SonicRetro.SonLVL.GUI
 							}
 							else
 							{
-								BitmapBits bmp = LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
-								using (Bitmap res = bmp.ToBitmap(LevelImgPalette))
-									res.Save(a.FileName);
+								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+								{
+									BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									using (Bitmap res = bmp.ToBitmap())
+										res.Save(a.FileName);
+								}
+								else
+								{
+									BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
+										res.Save(a.FileName);
+								}
 							}
 							break;
 					}

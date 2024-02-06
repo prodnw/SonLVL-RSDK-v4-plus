@@ -770,10 +770,10 @@ namespace SonicRetro.SonLVL.GUI
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
 			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
 			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
-			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled =
-				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = removeDuplicateChunksToolStripButton.Enabled =
-				replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = replaceBackgroundToolStripButton.Enabled = replaceForegroundToolStripButton.Enabled =
-				clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled = usageCountsToolStripMenuItem.Enabled =
+			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
+				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
+				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = replaceBackgroundToolStripButton.Enabled =
+				replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled = usageCountsToolStripMenuItem.Enabled =
 				titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
 			undoToolStripMenuItem.Enabled = false;
 			undoToolStripMenuItem.DropDownItems.Clear();

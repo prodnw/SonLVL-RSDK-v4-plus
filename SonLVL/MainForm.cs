@@ -3859,6 +3859,33 @@ namespace SonicRetro.SonLVL.GUI
 					else
 						return;
 					break;
+				case Keys.Q:
+					bool angles = anglesToolStripMenuItem.Checked;
+					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+						if (item is ToolStripMenuItem item1)
+							item1.Checked = false;
+					noneToolStripMenuItem1.Checked = true;
+					anglesToolStripMenuItem.Checked = angles;
+					DrawChunkPicture();
+					break;
+				case Keys.W:
+					angles = anglesToolStripMenuItem.Checked;
+					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+						if (item is ToolStripMenuItem item1)
+							item1.Checked = false;
+					path1ToolStripMenuItem.Checked = true;
+					anglesToolStripMenuItem.Checked = angles;
+					DrawChunkPicture();
+					break;
+				case Keys.E:
+					angles = anglesToolStripMenuItem.Checked;
+					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+						if (item is ToolStripMenuItem item1)
+							item1.Checked = false;
+					path2ToolStripMenuItem.Checked = true;
+					anglesToolStripMenuItem.Checked = angles;
+					DrawChunkPicture();
+					break;
 				case Keys.S:
 					if (!e.Control)
 					{

@@ -794,7 +794,7 @@ namespace SonicRetro.SonLVL.GUI
 			objectTypeImages.Images.Clear();
 			objectTypeImages.Images.Add(LevelData.UnknownImg.Resize(objectTypeImages.ImageSize));
 			objectTypeListMap.Clear();
-			for (int i = 1; i < LevelData.ObjTypes.Count; i++)
+			for (int i = 0; i < LevelData.ObjTypes.Count; i++)
 			{
 				Bitmap image = LevelData.ObjTypes[i].Image.GetBitmap().ToBitmap(LevelData.BmpPal);
 				ObjectSelect.imageList1.Images.Add(image.Resize(ObjectSelect.imageList1.ImageSize));
@@ -802,8 +802,8 @@ namespace SonicRetro.SonLVL.GUI
 				if (!LevelData.ObjTypes[i].Hidden)
 				{
 					objectTypeListMap.Add(i, objectTypeList.Items.Count);
-					ObjectSelect.listView1.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, ObjectSelect.imageList1.Images.Count - 1) { Tag = (byte)i });
-					objectTypeList.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, objectTypeImages.Images.Count - 1) { Tag = (byte)i });
+					ObjectSelect.listView1.Items.Add(new ListViewItem((i == 0) ? "Blank Object" : LevelData.ObjTypes[i].Name, ObjectSelect.imageList1.Images.Count - 1) { Tag = (byte)i });
+					objectTypeList.Items.Add(new ListViewItem((i == 0) ? "Blank Object" : LevelData.ObjTypes[i].Name, objectTypeImages.Images.Count - 1) { Tag = (byte)i });
 				}
 			}
 			ObjectSelect.listView1.EndUpdate();

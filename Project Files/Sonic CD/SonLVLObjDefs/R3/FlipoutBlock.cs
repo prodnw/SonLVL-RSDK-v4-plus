@@ -27,7 +27,7 @@ namespace SCDObjectDefinitions.R3
 			properties[0] = new PropertySpec("Carry Object", typeof(bool), "Extended",
 				"If this block should carry object[+1] with it.", null,
 				(obj) => (obj.PropertyValue & 1) == 0,
-				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | ((bool)value ? 1 : 0)));
+				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | ((bool)value ? 0 : 1)));
 			
 			properties[1] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction this block will move.", null, new Dictionary<string, int>
@@ -51,7 +51,7 @@ namespace SCDObjectDefinitions.R3
 
 		public override string SubtypeName(byte subtype)
 		{
-			string name = (subtype > 1) ? "Extend Upwards" : "Extend Downwards";
+			string name = (subtype > 1) ? "Extend Downwards" : "Extend Upwards";
 			if ((subtype & 1) == 0)
 				name += " (Carrying Object)";
 			return name;

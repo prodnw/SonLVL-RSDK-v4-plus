@@ -31,6 +31,11 @@ namespace S2ObjectDefinitions.CNZ
 			get { return true; }
 		}
 		
+		public override byte DefaultSubtype
+		{
+			get { return 0x10; }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

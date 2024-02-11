@@ -23,7 +23,7 @@ namespace S2ObjectDefinitions.WFZ
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {8, 10, 12, 14, 16, 18, 20}); }
 		}
 		
 		public override bool Debug
@@ -43,7 +43,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return subtype + " Tiles Long";
 		}
 
 		public override Sprite Image

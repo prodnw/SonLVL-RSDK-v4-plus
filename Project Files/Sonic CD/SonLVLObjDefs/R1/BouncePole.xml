@@ -14,15 +14,10 @@
       <EnumMember name="Right" />
     </Enum>
   </Enums>
-  <ImageSets>
-    <ImageSet id="right">
-      <ImageRef image="bouncepole" xflip="AlwaysFlip" />
-    </ImageSet>
-  </ImageSets>
   <Subtypes>
     <Subtype id="00" name="Facing Left" image="bouncepole" />
     <Subtype id="01" name="Facing Right">
-      <ImageSetRef set="right" />
+      <ImageRef image="bouncepole" xflip="AlwaysFlip" />
     </Subtype>
   </Subtypes>
 </ObjDef>

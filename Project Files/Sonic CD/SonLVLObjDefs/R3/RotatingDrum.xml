@@ -27,7 +27,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Offset" description="How much this object should be through its interval. Offsets greater than 55% are in the background." type="offsets" startbit="0" length="8" />
+    <Property name="Offset" description="How much this object should be through its interval. Offsets past 55% are in the background." type="offsets" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="offsets">

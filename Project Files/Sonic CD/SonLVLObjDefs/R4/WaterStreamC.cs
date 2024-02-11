@@ -93,6 +93,11 @@ namespace SCDObjectDefinitions.R4
 			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

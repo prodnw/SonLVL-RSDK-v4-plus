@@ -70,9 +70,9 @@ namespace SCDObjectDefinitions.R1
 					{ "Enterance", 4 },
 					{ "Drop", 5 },
 					{ "Exit (Boost)", 8 },
+					{ "Y Bounds - 1280/1024", 3 },
 					{ "Y Bounds - 1024/792", 6 },
-					{ "Y Bounds - 792/1024", 7 },
-					{ "Y Bounds - 1280/1024", 3 }
+					{ "Y Bounds - 792/1024", 7 }
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -103,7 +103,12 @@ namespace SCDObjectDefinitions.R1
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2, 4, 5, 8, 6, 7, 3}); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2, 4, 5, 8, 3, 6, 7}); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties

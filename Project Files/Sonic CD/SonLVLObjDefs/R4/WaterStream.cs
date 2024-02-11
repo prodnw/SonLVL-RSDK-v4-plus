@@ -56,6 +56,11 @@ namespace SCDObjectDefinitions.R4
 			get { return new ReadOnlyCollection<byte>(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x10, 0x11, 0x12, 0x13, 0x14}); } // this is kinda iffy..
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 4; }

@@ -27,6 +27,8 @@ namespace SCDObjectDefinitions.Special
 			new PropertySpec("Speed", typeof(double), "Extended", "The speed at which the UFO moves after this node is reached, in pixels per second.", 30m, GetSpeed, SetSpeed)
 		};
 
+		public override bool Debug { get { return true; } }
+
 		public override PropertySpec[] CustomProperties { get { return customProperties; } }
 
 		public override byte DefaultSubtype { get { return 30; } }

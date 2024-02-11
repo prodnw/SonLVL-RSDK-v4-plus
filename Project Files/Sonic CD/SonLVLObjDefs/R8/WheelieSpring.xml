@@ -12,12 +12,12 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Spring" description="Which type of Spring this object should be carrying." type="springs" startbit="0" length="8" />
+    <Property name="Colour" description="Which colour of Spring this object should be carrying." type="springs" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="springs">
-      <EnumMember name="Red Spring" />
-      <EnumMember name="Yellow Spring" value="2" />
+      <EnumMember name="Red" />
+      <EnumMember name="Yellow" value="2" />
     </Enum>
   </Enums>
   <ImageSets>

@@ -71,7 +71,6 @@ namespace SCDObjectDefinitions.R5
 			return sprite;
 		}
 		
-		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return debug;
@@ -79,6 +78,7 @@ namespace SCDObjectDefinitions.R5
 		
 		public override Rectangle GetBounds(ObjectEntry obj)
 		{
+			// Let's use the bounds of only one of the platforms, instead of both (which would include the gap between them)
 			return new Rectangle(-32 + obj.X - 32, -16 + obj.Y, 64, 32); // x: sprite offset - obj.X - platform offset
 		}
 	}

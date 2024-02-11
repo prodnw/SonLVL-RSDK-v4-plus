@@ -55,7 +55,12 @@ namespace SCDObjectDefinitions.R6
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2}); }
 		}
-
+		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override PropertySpec[] CustomProperties
 		{
 			get { return properties; }

@@ -8,15 +8,14 @@ namespace SCDObjectDefinitions.Global
 {
 	class TimeWarpFix : ObjectDefinition
 	{
+		private PropertySpec[] properties = new PropertySpec[1];
 		private Sprite sprite;
 		private Sprite[] debug = new Sprite[3];
-		private PropertySpec[] properties;
 
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
 			
-			properties = new PropertySpec[1];
 			properties[0] = new PropertySpec("Fix Type", typeof(int), "Extended",
                 "The type of \"fix\" this Object will apply.", null, new Dictionary<string, int>
 				{
@@ -45,6 +44,11 @@ namespace SCDObjectDefinitions.Global
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3, 4}); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -92,10 +96,10 @@ namespace SCDObjectDefinitions.Global
 					return null;
 				case 2:
 				case 3:
-					int index = Math.Max(0, LevelData.Objects.IndexOf(obj) + 1);
+					int index = LevelData.Objects.IndexOf(obj) + 1;
 					
 					if (index > (LevelData.Objects.Count-1))
-						index--; // just make it point to this object
+						return null;
 					
 					int xmin = Math.Min(obj.X, LevelData.Objects[index].X);
 					int ymin = Math.Min(obj.Y, LevelData.Objects[index].Y);

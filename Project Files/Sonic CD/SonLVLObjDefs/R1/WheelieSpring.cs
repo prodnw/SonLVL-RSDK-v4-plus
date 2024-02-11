@@ -17,8 +17,8 @@ namespace SCDObjectDefinitions.R1
 			
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"How far the spring should travel, in pixels.", null,
-				(obj) => obj.PropertyValue,
-				(obj, value) => obj.PropertyValue = (byte)((int)value));
+				(obj) => obj.PropertyValue << 1,
+				(obj, value) => obj.PropertyValue = (byte)((int)value >> 1));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -38,7 +38,7 @@ namespace SCDObjectDefinitions.R1
 
 		public override string SubtypeName(byte subtype)
 		{
-			return "Travel " + subtype + " px";
+			return "Travel " + (subtype << 1) + " px";
 		}
 
 		public override Sprite Image

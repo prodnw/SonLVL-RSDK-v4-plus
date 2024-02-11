@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org">
+<ObjDef xmlns="http://www.sonicretro.org" Image="flipper">
   <Images>
     <ImageFromSheet id="flipper" sheet="R3/Objects.gif" sourcex="100" sourcey="167" width="64" height="32">
       <Offset X="-32" Y="-12"/>
@@ -14,23 +14,12 @@
       <EnumMember name="Right" />
     </Enum>
   </Enums>
-  <ImageSets>
-    <ImageSet id="left">
-      <ImageRef image="flipper" />
-    </ImageSet>
-    <ImageSet id="right">
-      <ImageRef image="flipper" xflip="AlwaysFlip" />
-    </ImageSet>
-  </ImageSets>
-  <DefaultImage>
-    <ImageSetRef set="left" />
-  </DefaultImage>
   <Subtypes>
     <Subtype id="00" name="Facing Left" >
-      <ImageSetRef set="left" />
+      <ImageRef image="flipper" />
     </Subtype>
     <Subtype id="01" name="Facing Right" >
-      <ImageSetRef set="right" />
+      <ImageRef image="flipper" xflip="AlwaysFlip" />
     </Subtype>
   </Subtypes>
 </ObjDef>

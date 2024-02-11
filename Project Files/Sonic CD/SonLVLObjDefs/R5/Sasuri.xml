@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Image="gmain">
+<ObjDef xmlns="http://www.sonicretro.org">
   <Images>
     <ImageFromSheet id="gmain" sheet="R5/Objects.gif" sourcex="174" sourcey="141" width="48" height="32">
       <Offset X="-24" Y="-16"/>

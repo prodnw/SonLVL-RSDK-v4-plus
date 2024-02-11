@@ -25,6 +25,11 @@ namespace SCDObjectDefinitions.R6
 			get { return new ReadOnlyCollection<byte>(new byte[] {0x18, 0x19, 0x1a, 0x1b, 0x1c}); }
 		}
 		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
 		public override byte DefaultSubtype
 		{
 			get { return 0x1a; }

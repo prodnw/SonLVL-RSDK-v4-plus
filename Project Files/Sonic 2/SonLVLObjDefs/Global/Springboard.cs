@@ -22,8 +22,8 @@ namespace S2ObjectDefinitions.Global
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which way the Springboard is facing.", null, new Dictionary<string, int>
 				{
-					{ "Left", 0 },
-					{ "Right", 1 }
+					{ "Right", 0 },
+					{ "Left", 1 }
 				},
 				(obj) => (int)((V4ObjectEntry)obj).Direction,
 				(obj, value) => ((V4ObjectEntry)obj).Direction = (RSDKv3_4.Tiles128x128.Block.Tile.Directions)value);

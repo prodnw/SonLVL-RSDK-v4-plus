@@ -49,13 +49,14 @@ namespace S1ObjectDefinitions.Mission
 		{
 			// Draw a line from this object's position to its falling bounds, and then draw a line across those falling bounds
 			// (1408 is a value hardcoded in the script)
-			int ymin = Math.Min((int)obj.Y, 1408);
-			int ymax = Math.Max((int)obj.Y, 1408);
+			const int bounds = 1408;
+			int ymin = Math.Min((int)obj.Y, bounds);
+			int ymax = Math.Max((int)obj.Y, bounds);
 			BitmapBits bitmap = new BitmapBits(257, ymax - ymin + 1);
 			
 			// tagging this area with LevelData.ColorWhite
-			bitmap.DrawLine(6, 128, obj.Y - ymin, 128, 1408 - ymin);
-			bitmap.DrawLine(6, 0, 1408 - ymin, 256, 1408 - ymin);
+			bitmap.DrawLine(6, 128, obj.Y - ymin, 128, bounds - ymin);
+			bitmap.DrawLine(6, 0, bounds - ymin, 256, bounds - ymin);
 			
 			return new Sprite(bitmap, -128, ymin - obj.Y);
 		}

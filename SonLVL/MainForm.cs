@@ -792,7 +792,6 @@ namespace SonicRetro.SonLVL.GUI
 			objectTypeList.BeginUpdate();
 			objectTypeList.Items.Clear();
 			objectTypeImages.Images.Clear();
-			objectTypeImages.Images.Add(LevelData.UnknownImg.Resize(objectTypeImages.ImageSize));
 			objectTypeListMap.Clear();
 			for (int i = 0; i < LevelData.ObjTypes.Count; i++)
 			{
@@ -4957,6 +4956,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			SelectedItems = new List<Entry>(LevelData.Objects.Cast<Entry>());
 			SelectedObjectChanged();
+			DrawLevel();
 		}
 
 		private void cutToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -5615,6 +5615,7 @@ namespace SonicRetro.SonLVL.GUI
 				switch (solid)
 				{
 					case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTop:
+					case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip:
 					case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
 						return false;
 				}

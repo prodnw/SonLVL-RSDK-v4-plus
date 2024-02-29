@@ -106,10 +106,10 @@ namespace SonicRetro.SonLVL.API
 			listView1.Items.Clear();
 			imageList1.Images.Clear();
 			if (LevelData.ObjTypes != null)
-				for (byte i = 1; i < LevelData.ObjTypes.Count; i++)
+				for (byte i = 0; i < LevelData.ObjTypes.Count; i++)
 				{
 					imageList1.Images.Add(LevelData.ObjTypes[i].Image.GetBitmap().ToBitmap(LevelData.BmpPal).Resize(imageList1.ImageSize));
-					listView1.Items.Add(new ListViewItem(LevelData.ObjTypes[i].Name, imageList1.Images.Count - 1) { Tag = i, Selected = i == Value });
+					listView1.Items.Add(new ListViewItem((i == 0) ? "Blank Object" : LevelData.ObjTypes[i].Name, imageList1.Images.Count - 1) { Tag = i, Selected = i == Value });
 				}
 			listView1.EndUpdate();
 			numericUpDown1.Value = Value;

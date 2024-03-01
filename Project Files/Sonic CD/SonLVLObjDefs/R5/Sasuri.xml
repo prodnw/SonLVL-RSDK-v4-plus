@@ -27,7 +27,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" description="What condition this Sasuri should be in. Affects movement speed whether or not this badnik can shoot." type="conditions" startbit="0" length="8" />
+    <Property name="Condition" description="What condition this Sasuri should be in. Affects movement speed and whether or not this badnik can shoot." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="conditions">

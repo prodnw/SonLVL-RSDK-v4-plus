@@ -80,7 +80,6 @@ namespace SonicRetro.SonLVL
 			// subtypeSelect
 			// 
 			this.subtypeSelect.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.subtypeSelect.Hexadecimal = true;
 			this.subtypeSelect.Location = new System.Drawing.Point(0, 80);
 			this.subtypeSelect.Maximum = new decimal(new int[] {
             255,

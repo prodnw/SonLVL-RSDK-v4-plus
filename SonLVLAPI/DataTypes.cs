@@ -218,7 +218,6 @@ namespace SonicRetro.SonLVL.API
 		[DefaultValue(0)]
 		[Description("The ID number of the object.")]
 		[Editor(typeof(IDEditor), typeof(System.Drawing.Design.UITypeEditor))]
-		[TypeConverter(typeof(ByteHexConverter))]
 		public byte Type
 		{
 			get => Entity.type;
@@ -228,7 +227,6 @@ namespace SonicRetro.SonLVL.API
 		[DefaultValue(0)]
 		[Description("The subtype of the object.")]
 		[Editor(typeof(SubTypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-		[TypeConverter(typeof(ByteHexConverter))]
 		public byte PropertyValue
 		{
 			get => Entity.propertyValue;

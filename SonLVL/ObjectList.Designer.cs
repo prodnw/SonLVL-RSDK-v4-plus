@@ -79,7 +79,6 @@ namespace SonicRetro.SonLVL.GUI
 			// numericUpDown1
 			// 
 			this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDown1.Hexadecimal = true;
 			this.numericUpDown1.Location = new System.Drawing.Point(3, 9);
 			this.numericUpDown1.Maximum = new decimal(new int[] {
 			255,
@@ -93,7 +92,6 @@ namespace SonicRetro.SonLVL.GUI
 			// numericUpDown2
 			// 
 			this.numericUpDown2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDown2.Hexadecimal = true;
 			this.numericUpDown2.Location = new System.Drawing.Point(47, 9);
 			this.numericUpDown2.Maximum = new decimal(new int[] {
 			255,

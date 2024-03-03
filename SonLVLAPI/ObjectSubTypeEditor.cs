@@ -60,7 +60,6 @@ namespace SonicRetro.SonLVL.API
 			// numericUpDown1
 			// 
 			this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.numericUpDown1.Hexadecimal = true;
 			this.numericUpDown1.Location = new System.Drawing.Point(0, 130);
 			this.numericUpDown1.Maximum = new decimal(new int[] {
 			255,

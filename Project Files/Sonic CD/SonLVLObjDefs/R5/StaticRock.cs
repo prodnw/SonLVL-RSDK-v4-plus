@@ -9,7 +9,7 @@ namespace SCDObjectDefinitions.R5
 	class StaticRock : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite[] sprites = new Sprite[3];
+		private Sprite[] sprites = new Sprite[4];
 		
 		public override void Init(ObjectData data)
 		{
@@ -23,7 +23,9 @@ namespace SCDObjectDefinitions.R5
 			
 			bitmap = new BitmapBits(32, 30);
 			bitmap.DrawRectangle(15, 0, 0, 31, 29); // yellow
-			sprites[1] = new Sprite(sprites[1], new Sprite(bitmap, -16, -14));
+			sprites[1] = new Sprite(sprites[1], new Sprite(bitmap, -16, -15));
+			
+			sprites[3] = new Sprite();
 			
 			properties[0] = new PropertySpec("Mode", typeof(int), "Extended",
 				"Which type of block this object is.", null, new Dictionary<string, int>
@@ -64,12 +66,26 @@ namespace SCDObjectDefinitions.R5
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[subtype];
+			return sprites[(subtype > 2) ? 3 : subtype];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return sprites[(obj.PropertyValue > 0) ? 3 : obj.PropertyValue];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return (obj.PropertyValue > 0) ? sprites[Math.Min((int)obj.PropertyValue, 2)] : null;
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			if (obj.PropertyValue == 0)
+				return Rectangle.Empty;
+			
+			int sy = (obj.PropertyValue == 1) ? 30 : 32;
+			return new Rectangle(obj.X - 16, obj.Y - (sy / 2), 32, sy);
 		}
 	}
 }

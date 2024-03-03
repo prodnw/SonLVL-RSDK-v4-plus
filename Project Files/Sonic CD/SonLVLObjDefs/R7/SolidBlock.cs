@@ -8,7 +8,7 @@ namespace SCDObjectDefinitions.R7
 	class SolidBlock : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite[] sprites = new Sprite[8];
+		private Sprite[] sprites = new Sprite[9];
 		
 		public override void Init(ObjectData data)
 		{
@@ -29,6 +29,8 @@ namespace SCDObjectDefinitions.R7
 			bitmap.DrawRectangle(6, 0, 0, 31, 31); // LevelData.ColorWhite
 			sprites[7] = new Sprite(bitmap, -16, -16);
 			
+			sprites[8] = new Sprite();
+			
 			properties[0] = new PropertySpec("Formation", typeof(int), "Extended",
 				"The formation of the blocks.", null, new Dictionary<string, int>
 				{
@@ -41,7 +43,7 @@ namespace SCDObjectDefinitions.R7
 					{ "Four Blocks (Vertical)", 6 },
 					{ "Invisible Block", 7 }
 				},
-				(obj) => obj.PropertyValue & 7,
+				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
@@ -67,15 +69,22 @@ namespace SCDObjectDefinitions.R7
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[subtype];
+			return sprites[(subtype > 6) ? 8 : subtype];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			if (obj.PropertyValue > 7)
-				return sprites[7];
-			
-			return sprites[obj.PropertyValue];
+			return sprites[(obj.PropertyValue > 6) ? 8 : obj.PropertyValue];
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			return (obj.PropertyValue > 6) ? sprites[7] : null;
+		}
+		
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			return (obj.PropertyValue > 6) ? new Rectangle(obj.X - 16, obj.Y - 16, 32, 32) : Rectangle.Empty;
 		}
 	}
 }

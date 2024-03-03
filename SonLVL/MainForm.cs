@@ -637,6 +637,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelImgPalette.Entries[LevelData.ColorWhite] = Color.White;
 			LevelImgPalette.Entries[LevelData.ColorYellow] = Color.Yellow;
 			LevelImgPalette.Entries[LevelData.ColorBlack] = Color.Black;
+			LevelImgPalette.Entries[LevelData.ColorRed] = Color.Red;
 			LevelImgPalette.Entries[ColorGrid] = Settings.GridColor;
 		}
 
@@ -1388,6 +1389,7 @@ namespace SonicRetro.SonLVL.GUI
 				LevelImgPalette.Entries[LevelData.ColorWhite] = Color.White;
 				LevelImgPalette.Entries[LevelData.ColorYellow] = Color.Yellow;
 				LevelImgPalette.Entries[LevelData.ColorBlack] = Color.Black;
+				LevelImgPalette.Entries[LevelData.ColorRed] = Color.Red;
 				LevelImgPalette.Entries[ColorGrid] = Settings.GridColor;
 				ChunkSelector.Images = LevelData.CompChunkBmps;
 				ChunkSelector.SelectedIndex = 0;
@@ -1648,8 +1650,8 @@ namespace SonicRetro.SonLVL.GUI
 							BitmapBits bits = new BitmapBits(128, 128);
 							bits.DrawSprite(LevelData.ChunkSprites[i]);
 							bits.ToBitmap(pal).Save(pathBase + ".png");
-							LevelData.ChunkColBmpBits[i][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
-							LevelData.ChunkColBmpBits[i][1].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2.png");
+							LevelData.ChunkColBmpBits[i][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1.png");
+							LevelData.ChunkColBmpBits[i][1].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2.png");
 							BitmapBits pri = new BitmapBits(128, 128);
 							BitmapBits fa1 = new BitmapBits(128, 128);
 							BitmapBits fa2 = new BitmapBits(128, 128);
@@ -1711,6 +1713,7 @@ namespace SonicRetro.SonLVL.GUI
 								bits.Palette[LevelData.ColorWhite] = Color.White;
 								bits.Palette[LevelData.ColorYellow] = Color.Yellow;
 								bits.Palette[LevelData.ColorBlack] = Color.Black;
+								bits.Palette[LevelData.ColorRed] = Color.Red;
 
 								if (path1ToolStripMenuItem.Checked)
 									bits.DrawBitmap(LevelData.ChunkColBmpBits[i][0], 0, 0);
@@ -1770,9 +1773,9 @@ namespace SonicRetro.SonLVL.GUI
 						res.Palette = pal;
 						res.Save(a.FileName);
 						bmp = LevelData.DrawForegroundCollision(null, 0);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
 						bmp = LevelData.DrawForegroundCollision(null, 1);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
@@ -1864,9 +1867,9 @@ namespace SonicRetro.SonLVL.GUI
 						res.Palette = pal;
 						res.Save(a.FileName);
 						bmp = LevelData.DrawBackground(bglayer, null, false, false, true, false);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
 						bmp = LevelData.DrawBackground(bglayer, null, false, false, false, true);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
+						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
@@ -2160,6 +2163,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelImg8bpp.Palette[LevelData.ColorWhite] = Color.White;
 			LevelImg8bpp.Palette[LevelData.ColorYellow] = Color.Yellow;
 			LevelImg8bpp.Palette[LevelData.ColorBlack] = Color.Black;
+			LevelImg8bpp.Palette[LevelData.ColorRed] = Color.Red;
 			switch (CurrentTab)
 			{
 				case Tab.Objects:
@@ -2280,7 +2284,7 @@ namespace SonicRetro.SonLVL.GUI
 				else if (path2ToolStripMenuItem.Checked)
 					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 2"));
 			}
-			Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+			Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 			if (CurrentTab == Tab.Objects && dragdrop)
 				LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
 			LevelBmp = LevelImg8bpp.ToBitmap();
@@ -3963,6 +3967,7 @@ namespace SonicRetro.SonLVL.GUI
 			bmp.Palette[LevelData.ColorWhite] = Color.White;
 			bmp.Palette[LevelData.ColorYellow] = Color.Yellow;
 			bmp.Palette[LevelData.ColorBlack] = Color.Black;
+			bmp.Palette[LevelData.ColorRed] = Color.Red;
 
 			if (path1ToolStripMenuItem.Checked)
 				bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
@@ -6807,8 +6812,8 @@ namespace SonicRetro.SonLVL.GUI
 								BitmapBits bits = new BitmapBits(128, 128);
 								bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
 								bits.ToBitmap(pal).Save(pathBase + ".png");
-								LevelData.ChunkColBmpBits[SelectedChunk][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1.png");
-								LevelData.ChunkColBmpBits[SelectedChunk][1].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2.png");
+								LevelData.ChunkColBmpBits[SelectedChunk][0].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1.png");
+								LevelData.ChunkColBmpBits[SelectedChunk][1].ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2.png");
 								bits = new BitmapBits(128, 128);
 								for (int cy = 0; cy < 8; cy++)
 									for (int cx = 0; cx < 8; cx++)
@@ -6822,6 +6827,7 @@ namespace SonicRetro.SonLVL.GUI
 								{
 									BitmapBits32 bits = new BitmapBits32(128, 128);
 									pal.Entries.CopyTo(bits.Palette, 0);
+									bits.Clear(pal.Entries[0]);
 									if (highToolStripMenuItem.Checked & lowToolStripMenuItem.Checked)
 										bits.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
 									else if (lowToolStripMenuItem.Checked)
@@ -6832,6 +6838,7 @@ namespace SonicRetro.SonLVL.GUI
 									bits.Palette[LevelData.ColorWhite] = Color.White;
 									bits.Palette[LevelData.ColorYellow] = Color.Yellow;
 									bits.Palette[LevelData.ColorBlack] = Color.Black;
+									bits.Palette[LevelData.ColorRed] = Color.Red;
 
 									if (path1ToolStripMenuItem.Checked)
 										bits.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
@@ -6891,8 +6898,8 @@ namespace SonicRetro.SonLVL.GUI
 									pal.Entries[0] = Color.Transparent;
 								res.Palette = pal;
 								res.Save(a.FileName);
-								LevelData.DrawForegroundCollision(area, 0).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
-								LevelData.DrawForegroundCollision(area, 1).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
+								LevelData.DrawForegroundCollision(area, 0).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
+								LevelData.DrawForegroundCollision(area, 1).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 								bmp.Clear();
 								for (int ly = FGSelection.Top; ly < FGSelection.Bottom; ly++)
 									for (int lx = FGSelection.Left; lx < FGSelection.Right; lx++)
@@ -6939,9 +6946,9 @@ namespace SonicRetro.SonLVL.GUI
 								res.Palette = pal;
 								res.Save(a.FileName);
 								bmp = LevelData.DrawBackground(bglayer, area, false, false, true, false);
-								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col1" + pathExt);
+								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
 								bmp = LevelData.DrawBackground(bglayer, area, false, false, false, true);
-								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black).Save(pathBase + "_col2" + pathExt);
+								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 								bmp.Clear();
 								for (int ly = BGSelection.Top; ly < BGSelection.Bottom; ly++)
 									for (int lx = BGSelection.Left; lx < BGSelection.Right; lx++)

@@ -63,6 +63,7 @@ namespace SonicRetro.SonLVL.API
 		public const int ColorWhite = 1;
 		public const int ColorYellow = 2;
 		public const int ColorBlack = 3;
+		public const int ColorRed = 4;
 		static readonly List<string> rsdk_files_list = new List<string>();
 
 		static LevelData()
@@ -411,6 +412,7 @@ namespace SonicRetro.SonLVL.API
 			BmpPal.Entries[ColorWhite] = Color.White;
 			BmpPal.Entries[ColorYellow] = Color.Yellow;
 			BmpPal.Entries[ColorBlack] = Color.Black;
+			BmpPal.Entries[ColorRed] = Color.Red;
 			UnknownImg.Palette = BmpPal;
 			InitObjectDefinitions();
 			NewTileBmps = new Bitmap[NewTiles.Length];
@@ -717,8 +719,9 @@ namespace SonicRetro.SonLVL.API
 								LevelImg8bpp.Palette[ColorWhite] = Color.White;
 								LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
 								LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+								LevelImg8bpp.Palette[ColorRed] = Color.Red;
 								LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
-								Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+								Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 							}
 						}
 						else
@@ -734,8 +737,9 @@ namespace SonicRetro.SonLVL.API
 									LevelImg8bpp.Palette[ColorWhite] = Color.White;
 									LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
 									LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+									LevelImg8bpp.Palette[ColorRed] = Color.Red;
 									LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
-									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 								}
 							}
 						}
@@ -756,8 +760,9 @@ namespace SonicRetro.SonLVL.API
 									LevelImg8bpp.Palette[ColorWhite] = Color.White;
 									LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
 									LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+									LevelImg8bpp.Palette[ColorRed] = Color.Red;
 									LevelImg8bpp.DrawSprite(ChunkColSprites[Scene.layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
-									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 								}
 							}
 				foreach (ObjectEntry item in Objects)
@@ -899,8 +904,9 @@ namespace SonicRetro.SonLVL.API
 							LevelImg8bpp.Palette[ColorWhite] = Color.White;
 							LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
 							LevelImg8bpp.Palette[ColorBlack] = Color.Black;
+							LevelImg8bpp.Palette[ColorRed] = Color.Red;
 							LevelImg8bpp.DrawSprite(ChunkColSprites[Background.layers[layer].layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
-							Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+							Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 						}
 					}
 			return LevelImg8bpp;
@@ -1123,7 +1129,7 @@ namespace SonicRetro.SonLVL.API
 			{ Tiles128x128.Block.Tile.Solidities.SolidTop, 0 },
 			{ Tiles128x128.Block.Tile.Solidities.SolidAllButTop, 1 },
 			{ Tiles128x128.Block.Tile.Solidities.SolidAll, 2 },
-			{ Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip, 0 }
+			{ Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip, 3 }
 		};
 		public static void RedrawChunk(int chunk)
 		{
@@ -1171,8 +1177,8 @@ namespace SonicRetro.SonLVL.API
 			ChunkBmps[chunk][1] = tmphigh.ToBitmap(BmpPal);
 			ChunkColSprites[chunk][0] = new Sprite(ChunkColBmpBits[chunk][0]);
 			ChunkColSprites[chunk][1] = new Sprite(ChunkColBmpBits[chunk][1]);
-			ChunkColBmps[chunk][0] = ChunkColBmpBits[chunk][0].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black);
-			ChunkColBmps[chunk][1] = ChunkColBmpBits[chunk][1].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black);
+			ChunkColBmps[chunk][0] = ChunkColBmpBits[chunk][0].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black, Color.Red);
+			ChunkColBmps[chunk][1] = ChunkColBmpBits[chunk][1].ToBitmap(Color.Transparent, Color.White, Color.Yellow, Color.Black, Color.Red);
 			tmplow.DrawBitmapComposited(tmphigh, 0, 0);
 			CompChunkBmps[chunk] = tmplow.ToBitmap(BmpPal);
 		}
@@ -1448,7 +1454,7 @@ namespace SonicRetro.SonLVL.API
 			byte[] Bits = new byte[Math.Abs(stride) * bmpd.Height];
 			System.Runtime.InteropServices.Marshal.Copy(bmpd.Scan0, Bits, 0, Bits.Length);
 			bmp.UnlockBits(bmpd);
-			LoadBitmap32BppArgb(bmpbits, Bits, stride, new Color[] { Color.Magenta, Color.White, Color.Yellow, Color.Black });
+			LoadBitmap32BppArgb(bmpbits, Bits, stride, new Color[] { Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red });
 			ColInfo[,] result = new ColInfo[bmpbits.Width / 16, bmpbits.Height / 16];
 			Parallel.For(0, bmpbits.Height / 16, by =>
 			{

@@ -12,9 +12,9 @@ namespace SCDObjectDefinitions.R7
 		public override void Init(ObjectData data)
 		{
 			if (LevelData.StageInfo.folder.EndsWith("C"))
-				sprite = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(117, 219, 32, 28), -16, 0);
+				sprite = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(117, 219, 32, 32), -16, 0);
 			else
-				sprite = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(1, 1, 32, 28), -16, 0);
+				sprite = new Sprite(LevelData.GetSpriteSheet("R7/Objects.gif").GetSection(1, 1, 32, 32), -16, 0);
 			
 			sprite = new Sprite(sprite, new Sprite(sprite, 0, -32));
 		}

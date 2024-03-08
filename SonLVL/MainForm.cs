@@ -257,7 +257,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			scrollPreviewButton.Checked = false;
-			if (loaded && LevelData.ModFolder != null)
+			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -473,9 +473,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
 				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
 			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
-			{
 				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
-			}
 			objectScriptBox.AutoCompleteCustomSource.Clear();
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
 			sfxFiles = new List<string>();
@@ -517,7 +515,7 @@ namespace SonicRetro.SonLVL.GUI
 #region File Menu
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (loaded && LevelData.ModFolder != null)
+			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -543,7 +541,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void editGameConfigToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			fileToolStripMenuItem.DropDown.Hide();
-			if (loaded && LevelData.ModFolder != null)
+			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -576,7 +574,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LevelToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
-			if (loaded && LevelData.ModFolder != null)
+			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
 			{
 				fileToolStripMenuItem.DropDown.Hide();
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
@@ -1129,6 +1127,10 @@ namespace SonicRetro.SonLVL.GUI
 										findPreviousToolStripMenuItem.Enabled = false;
 										FGSelection = new Rectangle(x, y, 1, 1);
 										loaded = false;
+										objectPanel.HScrollValue = (int)Math.Max(0, Math.Min(objectPanel.HScrollMaximum, (x * 128)
+											+ (128 / 2) - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
+										objectPanel.VScrollValue = (int)Math.Max(0, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
+											+ (128 / 2) - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
 										foregroundPanel.HScrollValue = (int)Math.Max(0, Math.Min(foregroundPanel.HScrollMaximum, (x * 128)
 											+ (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
 										foregroundPanel.VScrollValue = (int)Math.Max(0, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
@@ -1188,6 +1190,8 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = false;
 			objectPanel.HScrollValue = (int)Math.Max(0, Math.Min(objectPanel.HScrollMaximum, item.X - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
 			objectPanel.VScrollValue = (int)Math.Max(0, Math.Min(objectPanel.VScrollMaximum, item.Y - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
+			foregroundPanel.HScrollValue = (int)Math.Max(0, Math.Min(foregroundPanel.HScrollMaximum, item.X - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
+			foregroundPanel.VScrollValue = (int)Math.Max(0, Math.Min(foregroundPanel.VScrollMaximum, item.Y - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
 			loaded = true;
 		}
 
@@ -3700,6 +3704,12 @@ namespace SonicRetro.SonLVL.GUI
 					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 					panel10.Controls.Add(ChunkSelector);
 					ChunkSelector.AllowDrop = true;
+					break;
+				case Tab.Palette:
+					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
+					colorRed.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].R;
+					colorGreen.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].G;
+					colorBlue.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].B;
 					break;
 				default:
 					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;

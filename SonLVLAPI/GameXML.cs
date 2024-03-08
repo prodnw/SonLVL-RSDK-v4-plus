@@ -45,7 +45,7 @@ namespace SonicRetro.SonLVL.API
 			if (result.variables == null)
 				result.variables = new List<VariableXML>();
 			if (result.sounds == null)
-				result.variables = new List<VariableXML>();
+				result.sounds = new List<SoundFXXML>();
 			if (result.players == null)
 				result.players = new List<PlayerXML>();
 			if (result.presentationStages == null)

@@ -2528,19 +2528,24 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.A:
 					if (!loaded) return;
-					for (int i = 0; i < SelectedItems.Count; i++)
+					if (e.Control)
+						selectAllObjectsToolStripMenuItem_Click(sender, EventArgs.Empty);
+					else
 					{
-						if (SelectedItems[i] is ObjectEntry oi)
+						for (int i = 0; i < SelectedItems.Count; i++)
 						{
-							oi.Type = (byte)(oi.Type == 0 ? 255 : oi.Type - 1);
-							var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
-							lvi.Text = oi.Name;
-							lvi.ImageIndex = oi.Type < objectTypeImages.Images.Count ? oi.Type : 0;
-							SelectedItems[i].UpdateSprite();
+							if (SelectedItems[i] is ObjectEntry oi)
+							{
+								oi.Type = (byte)(oi.Type == 0 ? 255 : oi.Type - 1);
+								var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
+								lvi.Text = oi.Name;
+								lvi.ImageIndex = oi.Type < objectTypeImages.Images.Count ? oi.Type : 0;
+								SelectedItems[i].UpdateSprite();
+							}
 						}
+						DrawLevel();
+						SaveState("Change Objects Type");
 					}
-					DrawLevel();
-					SaveState("Change Objects Type");
 					break;
 				case Keys.C:
 					if (!loaded) return;

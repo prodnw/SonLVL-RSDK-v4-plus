@@ -557,7 +557,9 @@ namespace SonicRetro.SonLVL.API
 				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
 			SaveFile("16x16Tiles.gif", fn =>
 			{
-				using (Bitmap bmp = tiles.ToBitmap(NewPalette))
+				Color[] palette = (Color[])NewPalette.Clone();
+				palette.Fill(NewPalette[0], 1, 95);
+				using (Bitmap bmp = tiles.ToBitmap(palette))
 					bmp.Save(fn, ImageFormat.Gif);
 			});
 			SaveFile("128x128Tiles.bin", fn => NewChunks.Write(fn));

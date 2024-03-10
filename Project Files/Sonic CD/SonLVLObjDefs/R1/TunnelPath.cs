@@ -9,45 +9,16 @@ namespace SCDObjectDefinitions.R1
 	class TunnelPath : ObjectDefinition
 	{
 		private Sprite sprite;
+		private Sprite debug;
 		
 		public override void Init(ObjectData data)
 		{
 			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
-		}
-
-		public override ReadOnlyCollection<byte> Subtypes
-		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
-		}
-		
-		public override bool Debug
-		{
-			get { return true; }
-		}
-		
-		public override string SubtypeName(byte subtype)
-		{
-			return null;
-		}
-
-		public override Sprite Image
-		{
-			get { return sprite; }
-		}
-
-		public override Sprite SubtypeImage(byte subtype)
-		{
-			return sprite;
-		}
-
-		public override Sprite GetSprite(ObjectEntry obj)
-		{
-			return sprite;
-		}
-		
-		public override Sprite GetDebugOverlay(ObjectEntry obj)
-		{
+			
+			// btw Object[+1] should be a Blank Object with a nonzero prop val if you want the hole in the wall to appear, not quite sure how to show that in the editor though
+			
 			// this sucks, it's not even relative like all the other tunnelpaths
+			// (but yeah, just like every other tunnel path, all these values are taken from the object's giant switch case)
 			int[] path = {
 				0x13F0B100, 0xF06500,
 				0x1400B100, 0xF06500,
@@ -206,10 +177,10 @@ namespace SCDObjectDefinitions.R1
 				0x16E09A00, 0x2E4F900
 			};
 			
-			int xmin = obj.X;
-			int ymin = obj.Y;
-			int xmax = obj.X;
-			int ymax = obj.Y;
+			int xmin = 0x7fff;
+			int ymin = 0x7fff;
+			int xmax = -0x7fff;
+			int ymax = -0x7fff;
 			
 			for (int i = 0; i < path.Length; i += 2)
 			{
@@ -221,12 +192,54 @@ namespace SCDObjectDefinitions.R1
 			
 			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
 			
-			bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, (path[0] >> 16) - xmin, (path[1] >> 16) - ymin); // LevelData.ColorWhite
-			
 			for (int i = 2; i < path.Length; i += 2)
-				bitmap.DrawLine(6, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin); // LevelData.ColorWhite
+				bitmap.DrawLine(6, (path[i-2] >> 16) - xmin, (path[i-1] >> 16) - ymin, (path[i] >> 16) - xmin, (path[i+1] >> 16) - ymin);
 			
-			return new Sprite(bitmap, xmin - obj.X, ymin - obj.Y);
+			debug = new Sprite(bitmap, xmin, ymin);
+		}
+
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override bool Debug
+		{
+			get { return true; }
+		}
+		
+		public override string SubtypeName(byte subtype)
+		{
+			return null;
+		}
+
+		public override Sprite Image
+		{
+			get { return sprite; }
+		}
+
+		public override Sprite SubtypeImage(byte subtype)
+		{
+			return sprite;
+		}
+
+		public override Sprite GetSprite(ObjectEntry obj)
+		{
+			return sprite;
+		}
+		
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			// (the tunnel starts at 0x13F0B100, 0xF06500, let's draw a line to that point and join it with the proper debug path vis)
+			int xmin = Math.Min((int)obj.X, 0x13F0B100 >> 16);
+			int ymin = Math.Min((int)obj.Y, 0xF06500 >> 16);
+			int xmax = Math.Max((int)obj.X, 0x13F0B100 >> 16);
+			int ymax = Math.Max((int)obj.Y, 0xF06500 >> 16);
+			
+			BitmapBits bitmap = new BitmapBits(xmax - xmin + 1, ymax - ymin + 1);
+			bitmap.DrawLine(6, obj.X - xmin, obj.Y - ymin, (0x13F0B100 >> 16) - xmin, (0xF06500 >> 16) - ymin); // LevelData.ColorWhite
+			
+			return new Sprite(new Sprite(debug, -obj.X, -obj.Y), new Sprite(bitmap, xmin - obj.X, ymin - obj.Y));
 		}
 	}
 }

@@ -4243,6 +4243,70 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState($"{(ModifierKeys.HasFlag(Keys.Control) ? "Swap" : "Move")} Color");
 		}
 
+		private void importGlobalPaletteToolStripButton_Click(object sender, EventArgs e)
+		{
+			importPalette(0, 6);
+		}
+
+		private void importStagePaletteToolStripButton_Click(object sender, EventArgs e)
+		{
+			importPalette(96, 10);
+		}
+
+		private void importPalette(int start, int rows)
+		{
+			using (OpenFileDialog a = new OpenFileDialog())
+			{
+				a.DefaultExt = "bin";
+				a.Filter = "Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";
+				a.RestoreDirectory = true;
+				if (a.ShowDialog(this) == DialogResult.OK)
+				{
+					switch (Path.GetExtension(a.FileName))
+					{
+						case ".act":
+							RSDKv3_4.Palette palette = new RSDKv3_4.Palette(a.FileName, rows);
+							for (int l = 0; l < Math.Min(Math.Min(palette.colors.Length, rows), 15); l++)
+								for (int c = 0; c < palette.colors[l].Length; c++)
+								{
+									LevelData.NewPalette[(l * 16) + c + start] = palette.colors[l][c].ToSystemColor();
+								}
+							break;
+						case ".bmp":
+						case ".png":
+						case ".jpg":
+						case ".gif":
+							using (Bitmap bmp = new Bitmap(a.FileName))
+							{
+								if ((bmp.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
+								{
+									Color[] pal = bmp.Palette.Entries;
+									for (int i = start; i < Math.Min(Math.Min(pal.Length, 255), start + (rows * 16)); i++)
+										LevelData.NewPalette[i] = pal[i];
+								}
+								else
+									for (int y = 0; y < bmp.Height; y += 8)
+									{
+										for (int x = 0; x < bmp.Width; x += 8)
+										{
+											int index = start + ((y / 8) * (bmp.Width)) + (x / 8);
+											LevelData.NewPalette[index] = bmp.GetPixel(x, y);
+											if (index > 255)
+											{
+												y = bmp.Height;
+												break;
+											}
+										}
+									}
+							}
+							break;
+					}
+				}
+			}
+			LevelData.PaletteChanged();
+			SaveState("Import Palette");
+		}
+
 		private void importPaletteToolStripButton_Click(object sender, EventArgs e)
 		{
 			/*using (OpenFileDialog a = new OpenFileDialog())

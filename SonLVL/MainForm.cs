@@ -2544,6 +2544,7 @@ namespace SonicRetro.SonLVL.GUI
 							}
 						}
 						DrawLevel();
+						ObjectProperties.Refresh();
 						SaveState("Change Objects Type");
 					}
 					break;
@@ -2620,6 +2621,7 @@ namespace SonicRetro.SonLVL.GUI
 							}
 						}
 						DrawLevel();
+						ObjectProperties.Refresh();
 						SaveState("Change Objects Type");
 					}
 					break;

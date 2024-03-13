@@ -1573,29 +1573,65 @@ namespace SonicRetro.SonLVL.GUI
 			LogWindow.Show(this);
 			logToolStripMenuItem.Enabled = false;
 		}
-#endregion
+		#endregion
 
-#region Export Menu
-		private void pNGToolStripMenuItem_Click(object sender, EventArgs e)
+		#region Export Menu
+		private void pNGGlobalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_png(0, 6);
+		}
+
+		private void pNGStageToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_png(6, 10);
+		}
+
+		private void pNGAllToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_png(0, 16);
+		}
+
+		private void exportPalette_png(int start, int rows)
 		{
 			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "png", Filter = "PNG Files|*.png", RestoreDirectory = true })
 				if (a.ShowDialog(this) == DialogResult.OK)
 				{
-					BitmapBits bmp = new BitmapBits(16 * 8, 16 * 8);
-					for (int y = 0; y < 16; y++)
+					BitmapBits bmp = new BitmapBits(16 * 8, rows * 8);
+					for (int y = start; y < (start + rows); y++)
 						for (int x = 0; x < 16; x++)
-							bmp.FillRectangle((byte)((y * 16) + x), x * 8, y * 8, 8, 8);
-					bmp.ToBitmap(LevelData.NewPalette).Save(a.FileName);
+							bmp.FillRectangle((byte)((y * 16) + x), x * 8, (y - start) * 8, 8, 8);
+
+					Color[] palette = (Color[])LevelData.NewPalette.Clone();
+					if (start > 0)
+						palette.Fill(LevelData.NewPalette[0], 0, start * 16);
+					if ((start + rows) < 16)
+						palette.Fill(LevelData.NewPalette[0], (start + rows) * 16, palette.Length - ((start + rows) * 16));
+					bmp.ToBitmap(palette).Save(a.FileName);
 				}
 		}
 
-		private void yYCHRToolStripMenuItem_Click(object sender, EventArgs e)
+		private void aCTGlobalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_act(0, 6);
+		}
+
+		private void aCTStageToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_act(6, 10);
+		}
+
+		private void aCTAllToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_act(0, 16);
+		}
+
+		private void exportPalette_act(int start, int rows)
 		{
 			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "act", Filter = "Palette Files|*.act", RestoreDirectory = true })
 				if (a.ShowDialog(this) == DialogResult.OK)
 					using (FileStream str = File.Create(a.FileName))
 					using (BinaryWriter bw = new BinaryWriter(str))
-						for (int i = 0; i < 256; i++)
+						for (int i = (start * 16); i < (start + rows) * 16; i++)
 						{
 							bw.Write(LevelData.NewPalette[i].R);
 							bw.Write(LevelData.NewPalette[i].G);
@@ -1603,7 +1639,21 @@ namespace SonicRetro.SonLVL.GUI
 						}
 		}
 
-		private void jASCPALToolStripMenuItem_Click(object sender, EventArgs e)
+		private void jASCPALGlobalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_JASCPAL(0, 6);
+		}
+
+		private void jASCPALStageToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_JASCPAL(6, 10);
+		}
+		private void jASCPALAllToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			exportPalette_JASCPAL(0, 16);
+		}
+
+		private void exportPalette_JASCPAL(int start, int rows)
 		{
 			exportToolStripMenuItem.DropDown.Hide();
 			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "pal", Filter = "JASC-PAL Files|*.pal;*.PspPalette", RestoreDirectory = true })
@@ -1612,8 +1662,8 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						writer.WriteLine("JASC-PAL");
 						writer.WriteLine("0100");
-						writer.WriteLine("256");
-						for (int i = 0; i < 256; i++)
+						writer.WriteLine(rows * 16);
+						for (int i = (start * 16); i < (start + rows) * 16; i++)
 							writer.WriteLine("{0} {1} {2}", LevelData.NewPalette[i].R, LevelData.NewPalette[i].G, LevelData.NewPalette[i].B);
 						writer.Close();
 					}

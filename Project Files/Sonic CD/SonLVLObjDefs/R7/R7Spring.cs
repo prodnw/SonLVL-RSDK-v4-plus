@@ -51,7 +51,7 @@ namespace SCDObjectDefinitions.R7
 			{
 				case "Spring Cage":
 				{
-					switch (other.PropertyValue)
+					switch (other.PropertyValue) // Let's match our sprite to the Spring Cage's rotation
 					{
 						case 0:
 							index = 0; break;

@@ -15,7 +15,7 @@ namespace S1ObjectDefinitions.Mission
 			sprite = new Sprite(LevelData.GetSpriteSheet("Mission/Objects.gif").GetSection(1, 18, 32, 32), -16, -16);
 			
 			properties[0] = new PropertySpec("Can Crush", typeof(bool), "Extended",
-				"If this Mission Block is be able to crush the player.", null,
+				"If this Mission Block is allowed to crush the player.", null,
 				(obj) => obj.PropertyValue == 0,
 				(obj, value) => obj.PropertyValue = (byte)((bool)value ? 0 : 1));
 			

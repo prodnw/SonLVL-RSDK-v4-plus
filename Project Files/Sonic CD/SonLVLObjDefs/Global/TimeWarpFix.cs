@@ -21,8 +21,8 @@ namespace SCDObjectDefinitions.Global
 				{
 					{ "Erase - Touch", 0 },
 					{ "Erase - Pass", 1 },
-					{ "Pos Fix - Ground", 2 },
-					{ "Pos Fix - Air", 3 },
+					{ "Pos Fix (Small)", 2 },
+					{ "Pos Fix (Large)", 3 },
 					{ "Force Erase - Touch (Origins)", 4 }
 				},
                 (obj) => (int)obj.PropertyValue,
@@ -62,8 +62,8 @@ namespace SCDObjectDefinitions.Global
 			{
 				case 0: return "Erase - Touch";
 				case 1: return "Erase - Pass";
-				case 2: return "Pos Fix - Ground";
-				case 3: return "Pos Fix - Air";
+				case 2: return "Pos Fix (Small)";
+				case 3: return "Pos Fix (Large)";
 				case 4: return "Force Erase - Touch (Origins)";
 				default: return "Unknown";
 			}

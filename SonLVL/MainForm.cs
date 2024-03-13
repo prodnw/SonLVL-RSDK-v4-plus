@@ -4257,7 +4257,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			using (OpenFileDialog a = new OpenFileDialog())
 			{
-				a.DefaultExt = "bin";
+				a.DefaultExt = "act";
 				a.Filter = "Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";
 				a.RestoreDirectory = true;
 				if (a.ShowDialog(this) == DialogResult.OK)

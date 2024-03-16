@@ -4317,12 +4317,9 @@ namespace SonicRetro.SonLVL.GUI
 					switch (Path.GetExtension(a.FileName))
 					{
 						case ".act":
-							RSDKv3_4.Palette palette = new RSDKv3_4.Palette(a.FileName, rows);
-							for (int l = 0; l < Math.Min(Math.Min(palette.colors.Length, rows), 15); l++)
-								for (int c = 0; c < palette.colors[l].Length; c++)
-								{
-									LevelData.NewPalette[(l * 16) + c + start] = palette.colors[l][c].ToSystemColor();
-								}
+							byte[] palette = File.ReadAllBytes(a.FileName);
+							for (int i = 0; i < Math.Min(palette.Length / 3, rows * 16); i++)
+								LevelData.NewPalette[start + i] = Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
 							break;
 						case ".bmp":
 						case ".png":

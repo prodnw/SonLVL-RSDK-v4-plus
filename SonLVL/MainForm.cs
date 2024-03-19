@@ -2050,7 +2050,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			foreach (Entry item in SelectedItems)
 			{
-				if (item is ObjectEntry oe && e.ChangedItem.PropertyDescriptor.Name == "ID")
+				if (item is ObjectEntry oe && e.ChangedItem.PropertyDescriptor.Name == "Type")
 				{
 					var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oe)];
 					lvi.Text = item.Name;
@@ -2059,6 +2059,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			DrawLevel();
+			if (e.ChangedItem.PropertyDescriptor.Name == "Type")
+				ObjectProperties.Refresh();
 			SaveState($"Change Objects {e.ChangedItem.Label}");
 		}
 
@@ -2626,6 +2628,7 @@ namespace SonicRetro.SonLVL.GUI
 							item.UpdateSprite();
 						}
 						DrawLevel();
+						ObjectProperties.Refresh();
 						SaveState("Change Objects PropertyValue");
 					}
 					break;
@@ -2652,6 +2655,7 @@ namespace SonicRetro.SonLVL.GUI
 							item.UpdateSprite();
 						}
 						DrawLevel();
+						ObjectProperties.Refresh();
 						SaveState("Change Objects PropertyValue");
 					}
 					break;

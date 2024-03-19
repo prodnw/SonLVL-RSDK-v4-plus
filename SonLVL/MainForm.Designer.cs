@@ -1655,6 +1655,7 @@ namespace SonicRetro.SonLVL.GUI
             this.invertColorsToolStripMenuItem.Name = "invertColorsToolStripMenuItem";
             this.invertColorsToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.invertColorsToolStripMenuItem.Text = "I&nvert Colors";
+            this.invertColorsToolStripMenuItem.Visible = false;
             this.invertColorsToolStripMenuItem.Click += new System.EventHandler(this.invertColorsToolStripMenuItem_Click);
             // 
             // layersToolStripMenuItem

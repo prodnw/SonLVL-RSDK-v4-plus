@@ -160,7 +160,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			objectsAboveHighPlaneToolStripMenuItem.Checked = Settings.ObjectsAboveHighPlane;
 			hUDToolStripMenuItem.Checked = Settings.ShowHUD;
-			invertColorsToolStripMenuItem.Checked = Settings.InvertColors;
+			//invertColorsToolStripMenuItem.Checked = Settings.InvertColors;
 			lowToolStripMenuItem.Checked = Settings.ViewLowPlane;
 			highToolStripMenuItem.Checked = Settings.ViewHighPlane;
 			switch (Settings.ViewCollision)
@@ -272,7 +272,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (Settings != null)
 			{
 				Settings.ShowHUD = hUDToolStripMenuItem.Checked;
-				Settings.InvertColors = invertColorsToolStripMenuItem.Checked;
+				//Settings.InvertColors = invertColorsToolStripMenuItem.Checked;
 				if (path1ToolStripMenuItem.Checked)
 					Settings.ViewCollision = CollisionPath.Path1;
 				else if (path2ToolStripMenuItem.Checked)

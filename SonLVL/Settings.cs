@@ -46,7 +46,6 @@ namespace SonicRetro.SonLVL
 		public bool UseHexadecimalIndexesExport { get; set; }
 		public bool ExportArtCollisionPriority { get; set; }
 		public bool ObjectsAboveHighPlane { get; set; }
-		public bool InvertColors { get; set; }
 		[DefaultValue(true)]
 		public bool ViewLowPlane { get; set; }
 		[DefaultValue(true)]

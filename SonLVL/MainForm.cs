@@ -4029,8 +4029,8 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			BitmapBits32 bmp = new BitmapBits32(128, 128);
-			LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-			bmp.Clear(LevelImgPalette.Entries[0xA0]);
+			LevelData.NewPalette.CopyTo(bmp.Palette, 0);
+			bmp.Clear(LevelData.NewPalette[0xA0]);
 			if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
 				bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (lowToolStripMenuItem.Checked)
@@ -4853,8 +4853,8 @@ namespace SonicRetro.SonLVL.GUI
 				if (showBlockBehindCollisionCheckBox.Checked)
 				{
 					BitmapBits32 bmp = new BitmapBits32(16, 16);
-					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-					bmp.Clear(LevelImgPalette.Entries[0xA0]);
+					LevelData.NewPalette.CopyTo(bmp.Palette, 0);
+					bmp.Clear(LevelData.NewPalette[0xA0]);
 					bmp.DrawBitmap(LevelData.NewTiles[SelectedTile], 0, 0);
 					bmp.Palette[1] = Color.White;
 					bmp.DrawBitmap(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex], 0, 0);

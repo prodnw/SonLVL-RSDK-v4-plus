@@ -845,6 +845,12 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.Scene != null && LevelData.ModFolder != null)
 				saveToolStripMenuItem_Click(sender, e);
 
+			if (!File.Exists(Path.Combine(Environment.CurrentDirectory, LevelData.Game.EXEFile)))
+			{
+				MessageBox.Show(this, $"Unable to locate game executable at \"{Path.Combine(Environment.CurrentDirectory, LevelData.Game.EXEFile)}\". Make sure that \"EXEPath\" is set correctly in the project file.", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
+
 			if (loaded)
 				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.Game.EXEFile, $"stage={LevelData.StageInfo.folder} scene={LevelData.StageInfo.actID}") { WorkingDirectory = LevelData.EXEFolder });
 			else

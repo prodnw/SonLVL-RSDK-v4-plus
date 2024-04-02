@@ -117,6 +117,7 @@ namespace SonicRetro.SonLVL
 				variableID.Visible = false;
 				soundID.Visible = false;
 				playerID.Visible = false;
+				listPosText.Visible = false;
 			}
 			else
 			{
@@ -127,6 +128,7 @@ namespace SonicRetro.SonLVL
 				variableID.Visible = true;
 				soundID.Visible = true;
 				playerID.Visible = true;
+				listPosText.Visible = true;
 			}
 			objectListBox.BeginUpdate();
 			objectListBox.Items.Clear();
@@ -448,6 +450,8 @@ namespace SonicRetro.SonLVL
 				stageHighlight.Checked = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].highlight;
 				loaded = true;
 			}
+
+			listPosText.Text = $"List Pos: {stageListBox.SelectedIndex}";
 		}
 
 		private void stageAddButton_Click(object sender, EventArgs e)
@@ -478,6 +482,8 @@ namespace SonicRetro.SonLVL
 
 			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
 			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
+
+			stageListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void stageDownButton_Click(object sender, EventArgs e)
@@ -492,6 +498,8 @@ namespace SonicRetro.SonLVL
 
 			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
 			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
+
+			stageListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void stageFolder_TextChanged(object sender, EventArgs e)

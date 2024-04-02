@@ -91,6 +91,7 @@ namespace SonicRetro.SonLVL
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
+            this.listPosText = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -645,6 +646,7 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.listPosText);
             this.tabPage6.Controls.Add(this.stageDownButton);
             this.tabPage6.Controls.Add(this.stageUpButton);
             this.tabPage6.Controls.Add(this.stageBrowseButton);
@@ -884,6 +886,16 @@ namespace SonicRetro.SonLVL
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
+            // listPosText
+            // 
+            this.listPosText.AutoSize = true;
+            this.listPosText.Location = new System.Drawing.Point(389, 188);
+            this.listPosText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.listPosText.Name = "listPosText";
+            this.listPosText.Size = new System.Drawing.Size(71, 16);
+            this.listPosText.TabIndex = 13;
+            this.listPosText.Text = "List Pos: -1";
+            // 
             // GameConfigEditorDialog
             // 
             this.AcceptButton = this.okButton;
@@ -985,5 +997,6 @@ namespace SonicRetro.SonLVL
 		private System.Windows.Forms.Label variableID;
 		private System.Windows.Forms.Label soundID;
 		private System.Windows.Forms.Label playerID;
+		private System.Windows.Forms.Label listPosText;
 	}
 }

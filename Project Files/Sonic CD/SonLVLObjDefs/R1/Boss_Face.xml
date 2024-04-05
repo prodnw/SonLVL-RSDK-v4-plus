@@ -95,4 +95,18 @@
   <DefaultImage>
     <ImageSetRef set="boss" />
   </DefaultImage>
+  <Subtypes>
+    <Subtype id="05" name="0.5x Speed">
+      <ImageSetRef set="boss" />
+    </Subtype>
+    <Subtype id="0A" name="Normal Speed">
+      <ImageSetRef set="boss" />
+    </Subtype>
+    <Subtype id="14" name="2x Speed">
+      <ImageSetRef set="boss" />
+    </Subtype>
+    <Subtype id="32" name="5x Speed">
+      <ImageSetRef set="boss" />
+    </Subtype>
+  </Subtypes>
 </ObjDef>

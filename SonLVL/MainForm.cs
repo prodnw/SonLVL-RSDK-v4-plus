@@ -845,16 +845,18 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.Scene != null && LevelData.ModFolder != null)
 				saveToolStripMenuItem_Click(sender, e);
 
-			if (!File.Exists(Path.Combine(Environment.CurrentDirectory, LevelData.Game.EXEFile)))
+			string path = Path.Combine(Environment.CurrentDirectory, LevelData.Game.EXEFile);
+
+			if (!File.Exists(path))
 			{
-				MessageBox.Show(this, $"Unable to locate game executable at \"{Path.Combine(Environment.CurrentDirectory, LevelData.Game.EXEFile)}\". Make sure that \"EXEPath\" is set correctly in the project file.", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(this, $"Unable to locate game executable at \"{path}\". Make sure that \"EXEPath\" is set correctly in the project file.", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
 			if (loaded)
-				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.Game.EXEFile, $"stage={LevelData.StageInfo.folder} scene={LevelData.StageInfo.actID}") { WorkingDirectory = LevelData.EXEFolder });
+				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path, $"stage={LevelData.StageInfo.folder} scene={LevelData.StageInfo.actID}") { WorkingDirectory = LevelData.EXEFolder });
 			else
-				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(LevelData.Game.EXEFile) { WorkingDirectory = LevelData.EXEFolder });
+				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { WorkingDirectory = LevelData.EXEFolder });
 		}
 
 		private void recentProjectsToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)

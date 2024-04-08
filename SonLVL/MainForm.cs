@@ -2514,7 +2514,8 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Keys.F5:
-					mainMenuStrip.ShowHide();
+					if (e.Control)
+						mainMenuStrip.ShowHide();
 					break;
 				case Keys.D1:
 				case Keys.NumPad1:

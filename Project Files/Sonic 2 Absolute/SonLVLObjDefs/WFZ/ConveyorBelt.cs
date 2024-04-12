@@ -63,6 +63,7 @@ namespace S2ObjectDefinitions.WFZ
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
+			if (obj.PropertyValue == 0) return null;
 			int width = obj.PropertyValue << 4;
 			BitmapBits bitmap = new BitmapBits(width + 1, 33);
 			bitmap.DrawRectangle(6, 0, 0, width, 32); // LevelData.ColorWhite

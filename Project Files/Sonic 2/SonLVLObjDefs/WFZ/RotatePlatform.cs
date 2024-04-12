@@ -32,11 +32,12 @@ namespace S2ObjectDefinitions.WFZ
 			overlay.DrawCircle(6, radius, radius, radius); // LevelData.ColorWhite
 			debug = new Sprite(overlay, -radius, -radius - 4);
 			
+			// hitbox size doesn't match with sprite size (small sprite has large hitbox, large sprite has small hitbox), but let's stick with what we see
 			properties[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the platform.", null, new Dictionary<string, int>
 				{
-					{ "Large", 0 },
-					{ "Small", 1 }
+					{ "Small", 0 },
+					{ "Large", 1 }
 				},
 				(obj) => ((obj.PropertyValue & 0x0F) == 0) ? 0 : 1,
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~0x0F) | (int)value));

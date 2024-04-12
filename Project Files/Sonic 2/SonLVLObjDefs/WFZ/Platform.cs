@@ -32,11 +32,13 @@ namespace S2ObjectDefinitions.WFZ
 		public override PropertySpec[] SetupProperties()
 		{
 			PropertySpec[] props = new PropertySpec[1];
+			
+			// hitbox size doesn't match with sprite size (small sprite has large hitbox, large sprite has small hitbox), but let's stick with what we see
 			props[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the platform.", null, new Dictionary<string, int>
 				{
-					{ "Large", 0 },
-					{ "Small", 1 }
+					{ "Small", 0 },
+					{ "Large", 1 }
 				},
 				(obj) => (obj.PropertyValue > 0) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -59,11 +61,13 @@ namespace S2ObjectDefinitions.WFZ
 		public virtual PropertySpec[] SetupProperties()
 		{
 			PropertySpec[] props = new PropertySpec[2];
+			
+			// hitbox size doesn't match with sprite size (small sprite has large hitbox, large sprite has small hitbox), but let's stick with what we see
 			props[0] = new PropertySpec("Size", typeof(int), "Extended",
 				"The size of the platform.", null, new Dictionary<string, int>
 				{
-					{ "Large", 0 },
-					{ "Small", 1 }
+					{ "Small", 0 },
+					{ "Large", 1 }
 				},
 				(obj) => (obj.PropertyValue > 0) ? 1 : 0,
 				(obj, value) => obj.PropertyValue = (byte)((int)value));
@@ -104,7 +108,7 @@ namespace S2ObjectDefinitions.WFZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return (subtype > 0) ? "Small Platform" : "Large Platform";
+			return (subtype > 0) ? "Large Platform" : "Small Platform";
 		}
 
 		public override Sprite Image

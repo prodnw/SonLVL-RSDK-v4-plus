@@ -158,6 +158,9 @@
     <Compile Include="NumericUpDownMulti.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NumericUpDownPadded.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ReplaceChunksDialog.cs">
       <SubType>Form</SubType>
     </Compile>

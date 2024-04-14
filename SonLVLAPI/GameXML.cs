@@ -38,6 +38,8 @@ namespace SonicRetro.SonLVL.API
 			GameXML result;
 			using (StreamReader textReader = File.OpenText(filename))
 				result = (GameXML)xmlSerializer.Deserialize(textReader);
+			if (result.title == null)
+				result.title = new TitleXML(null);
 			if (result.palette == null)
 				result.palette = new List<ColorXML>();
 			if (result.objects == null)

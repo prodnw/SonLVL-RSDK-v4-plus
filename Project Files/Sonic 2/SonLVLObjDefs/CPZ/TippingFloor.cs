@@ -63,7 +63,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0x00, 0x10, 0x20, 0x30}); } // instead of having every interval in here, let's just have duration
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -73,7 +73,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return (((subtype & 0x30) + 0x10) - 1) + " Frame Duration";
 		}
 
 		public override Sprite Image

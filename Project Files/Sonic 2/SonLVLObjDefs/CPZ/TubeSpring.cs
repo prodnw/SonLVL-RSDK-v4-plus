@@ -53,7 +53,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 2}); } // the spring always has a prop val of 2 everywhere it appears in the game, but let's stick with spring strength for this
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -63,7 +63,7 @@ namespace S2ObjectDefinitions.CPZ
 
 		public override string SubtypeName(byte subtype)
 		{
-			return null;
+			return ((subtype & 2) == 2) ? "Strong Launch" : "Weak Launch";
 		}
 
 		public override Sprite Image

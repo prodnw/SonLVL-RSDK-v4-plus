@@ -4164,6 +4164,11 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X] = Color.FromArgb((byte)colorRed.Value, (byte)colorGreen.Value, (byte)colorBlue.Value);
+
+			loaded = false;
+			colorHex.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].ToArgb() & 0xFFFFFF;
+			loaded = true;
+
 			LevelData.PaletteChanged();
 			SaveState($"Change Color {(SelectedColor.Y * 16) + SelectedColor.X}");
 		}
@@ -4172,6 +4177,13 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X] = Color.FromArgb((int)((int)colorHex.Value | 0xFF000000));
+			
+			loaded = false;
+			colorRed.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].R;
+			colorGreen.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].G;
+			colorBlue.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].B;
+			loaded = true;
+
 			LevelData.PaletteChanged();
 			SaveState($"Change Color {(SelectedColor.Y * 16) + SelectedColor.X}");
 		}

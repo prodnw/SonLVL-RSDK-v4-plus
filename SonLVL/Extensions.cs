@@ -15,6 +15,24 @@ namespace SonicRetro.SonLVL.GUI
 				ctrl.Show();
 		}
 
+		public static void MoveSelectionUp(this System.Windows.Forms.ListBox listBox)
+		{
+			listBox.BeginUpdate();
+			listBox.Items.Insert(listBox.SelectedIndex - 1, listBox.Items[listBox.SelectedIndex]);
+			listBox.SelectedIndex -= 2;
+			listBox.Items.RemoveAt(listBox.SelectedIndex + 2);
+			listBox.EndUpdate();
+		}
+
+		public static void MoveSelectionDown(this System.Windows.Forms.ListBox listBox)
+		{
+			listBox.BeginUpdate();
+			listBox.Items.Insert(listBox.SelectedIndex + 2, listBox.Items[listBox.SelectedIndex]);
+			listBox.SelectedIndex += 2;
+			listBox.Items.RemoveAt(listBox.SelectedIndex - 2);
+			listBox.EndUpdate();
+		}
+
 		public static Color Blend(this Color back, Color blend)
 		{
 			double A = blend.A / 255d;

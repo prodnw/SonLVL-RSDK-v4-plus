@@ -36,6 +36,8 @@ namespace SonicRetro.SonLVL
             this.gameName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.objectDownButton = new System.Windows.Forms.Button();
+            this.objectUpButton = new System.Windows.Forms.Button();
             this.objectTypeID = new System.Windows.Forms.Label();
             this.objectForceLoad = new System.Windows.Forms.CheckBox();
             this.browseScriptButton = new System.Windows.Forms.Button();
@@ -47,6 +49,8 @@ namespace SonicRetro.SonLVL
             this.objectAddButton = new System.Windows.Forms.Button();
             this.objectListBox = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.variableDownButton = new System.Windows.Forms.Button();
+            this.variableUpButton = new System.Windows.Forms.Button();
             this.variableID = new System.Windows.Forms.Label();
             this.variableValue = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -56,7 +60,9 @@ namespace SonicRetro.SonLVL
             this.variableAddButton = new System.Windows.Forms.Button();
             this.variableListBox = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.soundID = new System.Windows.Forms.Label();
+            this.sfxDownButton = new System.Windows.Forms.Button();
+            this.sfxUpButton = new System.Windows.Forms.Button();
+            this.sfxID = new System.Windows.Forms.Label();
             this.sfxBrowseButton = new System.Windows.Forms.Button();
             this.sfxFileBox = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
@@ -66,6 +72,8 @@ namespace SonicRetro.SonLVL
             this.sfxAddButton = new System.Windows.Forms.Button();
             this.sfxListBox = new System.Windows.Forms.ListBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.playerDownButton = new System.Windows.Forms.Button();
+            this.playerUpButton = new System.Windows.Forms.Button();
             this.playerID = new System.Windows.Forms.Label();
             this.playerName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -73,6 +81,7 @@ namespace SonicRetro.SonLVL
             this.playerAddButton = new System.Windows.Forms.Button();
             this.playerListBox = new System.Windows.Forms.ListBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.listPosText = new System.Windows.Forms.Label();
             this.stageDownButton = new System.Windows.Forms.Button();
             this.stageUpButton = new System.Windows.Forms.Button();
             this.stageBrowseButton = new System.Windows.Forms.Button();
@@ -91,7 +100,6 @@ namespace SonicRetro.SonLVL
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
-            this.listPosText = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -182,6 +190,8 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.objectDownButton);
+            this.tabPage2.Controls.Add(this.objectUpButton);
             this.tabPage2.Controls.Add(this.objectTypeID);
             this.tabPage2.Controls.Add(this.objectForceLoad);
             this.tabPage2.Controls.Add(this.browseScriptButton);
@@ -201,21 +211,45 @@ namespace SonicRetro.SonLVL
             this.tabPage2.Text = "Object List";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // objectDownButton
+            // 
+            this.objectDownButton.Enabled = false;
+            this.objectDownButton.Location = new System.Drawing.Point(250, 196);
+            this.objectDownButton.Margin = new System.Windows.Forms.Padding(4);
+            this.objectDownButton.Name = "objectDownButton";
+            this.objectDownButton.Size = new System.Drawing.Size(22, 28);
+            this.objectDownButton.TabIndex = 11;
+            this.objectDownButton.Text = "↓";
+            this.objectDownButton.UseVisualStyleBackColor = true;
+            this.objectDownButton.Click += new System.EventHandler(this.objectDownButton_Click);
+            // 
+            // objectUpButton
+            // 
+            this.objectUpButton.Enabled = false;
+            this.objectUpButton.Location = new System.Drawing.Point(224, 196);
+            this.objectUpButton.Margin = new System.Windows.Forms.Padding(4);
+            this.objectUpButton.Name = "objectUpButton";
+            this.objectUpButton.Size = new System.Drawing.Size(22, 28);
+            this.objectUpButton.TabIndex = 10;
+            this.objectUpButton.Text = "↑";
+            this.objectUpButton.UseVisualStyleBackColor = true;
+            this.objectUpButton.Click += new System.EventHandler(this.objectUpButton_Click);
+            // 
             // objectTypeID
             // 
             this.objectTypeID.AutoSize = true;
-            this.objectTypeID.Location = new System.Drawing.Point(257, 171);
+            this.objectTypeID.Location = new System.Drawing.Point(281, 171);
             this.objectTypeID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.objectTypeID.Name = "objectTypeID";
-            this.objectTypeID.Size = new System.Drawing.Size(114, 16);
+            this.objectTypeID.Size = new System.Drawing.Size(100, 16);
             this.objectTypeID.TabIndex = 9;
-            this.objectTypeID.Text = "Object Type ID: -1";
+            this.objectTypeID.Text = "Object Type ID:";
             // 
             // objectForceLoad
             // 
             this.objectForceLoad.AutoSize = true;
             this.objectForceLoad.Enabled = false;
-            this.objectForceLoad.Location = new System.Drawing.Point(257, 143);
+            this.objectForceLoad.Location = new System.Drawing.Point(281, 143);
             this.objectForceLoad.Margin = new System.Windows.Forms.Padding(4);
             this.objectForceLoad.Name = "objectForceLoad";
             this.objectForceLoad.Size = new System.Drawing.Size(98, 20);
@@ -227,7 +261,7 @@ namespace SonicRetro.SonLVL
             // browseScriptButton
             // 
             this.browseScriptButton.Enabled = false;
-            this.browseScriptButton.Location = new System.Drawing.Point(257, 107);
+            this.browseScriptButton.Location = new System.Drawing.Point(281, 107);
             this.browseScriptButton.Margin = new System.Windows.Forms.Padding(4);
             this.browseScriptButton.Name = "browseScriptButton";
             this.browseScriptButton.Size = new System.Drawing.Size(100, 28);
@@ -243,18 +277,18 @@ namespace SonicRetro.SonLVL
             this.objectScriptBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.objectScriptBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.objectScriptBox.Enabled = false;
-            this.objectScriptBox.Location = new System.Drawing.Point(257, 75);
+            this.objectScriptBox.Location = new System.Drawing.Point(281, 75);
             this.objectScriptBox.Margin = new System.Windows.Forms.Padding(4);
             this.objectScriptBox.MaxLength = 255;
             this.objectScriptBox.Name = "objectScriptBox";
-            this.objectScriptBox.Size = new System.Drawing.Size(235, 22);
+            this.objectScriptBox.Size = new System.Drawing.Size(211, 22);
             this.objectScriptBox.TabIndex = 6;
             this.objectScriptBox.TextChanged += new System.EventHandler(this.objectScriptBox_TextChanged);
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(257, 55);
+            this.label23.Location = new System.Drawing.Point(281, 55);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(44, 16);
@@ -266,18 +300,18 @@ namespace SonicRetro.SonLVL
             this.objectNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.objectNameBox.Enabled = false;
-            this.objectNameBox.Location = new System.Drawing.Point(257, 27);
+            this.objectNameBox.Location = new System.Drawing.Point(281, 27);
             this.objectNameBox.Margin = new System.Windows.Forms.Padding(4);
             this.objectNameBox.MaxLength = 255;
             this.objectNameBox.Name = "objectNameBox";
-            this.objectNameBox.Size = new System.Drawing.Size(235, 22);
+            this.objectNameBox.Size = new System.Drawing.Size(211, 22);
             this.objectNameBox.TabIndex = 4;
             this.objectNameBox.TextChanged += new System.EventHandler(this.objectNameBox_TextChanged);
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(257, 7);
+            this.label22.Location = new System.Drawing.Point(281, 7);
             this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(47, 16);
@@ -314,12 +348,14 @@ namespace SonicRetro.SonLVL
             this.objectListBox.Location = new System.Drawing.Point(8, 7);
             this.objectListBox.Margin = new System.Windows.Forms.Padding(4);
             this.objectListBox.Name = "objectListBox";
-            this.objectListBox.Size = new System.Drawing.Size(240, 180);
+            this.objectListBox.Size = new System.Drawing.Size(264, 180);
             this.objectListBox.TabIndex = 0;
             this.objectListBox.SelectedIndexChanged += new System.EventHandler(this.objectListBox_SelectedIndexChanged);
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.variableDownButton);
+            this.tabPage3.Controls.Add(this.variableUpButton);
             this.tabPage3.Controls.Add(this.variableID);
             this.tabPage3.Controls.Add(this.variableValue);
             this.tabPage3.Controls.Add(this.label3);
@@ -337,15 +373,39 @@ namespace SonicRetro.SonLVL
             this.tabPage3.Text = "Variables";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // variableDownButton
+            // 
+            this.variableDownButton.Enabled = false;
+            this.variableDownButton.Location = new System.Drawing.Point(250, 196);
+            this.variableDownButton.Margin = new System.Windows.Forms.Padding(4);
+            this.variableDownButton.Name = "variableDownButton";
+            this.variableDownButton.Size = new System.Drawing.Size(22, 28);
+            this.variableDownButton.TabIndex = 9;
+            this.variableDownButton.Text = "↓";
+            this.variableDownButton.UseVisualStyleBackColor = true;
+            this.variableDownButton.Click += new System.EventHandler(this.variableDownButton_Click);
+            // 
+            // variableUpButton
+            // 
+            this.variableUpButton.Enabled = false;
+            this.variableUpButton.Location = new System.Drawing.Point(224, 196);
+            this.variableUpButton.Margin = new System.Windows.Forms.Padding(4);
+            this.variableUpButton.Name = "variableUpButton";
+            this.variableUpButton.Size = new System.Drawing.Size(22, 28);
+            this.variableUpButton.TabIndex = 8;
+            this.variableUpButton.Text = "↑";
+            this.variableUpButton.UseVisualStyleBackColor = true;
+            this.variableUpButton.Click += new System.EventHandler(this.variableUpButton_Click);
+            // 
             // variableID
             // 
             this.variableID.AutoSize = true;
             this.variableID.Location = new System.Drawing.Point(281, 171);
             this.variableID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.variableID.Name = "variableID";
-            this.variableID.Size = new System.Drawing.Size(91, 16);
+            this.variableID.Size = new System.Drawing.Size(77, 16);
             this.variableID.TabIndex = 7;
-            this.variableID.Text = "Variable ID: -1";
+            this.variableID.Text = "Variable ID:";
             // 
             // variableValue
             // 
@@ -438,7 +498,9 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.soundID);
+            this.tabPage4.Controls.Add(this.sfxDownButton);
+            this.tabPage4.Controls.Add(this.sfxUpButton);
+            this.tabPage4.Controls.Add(this.sfxID);
             this.tabPage4.Controls.Add(this.sfxBrowseButton);
             this.tabPage4.Controls.Add(this.sfxFileBox);
             this.tabPage4.Controls.Add(this.label24);
@@ -456,15 +518,39 @@ namespace SonicRetro.SonLVL
             this.tabPage4.Text = "Sound Effects";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // soundID
+            // sfxDownButton
             // 
-            this.soundID.AutoSize = true;
-            this.soundID.Location = new System.Drawing.Point(281, 171);
-            this.soundID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.soundID.Name = "soundID";
-            this.soundID.Size = new System.Drawing.Size(79, 16);
-            this.soundID.TabIndex = 8;
-            this.soundID.Text = "Sound ID: -1";
+            this.sfxDownButton.Enabled = false;
+            this.sfxDownButton.Location = new System.Drawing.Point(250, 196);
+            this.sfxDownButton.Margin = new System.Windows.Forms.Padding(4);
+            this.sfxDownButton.Name = "sfxDownButton";
+            this.sfxDownButton.Size = new System.Drawing.Size(22, 28);
+            this.sfxDownButton.TabIndex = 11;
+            this.sfxDownButton.Text = "↓";
+            this.sfxDownButton.UseVisualStyleBackColor = true;
+            this.sfxDownButton.Click += new System.EventHandler(this.sfxDownButton_Click);
+            // 
+            // sfxUpButton
+            // 
+            this.sfxUpButton.Enabled = false;
+            this.sfxUpButton.Location = new System.Drawing.Point(224, 196);
+            this.sfxUpButton.Margin = new System.Windows.Forms.Padding(4);
+            this.sfxUpButton.Name = "sfxUpButton";
+            this.sfxUpButton.Size = new System.Drawing.Size(22, 28);
+            this.sfxUpButton.TabIndex = 10;
+            this.sfxUpButton.Text = "↑";
+            this.sfxUpButton.UseVisualStyleBackColor = true;
+            this.sfxUpButton.Click += new System.EventHandler(this.sfxUpButton_Click);
+            // 
+            // sfxID
+            // 
+            this.sfxID.AutoSize = true;
+            this.sfxID.Location = new System.Drawing.Point(281, 171);
+            this.sfxID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.sfxID.Name = "sfxID";
+            this.sfxID.Size = new System.Drawing.Size(65, 16);
+            this.sfxID.TabIndex = 8;
+            this.sfxID.Text = "Sound ID:";
             // 
             // sfxBrowseButton
             // 
@@ -562,6 +648,8 @@ namespace SonicRetro.SonLVL
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.playerDownButton);
+            this.tabPage5.Controls.Add(this.playerUpButton);
             this.tabPage5.Controls.Add(this.playerID);
             this.tabPage5.Controls.Add(this.playerName);
             this.tabPage5.Controls.Add(this.label6);
@@ -577,15 +665,39 @@ namespace SonicRetro.SonLVL
             this.tabPage5.Text = "Players";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // playerDownButton
+            // 
+            this.playerDownButton.Enabled = false;
+            this.playerDownButton.Location = new System.Drawing.Point(250, 196);
+            this.playerDownButton.Margin = new System.Windows.Forms.Padding(4);
+            this.playerDownButton.Name = "playerDownButton";
+            this.playerDownButton.Size = new System.Drawing.Size(22, 28);
+            this.playerDownButton.TabIndex = 13;
+            this.playerDownButton.Text = "↓";
+            this.playerDownButton.UseVisualStyleBackColor = true;
+            this.playerDownButton.Click += new System.EventHandler(this.playerDownButton_Click);
+            // 
+            // playerUpButton
+            // 
+            this.playerUpButton.Enabled = false;
+            this.playerUpButton.Location = new System.Drawing.Point(224, 196);
+            this.playerUpButton.Margin = new System.Windows.Forms.Padding(4);
+            this.playerUpButton.Name = "playerUpButton";
+            this.playerUpButton.Size = new System.Drawing.Size(22, 28);
+            this.playerUpButton.TabIndex = 12;
+            this.playerUpButton.Text = "↑";
+            this.playerUpButton.UseVisualStyleBackColor = true;
+            this.playerUpButton.Click += new System.EventHandler(this.playerUpButton_Click);
+            // 
             // playerID
             // 
             this.playerID.AutoSize = true;
             this.playerID.Location = new System.Drawing.Point(281, 171);
             this.playerID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.playerID.Name = "playerID";
-            this.playerID.Size = new System.Drawing.Size(79, 16);
+            this.playerID.Size = new System.Drawing.Size(65, 16);
             this.playerID.TabIndex = 5;
-            this.playerID.Text = "Player ID: -1";
+            this.playerID.Text = "Player ID:";
             // 
             // playerName
             // 
@@ -671,8 +783,19 @@ namespace SonicRetro.SonLVL
             this.tabPage6.Text = "Stages";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // listPosText
+            // 
+            this.listPosText.AutoSize = true;
+            this.listPosText.Location = new System.Drawing.Point(389, 188);
+            this.listPosText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.listPosText.Name = "listPosText";
+            this.listPosText.Size = new System.Drawing.Size(57, 16);
+            this.listPosText.TabIndex = 13;
+            this.listPosText.Text = "List Pos:";
+            // 
             // stageDownButton
             // 
+            this.stageDownButton.Enabled = false;
             this.stageDownButton.Location = new System.Drawing.Point(250, 197);
             this.stageDownButton.Margin = new System.Windows.Forms.Padding(4);
             this.stageDownButton.Name = "stageDownButton";
@@ -684,6 +807,7 @@ namespace SonicRetro.SonLVL
             // 
             // stageUpButton
             // 
+            this.stageUpButton.Enabled = false;
             this.stageUpButton.Location = new System.Drawing.Point(224, 197);
             this.stageUpButton.Margin = new System.Windows.Forms.Padding(4);
             this.stageUpButton.Name = "stageUpButton";
@@ -886,16 +1010,6 @@ namespace SonicRetro.SonLVL
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
-            // listPosText
-            // 
-            this.listPosText.AutoSize = true;
-            this.listPosText.Location = new System.Drawing.Point(389, 188);
-            this.listPosText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.listPosText.Name = "listPosText";
-            this.listPosText.Size = new System.Drawing.Size(71, 16);
-            this.listPosText.TabIndex = 13;
-            this.listPosText.Text = "List Pos: -1";
-            // 
             // GameConfigEditorDialog
             // 
             this.AcceptButton = this.okButton;
@@ -995,8 +1109,16 @@ namespace SonicRetro.SonLVL
 		private System.Windows.Forms.Button stageUpButton;
 		private System.Windows.Forms.Label objectTypeID;
 		private System.Windows.Forms.Label variableID;
-		private System.Windows.Forms.Label soundID;
+		private System.Windows.Forms.Label sfxID;
 		private System.Windows.Forms.Label playerID;
 		private System.Windows.Forms.Label listPosText;
+		private System.Windows.Forms.Button variableDownButton;
+		private System.Windows.Forms.Button variableUpButton;
+		private System.Windows.Forms.Button sfxDownButton;
+		private System.Windows.Forms.Button sfxUpButton;
+		private System.Windows.Forms.Button playerDownButton;
+		private System.Windows.Forms.Button playerUpButton;
+		private System.Windows.Forms.Button objectDownButton;
+		private System.Windows.Forms.Button objectUpButton;
 	}
 }

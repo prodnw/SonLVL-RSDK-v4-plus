@@ -96,8 +96,8 @@ namespace SonicRetro.SonLVL
 				sounds.ForEach(a => a.name = Path.GetFileNameWithoutExtension(a.path));
 			ReloadData();
 			loaded = true;
-			if (Directory.Exists("Data/Stages"))
-				stageFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), "Data/Stages"), "Act*.bin"));
+			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/Stages")))
+				stageFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/Stages"), "Act*.bin"));
 			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Stages")))
 				stageFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Stages"), "Act*.bin").Where(a => !stageFiles.Contains(a)));
 			stageFolder.AutoCompleteCustomSource.AddRange(stageFiles.Select(a => a.Remove(a.LastIndexOf('/'))).Distinct().ToArray());
@@ -115,7 +115,7 @@ namespace SonicRetro.SonLVL
 				objectForceLoad.Visible = true;
 				objectTypeID.Visible = false;
 				variableID.Visible = false;
-				soundID.Visible = false;
+				sfxID.Visible = false;
 				playerID.Visible = false;
 				listPosText.Visible = false;
 			}
@@ -126,7 +126,7 @@ namespace SonicRetro.SonLVL
 				objectForceLoad.Visible = false;
 				objectTypeID.Visible = true;
 				variableID.Visible = true;
-				soundID.Visible = true;
+				sfxID.Visible = true;
 				playerID.Visible = true;
 				listPosText.Visible = true;
 			}
@@ -170,6 +170,9 @@ namespace SonicRetro.SonLVL
 				objectScriptBox.Enabled = false;
 				browseScriptButton.Enabled = false;
 				objectForceLoad.Enabled = false;
+				objectUpButton.Enabled = false;
+				objectDownButton.Enabled = false;
+				objectTypeID.Text = "Object Type ID:";
 			}
 			else
 			{
@@ -178,14 +181,15 @@ namespace SonicRetro.SonLVL
 				objectScriptBox.Enabled = true;
 				browseScriptButton.Enabled = true;
 				objectForceLoad.Enabled = true;
+				objectUpButton.Enabled = objectListBox.SelectedIndex > 0;
+				objectDownButton.Enabled = objectListBox.SelectedIndex < objects.Count - 1;
+				objectTypeID.Text = $"Object Type ID: {objectListBox.SelectedIndex + 1}";
 				loaded = false;
 				objectNameBox.Text = objects[objectListBox.SelectedIndex].name;
 				objectScriptBox.Text = objects[objectListBox.SelectedIndex].script;
 				objectForceLoad.Checked = objects[objectListBox.SelectedIndex].forceLoad;
 				loaded = true;
 			}
-
-			objectTypeID.Text = $"Object Type ID: {objectListBox.SelectedIndex}";
 		}
 
 		private void objectAddButton_Click(object sender, EventArgs e)
@@ -202,6 +206,28 @@ namespace SonicRetro.SonLVL
 			objects.RemoveAt(objectListBox.SelectedIndex);
 			objectListBox.Items.RemoveAt(objectListBox.SelectedIndex);
 			objectAddButton.Enabled = objects.Count < 255;
+		}
+
+		private void objectUpButton_Click(object sender, EventArgs e)
+		{
+			objects.Swap(objectListBox.SelectedIndex, objectListBox.SelectedIndex - 1);
+
+			loaded = false;
+			objectListBox.MoveSelectionUp();
+			loaded = true;
+
+			objectListBox_SelectedIndexChanged(sender, EventArgs.Empty);
+		}
+
+		private void objectDownButton_Click(object sender, EventArgs e)
+		{
+			objects.Swap(objectListBox.SelectedIndex, objectListBox.SelectedIndex + 1);
+
+			loaded = false;
+			objectListBox.MoveSelectionDown();
+			loaded = true;
+
+			objectListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void objectNameBox_TextChanged(object sender, EventArgs e)
@@ -240,19 +266,23 @@ namespace SonicRetro.SonLVL
 				variableDeleteButton.Enabled = false;
 				variableName.Enabled = false;
 				variableValue.Enabled = false;
+				variableUpButton.Enabled = false;
+				variableDownButton.Enabled = false;
+				variableID.Text = "Variable ID:";
 			}
 			else
 			{
 				variableDeleteButton.Enabled = true;
 				variableName.Enabled = true;
 				variableValue.Enabled = true;
+				variableUpButton.Enabled = variableListBox.SelectedIndex > 0;
+				variableDownButton.Enabled = variableListBox.SelectedIndex < variables.Count - 1;
+				variableID.Text = $"Variable ID: {variableListBox.SelectedIndex}";
 				loaded = false;
 				variableName.Text = variables[variableListBox.SelectedIndex].name;
 				variableValue.Value = variables[variableListBox.SelectedIndex].value;
 				loaded = true;
 			}
-
-			variableID.Text = $"Variable ID: {variableListBox.SelectedIndex}";
 		}
 
 		private void variableAddButton_Click(object sender, EventArgs e)
@@ -269,6 +299,28 @@ namespace SonicRetro.SonLVL
 			variables.RemoveAt(variableListBox.SelectedIndex);
 			variableListBox.Items.RemoveAt(variableListBox.SelectedIndex);
 			variableAddButton.Enabled = variables.Count < 255;
+		}
+
+		private void variableUpButton_Click(object sender, EventArgs e)
+		{
+			variables.Swap(variableListBox.SelectedIndex, variableListBox.SelectedIndex - 1);
+
+			loaded = false;
+			variableListBox.MoveSelectionUp();
+			loaded = true;
+
+			variableListBox_SelectedIndexChanged(sender, EventArgs.Empty);
+		}
+
+		private void variableDownButton_Click(object sender, EventArgs e)
+		{
+			variables.Swap(variableListBox.SelectedIndex, variableListBox.SelectedIndex + 1);
+
+			loaded = false;
+			variableListBox.MoveSelectionDown();
+			loaded = true;
+
+			variableListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void variableName_TextChanged(object sender, EventArgs e)
@@ -295,6 +347,9 @@ namespace SonicRetro.SonLVL
 				sfxNameBox.Enabled = false;
 				sfxFileBox.Enabled = false;
 				sfxBrowseButton.Enabled = false;
+				sfxUpButton.Enabled = false;
+				sfxDownButton.Enabled = false;
+				sfxID.Text = "Sound ID:";
 			}
 			else
 			{
@@ -302,13 +357,14 @@ namespace SonicRetro.SonLVL
 				sfxNameBox.Enabled = LevelData.Game.RSDKVer == EngineVersion.V4;
 				sfxFileBox.Enabled = true;
 				sfxBrowseButton.Enabled = true;
+				sfxUpButton.Enabled = sfxListBox.SelectedIndex > 0;
+				sfxDownButton.Enabled = sfxListBox.SelectedIndex < sounds.Count - 1;
+				sfxID.Text = $"Sound ID: {sfxListBox.SelectedIndex}";
 				loaded = false;
 				sfxNameBox.Text = sounds[sfxListBox.SelectedIndex].name;
 				sfxFileBox.Text = sounds[sfxListBox.SelectedIndex].path;
 				loaded = true;
 			}
-
-			soundID.Text = $"Sound ID: {sfxListBox.SelectedIndex}";
 		}
 
 		private void sfxAddButton_Click(object sender, EventArgs e)
@@ -325,6 +381,28 @@ namespace SonicRetro.SonLVL
 			sounds.RemoveAt(sfxListBox.SelectedIndex);
 			sfxListBox.Items.RemoveAt(sfxListBox.SelectedIndex);
 			sfxAddButton.Enabled = sounds.Count < 255;
+		}
+
+		private void sfxUpButton_Click(object sender, EventArgs e)
+		{
+			sounds.Swap(sfxListBox.SelectedIndex, sfxListBox.SelectedIndex - 1);
+
+			loaded = false;
+			sfxListBox.MoveSelectionUp();
+			loaded = true;
+
+			sfxListBox_SelectedIndexChanged(sender, EventArgs.Empty);
+		}
+
+		private void sfxDownButton_Click(object sender, EventArgs e)
+		{
+			sounds.Swap(sfxListBox.SelectedIndex, sfxListBox.SelectedIndex + 1);
+
+			loaded = false;
+			sfxListBox.MoveSelectionDown();
+			loaded = true;
+
+			sfxListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void sfxNameBox_TextChanged(object sender, EventArgs e)
@@ -358,17 +436,21 @@ namespace SonicRetro.SonLVL
 			{
 				playerDeleteButton.Enabled = false;
 				playerName.Enabled = false;
+				playerUpButton.Enabled = false;
+				playerDownButton.Enabled = false;
+				playerID.Text = "Player ID:";
 			}
 			else
 			{
 				playerDeleteButton.Enabled = true;
 				playerName.Enabled = true;
+				playerUpButton.Enabled = playerListBox.SelectedIndex > 0;
+				playerDownButton.Enabled = playerListBox.SelectedIndex < players.Count - 1;
+				playerID.Text = $"Player ID: {playerListBox.SelectedIndex}";
 				loaded = false;
 				playerName.Text = players[playerListBox.SelectedIndex];
 				loaded = true;
 			}
-
-			playerID.Text = $"Player ID: {playerListBox.SelectedIndex}";
 		}
 
 		private void playerAddButton_Click(object sender, EventArgs e)
@@ -385,6 +467,28 @@ namespace SonicRetro.SonLVL
 			players.RemoveAt(playerListBox.SelectedIndex);
 			playerListBox.Items.RemoveAt(playerListBox.SelectedIndex);
 			playerAddButton.Enabled = players.Count < 255;
+		}
+
+		private void playerUpButton_Click(object sender, EventArgs e)
+		{
+			players.Swap(playerListBox.SelectedIndex, playerListBox.SelectedIndex - 1);
+
+			loaded = false;
+			playerListBox.MoveSelectionUp();
+			loaded = true;
+
+			playerListBox_SelectedIndexChanged(sender, EventArgs.Empty);
+		}
+
+		private void playerDownButton_Click(object sender, EventArgs e)
+		{
+			players.Swap(playerListBox.SelectedIndex, playerListBox.SelectedIndex + 1);
+
+			loaded = false;
+			playerListBox.MoveSelectionDown();
+			loaded = true;
+
+			playerListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
 
 		private void playerName_TextChanged(object sender, EventArgs e)
@@ -432,6 +536,7 @@ namespace SonicRetro.SonLVL
 				stageBrowseButton.Enabled = false;
 				stageUpButton.Enabled = false;
 				stageDownButton.Enabled = false;
+				listPosText.Text = "List Pos:";
 			}
 			else
 			{
@@ -443,6 +548,7 @@ namespace SonicRetro.SonLVL
 				stageBrowseButton.Enabled = true;
 				stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
 				stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
+				listPosText.Text = $"List Pos: {stageListBox.SelectedIndex}";
 				loaded = false;
 				stageFolder.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].folder;
 				stageAct.Text = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].id;
@@ -450,8 +556,6 @@ namespace SonicRetro.SonLVL
 				stageHighlight.Checked = stages[stageCategory.SelectedIndex][stageListBox.SelectedIndex].highlight;
 				loaded = true;
 			}
-
-			listPosText.Text = $"List Pos: {stageListBox.SelectedIndex}";
 		}
 
 		private void stageAddButton_Click(object sender, EventArgs e)
@@ -475,13 +579,8 @@ namespace SonicRetro.SonLVL
 			stages[stageCategory.SelectedIndex].Swap(stageListBox.SelectedIndex, stageListBox.SelectedIndex - 1);
 
 			loaded = false;
-			stageListBox.Items.Insert(stageListBox.SelectedIndex - 1, stageListBox.Items[stageListBox.SelectedIndex]);
-			stageListBox.SelectedIndex -= 2;
-			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex + 2);
+			stageListBox.MoveSelectionUp();
 			loaded = true;
-
-			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
-			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 
 			stageListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}
@@ -491,13 +590,8 @@ namespace SonicRetro.SonLVL
 			stages[stageCategory.SelectedIndex].Swap(stageListBox.SelectedIndex, stageListBox.SelectedIndex + 1);
 
 			loaded = false;
-			stageListBox.Items.Insert(stageListBox.SelectedIndex + 2, stageListBox.Items[stageListBox.SelectedIndex]);
-			stageListBox.SelectedIndex += 2;
-			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex - 2);
+			stageListBox.MoveSelectionDown();
 			loaded = true;
-
-			stageUpButton.Enabled = stageListBox.SelectedIndex > 0;
-			stageDownButton.Enabled = stageListBox.SelectedIndex < stages[stageCategory.SelectedIndex].Count - 1;
 
 			stageListBox_SelectedIndexChanged(sender, EventArgs.Empty);
 		}

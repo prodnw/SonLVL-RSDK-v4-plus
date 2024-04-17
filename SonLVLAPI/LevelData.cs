@@ -1643,8 +1643,7 @@ namespace SonicRetro.SonLVL.API
 				for (int x = 0; x < bmp.Width; x++)
 				{
 					Color col = Color.FromArgb(BitConverter.ToInt32(Bits, srcaddr + (x * 4)));
-					if (col.A >= 128)
-						bmp.Bits[dstaddr++] = (byte)col.FindNearestMatch(palette);
+					bmp.Bits[dstaddr++] = (byte)((col.A >= 128) ? col.FindNearestMatch(palette) : 0);
 				}
 			}
 		}

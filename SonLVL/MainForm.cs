@@ -7556,6 +7556,13 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (tabControl3.SelectedIndex != 2)
 				scrollPreviewButton.Checked = false;
+			else
+			{
+				if (LevelData.BGSize[bglayer].IsEmpty)
+					tabPage13.Hide();
+				else
+					tabPage13.Show();
+			}
 			DrawLevel();
 		}
 

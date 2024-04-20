@@ -2029,7 +2029,7 @@ namespace SonicRetro.SonLVL.API
 				lWallAngle = src.lWallAngle
 			};
 			for (int i = 0; i < 16; i++)
-				if (result.heightMasks[i].solid = src.heightMasks[i].solid)
+				if (result.heightMasks[i].solid == src.heightMasks[i].solid)
 					result.heightMasks[i].height = src.heightMasks[i].height;
 			return result;
 		}

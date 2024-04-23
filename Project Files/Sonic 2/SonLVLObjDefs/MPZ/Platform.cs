@@ -98,6 +98,39 @@ namespace S2ObjectDefinitions.MPZ
 		}
 	}
 	
+	class MPlatform : MPZ.Platform
+	{
+		public override Sprite SetupDebugOverlay()
+		{
+			BitmapBits overlay = new BitmapBits(129 + 10, 65);
+			int[] points = {
+				0, 0,
+				0, 64,
+				128, 0,
+				128, 64,
+				0, 0
+			};
+			for (int i = 2; i < points.Length; i += 2)
+				overlay.DrawArrow(6, points[i-2] + 5, points[i-1], points[i] + 5, points[i+1]);
+			return new Sprite(overlay, -5, 0);
+		}
+		
+		public override PropertySpec[] SetupProperties()
+		{
+			return null;
+		}
+		
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[0]); }
+		}
+		
+		public override string SubtypeName(byte subtype)
+		{
+			return null;
+		}
+	}
+	
 	abstract class Platform : ObjectDefinition
 	{
 		private PropertySpec[] properties;
@@ -171,6 +204,18 @@ namespace S2ObjectDefinitions.MPZ
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
 			return debug;
+		}
+	}
+	
+	public static class BitmapBitsExtensions
+	{
+		public static void DrawArrow(this BitmapBits bitmap, byte index, int x1, int y1, int x2, int y2)
+		{
+			bitmap.DrawLine(index, x1, y1, x2, y2);
+			
+			double angle = Math.Atan2(y1 - y2, x1 - x2);
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle + 0.40) * 10), y2 + (int)(Math.Sin(angle + 0.40) * 10));
+			bitmap.DrawLine(index, x2, y2, x2 + (int)(Math.Cos(angle - 0.40) * 10), y2 + (int)(Math.Sin(angle - 0.40) * 10));
 		}
 	}
 }

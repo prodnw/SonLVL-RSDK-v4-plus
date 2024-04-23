@@ -41,12 +41,12 @@ namespace S2ObjectDefinitions.Mission
 				(obj, value) => obj.PropertyValue = (byte)((obj.PropertyValue & ~1) | (int)value));
 			
 			properties[1] = new PropertySpec("Cooldown", typeof(int), "Extended",
-				"How long, in frames, this Buzzer's cooldown pauses should be..", null,
+				"How long, in frames, this Buzzer's cooldown pauses should be.", null,
 				(obj) => (((V4ObjectEntry)obj).Value0 > 0) ? ((V4ObjectEntry)obj).Value0 : 256,
 				(obj, value) => ((V4ObjectEntry)obj).Value0 = ((int)value));
 			
 			properties[2] = new PropertySpec("Speed", typeof(decimal), "Extended",
-				"The speed at which this Buzzer should move horizontally, in pixels per frame.", null,
+				"The speed, in pixels per frame, at which this Buzzer should move horizontally.", null,
 				(obj) => ((((V4ObjectEntry)obj).Value1 > 0) ? ((V4ObjectEntry)obj).Value1 : 100)/100m,
 				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)((decimal)value * 100m));
 		}

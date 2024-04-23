@@ -72,7 +72,7 @@ namespace S2ObjectDefinitions.Mission
 				if (obj.PropertyValue == 0)
 				{
 					ObjectEntry other = LevelData.Objects[LevelData.Objects.IndexOf(obj) + 1];
-					if (other.Name != "M035Block" || other.PropertyValue != 1)
+					if (other.Type != obj.Type || other.PropertyValue != 1)
 					{
 						updateSprite = false;
 						return sprites[0];
@@ -96,7 +96,7 @@ namespace S2ObjectDefinitions.Mission
 				else
 				{
 					ObjectEntry other = LevelData.Objects[LevelData.Objects.IndexOf(obj) - 1];
-					if (other.Name != "M035Block" || other.PropertyValue != 0)
+					if (other.Type != obj.Type || other.PropertyValue != 0)
 					{
 						updateSprite = false;
 						return sprites[0];

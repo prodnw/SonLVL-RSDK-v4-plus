@@ -71,12 +71,12 @@ namespace SCDObjectDefinitions.R1
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[subtype];
+			return sprites[subtype & 7];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return sprites[obj.PropertyValue & 7];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)

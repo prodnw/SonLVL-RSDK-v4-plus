@@ -29,7 +29,7 @@ namespace S2ObjectDefinitions.ARZ
 					{ "Hover", 1 }
 				},
 				(obj) => (obj.PropertyValue == 0) ? 0 : 1,
-				(obj, value) => obj.PropertyValue = (byte)(int)value);
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

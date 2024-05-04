@@ -4774,6 +4774,8 @@ namespace SonicRetro.SonLVL.GUI
 						LevelData.RedrawCol(ind, false);
 					}
 				}
+				if (CurrentTab == Tab.Art && CurrentArtTab == ArtTab.Tiles)
+					TileSelector.SelectedIndex = freetiles[0];
 				TileSelector.Invalidate();
 			}
 			List<RSDKv3_4.Tiles128x128.Block> newChunks = new List<RSDKv3_4.Tiles128x128.Block>();
@@ -4820,6 +4822,8 @@ namespace SonicRetro.SonLVL.GUI
 					LevelData.NewChunks.chunkList[ind] = cnk;
 					LevelData.RedrawChunk(ind);
 				}
+				if (CurrentTab == Tab.Art && CurrentArtTab == ArtTab.Chunks)
+					ChunkSelector.SelectedIndex = freechunks[0];
 				ChunkSelector.Invalidate();
 			}
 			else if (ir.Art.Count > 0)

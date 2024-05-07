@@ -685,17 +685,21 @@ namespace SonicRetro.SonLVL.GUI
 			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle + " - " + this.levelname;
 			UpdateScrollBars();
 			objectPanel.HScrollValue = 0;
+			objectPanel.HScrollMinimum = -128;
 			objectPanel.HScrollSmallChange = 16;
 			objectPanel.HScrollLargeChange = 128;
 			objectPanel.VScrollValue = 0;
+			objectPanel.VScrollMinimum = -128;
 			objectPanel.VScrollSmallChange = 16;
 			objectPanel.VScrollLargeChange = 128;
 			objectPanel.HScrollEnabled = true;
 			objectPanel.VScrollEnabled = true;
 			foregroundPanel.HScrollValue = 0;
+			foregroundPanel.HScrollMinimum = -128;
 			foregroundPanel.HScrollSmallChange = 16;
 			foregroundPanel.HScrollLargeChange = 128;
 			foregroundPanel.VScrollValue = 0;
+			foregroundPanel.VScrollMinimum = -128;
 			foregroundPanel.VScrollSmallChange = 16;
 			foregroundPanel.VScrollLargeChange = 128;
 			foregroundPanel.HScrollEnabled = true;
@@ -2244,10 +2248,10 @@ namespace SonicRetro.SonLVL.GUI
 				case Tab.Background:
 					if (enableGridToolStripMenuItem.Checked)
 					{
-						for (int x = (128 - (camera.X % 128)) % 128; x < LevelImg8bpp.Width; x += 128)
-							LevelImg8bpp.DrawLine(Settings.GridColor, x, 0, x, LevelImg8bpp.Height - 1);
-						for (int y = (128 - (camera.Y % 128)) % 128; y < LevelImg8bpp.Height; y += 128)
-							LevelImg8bpp.DrawLine(Settings.GridColor, 0, y, LevelImg8bpp.Width - 1, y);
+						for (int x = Math.Max(camera.X & ~127, 0); x <= Math.Min(camera.X + (LevelImg8bpp.Width - 1), lvlsize.Width * 128); x += 128)
+							LevelImg8bpp.DrawLine(Settings.GridColor, x - camera.X, Math.Max(-camera.Y, 0), x - camera.X, Math.Min(LevelImg8bpp.Height - 1, (lvlsize.Height * 128) - camera.Y - 1));
+						for (int y = Math.Max(camera.Y & ~127, 0); y <= Math.Min(camera.Y + (LevelImg8bpp.Height - 1), lvlsize.Height * 128); y += 128)
+							LevelImg8bpp.DrawLine(Settings.GridColor, Math.Max(-camera.X, 0), y - camera.Y, Math.Min(LevelImg8bpp.Width - 1, (lvlsize.Width* 128) - camera.X - 1), y - camera.Y);
 					}
 					break;
 			}

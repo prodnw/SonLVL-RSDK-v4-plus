@@ -5449,6 +5449,7 @@ namespace SonicRetro.SonLVL.GUI
 				obj.UpdateSprite();
 				SelectedItems = new List<Entry>(1) { obj };
 				SelectedObjectChanged();
+				objectPanel.FocusPanel();
 				DrawLevel();
 				SaveState("Add Object");
 			}

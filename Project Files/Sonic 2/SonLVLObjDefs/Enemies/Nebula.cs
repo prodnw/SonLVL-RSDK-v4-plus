@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Inactive", 1 }
 				},
 				(obj) => (obj.PropertyValue > 0) ? 1 : 0,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

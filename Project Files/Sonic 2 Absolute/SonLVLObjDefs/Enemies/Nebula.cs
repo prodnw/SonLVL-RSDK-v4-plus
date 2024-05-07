@@ -28,7 +28,7 @@ namespace S2ObjectDefinitions.Enemies
 					{ "Inactive", 1 }
 				},
 				(obj) => (obj.PropertyValue > 0) ? 1 : 0,
-				(obj, value) => obj.PropertyValue = ((byte)((int)value)));
+				(obj, value) => obj.PropertyValue = (byte)((int)value));
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes
@@ -67,7 +67,7 @@ namespace S2ObjectDefinitions.Enemies
 			{
 				switch (LevelData.Objects[i].Name)
 				{
-					case "Object Activator": // well technically any non object can work.. but how about we don't loop around the entire object list every time
+					case "Object Activator": // well technically any object can work.. but how about we don't loop around the entire object list every time
 						LevelData.Objects[i].UpdateDebugOverlay();
 						break;
 					case "Nebula":

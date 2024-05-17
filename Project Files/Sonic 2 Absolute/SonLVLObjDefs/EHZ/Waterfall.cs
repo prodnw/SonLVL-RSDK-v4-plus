@@ -39,18 +39,18 @@ namespace S2AObjectDefinitions.EHZ
 					"How long this Waterfall is.", null, new Dictionary<string, int>
 					{
 						{ "Top", 0 },
-						{ "256 px", 1 },
-						{ "192 px", 7 },
-						{ "160 px", 2 },
-						{ "128 px", 3 },
-						{ "96 px", 8 },
+						{ "16 px", 6 },
 						{ "48 px", 5 },
-						{ "16 px", 6 }
+						{ "96 px", 8 },
+						{ "128 px", 3 },
+						{ "160 px", 2 },
+						{ "192 px", 7 },
+						{ "256 px", 1 },
 					},
 					(obj) => (int)obj.PropertyValue,
 					(obj, value) => obj.PropertyValue = (byte)((int)value));
 				
-				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 1, 7, 2, 3, 8, 5, 6});
+				subtypes = new ReadOnlyCollection<byte>(new byte[] {0, 6, 5, 8, 3, 2, 7, 1});
 			}
 			else
 			{

@@ -9,7 +9,7 @@ namespace SCDObjectDefinitions.R4
 	class LinkPlatforms : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite[] sprites = new Sprite[10];
+		private Sprite[] sprites = new Sprite[11];
 		private Sprite debug;
 		
 		public override void Init(ObjectData data)
@@ -17,7 +17,7 @@ namespace SCDObjectDefinitions.R4
 			BitmapBits sheet = LevelData.GetSpriteSheet("R4/Objects.gif");
 			
 			Sprite[] frames = new Sprite[2];
-			frames[0] = new Sprite(sheet.GetSection(180, 52, 16, 16), -8, -8); // chain
+			sprites[10] = frames[0] = new Sprite(sheet.GetSection(180, 52, 16, 16), -8, -8); // chain
 			frames[1] = new Sprite(sheet.GetSection(147, 69, 64, 16), -32, -8); // platform
 			
 			int[] angles = {112, 16, 32, 48, 96, 80, 64, 0, 128, 0};
@@ -67,25 +67,21 @@ namespace SCDObjectDefinitions.R4
 
 		public override Sprite Image
 		{
-			get { return sprites[0]; }
+			get { return sprites[10]; }
 		}
 
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprites[0];
+			return sprites[10];
 		}
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			int index = LevelData.Objects.IndexOf(obj);
 			
-			if ((obj.PropertyValue == 1) || (obj.PropertyValue == 2))
-			{
-				for (int i = 1; (i < 9) && ((index + i) < LevelData.Objects.Count); i++)
-				{
-					LevelData.Objects[index + i].UpdateSprite();
-				}
-			}
+			// It's kinda funky, this is is like a recursive way of updating the next platform (in case the first platform had its Mode changed, we need to update all the platforms that follow it)
+			if (((index + 1) < LevelData.Objects.Count) && (LevelData.Objects[index + 1].Type == obj.Type) && (LevelData.Objects[index + 1].PropertyValue == 0))
+				LevelData.Objects[index + 1].UpdateSprite();
 			
 			int offset = 0;
 			while (index > 0)

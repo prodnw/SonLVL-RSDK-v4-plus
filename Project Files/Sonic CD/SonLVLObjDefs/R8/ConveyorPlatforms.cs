@@ -90,15 +90,12 @@ namespace SCDObjectDefinitions.R8
 		{
 			int index = LevelData.Objects.IndexOf(obj);
 			
+			// It's kinda funky, this is is like a recursive way of updating the next platform (in case the first platform had its Mode changed, we need to update all the platforms that follow it)
+			if (((index + 1) < LevelData.Objects.Count) && (LevelData.Objects[index + 1].Type == obj.Type) && (LevelData.Objects[index + 1].PropertyValue != 0))
+				LevelData.Objects[index + 1].UpdateSprite();
+			
 			if (obj.PropertyValue == 0)
-			{
-				index++;
-				for (int i = 0; (i < 5) && (index < LevelData.Objects.Count); i++, index++)
-				{
-					LevelData.Objects[index].UpdateSprite();
-				}
 				return sprites[0];
-			}
 			
 			index--;
 			int offset = 1;
@@ -116,9 +113,8 @@ namespace SCDObjectDefinitions.R8
 				}
 			}
 			
-			ObjectEntry other = LevelData.Objects[index];
-			
-			return new Sprite(sprites[offset], other.X - obj.X, other.Y - obj.Y);
+			ObjectEntry leader = LevelData.Objects[index];
+			return new Sprite(sprites[offset], leader.X - obj.X, leader.Y - obj.Y);
 		}
 	}
 }

@@ -80,9 +80,8 @@ namespace S2ObjectDefinitions.WFZ
 		{
 			// update all the following platforms' sprites too, if possible
 			// (we're always updating 8 and not 4 on purpose, in case distance (platform count) is different from before)
-			int index = LevelData.Objects.IndexOf(obj) + 1;
-			for (int i = 0; (i < 8) && (index < LevelData.Objects.Count); i++, index++)
-				LevelData.Objects[index].UpdateSprite();
+			foreach (var entity in LevelData.Objects.Skip(LevelData.Objects.IndexOf(obj) + 1).Take(8))
+				entity.UpdateSprite();
 			
 			return sprite;
 		}

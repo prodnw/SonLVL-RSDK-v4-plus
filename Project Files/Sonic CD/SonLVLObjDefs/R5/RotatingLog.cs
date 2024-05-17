@@ -76,6 +76,11 @@ namespace SCDObjectDefinitions.R5
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
 			int index = LevelData.Objects.IndexOf(obj);
+			
+			// It's kinda funky, this is is like a recursive way of updating the next log (in case the first log had its Leader value changed, so we need to update all the logs that follow it)
+			if (((index + 1) < LevelData.Objects.Count) && (LevelData.Objects[index + 1].Type == obj.Type) && (LevelData.Objects[index + 1].PropertyValue == 0))
+				LevelData.Objects[index + 1].UpdateSprite();
+			
 			int offset = 0;
 			while (index > 0)
 			{

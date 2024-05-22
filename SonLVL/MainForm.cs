@@ -2251,7 +2251,7 @@ namespace SonicRetro.SonLVL.GUI
 						for (int x = Math.Max(camera.X & ~127, 0); x <= Math.Min(camera.X + (LevelImg8bpp.Width - 1), lvlsize.Width * 128); x += 128)
 							LevelImg8bpp.DrawLine(Settings.GridColor, x - camera.X, Math.Max(-camera.Y, 0), x - camera.X, Math.Min(LevelImg8bpp.Height - 1, (lvlsize.Height * 128) - camera.Y - 1));
 						for (int y = Math.Max(camera.Y & ~127, 0); y <= Math.Min(camera.Y + (LevelImg8bpp.Height - 1), lvlsize.Height * 128); y += 128)
-							LevelImg8bpp.DrawLine(Settings.GridColor, Math.Max(-camera.X, 0), y - camera.Y, Math.Min(LevelImg8bpp.Width - 1, (lvlsize.Width* 128) - camera.X - 1), y - camera.Y);
+							LevelImg8bpp.DrawLine(Settings.GridColor, Math.Max(-camera.X, 0), y - camera.Y, Math.Min(LevelImg8bpp.Width - 1, (lvlsize.Width * 128) - camera.X - 1), y - camera.Y);
 					}
 					break;
 			}
@@ -3155,7 +3155,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			Point chunkpoint = new Point(((int)(e.X / ZoomLevel) + foregroundPanel.HScrollValue) / 128, ((int)(e.Y / ZoomLevel) + foregroundPanel.VScrollValue) / 128);
-			if (chunkpoint.X >= LevelData.FGWidth | chunkpoint.Y >= LevelData.FGHeight) return;
+			if (chunkpoint.X < 0 || chunkpoint.Y < 0 || chunkpoint.X >= LevelData.FGWidth || chunkpoint.Y >= LevelData.FGHeight) return;
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
@@ -3181,7 +3181,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (e.X < 0 || e.Y < 0 || e.X > foregroundPanel.PanelWidth || e.Y > foregroundPanel.PanelHeight) return;
 			Point mouse = new Point((int)(e.X / ZoomLevel) + foregroundPanel.HScrollValue, (int)(e.Y / ZoomLevel) + foregroundPanel.VScrollValue);
 			Point chunkpoint = new Point(mouse.X / 128, mouse.Y / 128);
-			if (chunkpoint.X >= LevelData.FGWidth | chunkpoint.Y >= LevelData.FGHeight) return;
+			if (chunkpoint.X < 0 || chunkpoint.Y < 0 || chunkpoint.X >= LevelData.FGWidth || chunkpoint.Y >= LevelData.FGHeight) return;
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
@@ -3353,7 +3353,7 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				Point chunkpoint = new Point(((int)(e.X / ZoomLevel) + backgroundPanel.HScrollValue) / 128, ((int)(e.Y / ZoomLevel) + backgroundPanel.VScrollValue) / 128);
-				if (chunkpoint.X >= LevelData.BGWidth[bglayer] | chunkpoint.Y >= LevelData.BGHeight[bglayer]) return;
+				if (chunkpoint.X >= LevelData.BGWidth[bglayer] || chunkpoint.Y >= LevelData.BGHeight[bglayer]) return;
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
@@ -3453,7 +3453,7 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				Point chunkpoint = new Point(mouse.X / 128, mouse.Y / 128);
-				if (chunkpoint.X >= LevelData.BGWidth[bglayer] | chunkpoint.Y >= LevelData.BGHeight[bglayer]) return;
+				if (chunkpoint.X >= LevelData.BGWidth[bglayer] || chunkpoint.Y >= LevelData.BGHeight[bglayer]) return;
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
@@ -4044,7 +4044,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			BitmapBits32 bmp = new BitmapBits32(128, 128);
 			LevelData.NewPalette.CopyTo(bmp.Palette, 0);
-			bmp.Clear(LevelData.NewPalette[0xA0]);
+			bmp.Clear(LevelData.NewPalette[160]);
 			if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
 				bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (lowToolStripMenuItem.Checked)
@@ -4894,7 +4894,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					BitmapBits32 bmp = new BitmapBits32(16, 16);
 					LevelData.NewPalette.CopyTo(bmp.Palette, 0);
-					bmp.Clear(LevelData.NewPalette[0xA0]);
+					bmp.Clear(LevelData.NewPalette[160]);
 					bmp.DrawBitmap(LevelData.NewTiles[SelectedTile], 0, 0);
 					bmp.Palette[1] = Color.White;
 					bmp.DrawBitmap(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex], 0, 0);
@@ -4947,9 +4947,9 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (TileSelector.SelectedIndex == -1 || e.Button == MouseButtons.None) return;
 			int x = e.X / 8;
-			if (x < 0 | x > 15) return;
+			if (x < 0 || x > 15) return;
 			int y = e.Y / 8;
-			if (y < 0 | y > 16) return;
+			if (y < 0 || y > 16) return;
 			if (y == 16)
 			{
 				LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].heightMasks[x].solid = false;

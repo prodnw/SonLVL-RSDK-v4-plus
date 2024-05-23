@@ -1139,14 +1139,14 @@ namespace SonicRetro.SonLVL.GUI
 										findPreviousToolStripMenuItem.Enabled = false;
 										FGSelection = new Rectangle(x, y, 1, 1);
 										loaded = false;
-										objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum, (x * 128)
-											+ (128 / 2) - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
-										objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
-											+ (128 / 2) - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
-										foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum, (x * 128)
-											+ (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
-										foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
-											+ (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
+										objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1,
+											(x * 128) + (128 / 2) - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
+										objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1,
+											(y * 128) + (128 / 2) - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
+										foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1,
+											(x * 128) + (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
+										foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1,
+											(y * 128) + (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
 										loaded = true;
 										DrawLevel();
 										return;
@@ -1180,10 +1180,10 @@ namespace SonicRetro.SonLVL.GUI
 										findPreviousToolStripMenuItem.Enabled = false;
 										BGSelection = new Rectangle(x, y, 1, 1);
 										loaded = false;
-										backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum, (x * 128)
-											+ (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
-										backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum, (y * 128)
-											+ (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
+										backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1,
+											(x * 128) + (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
+										backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1,
+											(y * 128) + (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
 										loaded = true;
 										DrawLevel();
 										return;
@@ -1200,10 +1200,10 @@ namespace SonicRetro.SonLVL.GUI
 		private void ScrollToObject(Entry item)
 		{
 			loaded = false;
-			objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum, item.X - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
-			objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum, item.Y - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
-			foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum, item.X - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
-			foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum, item.Y - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
+			objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1, item.X - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
+			objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1, item.Y - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
+			foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1, item.X - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
+			foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1, item.Y - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
 			loaded = true;
 		}
 
@@ -1242,10 +1242,10 @@ namespace SonicRetro.SonLVL.GUI
 								findPreviousToolStripMenuItem.Enabled = true;
 								FGSelection = new Rectangle(x, y, 1, 1);
 								loaded = false;
-								foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum, (x * 128)
-									+ (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
-								foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
-									+ (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
+								foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1,
+									(x * 128) + (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
+								foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1,
+									(y * 128) + (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
 								loaded = true;
 								DrawLevel();
 								return;
@@ -1269,10 +1269,10 @@ namespace SonicRetro.SonLVL.GUI
 								findPreviousToolStripMenuItem.Enabled = true;
 								BGSelection = new Rectangle(x, y, 1, 1);
 								loaded = false;
-								backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum, (x * 128)
-									+ (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
-								backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum, (y * 128)
-									+ (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
+								backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1,
+									(x * 128) + (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
+								backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1,
+									(y * 128) + (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
 								loaded = true;
 								DrawLevel();
 								return;
@@ -1319,10 +1319,10 @@ namespace SonicRetro.SonLVL.GUI
 								findNextToolStripMenuItem.Enabled = true;
 								FGSelection = new Rectangle(x, y, 1, 1);
 								loaded = false;
-								foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum, (x * 128)
-									+ (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
-								foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum, (y * 128)
-									+ (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
+								foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1,
+									(x * 128) + (128 / 2) - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
+								foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1,
+									(y * 128) + (128 / 2) - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
 								loaded = true;
 								DrawLevel();
 								return;
@@ -1346,10 +1346,10 @@ namespace SonicRetro.SonLVL.GUI
 								findNextToolStripMenuItem.Enabled = true;
 								BGSelection = new Rectangle(x, y, 1, 1);
 								loaded = false;
-								backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum, (x * 128)
-									+ (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
-								backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum, (y * 128)
-									+ (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
+								backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1,
+									(x * 128) + (128 / 2) - ((backgroundPanel.PanelWidth / 2) / ZoomLevel)));
+								backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1,
+									(y * 128) + (128 / 2) - ((backgroundPanel.PanelHeight / 2) / ZoomLevel)));
 								loaded = true;
 								DrawLevel();
 								return;
@@ -2484,12 +2484,12 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void UpdateScrollBars()
 		{
-			objectPanel.HScrollMaximum = (int)Math.Max(((LevelData.FGWidth + 1) * 128) - (objectPanel.PanelWidth / ZoomLevel), 0);
-			objectPanel.VScrollMaximum = (int)Math.Max(((LevelData.FGHeight + 1) * 128) - (objectPanel.PanelHeight / ZoomLevel), 0);
-			foregroundPanel.HScrollMaximum = (int)Math.Max(((LevelData.FGWidth + 1) * 128) - (foregroundPanel.PanelWidth / ZoomLevel), 0);
-			foregroundPanel.VScrollMaximum = (int)Math.Max(((LevelData.FGHeight + 1) * 128) - (foregroundPanel.PanelHeight / ZoomLevel), 0);
-			backgroundPanel.HScrollMaximum = (int)Math.Max(((LevelData.BGWidth[bglayer] + 1) * 128) - (backgroundPanel.PanelWidth / ZoomLevel), 0);
-			backgroundPanel.VScrollMaximum = (int)Math.Max(((LevelData.BGHeight[bglayer] + 1) * 128) - (backgroundPanel.PanelHeight / ZoomLevel), 0);
+			objectPanel.HScrollMaximum = (int)Math.Max(((LevelData.FGWidth + 2) * 128) - (objectPanel.PanelWidth / ZoomLevel), objectPanel.HScrollLargeChange - 1);
+			objectPanel.VScrollMaximum = (int)Math.Max(((LevelData.FGHeight + 2) * 128) - (objectPanel.PanelHeight / ZoomLevel), objectPanel.VScrollLargeChange - 1);
+			foregroundPanel.HScrollMaximum = (int)Math.Max(((LevelData.FGWidth + 2) * 128) - (foregroundPanel.PanelWidth / ZoomLevel), foregroundPanel.HScrollLargeChange - 1);
+			foregroundPanel.VScrollMaximum = (int)Math.Max(((LevelData.FGHeight + 2) * 128) - (foregroundPanel.PanelHeight / ZoomLevel), foregroundPanel.VScrollLargeChange - 1);
+			backgroundPanel.HScrollMaximum = (int)Math.Max(((LevelData.BGWidth[bglayer] + 1) * 128) - (backgroundPanel.PanelWidth / ZoomLevel), backgroundPanel.HScrollLargeChange - 1);
+			backgroundPanel.VScrollMaximum = (int)Math.Max(((LevelData.BGHeight[bglayer] + 1) * 128) - (backgroundPanel.PanelHeight / ZoomLevel), backgroundPanel.VScrollLargeChange - 1);
 		}
 
 		Rectangle prevbnds;
@@ -2576,7 +2576,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Down:
 					if (!loaded) return;
-					objectPanel.VScrollValue = Math.Max((int)Math.Min(objectPanel.VScrollValue + vstep, objectPanel.VScrollMaximum), objectPanel.VScrollMinimum);
+					objectPanel.VScrollValue = Math.Max((int)Math.Min(objectPanel.VScrollValue + vstep, objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1), objectPanel.VScrollMinimum);
 					break;
 				case Keys.Left:
 					if (!loaded) return;
@@ -2584,7 +2584,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Right:
 					if (!loaded) return;
-					objectPanel.HScrollValue = Math.Max((int)Math.Min(objectPanel.HScrollValue + hstep, objectPanel.HScrollMaximum), objectPanel.HScrollMinimum);
+					objectPanel.HScrollValue = Math.Max((int)Math.Min(objectPanel.HScrollValue + hstep, objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1), objectPanel.HScrollMinimum);
 					break;
 				case Keys.Delete:
 					if (!loaded) return;
@@ -2800,7 +2800,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Down:
 					if (!loaded) return;
-					foregroundPanel.VScrollValue = Math.Max((int)Math.Min(foregroundPanel.VScrollValue + vstep, foregroundPanel.VScrollMaximum), foregroundPanel.VScrollMinimum);
+					foregroundPanel.VScrollValue = Math.Max((int)Math.Min(foregroundPanel.VScrollValue + vstep, foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1), foregroundPanel.VScrollMinimum);
 					break;
 				case Keys.Left:
 					if (!loaded) return;
@@ -2808,7 +2808,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.Right:
 					if (!loaded) return;
-					foregroundPanel.HScrollValue = Math.Max((int)Math.Min(foregroundPanel.HScrollValue + hstep, foregroundPanel.HScrollMaximum), foregroundPanel.HScrollMinimum);
+					foregroundPanel.HScrollValue = Math.Max((int)Math.Min(foregroundPanel.HScrollValue + hstep, foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1), foregroundPanel.HScrollMinimum);
 					break;
 				case Keys.A:
 					if (!loaded) return;
@@ -2859,7 +2859,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.Down:
 						if (!loaded) return;
-						backgroundPanel.VScrollValue = Math.Max((int)Math.Min(backgroundPanel.VScrollValue + vstep, backgroundPanel.VScrollMaximum), backgroundPanel.VScrollMinimum);
+						backgroundPanel.VScrollValue = Math.Max((int)Math.Min(backgroundPanel.VScrollValue + vstep, backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1), backgroundPanel.VScrollMinimum);
 						break;
 					case Keys.Left:
 						if (!loaded) return;
@@ -2867,7 +2867,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.Right:
 						if (!loaded) return;
-						backgroundPanel.HScrollValue = Math.Max((int)Math.Min(backgroundPanel.HScrollValue + hstep, backgroundPanel.HScrollMaximum), backgroundPanel.HScrollMinimum);
+						backgroundPanel.HScrollValue = Math.Max((int)Math.Min(backgroundPanel.HScrollValue + hstep, backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1), backgroundPanel.HScrollMinimum);
 						break;
 					case Keys.A:
 						if (!loaded) return;
@@ -3577,12 +3577,12 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentTab)
 			{
 				case Tab.Objects:
-					foregroundPanel.HScrollValue = Math.Min(objectPanel.HScrollValue, foregroundPanel.HScrollMaximum);
-					foregroundPanel.VScrollValue = Math.Min(objectPanel.VScrollValue, foregroundPanel.VScrollMaximum);
+					foregroundPanel.HScrollValue = Math.Min(objectPanel.HScrollValue, foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1);
+					foregroundPanel.VScrollValue = Math.Min(objectPanel.VScrollValue, foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1);
 					break;
 				case Tab.Foreground:
-					objectPanel.HScrollValue = Math.Min(foregroundPanel.HScrollValue, objectPanel.HScrollMaximum);
-					objectPanel.VScrollValue = Math.Min(foregroundPanel.VScrollValue, objectPanel.VScrollMaximum);
+					objectPanel.HScrollValue = Math.Min(foregroundPanel.HScrollValue, objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1);
+					objectPanel.VScrollValue = Math.Min(foregroundPanel.VScrollValue, objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1);
 					break;
 			}
 			loaded = true;

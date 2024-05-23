@@ -156,8 +156,8 @@ namespace SonicRetro.SonLVL
 			}
 			if (bPan) {
 				Point p = origScroll - (Size)(e.Location - (Size)origPoint);
-				VScrollValue = (int)Math.Min(Math.Max(p.Y, VScrollMinimum), VScrollMaximum);
-				HScrollValue = (int)Math.Min(Math.Max(p.X, HScrollMinimum), HScrollMaximum);
+				VScrollValue = (int)Math.Min(Math.Max(p.Y, VScrollMinimum), VScrollMaximum - VScrollLargeChange + 1);
+				HScrollValue = (int)Math.Min(Math.Max(p.X, HScrollMinimum), HScrollMaximum - HScrollLargeChange + 1);
 			}
 			PanelMouseMove(sender, e);
 		}
@@ -180,10 +180,10 @@ namespace SonicRetro.SonLVL
 			}
 
 			if(shiftHeld && VScrollEnabled) {
-				VScrollValue = (int)Math.Min(Math.Max(VScrollValue + delta, VScrollMinimum), VScrollMaximum);
+				VScrollValue = (int)Math.Min(Math.Max(VScrollValue + delta, VScrollMinimum), VScrollMaximum - VScrollLargeChange + 1);
 			}
 			else if(!shiftHeld && HScrollEnabled) {
-				HScrollValue = (int)Math.Min(Math.Max(HScrollValue + delta, HScrollMinimum), HScrollMaximum);
+				HScrollValue = (int)Math.Min(Math.Max(HScrollValue + delta, HScrollMinimum), HScrollMaximum - HScrollLargeChange + 1);
 			}
 		}
 

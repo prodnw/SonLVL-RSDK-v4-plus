@@ -7799,6 +7799,9 @@ namespace SonicRetro.SonLVL.GUI
 				objectNameBox.Enabled = false;
 				objectScriptBox.Enabled = false;
 				browseScriptButton.Enabled = false;
+				objectUpButton.Enabled = false;
+				objectDownButton.Enabled = false;
+				objectTypeID.Text = "Object Type ID:";
 			}
 			else
 			{
@@ -7806,6 +7809,9 @@ namespace SonicRetro.SonLVL.GUI
 				objectNameBox.Enabled = true;
 				objectScriptBox.Enabled = true;
 				browseScriptButton.Enabled = true;
+				objectUpButton.Enabled = objectListBox.SelectedIndex > 0;
+				objectDownButton.Enabled = objectListBox.SelectedIndex < LevelData.StageConfig.objects.Count - 1;
+				objectTypeID.Text = $"Object Type ID: {objectListBox.SelectedIndex + (LevelData.StageConfig.loadGlobalObjects ? LevelData.GameConfig.objects.Count : 0) + 1}";
 				loaded = false;
 				objectNameBox.Text = LevelData.StageConfig.objects[objectListBox.SelectedIndex].name;
 				objectScriptBox.Text = LevelData.StageConfig.objects[objectListBox.SelectedIndex].script;
@@ -7890,6 +7896,54 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState("Delete Object Type");
 		}
 
+		private void objectUpButton_Click(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			byte idx = (byte)(objectListBox.SelectedIndex + 1);
+			if (LevelData.StageConfig.loadGlobalObjects)
+				idx += (byte)LevelData.GlobalObjects.Count;
+			foreach (var item in LevelData.Objects)
+			{
+				if (item.Type == idx)
+					item.Type--;
+				else if (item.Type == idx - 1)
+					item.Type++;
+			}
+			LevelData.StageConfig.objects.Swap(objectListBox.SelectedIndex, objectListBox.SelectedIndex - 1);
+			LevelData.ObjTypes.Swap(idx, idx - 1);
+			InitObjectTypes();
+			SelectedObjectChanged();
+			loaded = false;
+			objectListBox.MoveSelectionUp();
+			loaded = true;
+			objectListBox_SelectedIndexChanged(this, EventArgs.Empty);
+			SaveState("Swap Object Type Up");
+		}
+
+		private void objectDownButton_Click(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			byte idx = (byte)(objectListBox.SelectedIndex + 1);
+			if (LevelData.StageConfig.loadGlobalObjects)
+				idx += (byte)LevelData.GlobalObjects.Count;
+			foreach (var item in LevelData.Objects)
+			{
+				if (item.Type == idx)
+					item.Type++;
+				else if (item.Type == idx + 1)
+					item.Type--;
+			}
+			LevelData.StageConfig.objects.Swap(objectListBox.SelectedIndex, objectListBox.SelectedIndex + 1);
+			LevelData.ObjTypes.Swap(idx, idx + 1);
+			InitObjectTypes();
+			SelectedObjectChanged();
+			loaded = false;
+			objectListBox.MoveSelectionDown();
+			loaded = true;
+			objectListBox_SelectedIndexChanged(this, EventArgs.Empty);
+			SaveState("Swap Object Type Down");
+		}
+
 		private void objectNameBox_TextChanged(object sender, EventArgs e)
 		{
 			if (!loaded) return;
@@ -7927,7 +7981,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (objectTypeListMap.TryGetValue(idx, out var idx2))
 			{
 				ObjectSelect.imageList1.Images[idx2] = image.Resize(ObjectSelect.imageList1.ImageSize);
-				objectTypeImages.Images[idx2 + 1] = image.Resize(objectTypeImages.ImageSize);
+				objectTypeImages.Images[idx2] = image.Resize(objectTypeImages.ImageSize);
 			}
 			foreach (var item in LevelData.Objects)
 				if (item.Type == idx)
@@ -7952,6 +8006,9 @@ namespace SonicRetro.SonLVL.GUI
 				sfxNameBox.Enabled = false;
 				sfxFileBox.Enabled = false;
 				sfxBrowseButton.Enabled = false;
+				sfxUpButton.Enabled = false;
+				sfxDownButton.Enabled = false;
+				sfxID.Text = "Sound ID:";
 			}
 			else
 			{
@@ -7959,6 +8016,9 @@ namespace SonicRetro.SonLVL.GUI
 				sfxNameBox.Enabled = LevelData.Game.RSDKVer == EngineVersion.V4;
 				sfxFileBox.Enabled = true;
 				sfxBrowseButton.Enabled = true;
+				sfxUpButton.Enabled = sfxListBox.SelectedIndex > 0;
+				sfxDownButton.Enabled = sfxListBox.SelectedIndex < LevelData.StageConfig.soundFX.Count - 1;
+				sfxID.Text = $"Sound ID: {sfxListBox.SelectedIndex + (LevelData.Game.RSDKVer == EngineVersion.V3 ? 0 : LevelData.GameConfig.soundFX.Count)}";
 				loaded = false;
 				sfxNameBox.Text = LevelData.StageConfig.soundFX[sfxListBox.SelectedIndex].name;
 				sfxFileBox.Text = LevelData.StageConfig.soundFX[sfxListBox.SelectedIndex].path;
@@ -8008,6 +8068,25 @@ namespace SonicRetro.SonLVL.GUI
 			using (FileSelectDialog dlg = new FileSelectDialog("Sound Effects", sfxFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 					sfxFileBox.Text = dlg.SelectedPath;
+		}
+
+		private void sfxUpButton_Click(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			LevelData.StageConfig.soundFX.Swap(sfxListBox.SelectedIndex, sfxListBox.SelectedIndex - 1);
+			loaded = false;
+			sfxListBox.MoveSelectionUp();
+			loaded = true;
+			SaveState("Swap Sound Effect Up");
+		}
+		private void sfxDownButton_Click(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			LevelData.StageConfig.soundFX.Swap(sfxListBox.SelectedIndex, sfxListBox.SelectedIndex + 1);
+			loaded = false;
+			sfxListBox.MoveSelectionDown();
+			loaded = true;
+			SaveState("Swap Sound Effect Down");
 		}
 
 		private void copyCollisionAllButton_Click(object sender, EventArgs e)

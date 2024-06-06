@@ -775,9 +775,10 @@ namespace SonicRetro.SonLVL.GUI
 			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
 				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
-				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = replaceBackgroundToolStripButton.Enabled =
-				replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled = usageCountsToolStripMenuItem.Enabled =
-				titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
+				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled =
+				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled =
+				replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled =
+				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
 			undoToolStripMenuItem.Enabled = false;
 			undoToolStripMenuItem.DropDownItems.Clear();
 			redoToolStripMenuItem.Enabled = false;

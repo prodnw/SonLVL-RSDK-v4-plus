@@ -8077,6 +8077,7 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = false;
 			sfxListBox.MoveSelectionUp();
 			loaded = true;
+			sfxListBox_SelectedIndexChanged(this, EventArgs.Empty);
 			SaveState("Swap Sound Effect Up");
 		}
 		private void sfxDownButton_Click(object sender, EventArgs e)
@@ -8086,6 +8087,7 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = false;
 			sfxListBox.MoveSelectionDown();
 			loaded = true;
+			sfxListBox_SelectedIndexChanged(this, EventArgs.Empty);
 			SaveState("Swap Sound Effect Down");
 		}
 

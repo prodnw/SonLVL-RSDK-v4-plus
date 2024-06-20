@@ -2017,21 +2017,27 @@ namespace SonicRetro.SonLVL.API
 			}
 		}
 
+		public static TileConfig.CollisionMask.HeightMask Clone(this TileConfig.CollisionMask.HeightMask src)
+		{
+			return new TileConfig.CollisionMask.HeightMask()
+			{
+				height = src.height,
+				solid = src.solid
+			};
+		}
+
 		public static TileConfig.CollisionMask Clone(this TileConfig.CollisionMask src)
 		{
-			TileConfig.CollisionMask result = new TileConfig.CollisionMask()
+			return new TileConfig.CollisionMask()
 			{
 				flags = src.flags,
 				flipY = src.flipY,
 				floorAngle = src.floorAngle,
 				rWallAngle = src.rWallAngle,
 				roofAngle = src.roofAngle,
-				lWallAngle = src.lWallAngle
+				lWallAngle = src.lWallAngle,
+				heightMasks = src.heightMasks.Select(a => a.Clone()).ToArray()
 			};
-			for (int i = 0; i < 16; i++)
-				if (result.heightMasks[i].solid == src.heightMasks[i].solid)
-					result.heightMasks[i].height = src.heightMasks[i].height;
-			return result;
 		}
 
 		public static bool Equal(this TileConfig.CollisionMask src, TileConfig.CollisionMask other)

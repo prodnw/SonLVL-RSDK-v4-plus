@@ -8097,17 +8097,17 @@ namespace SonicRetro.SonLVL.GUI
 			if (MessageBox.Show(this, "Are you sure you want to replace all of Path 2's collision with Path 1's?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			
-			RSDKv3_4.TileConfig.CollisionMask[] prevCol = LevelData.Collision.collisionMasks[1].Select(a => a.Clone()).ToArray();
-
-			LevelData.Collision.collisionMasks[1] = LevelData.Collision.collisionMasks[0].Select(a => a.Clone()).ToArray();
-
 			var redrawblocks = new SortedSet<int>();
 			for (int i = 0; i < LevelData.Collision.collisionMasks[0].Length; i++)
-				if (!prevCol[i].Equal(LevelData.Collision.collisionMasks[1][i]))
+			{
+				if (!LevelData.Collision.collisionMasks[0][i].Equal(LevelData.Collision.collisionMasks[1][i]))
 				{
+					LevelData.Collision.collisionMasks[1][i] = LevelData.Collision.collisionMasks[0][i].Clone();
+
 					LevelData.RedrawCol(i, false);
 					redrawblocks.Add(i);
 				}
+			}
 
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 			{

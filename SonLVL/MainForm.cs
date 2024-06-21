@@ -185,6 +185,7 @@ namespace SonicRetro.SonLVL.GUI
 			objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[Settings.ObjectGridSize]));
 			includeObjectsWithForegroundSelectionToolStripMenuItem.Checked = Settings.IncludeObjectsInForegroundSelection;
 			transparentBackgroundToolStripMenuItem.Checked = Settings.TransparentBackgroundExport;
+			hideDebugObjectsToolStripMenuItem.Checked = Settings.HideDebugObjectsExport;
 			includeobjectsWithFGToolStripMenuItem.Checked = Settings.IncludeObjectsFG;
 			exportArtcollisionpriorityToolStripMenuItem.Checked = Settings.ExportArtCollisionPriority;
 			CurrentTab = Settings.CurrentTab;
@@ -1897,13 +1898,13 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 						{
-							BitmapBits32 bmp = LevelData.DrawForeground32(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits32 bmp = LevelData.DrawForeground32(null, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 							using (Bitmap res = bmp.ToBitmap())
 								res.Save(a.FileName);
 						}
 						else
 						{
-							BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 							using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
 								res.Save(a.FileName);
 						}
@@ -2008,6 +2009,11 @@ namespace SonicRetro.SonLVL.GUI
 		private void transparentBackgroundToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			Settings.TransparentBackgroundExport = transparentBackgroundToolStripMenuItem.Checked;
+		}
+
+		private void hideDebugObjectsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			Settings.HideDebugObjectsExport = hideDebugObjectsToolStripMenuItem.Checked;
 		}
 
 		private void useHexadecimalIndexesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -2125,7 +2131,7 @@ namespace SonicRetro.SonLVL.GUI
 				case Tab.Foreground:
 					lvlsize = LevelData.FGSize;
 					layout = LevelData.Scene.layout;
-					LevelImg8bpp = LevelData.DrawForeground32(dispRect, CurrentTab == Tab.Objects || includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+					LevelImg8bpp = LevelData.DrawForeground32(dispRect, CurrentTab == Tab.Objects || includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 					break;
 				case Tab.Background:
 					lvlsize = LevelData.BGSize[bglayer];
@@ -7065,7 +7071,7 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								string pathBase = Path.Combine(Path.GetDirectoryName(a.FileName), Path.GetFileNameWithoutExtension(a.FileName));
 								string pathExt = Path.GetExtension(a.FileName);
-								BitmapBits bmp = LevelData.DrawForeground(area, false, false, true, true, false, false);
+								BitmapBits bmp = LevelData.DrawForeground(area, false, false, false, true, true, false, false);
 								if (transparentBackgroundToolStripMenuItem.Checked)
 									bmp.ReplaceColor(0, 160);
 								Bitmap res = bmp.ToBitmap();
@@ -7094,13 +7100,13 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 								{
-									BitmapBits32 bmp = LevelData.DrawForeground32(area, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits32 bmp = LevelData.DrawForeground32(area, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 									using (Bitmap res = bmp.ToBitmap())
 										res.Save(a.FileName);
 								}
 								else
 								{
-									BitmapBits bmp = LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits bmp = LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 									using (Bitmap res = bmp.ToBitmap(LevelData.NewPalette))
 										res.Save(a.FileName);
 								}

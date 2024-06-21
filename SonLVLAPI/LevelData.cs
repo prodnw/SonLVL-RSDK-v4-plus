@@ -627,7 +627,7 @@ namespace SonicRetro.SonLVL.API
 				File.Delete(fullpath);
 		}
 
-		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -669,7 +669,8 @@ namespace SonicRetro.SonLVL.API
 			if (includeObjects)
 			{
 				foreach (Entry item in Objects)
-					LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
+					if (!(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).Type).Debug))
+						LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
 				if (!objectsAboveHighPlane)
 					for (int y = ct; y <= cb; y++)
 						for (int x = cl; x <= cr; x++)
@@ -682,14 +683,15 @@ namespace SonicRetro.SonLVL.API
 								else if (collisionPath2)
 									LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Scene.layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 							}
-				foreach (ObjectEntry item in Objects)
-					if (item.DebugOverlay != null)
-						LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
+				if (includeDebugObjects)
+					foreach (ObjectEntry item in Objects)
+						if (item.DebugOverlay != null)
+							LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
 			}
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits32 DrawForeground32(Rectangle? section, bool includeObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits32 DrawForeground32(Rectangle? section, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -749,7 +751,8 @@ namespace SonicRetro.SonLVL.API
 			if (includeObjects)
 			{
 				foreach (Entry item in Objects)
-					LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
+					if (!(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).Type).Debug))
+						LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
 				if (!objectsAboveHighPlane)
 					for (int y = ct; y <= cb; y++)
 						for (int x = cl; x <= cr; x++)
@@ -767,9 +770,10 @@ namespace SonicRetro.SonLVL.API
 									Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 								}
 							}
-				foreach (ObjectEntry item in Objects)
-					if (item.DebugOverlay != null)
-						LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
+				if (includeDebugObjects)
+					foreach (ObjectEntry item in Objects)
+						if (item.DebugOverlay != null)
+							LevelImg8bpp.DrawSprite(item.DebugOverlay, item.X - bounds.X, item.Y - bounds.Y);
 			}
 			return LevelImg8bpp;
 		}

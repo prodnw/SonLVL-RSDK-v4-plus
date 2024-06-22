@@ -777,7 +777,7 @@ namespace SonicRetro.SonLVL.GUI
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
 				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
 				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled =
-				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled =
+				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled = importToolStripButton.Enabled =
 				replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled =
 				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
 			undoToolStripMenuItem.Enabled = false;
@@ -7574,7 +7574,7 @@ namespace SonicRetro.SonLVL.GUI
 				scrollPreviewButton.Checked = false;
 			else
 			{
-				if (LevelData.BGSize[bglayer].IsEmpty)
+				if (!loaded || LevelData.BGSize[bglayer].IsEmpty)
 					tabPage13.Hide();
 				else
 					tabPage13.Show();

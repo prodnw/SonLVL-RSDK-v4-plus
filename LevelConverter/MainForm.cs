@@ -458,7 +458,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
 						{
 							deform = srcBG.hScroll[a].deform,
-							parallaxFactor = srcBG.hScroll[a].parallaxFactor,
+							parallaxFactor = (short)srcBG.hScroll[a].parallaxFactor,
 							scrollSpeed = (short)(srcBG.hScroll[a].scrollSpeed << 2)
 						}).ToList();
 						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
@@ -468,7 +468,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
 						{
 							deform = srcBG.vScroll[a].deform,
-							parallaxFactor = srcBG.vScroll[a].parallaxFactor,
+							parallaxFactor = (short)srcBG.vScroll[a].parallaxFactor,
 							scrollSpeed = (short)(srcBG.vScroll[a].scrollSpeed << 2)
 						}).ToList();
 						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
@@ -478,7 +478,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.type = RSDKv5.SceneLayer.Types.RotoZoom;
 						break;
 				}
-				dstLayer.parallaxFactor = srcLayer.parallaxFactor;
+				dstLayer.parallaxFactor = (short)srcLayer.parallaxFactor;
 				dstLayer.scrollSpeed = (short)(srcLayer.scrollSpeed << 2);
 				bool blank = true;
 				for (int y = 0; y < srcLayer.height; y++)
@@ -967,7 +967,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
 						{
 							deform = srcBG.hScroll[a].deform,
-							parallaxFactor = srcBG.hScroll[a].parallaxFactor,
+							parallaxFactor = (short)srcBG.hScroll[a].parallaxFactor,
 							scrollSpeed = (short)(srcBG.hScroll[a].scrollSpeed << 2)
 						}).ToList();
 						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
@@ -977,7 +977,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.scrollInfo = scrollinds.Select(a => new RSDKv5.ScrollInfo()
 						{
 							deform = srcBG.vScroll[a].deform,
-							parallaxFactor = srcBG.vScroll[a].parallaxFactor,
+							parallaxFactor = (short)srcBG.vScroll[a].parallaxFactor,
 							scrollSpeed = (short)(srcBG.vScroll[a].scrollSpeed << 2)
 						}).ToList();
 						dstLayer.lineScroll = srcLayer.lineScroll.Select(a => (byte)Array.IndexOf(scrollinds, a)).ToArray();
@@ -987,7 +987,7 @@ namespace SonicRetro.SonLVL.LevelConverter
 						dstLayer.type = RSDKv5.SceneLayer.Types.RotoZoom;
 						break;
 				}
-				dstLayer.parallaxFactor = srcLayer.parallaxFactor;
+				dstLayer.parallaxFactor = (short)srcLayer.parallaxFactor;
 				dstLayer.scrollSpeed = (short)(srcLayer.scrollSpeed << 2);
 				bool blank = true;
 				for (int y = 0; y < srcLayer.height; y++)
@@ -1330,8 +1330,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 						++height;
 					RSDKv3_4.Backgrounds.Layer bg = new RSDKv3.Backgrounds.Layer((byte)width, (byte)height)
 					{
-						scrollSpeed = (sbyte)(layer.scrollSpeed >> 2),
-						parallaxFactor = layer.parallaxFactor,
+						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						parallaxFactor = (ushort)layer.parallaxFactor,
 					};
 					switch (layer.type)
 					{
@@ -1341,8 +1341,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstBG.hScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv3.Backgrounds.ScrollInfo()
 							{
 								deform = a.deform,
-								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
+								parallaxFactor = (ushort)a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.VScroll:
@@ -1351,8 +1351,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstBG.vScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv3.Backgrounds.ScrollInfo()
 							{
 								deform = a.deform,
-								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
+								parallaxFactor = (ushort)a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.RotoZoom:
@@ -1697,8 +1697,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 						++height;
 					RSDKv3_4.Backgrounds.Layer bg = new RSDKv4.Backgrounds.Layer((byte)width, (byte)height)
 					{
-						scrollSpeed = (sbyte)(layer.scrollSpeed >> 2),
-						parallaxFactor = layer.parallaxFactor,
+						scrollSpeed = (byte)(layer.scrollSpeed >> 2),
+						parallaxFactor = (ushort)layer.parallaxFactor,
 					};
 					switch (layer.type)
 					{
@@ -1708,8 +1708,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstBG.hScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv4.Backgrounds.ScrollInfo()
 							{
 								deform = a.deform,
-								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
+								parallaxFactor = (ushort)a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.VScroll:
@@ -1718,8 +1718,8 @@ namespace SonicRetro.SonLVL.LevelConverter
 							dstBG.vScroll.AddRange(layer.scrollInfo.Select(a => new RSDKv4.Backgrounds.ScrollInfo()
 							{
 								deform = a.deform,
-								parallaxFactor = a.parallaxFactor,
-								scrollSpeed = (sbyte)(a.scrollSpeed >> 2)
+								parallaxFactor = (ushort)a.parallaxFactor,
+								scrollSpeed = (byte)(a.scrollSpeed >> 2)
 							}));
 							break;
 						case RSDKv5.SceneLayer.Types.RotoZoom:

@@ -51,19 +51,19 @@ namespace SonicRetro.SonLVL.LevelConverter
 				return;
 			if (dstVersion.SelectedIndex == -1 || dstVersion.SelectedIndex == srcVersion.SelectedIndex)
 				return;
-			switch (objectMode.SelectedIndex)
+			switch ((ObjectMode)objectMode.SelectedIndex)
 			{
-				case 1:
-				case 2:
+				case ObjectMode.MatchGlobalsAddStage:
+				case ObjectMode.MatchGlobalsDelete:
 					if (!File.Exists(srcGameConfig.FileName) || !File.Exists(dstGameConfig.FileName))
 						return;
 					break;
-				case 3:
-				case 4:
+				case ObjectMode.DeleteGlobal:
+				case ObjectMode.AddGlobalStage:
 					if (!File.Exists(srcGameConfig.FileName))
 						return;
 					break;
-				case 5:
+				case ObjectMode.AsIs:
 					if (dstVersion.SelectedIndex == 2 && !File.Exists(dstGameConfig.FileName))
 						return;
 					break;
@@ -97,23 +97,23 @@ namespace SonicRetro.SonLVL.LevelConverter
 		private void objectMode_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			CheckEnableConvert();
-			switch (objectMode.SelectedIndex)
+			switch ((ObjectMode)objectMode.SelectedIndex)
 			{
-				case 1:
-				case 2:
+				case ObjectMode.MatchGlobalsAddStage:
+				case ObjectMode.MatchGlobalsDelete:
 					srcGCLabel.Visible = true;
 					srcGameConfig.Visible = true;
 					dstGCLabel.Visible = true;
 					dstGameConfig.Visible = true;
 					break;
-				case 3:
-				case 4:
+				case ObjectMode.DeleteGlobal:
+				case ObjectMode.AddGlobalStage:
 					srcGCLabel.Visible = true;
 					srcGameConfig.Visible = true;
 					dstGCLabel.Visible = false;
 					dstGameConfig.Visible = false;
 					break;
-				case 5:
+				case ObjectMode.AsIs:
 					if (dstVersion.SelectedIndex != 2)
 						goto default;
 					srcGCLabel.Visible = false;

@@ -118,7 +118,7 @@ namespace S1ObjectDefinitions.Enemies
 			if (LevelData.StageInfo.folder.EndsWith("Zone07"))
 				return new Sprite(LevelData.GetSpriteSheet("MBZ/Objects.gif").GetSection(211, 220, 4, 4), -2, -2);
 			else
-				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(143, 235, 4, 4), -2, -2);
+				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(143, 235, 4, 4), -2, -2);
 		}
 		
 		public override bool Hidden { get { return true; } }

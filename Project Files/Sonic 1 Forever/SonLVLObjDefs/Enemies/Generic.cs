@@ -134,7 +134,7 @@ namespace S1FObjectDefinitions.Enemies
 			else if (LevelData.StageInfo.folder.EndsWith("Zone00"))
 				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects3.gif").GetSection(211, 220, 4, 4), -2, -2);
 			else
-				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects2.gif").GetSection(143, 235, 4, 4), -2, -2);
+				return new Sprite(LevelData.GetSpriteSheet("GHZ/Objects.gif").GetSection(143, 235, 4, 4), -2, -2);
 		}
 		
 		public override bool Hidden { get { return true; } }

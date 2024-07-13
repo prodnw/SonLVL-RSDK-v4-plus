@@ -3,6 +3,8 @@ using System.Xml.Serialization;
 using System.IO;
 using static RSDKv3_4.GameConfig;
 using System;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace SonicRetro.SonLVL.API
 {
@@ -10,9 +12,9 @@ namespace SonicRetro.SonLVL.API
 	public class GameXML
 	{
 		[XmlElement]
-		public TitleXML title;
-		[XmlArrayItem("color")]
-		public List<ColorXML> palette = new List<ColorXML>();
+		public TitleXML title = new TitleXML(null);
+		[XmlElement]
+		public PaletteXML palette = new PaletteXML();
 		[XmlArrayItem("object")]
 		public List<ObjectXML> objects = new List<ObjectXML>();
 		[XmlArrayItem("variable")]
@@ -30,6 +32,9 @@ namespace SonicRetro.SonLVL.API
 		[XmlArrayItem("stage")]
 		public List<StageXML> bonusStages = new List<StageXML>();
 
+
+		static readonly Regex colorsRegex = new Regex(@"((?:#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2}))|(?:\((\d+),?\s*(\d+),?\s*(\d+)\)))", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ECMAScript);
+
 		public GameXML() { }
 
 		private static readonly XmlSerializer xmlSerializer = new XmlSerializer(typeof(GameXML));
@@ -41,7 +46,7 @@ namespace SonicRetro.SonLVL.API
 			if (result.title == null)
 				result.title = new TitleXML(null);
 			if (result.palette == null)
-				result.palette = new List<ColorXML>();
+				result.palette = new PaletteXML();
 			if (result.objects == null)
 				result.objects = new List<ObjectXML>();
 			if (result.variables == null)
@@ -58,6 +63,24 @@ namespace SonicRetro.SonLVL.API
 				result.specialStages = new List<StageXML>();
 			if (result.bonusStages == null)
 				result.bonusStages = new List<StageXML>();
+
+			foreach (var item in result.palette.colorGroups)
+			{
+				foreach (Match match in colorsRegex.Matches(item.text))
+				{
+					NumberStyles styles = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite;
+					int start = 5;
+					if (match.Groups[2].Success)
+					{
+						styles |= NumberStyles.AllowHexSpecifier;
+						start = 2;
+					}
+
+					result.palette.colors.Add(new ColorXML(item.bank, item.start++, byte.Parse(match.Groups[start].Value, styles), byte.Parse(match.Groups[start + 1].Value, styles), byte.Parse(match.Groups[start + 2].Value, styles)));
+				}
+			}
+			result.palette.colorGroups.Clear();
+
 			return result;
 		}
 
@@ -76,6 +99,33 @@ namespace SonicRetro.SonLVL.API
 		public TitleXML() { }
 
 		public TitleXML(string name) => this.name = name;
+	}
+
+	public class PaletteXML
+	{
+		[XmlElement("color")]
+		public List<ColorXML> colors;
+
+		[XmlElement("colors")]
+		public List<ColorsXML> colorGroups;
+
+		public PaletteXML()
+		{
+			colors = new List<ColorXML>();
+			colorGroups = new List<ColorsXML>();
+		}
+	}
+
+	public class ColorsXML
+	{
+		[XmlAttribute]
+		public byte bank;
+		[XmlAttribute]
+		public byte start;
+		[XmlText]
+		public string text;
+
+		public ColorsXML() { }
 	}
 
 	public class ColorXML

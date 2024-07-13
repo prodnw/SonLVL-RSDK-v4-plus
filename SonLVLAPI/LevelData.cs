@@ -157,7 +157,7 @@ namespace SonicRetro.SonLVL.API
 				if (File.Exists(xmlpath))
 				{
 					GameXML = GameXML.Load(xmlpath);
-					foreach (var col in GameXML.palette.Where(a => a.bank == 0))
+					foreach (var col in GameXML.palette.colors.Where(a => a.bank == 0))
 						NewPalette[col.index] = (Color)col;
 					StageLists[0].AddRange(GameXML.presentationStages.Select(a => (GameConfig.StageList.StageInfo)a));
 					StageLists[1].AddRange(GameXML.regularStages.Select(a => (GameConfig.StageList.StageInfo)a));
@@ -165,7 +165,7 @@ namespace SonicRetro.SonLVL.API
 					StageLists[3].AddRange(GameXML.bonusStages.Select(a => (GameConfig.StageList.StageInfo)a));
 					GlobalObjects.AddRange(GameXML.objects.Where(a => !a.forceLoad).Select(a => (GameConfig.ObjectInfo)a));
 
-					if (GameXML.title != null && GameXML.title.name != null)
+					if (GameXML.title.name != null)
 						GameTitle = GameXML.title.name;
 				}
 			}
@@ -447,7 +447,7 @@ namespace SonicRetro.SonLVL.API
 			Log($"Saving {StageInfo.name}...");
 			if (GameXML != null)
 			{
-				GameXML.palette.RemoveAll(a => a.bank == 0 && a.index < 96);
+				GameXML.palette.colors.RemoveAll(a => a.bank == 0 && a.index < 96);
 				switch (Game.RSDKVer)
 				{
 					case EngineVersion.V3:
@@ -458,7 +458,7 @@ namespace SonicRetro.SonLVL.API
 							for (int i = 0; i < pallen; i++)
 							{
 								if (origpal[v] != NewPalette[i].R || origpal[v + 1] != NewPalette[i].G || origpal[v + 2] != NewPalette[i].B)
-									GameXML.palette.Add(new ColorXML(0, (byte)i, NewPalette[i]));
+									GameXML.palette.colors.Add(new ColorXML(0, (byte)i, NewPalette[i]));
 								v += 3;
 							}
 						}
@@ -472,13 +472,13 @@ namespace SonicRetro.SonLVL.API
 								{
 									if (i == 96) break;
 									if (origpal.colors[l][c].r != NewPalette[i].R || origpal.colors[l][c].g != NewPalette[i].G || origpal.colors[l][c].b != NewPalette[i].B)
-										GameXML.palette.Add(new ColorXML(0, (byte)i, NewPalette[i]));
+										GameXML.palette.colors.Add(new ColorXML(0, (byte)i, NewPalette[i]));
 									++i;
 								}
 						}
 						break;
 				}
-				GameXML.palette.Sort((a, b) =>
+				GameXML.palette.colors.Sort((a, b) =>
 				{
 					int result = a.bank.CompareTo(b.bank);
 					if (result == 0)

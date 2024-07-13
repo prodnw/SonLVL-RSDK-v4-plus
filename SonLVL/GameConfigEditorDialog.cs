@@ -794,7 +794,7 @@ namespace SonicRetro.SonLVL
 								for (int i = 0; i < pallen; i++)
 								{
 									if (origpal[v] != modpal[v] || origpal[v + 1] != modpal[v + 1] || origpal[v + 2] != modpal[v + 2])
-										LevelData.GameXML.palette.Add(new ColorXML(0, (byte)i, modpal[v], modpal[v + 1], modpal[v + 2]));
+										LevelData.GameXML.palette.colors.Add(new ColorXML(0, (byte)i, modpal[v], modpal[v + 1], modpal[v + 2]));
 									v += 3;
 								}
 								File.Delete(path);
@@ -810,7 +810,7 @@ namespace SonicRetro.SonLVL
 									{
 										if (i == 256) break;
 										if (origpal.colors[l][c].r != modpal.colors[l][c].r || origpal.colors[l][c].g != modpal.colors[l][c].g || origpal.colors[l][c].b != modpal.colors[l][c].b)
-											LevelData.GameXML.palette.Add(new ColorXML(0, (byte)i, modpal.colors[l][c]));
+											LevelData.GameXML.palette.colors.Add(new ColorXML(0, (byte)i, modpal.colors[l][c]));
 										++i;
 									}
 							}
@@ -837,13 +837,13 @@ namespace SonicRetro.SonLVL
 					string path = Path.Combine(LevelData.ModFolder, "Data/Game/game.xml");
 					if (File.Exists(path))
 						File.Delete(path);
-					if (LevelData.GameXML.palette.Any(a => a.bank == 0))
+					if (LevelData.GameXML.palette.colors.Any(a => a.bank == 0))
 						switch (LevelData.Game.RSDKVer)
 						{
 							case EngineVersion.V3:
 								{
 									byte[] pal = LevelData.ReadFileRaw("Data/Palettes/MasterPalette.act");
-									foreach (var item in LevelData.GameXML.palette.Where(a => a.bank == 0))
+									foreach (var item in LevelData.GameXML.palette.colors.Where(a => a.bank == 0))
 									{
 										pal[item.index * 3] = item.r;
 										pal[item.index * 3 + 1] = item.g;
@@ -855,7 +855,7 @@ namespace SonicRetro.SonLVL
 							case EngineVersion.V4:
 								{
 									var pal = ((RSDKv4.GameConfig)LevelData.GameConfig).masterPalette;
-									foreach (var item in LevelData.GameXML.palette.Where(a => a.bank == 0))
+									foreach (var item in LevelData.GameXML.palette.colors.Where(a => a.bank == 0))
 									{
 										int l = Math.DivRem(item.index, pal.colors[0].Length, out int c);
 										pal.colors[l][c] = new RSDKv3_4.Palette.Color(item.r, item.g, item.b);

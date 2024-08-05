@@ -17,66 +17,94 @@ namespace SonicRetro.SonLVL
 
 		private void StatisticsDialog_Load(object sender, EventArgs e)
 		{
-			Dictionary<int, int> counts = new Dictionary<int, int>();
-			for (int i = 1; i < LevelData.ObjTypes.Count; i++)
-				counts.Add(i, 0);
+			Dictionary<int, int[]> counts = new Dictionary<int, int[]>();
+			for (int i = 0; i < LevelData.ObjTypes.Count; i++)
+				counts.Add(i, new int[] { 0, 0 });
 			foreach (ObjectEntry item in LevelData.Objects)
 				if (counts.ContainsKey(item.Type))
-					counts[item.Type]++;
+					counts[item.Type][0]++;
 				else
-					counts.Add(item.Type, 1);
+					counts.Add(item.Type, new int[] { 1, 0 });
+
+			foreach (KeyValuePair<int, int[]> item in counts)
+				item.Value[1] = item.Value[0];
+			
+			foreach (var scene in LevelData.AdditionalScenes)
+				foreach (var entity in scene.Scene.entities)
+					if (counts.ContainsKey(entity.type))
+						counts[entity.type][1]++;
+					else
+						counts.Add(entity.type, new int[] { 0, 1 });
 			listView1.BeginUpdate();
-			foreach (KeyValuePair<int, int> item in counts)
+			foreach (KeyValuePair<int, int[]> item in counts)
 			{
 				ListViewItem lvi = new ListViewItem((item.Key == 0) ? "Blank Object" : LevelData.GetObjectDefinition((byte)item.Key).Name);
 				lvi.SubItems[0].Tag = item.Key;
-				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value.ToString()) { Tag = item.Value });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[1].ToString()) { Tag = item.Value[1] });
 				listView1.Items.Add(lvi);
 			}
 			listView1.Sort();
 			listView1.EndUpdate();
 			counts.Clear();
+
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
-				counts.Add(i, 0);
+				counts.Add(i, new int[] { 0, 0, 0 });
+			
 			for (int y = 0; y < LevelData.FGHeight; y++)
 				for (int x = 0; x < LevelData.FGWidth; x++)
 					if (counts.ContainsKey(LevelData.Scene.layout[y][x]))
-						counts[LevelData.Scene.layout[y][x]]++;
+						counts[LevelData.Scene.layout[y][x]][0]++;
 					else
-						counts.Add(LevelData.Scene.layout[y][x], 1);
+						counts.Add(LevelData.Scene.layout[y][x], new int[] { 1, 0, 0 });
+
 			for (int layer = 0; layer < 8; layer++)
 				for (int y = 0; y < LevelData.BGHeight[layer]; y++)
 					for (int x = 0; x < LevelData.BGWidth[layer]; x++)
 						if (counts.ContainsKey(LevelData.Background.layers[layer].layout[y][x]))
-							counts[LevelData.Background.layers[layer].layout[y][x]]++;
+							counts[LevelData.Background.layers[layer].layout[y][x]][1]++;
 						else
-							counts.Add(LevelData.Background.layers[layer].layout[y][x], 1);
+							counts.Add(LevelData.Background.layers[layer].layout[y][x], new int[] { 0, 1, 0 });
+
+			foreach (KeyValuePair<int, int[]> item in counts)
+				item.Value[2] = item.Value[0] + item.Value[1];
+
+			foreach (var scene in LevelData.AdditionalScenes)
+				foreach (ushort[] row in scene.Scene.layout)
+					foreach (ushort chunk in row)
+						if (counts.ContainsKey(chunk))
+							counts[chunk][2]++;
+						else
+							counts.Add(chunk, new int[] { 0, 0, 1 });
+
 			listView2.BeginUpdate();
-			foreach (KeyValuePair<int, int> item in counts)
+			foreach (KeyValuePair<int, int[]> item in counts)
 			{
 				ListViewItem lvi = new ListViewItem(item.Key.ToString("X2"));
 				lvi.SubItems[0].Tag = item.Key;
-				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value.ToString()) { Tag = item.Value });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[1].ToString()) { Tag = item.Value[1] });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[2].ToString()) { Tag = item.Value[2] });
 				listView2.Items.Add(lvi);
 			}
 			listView2.Sort();
 			listView2.EndUpdate();
 			counts.Clear();
 			for (int i = 0; i < LevelData.NewTiles.Length; i++)
-				counts.Add(i, 0);
+				counts.Add(i, new int[] { 0 });
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 				for (int y = 0; y < 8; y++)
 					for (int x = 0; x < 8; x++)
 						if (counts.ContainsKey(LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex))
-							counts[LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex]++;
+							counts[LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex][0]++;
 						else
-							counts.Add(LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex, 1);
+							counts.Add(LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex, new int[] { 1 });
 			listView4.BeginUpdate();
-			foreach (KeyValuePair<int, int> item in counts)
+			foreach (KeyValuePair<int, int[]> item in counts)
 			{
 				ListViewItem lvi = new ListViewItem(item.Key.ToString("X3"));
 				lvi.SubItems[0].Tag = item.Key;
-				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value.ToString()) { Tag = item.Value });
+				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
 				listView4.Items.Add(lvi);
 			}
 			listView4.Sort();

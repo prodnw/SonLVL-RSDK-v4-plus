@@ -3761,11 +3761,13 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentTab)
 			{
 				case Tab.Objects:
+					gotoToolStripMenuItem.Enabled = true;
 					findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = foundobjs == null;
 					objectPanel.Focus();
 					break;
 				case Tab.Foreground:
+					gotoToolStripMenuItem.Enabled = true;
 					findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = lastfoundfgchunk.HasValue;
 					tabPage8.Controls.Add(ChunkSelector);
@@ -3774,6 +3776,7 @@ namespace SonicRetro.SonLVL.GUI
 					foregroundPanel.Focus();
 					break;
 				case Tab.Background:
+					gotoToolStripMenuItem.Enabled = true;
 					findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = lastfoundbgchunk.HasValue;
 					tabPage10.Controls.Add(ChunkSelector);
@@ -3782,12 +3785,12 @@ namespace SonicRetro.SonLVL.GUI
 					backgroundPanel.Focus();
 					break;
 				case Tab.Art:
-					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 					panel10.Controls.Add(ChunkSelector);
 					ChunkSelector.AllowDrop = true;
 					break;
 				case Tab.Palette:
-					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 					bool l = loaded;
 					loaded = false;
 					colorRed.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].R;
@@ -3797,7 +3800,7 @@ namespace SonicRetro.SonLVL.GUI
 					loaded = l;
 					break;
 				default:
-					findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 					break;
 			}
 			DrawLevel();
@@ -8133,6 +8136,73 @@ namespace SonicRetro.SonLVL.GUI
 			}
 
 			SaveState("Copy Path 1 Collision to Path 2");
+		}
+
+		private void gotoToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (GoToDialog dlg = new GoToDialog())
+			{
+				dlg.entityPos.Maximum = 31 + LevelData.Objects.Count;
+				dlg.entityCountLabel.Text = $"/ {dlg.entityPos.Maximum}";
+
+				dlg.gotoEntity.Enabled = (CurrentTab == Tab.Objects) && (LevelData.Objects.Count > 0);
+				Size levelsize = (CurrentTab == Tab.Background) ? LevelData.BGSize[bglayer] : LevelData.FGSize;
+
+				dlg.xpos.Maximum = levelsize.Width * 128;
+				dlg.widthLabel.Text = $"/ {dlg.xpos.Maximum}";
+
+				dlg.ypos.Maximum = levelsize.Height * 128;
+				dlg.heightLabel.Text = $"/ {dlg.ypos.Maximum}";
+
+				ScrollingPanel panel;
+				switch (CurrentTab)
+				{
+					case Tab.Objects:
+						panel = objectPanel;
+						break;
+					case Tab.Foreground:
+						panel = foregroundPanel;
+						break;
+					case Tab.Background:
+						panel = backgroundPanel;
+						break;
+					default:
+						return;
+				}
+
+				dlg.xpos.Value = Math.Max(0, panel.HScrollValue);
+				dlg.ypos.Value = Math.Max(0, panel.VScrollValue);
+
+				if (dlg.ShowDialog() == DialogResult.OK)
+				{
+					if (dlg.gotoEntity.Checked)
+					{
+						SelectedItems.Clear();
+						SelectedItems.Add(LevelData.Objects[(int)dlg.entityPos.Value - 32]);
+						SelectedObjectChanged();
+						ScrollToObject(SelectedItems[0]);
+					}
+					else if (dlg.gotoPosition.Checked)
+					{
+						loaded = false;
+						if (CurrentTab == Tab.Background)
+						{
+							backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
+							backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
+						}
+						else
+						{
+							objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
+							objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
+							foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
+							foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
+						}
+						loaded = true;
+					}
+
+					DrawLevel();
+				}
+			}
 		}
 
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)

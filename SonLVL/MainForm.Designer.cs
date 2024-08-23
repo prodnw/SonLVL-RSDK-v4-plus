@@ -2896,7 +2896,7 @@
             // showScrollAreas
             // 
             this.showScrollAreas.AutoSize = true;
-            this.showScrollAreas.Location = new System.Drawing.Point(231, 119);
+            this.showScrollAreas.Location = new System.Drawing.Point(250, 119);
             this.showScrollAreas.Margin = new System.Windows.Forms.Padding(6);
             this.showScrollAreas.Name = "showScrollAreas";
             this.showScrollAreas.Size = new System.Drawing.Size(219, 29);

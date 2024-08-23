@@ -6752,8 +6752,8 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (replaceFGChunksDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				byte fc = (byte)replaceFGChunksDialog.findChunk.Value;
-				byte rc = (byte)replaceFGChunksDialog.replaceChunk.Value;
+				ushort fc = (ushort)replaceFGChunksDialog.findChunk.Value;
+				ushort rc = (ushort)replaceFGChunksDialog.replaceChunk.Value;
 				int cnt = 0;
 				for (int y = 0; y < LevelData.FGHeight; y++)
 					for (int x = 0; x < LevelData.FGWidth; x++)
@@ -6772,8 +6772,8 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (replaceBGChunksDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				byte fc = (byte)replaceBGChunksDialog.findChunk.Value;
-				byte rc = (byte)replaceBGChunksDialog.replaceChunk.Value;
+				ushort fc = (ushort)replaceBGChunksDialog.findChunk.Value;
+				ushort rc = (ushort)replaceBGChunksDialog.replaceChunk.Value;
 				int cnt = 0;
 				for (int y = 0; y < LevelData.BGHeight[bglayer]; y++)
 					for (int x = 0; x < LevelData.BGWidth[bglayer]; x++)

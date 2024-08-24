@@ -4644,10 +4644,13 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case ArtTab.Tiles:
 					tmp = LevelData.GetFreeTiles().First();
-					LevelData.NewTiles[tmp] = new BitmapBits(LevelData.NewTiles[SelectedChunk]);
+					LevelData.NewTiles[tmp] = new BitmapBits(LevelData.NewTiles[SelectedTile]);
+					LevelData.Collision.collisionMasks[0][tmp] = LevelData.Collision.collisionMasks[0][SelectedTile].Clone();
+					LevelData.Collision.collisionMasks[1][tmp] = LevelData.Collision.collisionMasks[1][SelectedTile].Clone();
+					LevelData.RedrawCol(tmp, true);
+					LevelData.RedrawBlock(tmp, false);
 					SelectedTile = tmp;
 					TileSelector.SelectedIndex = tmp;
-					LevelData.RedrawBlock(tmp, false);
 					SaveState("Duplicate Tile");
 					break;
 			}

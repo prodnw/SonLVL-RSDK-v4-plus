@@ -2709,6 +2709,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(-gs, gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad2:
@@ -2720,6 +2721,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(0, gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad3:
@@ -2732,6 +2734,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(gs, gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad4:
@@ -2743,6 +2746,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(-gs, 0);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad6:
@@ -2754,6 +2758,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(gs, 0);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad7:
@@ -2766,6 +2771,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(-gs, -gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad8:
@@ -2777,6 +2783,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(0, -gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 				case Keys.NumPad9:
@@ -2789,6 +2796,7 @@ namespace SonicRetro.SonLVL.GUI
 						ent.AdjustSpritePosition(gs, -gs);
 					}
 					DrawLevel();
+					ObjectProperties.Refresh();
 					SaveState("Move Objects");
 					break;
 			}

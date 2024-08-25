@@ -2933,7 +2933,6 @@
             // scrollCamY
             // 
             this.scrollCamY.AutoSize = true;
-            this.scrollCamY.Hexadecimal = true;
             this.scrollCamY.Location = new System.Drawing.Point(258, 67);
             this.scrollCamY.Margin = new System.Windows.Forms.Padding(6);
             this.scrollCamY.Maximum = new decimal(new int[] {
@@ -2949,7 +2948,6 @@
             // scrollCamX
             // 
             this.scrollCamX.AutoSize = true;
-            this.scrollCamX.Hexadecimal = true;
             this.scrollCamX.Location = new System.Drawing.Point(100, 67);
             this.scrollCamX.Margin = new System.Windows.Forms.Padding(6);
             this.scrollCamX.Maximum = new decimal(new int[] {

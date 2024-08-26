@@ -168,8 +168,10 @@
             // 
             // GoToDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(444, 275);
             this.Controls.Add(this.heightLabel);
             this.Controls.Add(this.widthLabel);

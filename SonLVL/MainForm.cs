@@ -4855,8 +4855,8 @@ namespace SonicRetro.SonLVL.GUI
 				chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 			sw.Stop();
 			System.Text.StringBuilder msg = new System.Text.StringBuilder();
-			msg.AppendFormat("New tiles: {0:X}\n", ir.Art.Count);
-			msg.AppendFormat("New chunks: {0:X}\n", newChunks.Count);
+			msg.AppendFormat("New tiles: {0}\n", ir.Art.Count);
+			msg.AppendFormat("New chunks: {0}\n", newChunks.Count);
 			msg.Append("\nCompleted in ");
 			if (sw.Elapsed.Hours > 0)
 			{

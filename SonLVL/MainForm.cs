@@ -4620,10 +4620,14 @@ namespace SonicRetro.SonLVL.GUI
 		private void DeleteTile()
 		{
 			LevelData.NewTiles[SelectedTile].Clear();
+			LevelData.Collision.collisionMasks[0][SelectedTile] = new RSDKv3_4.TileConfig.CollisionMask();
+			LevelData.Collision.collisionMasks[1][SelectedTile] = new RSDKv3_4.TileConfig.CollisionMask();
 			TileSelector.Invalidate();
 			DrawTilePicture();
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 			LevelData.RedrawBlock(SelectedTile, true);
+			LevelData.RedrawCol(SelectedTile, true);
+			DrawColPicture();
 		}
 
 		private void copyTilesToolStripMenuItem_Click(object sender, EventArgs e)

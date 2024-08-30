@@ -167,7 +167,7 @@ namespace SCDObjectDefinitions.Menu
 		
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return (obj.PropertyValue < 12) ? sprites[obj.PropertyValue] : new Sprite(LevelData.UnknownSprite);
 		}
 	}
 }

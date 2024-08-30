@@ -105,7 +105,7 @@ namespace SCDObjectDefinitions.R4
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return (obj.PropertyValue < 6) ? sprites[obj.PropertyValue] : new Sprite(LevelData.UnknownSprite);
 		}
 	}
 }

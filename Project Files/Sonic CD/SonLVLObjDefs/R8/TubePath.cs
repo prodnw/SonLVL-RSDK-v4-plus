@@ -9,13 +9,20 @@ namespace SCDObjectDefinitions.R8
 	class TubePath : ObjectDefinition
 	{
 		private PropertySpec[] properties = new PropertySpec[1];
-		private Sprite sprite;
+		private Sprite[] sprites = new Sprite[2];
 		private Sprite[] debug = new Sprite[13];
 		
 		public override void Init(ObjectData data)
 		{
 			// half sure that one of the sprites in R8/Objects2 is supposed to be for this object, but let's keep the T icon for consistency between all types (and imo i think the R8 icon is kind of weird-)
-			sprite = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
+			sprites[0] = new Sprite(LevelData.GetSpriteSheet("Global/Display.gif").GetSection(173, 67, 16, 16), -8, -8);
+			
+			// Tube Switch icon
+			sprites[1] = new Sprite(
+			                new Sprite(sprite, -8, -8),
+			                new Sprite(sprite,  8, -8),
+			                new Sprite(sprite, -8,  8),
+			                new Sprite(sprite,  8,  8));
 			
 			// Which angles each subtype should its lines drawn towards
 			double[][] angles = {
@@ -60,16 +67,12 @@ namespace SCDObjectDefinitions.R8
 					new Sprite(debug[i],  1,  1));
 			}
 			
-			bitmap = new BitmapBits(32, 32);
-			bitmap.DrawRectangle(6, 0, 0, 31, 31);
-			debug[10] = new Sprite(bitmap, -16, -16); // tunnel/tubeswitch one
-			
 			properties[0] = new PropertySpec("Direction", typeof(int), "Extended",
 				"Which direction this object should send the player.", null, new Dictionary<string, int>
 				{
 					{ "Junction", 0 },
 					{ "Entrance", 1 }, // Entrance/Exit
-					{ "Tunnel", 10 },
+					{ "Tube Switch", 10 },
 					{ "Up <-> Right", 2 },
 					{ "Down <-> Left", 3 },
 					{ "Up <-> Left", 4 },
@@ -117,12 +120,12 @@ namespace SCDObjectDefinitions.R8
 		
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprite;
+			return sprites[(obj.PropertyValue == 10) ? 1 : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			if (obj.PropertyValue > 12)
+			if ((obj.PropertyValue > 12) && (obj.PropertyValue != 10))
 				return null;
 			
 			return debug[obj.PropertyValue];

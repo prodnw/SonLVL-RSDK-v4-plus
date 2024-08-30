@@ -5,22 +5,6 @@
       <Offset X="-8" Y="-8"/>
     </ImageFromSheet>
   </Images>
-  <Properties>
-    <Property name="Trigger" description="Which effect this Tube Switch should apply." type="triggers" startbit="0" length="8" />
-  </Properties>
-  <Enums>
-    <Enum name="triggers"> <!-- honestly these names kind of suck but i have no idea what else to call them, so i guess i'll just stick with this? -->
-      <EnumMember name="Horizontal Enterance" />
-      <EnumMember name="Vertical Enterance" />
-      <EnumMember name="Circular Path" />
-      <EnumMember name="Vertical Boost" />
-      <EnumMember name="Horizontal Exit" />
-      <EnumMember name="Upwards Exit" />
-      <EnumMember name="Upwards Speed Cap" />
-      <EnumMember name="Diagonal Exit" />
-      <!-- p sure 8 isn't supposed to be placed? it's just used as a state i think? -->
-    </Enum>
-  </Enums>
   <ImageSets>
     <ImageSet id="tubeswitch">
       <ImageRef image="icon">
@@ -37,6 +21,22 @@
       </ImageRef>
     </ImageSet>
   </ImageSets>
+  <Properties>
+    <Property name="Trigger" description="Which effect this Tube Switch should apply." type="triggers" startbit="0" length="8" />
+  </Properties>
+  <Enums>
+    <Enum name="triggers"> <!-- honestly these names kind of suck but i have no idea what else to call them, so i guess i'll just stick with this? -->
+      <EnumMember name="Horizontal Enterance" />
+      <EnumMember name="Vertical Enterance" />
+      <EnumMember name="Circular Path" />
+      <EnumMember name="Vertical Boost" />
+      <EnumMember name="Horizontal Exit" />
+      <EnumMember name="Upwards Exit" />
+      <EnumMember name="Upwards Speed Cap" />
+      <EnumMember name="Diagonal Exit" />
+      <!-- p sure 8 isn't supposed to be placed? it's just used as a state i think? -->
+    </Enum>
+  </Enums>
   <DefaultImage>
     <ImageSetRef set="tubeswitch" />
   </DefaultImage>

@@ -53,6 +53,7 @@ namespace SCDObjectDefinitions.R6
 					{ lengths[2] + " Spikes, Match obj[-1]'s rotation", 2 },
 					{ lengths[3] + " Spikes, Counter-Clockwise", 3 },
 					{ lengths[4] + " Spikes, Clockwise ", 4 }, // extra space at the end of the name in case it's a dupe of type 0 lol
+					// 5 technically works as static i think, but.. let's not
 				},
 				(obj) => (int)obj.PropertyValue,
 				(obj, value) => obj.PropertyValue =  (byte)((int)value));
@@ -85,12 +86,12 @@ namespace SCDObjectDefinitions.R6
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return sprites[(obj.PropertyValue < 5) ? obj.PropertyValue : 0];
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue];
+			return (obj.PropertyValue < 5) ? debug[obj.PropertyValue] : null;
 		}
 	}
 }

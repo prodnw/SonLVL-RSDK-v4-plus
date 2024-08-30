@@ -226,7 +226,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue];
+			return (obj.PropertyValue < 5) ? debug[obj.PropertyValue] : null;
 		}
 	}
 }

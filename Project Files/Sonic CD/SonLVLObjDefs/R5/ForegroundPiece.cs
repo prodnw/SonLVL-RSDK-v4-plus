@@ -95,12 +95,12 @@ namespace SCDObjectDefinitions.R5
 
 		public override Sprite GetSprite(ObjectEntry obj)
 		{
-			return sprites[obj.PropertyValue];
+			return (obj.PropertyValue < 14) ? sprites[obj.PropertyValue] : new Sprite(LevelData.UnknownSprite);
 		}
 		
 		public override Sprite GetDebugOverlay(ObjectEntry obj)
 		{
-			return debug[obj.PropertyValue];
+			return (obj.PropertyValue < 14) ? debug[obj.PropertyValue] : null;
 		}
 	}
 }

@@ -8138,7 +8138,7 @@ namespace SonicRetro.SonLVL.GUI
 				bool redraw = false;
 				foreach (RSDKv3_4.Tiles128x128.Block.Tile tile in LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a))
 				{
-					redraw = redrawblocks.Contains(tile.tileIndex) || (tile.solidityA != tile.solidityB);
+					redraw |= redrawblocks.Contains(tile.tileIndex) || (tile.solidityA != tile.solidityB);
 					tile.solidityB = tile.solidityA;
 				}
 

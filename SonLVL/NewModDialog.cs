@@ -78,6 +78,8 @@ namespace SonicRetro.SonLVL.GUI
 				ModFile = Path.Combine(moddir, "mod.ini");
 				IniSerializer.Serialize(newMod, ModFile);
 
+				Directory.CreateDirectory(Path.Combine(moddir, "Data"));
+
 				if (useGameXml.Checked)
 				{
 					Directory.CreateDirectory(Path.Combine(moddir, "Data/Game"));

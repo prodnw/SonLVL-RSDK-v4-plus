@@ -2229,6 +2229,7 @@ namespace SonicRetro.SonLVL.GUI
 						}
 						tmpimg = LevelImg8bpp;
 						LevelImg8bpp = new BitmapBits32(dispRect.Size);
+						LevelImg8bpp.Clear(LevelData.NewPalette[160]);
 						LevelImg8bpp.DrawBitmap(tmpimg, 0, 0);
 					}
 					else

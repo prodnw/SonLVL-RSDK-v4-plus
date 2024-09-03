@@ -178,8 +178,8 @@ namespace SCDObjectDefinitions.R6
 				"Which movement pattern this object should have.", null, new Dictionary<string, int>
 				{
 					{ "Long (Clockwise)", 0 },
-					{ "Tetrominoes A", 1 },
 					{ "Long (Counter-Clockwise)", 3 },
+					{ "Tetrominoes A", 1 },
 					{ "Tetrominoes B", 4 },
 				},
 				(obj) => (int)obj.PropertyValue,
@@ -188,7 +188,7 @@ namespace SCDObjectDefinitions.R6
 		
 		public override ReadOnlyCollection<byte> Subtypes
 		{
-			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 3, 4} ); }
+			get { return new ReadOnlyCollection<byte>(new byte[] {0, 3, 1, 4} ); }
 		}
 		
 		public override PropertySpec[] CustomProperties
@@ -201,8 +201,8 @@ namespace SCDObjectDefinitions.R6
 			switch (subtype)
 			{
 				case 0: return "Long (Clockwise)";
-				case 1: return "Tetrominoes A";
 				case 3: return "Long (Counter-Clockwise)";
+				case 1: return "Tetrominoes A";
 				case 4: return "Tetrominoes B";
 				
 				default: return "Unknown";

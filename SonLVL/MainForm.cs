@@ -832,7 +832,7 @@ namespace SonicRetro.SonLVL.GUI
 			foreach (Entry ent in sec.Objects)
 			{
 				ent.UpdateSprite();
-				bmp.DrawSprite(ent.Sprite, 0, 0);
+				bmp.DrawSprite(ent.Sprite, ent.X, ent.Y);
 			}
 			for (int y = 0; y < h; y++)
 				for (int x = 0; x < w; x++)

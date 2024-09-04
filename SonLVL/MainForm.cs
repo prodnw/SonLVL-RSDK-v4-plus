@@ -2829,6 +2829,8 @@ namespace SonicRetro.SonLVL.GUI
 				case Keys.A:
 					if (!loaded) return;
 					SelectedChunk = (ushort)(SelectedChunk == 0 ? LevelData.NewChunks.chunkList.Length - 1 : SelectedChunk - 1);
+					if (SelectedChunk < LevelData.NewChunks.chunkList.Length)
+						ChunkSelector.SelectedIndex = SelectedChunk;
 					DrawLevel();
 					break;
 				case Keys.Z:
@@ -2836,6 +2838,8 @@ namespace SonicRetro.SonLVL.GUI
 					if (!e.Control)
 					{
 						SelectedChunk = (ushort)(SelectedChunk == LevelData.NewChunks.chunkList.Length - 1 ? 0 : SelectedChunk + 1);
+						if (SelectedChunk < LevelData.NewChunks.chunkList.Length)
+							ChunkSelector.SelectedIndex = SelectedChunk;
 						DrawLevel();
 					}
 					break;
@@ -2888,6 +2892,8 @@ namespace SonicRetro.SonLVL.GUI
 					case Keys.A:
 						if (!loaded) return;
 						SelectedChunk = (ushort)(SelectedChunk == 0 ? LevelData.NewChunks.chunkList.Length - 1 : SelectedChunk - 1);
+						if (SelectedChunk < LevelData.NewChunks.chunkList.Length)
+							ChunkSelector.SelectedIndex = SelectedChunk;
 						DrawLevel();
 						break;
 					case Keys.Z:
@@ -2895,6 +2901,8 @@ namespace SonicRetro.SonLVL.GUI
 						if (!e.Control)
 						{
 							SelectedChunk = (ushort)(SelectedChunk == LevelData.NewChunks.chunkList.Length - 1 ? 0 : SelectedChunk + 1);
+							if (SelectedChunk < LevelData.NewChunks.chunkList.Length)
+								ChunkSelector.SelectedIndex = SelectedChunk;
 							DrawLevel();
 						}
 						break;

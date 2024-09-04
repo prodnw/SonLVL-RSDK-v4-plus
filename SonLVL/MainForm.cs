@@ -7318,6 +7318,7 @@ namespace SonicRetro.SonLVL.GUI
 				bgscrollcts = new System.Threading.CancellationTokenSource();
 				bgscrolltoken = bgscrollcts.Token;
 				bgscrolltask = System.Threading.Tasks.Task.Run(bgscrollfunc, bgscrolltoken);
+				backgroundPanel.HScrollEnabled = backgroundPanel.VScrollEnabled = false;
 			}
 			else
 			{
@@ -7334,6 +7335,7 @@ namespace SonicRetro.SonLVL.GUI
 						scrollEditPanel.Enabled = false;
 						break;
 				}
+				backgroundPanel.HScrollEnabled = backgroundPanel.VScrollEnabled = true;
 				DrawLevel();
 			}
 		}

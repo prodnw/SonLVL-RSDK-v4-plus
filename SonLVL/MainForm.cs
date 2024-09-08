@@ -3045,6 +3045,9 @@ namespace SonicRetro.SonLVL.GUI
 						DrawLevel();
 					}
 					break;
+				case Keys.P:
+					snapToolStripMenuItem.Checked = !snapToolStripMenuItem.Checked;
+					break;
 				case Keys.OemMinus:
 				case Keys.Subtract:
 					for (int i = 1; i < zoomToolStripMenuItem.DropDownItems.Count; i++)
@@ -3077,7 +3080,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void objectPanel_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (!loaded) return;
-			double gs = 1 << ObjGrid;
+			double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
 			int curx = (int)(e.X / ZoomLevel) + objectPanel.HScrollValue;
 			int cury = (int)(e.Y / ZoomLevel) + objectPanel.VScrollValue;
 			short gridx = (short)(Math.Round(curx / gs, MidpointRounding.AwayFromZero) * gs);
@@ -3224,7 +3227,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (objdrag)
 			{
-				if (ObjGrid > 0)
+				if (ObjGrid > 0 && snapToolStripMenuItem.Checked)
 				{
 					double gs = 1 << ObjGrid;
 					foreach (Entry item in SelectedItems)
@@ -3722,7 +3725,7 @@ namespace SonicRetro.SonLVL.GUI
 				ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
 				objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
 				ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
-				double gs = 1 << ObjGrid;
+				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
 				ent.X = (short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				ent.Y = (short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				ent.UpdateSprite();
@@ -3745,7 +3748,7 @@ namespace SonicRetro.SonLVL.GUI
 					dlg.Text = "Add Group of Objects";
 					if (dlg.ShowDialog(this) == DialogResult.OK)
 					{
-						double gs = 1 << ObjGrid;
+						double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
 						Point pt = new Point(
 							(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
 							(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
@@ -3823,7 +3826,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 				Size off = new Size(((int)(menuLoc.X / ZoomLevel) + objectPanel.HScrollValue) - upleft.X, ((int)(menuLoc.Y / ZoomLevel) + objectPanel.VScrollValue) - upleft.Y);
 				SelectedItems = new List<Entry>(objs);
-				double gs = 1 << ObjGrid;
+				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
 				foreach (Entry item in objs)
 				{
 					item.X += (short)off.Width;
@@ -5569,7 +5572,7 @@ namespace SonicRetro.SonLVL.GUI
 			dragdrop = false;
 			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectDrop") && LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
 			{
-				double gs = 1 << ObjGrid;
+				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
 				Point clientPoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
 				clientPoint = new Point((int)(clientPoint.X / ZoomLevel), (int)(clientPoint.Y / ZoomLevel));
 				ObjectEntry obj = LevelData.CreateObject((byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop"));

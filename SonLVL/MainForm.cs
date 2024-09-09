@@ -471,12 +471,24 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 			scriptFiles = new List<string>();
+			
+			// originally "Scripts" was supposed to be in the EXE folder, but both work
+			// (and RE2 has it be in the Data folder) so let's support both, but with just "Scripts" at higher priority
 			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
 				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
-			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
-				scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			else if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/Scripts")))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/Scripts"), "*.txt"));
+			
+			// base decomp mods use "Data/Scripts" while S1F/S2A/SCDU mods use just "Scripts", let's go ahead and support 'em both too
+			if (LevelData.ModFolder != null)
+				if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
+					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+				else if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Scripts")))
+					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			
 			objectScriptBox.AutoCompleteCustomSource.Clear();
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
+
 			sfxFiles = new List<string>();
 			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/SoundFX")))
 			{

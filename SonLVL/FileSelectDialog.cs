@@ -27,6 +27,15 @@ namespace SonicRetro.SonLVL
 			button1.Enabled = e.Node.Nodes.Count == 0;
 		}
 
+		private void treeView1_DoubleClick(object sender, System.EventArgs e)
+		{
+			if (button1.Enabled)
+			{
+				DialogResult = DialogResult.OK;
+				Close();
+			}
+		}
+
 		private void button2_Click(object sender, System.EventArgs e)
 		{
 			Close();

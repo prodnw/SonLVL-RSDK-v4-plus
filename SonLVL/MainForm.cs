@@ -762,10 +762,7 @@ namespace SonicRetro.SonLVL.GUI
 				for (int i = 0; i < 256; i++)
 					LevelImgPalette.Entries[i] = LevelImgPalette.Entries[i].Invert();
 			findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
-			string levelname = this.levelname;
-			foreach (char c in Path.GetInvalidFileNameChars())
-				levelname = levelname.Replace(c, '_');
-
+			
 			if (File.Exists(LevelData.StageInfo.folder + ".sls"))
 				using (FileStream fs = File.OpenRead(LevelData.StageInfo.folder + ".sls"))
 					savedLayoutSections = (List<LayoutSection>)new BinaryFormatter().Deserialize(fs);
@@ -773,11 +770,15 @@ namespace SonicRetro.SonLVL.GUI
 				savedLayoutSections = new List<LayoutSection>();
 
 			// migrate old act-specific data to folder-wide data
-			if (File.Exists(levelname + ".sls"))
+			string filename = this.levelname + ".sls";
+			foreach (char c in Path.GetInvalidFileNameChars())
+				filename = filename.Replace(c, '_');
+
+			if (File.Exists(filename))
 			{
-				using (FileStream fs = File.OpenRead(levelname + ".sls"))
+				using (FileStream fs = File.OpenRead(filename))
 					savedLayoutSections.AddRange((List<LayoutSection>)new BinaryFormatter().Deserialize(fs));
-				File.Delete(levelname + ".sls");
+				File.Delete(filename);
 
 				using (FileStream fs = File.Create(LevelData.StageInfo.folder + ".sls"))
 					new BinaryFormatter().Serialize(fs, savedLayoutSections);

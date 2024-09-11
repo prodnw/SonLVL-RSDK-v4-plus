@@ -251,8 +251,30 @@ namespace SonicRetro.SonLVL.GUI
 			replaceChunkBlocksDialog = new ReplaceChunkBlocksDialog();
 			collisionLayerSelector.SelectedIndex = 0;
 			objectOrder.ListViewItemSorter = new ListViewIndexComparer();
-			if (Program.Arguments.Length > 0)
+
+			// Optional params: project file path, mod ini path, folder, act
+			if (Program.Arguments.Length > 0 && File.Exists(Program.Arguments[0]))
+			{
 				LoadINI(Program.Arguments[0]);
+				
+				if (Program.Arguments.Length > 1 && File.Exists(Program.Arguments[1]))
+				{
+					LoadMod(Program.Arguments[1]);
+
+					if (Program.Arguments.Length > 3)
+					{
+						LevelStuff ls = levelMenuItems.FirstOrDefault(a => a.Stage.folder.Equals(Program.Arguments[2], StringComparison.OrdinalIgnoreCase) && a.Stage.actID.Equals(Program.Arguments[3], StringComparison.OrdinalIgnoreCase));
+						if (ls != null)
+						{
+							ls.MenuItem.Checked = true;
+							Enabled = false;
+							UseWaitCursor = true;
+							levelname = ls.FullName;
+							LoadLevel(ls);
+						}
+					}
+				}
+			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

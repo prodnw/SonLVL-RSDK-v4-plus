@@ -691,7 +691,7 @@ namespace SonicRetro.SonLVL.API
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits32 DrawForeground32(Rectangle? section, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits32 DrawForeground32(Rectangle? section, Color backgroundColor, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -700,7 +700,7 @@ namespace SonicRetro.SonLVL.API
 				bounds = new Rectangle(0, 0, FGWidth * 128, FGHeight * 128);
 			BitmapBits32 LevelImg8bpp = new BitmapBits32(bounds.Size);
 			NewPalette.CopyTo(LevelImg8bpp.Palette, 0);
-			LevelImg8bpp.Clear(NewPalette[160]);
+			LevelImg8bpp.Clear(backgroundColor);
 			objectsAboveHighPlane |= !includeObjects;
 			int colpath = -1;
 			if (collisionPath1)
@@ -880,7 +880,7 @@ namespace SonicRetro.SonLVL.API
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits32 DrawBackground32(int layer, Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits32 DrawBackground32(int layer, Rectangle? section, Color backgroundColor, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -889,7 +889,7 @@ namespace SonicRetro.SonLVL.API
 				bounds = new Rectangle(0, 0, BGWidth[layer] * 128, BGHeight[layer] * 128);
 			BitmapBits32 LevelImg8bpp = new BitmapBits32(bounds.Size);
 			NewPalette.CopyTo(LevelImg8bpp.Palette, 0);
-			LevelImg8bpp.Clear(NewPalette[160]);
+			LevelImg8bpp.Clear(backgroundColor);
 			int colpath = -1;
 			if (collisionPath1)
 				colpath = 0;

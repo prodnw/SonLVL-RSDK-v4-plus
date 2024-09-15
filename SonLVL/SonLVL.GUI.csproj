@@ -54,6 +54,12 @@
     <Compile Include="AddGroupDialog.Designer.cs">
       <DependentUpon>AddGroupDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="BackgroundColorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackgroundColorDialog.Designer.cs">
+      <DependentUpon>BackgroundColorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChunkBlockEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     </Compile>
     <EmbeddedResource Include="AddGroupDialog.resx">
       <DependentUpon>AddGroupDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BackgroundColorDialog.resx">
+      <DependentUpon>BackgroundColorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChunkBlockEditor.resx">
       <DependentUpon>ChunkBlockEditor.cs</DependentUpon>

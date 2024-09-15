@@ -38,10 +38,10 @@ namespace SonicRetro.SonLVL.GUI
 		void LevelData_PaletteChangedEvent()
 		{
 			LevelData.BmpPal.Entries.CopyTo(LevelImgPalette.Entries, 0);
-			if (Settings.BackgroundColor <= 0)
-				LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[-Settings.BackgroundColor];
+			if (Settings.BackgroundColor.A < 255)
+				LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[Settings.BackgroundColor.A];
 			else
-				LevelImgPalette.Entries[LevelData.ColorTransparent] = Color.FromArgb(Settings.BackgroundColor);
+				LevelImgPalette.Entries[LevelData.ColorTransparent] = Settings.BackgroundColor;
 			if (invertColorsToolStripMenuItem.Checked)
 				for (int i = 0; i < 256; i++)
 					LevelImgPalette.Entries[i] = LevelImgPalette.Entries[i].Invert();
@@ -669,10 +669,10 @@ namespace SonicRetro.SonLVL.GUI
 			undoSystem.Init();
 			LevelImgPalette = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
 			LevelData.BmpPal.Entries.CopyTo(LevelImgPalette.Entries, 0);
-			if (Settings.BackgroundColor <= 0)
-				LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[-Settings.BackgroundColor];
+			if (Settings.BackgroundColor.A < 255)
+				LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[Settings.BackgroundColor.A];
 			else
-				LevelImgPalette.Entries[LevelData.ColorTransparent] = Color.FromArgb(Settings.BackgroundColor);
+				LevelImgPalette.Entries[LevelData.ColorTransparent] = Settings.BackgroundColor;
 		}
 
 		private void backgroundLevelLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1453,10 +1453,10 @@ namespace SonicRetro.SonLVL.GUI
 				loaded = false;
 				LevelData.ClearLevel();
 				LevelData.BmpPal.Entries.CopyTo(LevelImgPalette.Entries, 0);
-				if (Settings.BackgroundColor <= 0)
-					LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[-Settings.BackgroundColor];
+				if (Settings.BackgroundColor.A < 255)
+					LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[Settings.BackgroundColor.A];
 				else
-					LevelImgPalette.Entries[LevelData.ColorTransparent] = Color.FromArgb(Settings.BackgroundColor);
+					LevelImgPalette.Entries[LevelData.ColorTransparent] = Settings.BackgroundColor;
 				ChunkSelector.Images = LevelData.CompChunkBmps;
 				ChunkSelector.SelectedIndex = 0;
 				importChunksToolStripButton.Enabled = true;
@@ -1539,6 +1539,44 @@ namespace SonicRetro.SonLVL.GUI
 		private void invertColorsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			LevelData_PaletteChangedEvent();
+		}
+
+		private void bgColorToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (BackgroundColorDialog dialog = new BackgroundColorDialog())
+			{
+				if (Settings.BackgroundColor.A == 255)
+				{
+					dialog.index.Value = 160;
+					dialog.index.Enabled = false;
+					dialog.useConstantColor.Checked = true;
+				}
+				else
+				{
+					dialog.index.Value = Settings.BackgroundColor.A;
+					dialog.useLevelColor.Checked = true;
+				}
+
+				dialog.constantColorBox.BackColor = Color.FromArgb(255, Settings.BackgroundColor);
+
+				if (dialog.ShowDialog(this) == DialogResult.OK)
+				{
+					if (dialog.useLevelColor.Checked)
+						Settings.BackgroundColor = Color.FromArgb((int)dialog.index.Value, Settings.BackgroundColor);
+					else
+						Settings.BackgroundColor = dialog.constantColorBox.BackColor;
+
+					if (loaded)
+					{
+						if (Settings.BackgroundColor.A < 255)
+							LevelImgPalette.Entries[LevelData.ColorTransparent] = LevelData.NewPalette[Settings.BackgroundColor.A];
+						else
+							LevelImgPalette.Entries[LevelData.ColorTransparent] = Settings.BackgroundColor;
+
+						DrawLevel();
+					}
+				}
+			}
 		}
 
 		private void lowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2261,7 +2299,7 @@ namespace SonicRetro.SonLVL.GUI
 						}
 						tmpimg = LevelImg8bpp;
 						LevelImg8bpp = new BitmapBits32(dispRect.Size);
-						LevelImg8bpp.Clear(LevelImgPalette.Entries[160]);
+						LevelImg8bpp.Clear(LevelImgPalette.Entries[LevelData.ColorTransparent]);
 						LevelImg8bpp.DrawBitmap(tmpimg, 0, 0);
 					}
 					else
@@ -4184,7 +4222,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			BitmapBits32 bmp = new BitmapBits32(128, 128);
 			LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-			bmp.Clear(bmp.Palette[160]);
+			bmp.Clear(bmp.Palette[LevelData.ColorTransparent]);
 			if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
 				bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
 			else if (lowToolStripMenuItem.Checked)
@@ -5041,7 +5079,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					BitmapBits32 bmp = new BitmapBits32(16, 16);
 					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
-					bmp.Clear(bmp.Palette[160]);
+					bmp.Clear(bmp.Palette[LevelData.ColorTransparent]);
 					bmp.DrawBitmap(LevelData.NewTiles[SelectedTile], 0, 0);
 					bmp.Palette[1] = Color.White;
 					bmp.DrawBitmap(LevelData.NewColBmpBits[SelectedTile][collisionLayerSelector.SelectedIndex], 0, 0);

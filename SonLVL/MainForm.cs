@@ -208,7 +208,6 @@ namespace SonicRetro.SonLVL.GUI
 					Bounds = Screen.FromControl(this).Bounds;
 					break;
 			}
-			mainMenuStrip.Visible = Settings.ShowMenu;
 			enableDraggingPaletteButton.Checked = Settings.EnableDraggingPalette;
 			enableDraggingTilesButton.Checked = Settings.EnableDraggingTiles;
 			enableDraggingChunksButton.Checked = Settings.EnableDraggingChunks;
@@ -318,7 +317,6 @@ namespace SonicRetro.SonLVL.GUI
 					Settings.WindowMode = WindowMode.Maximized;
 				else
 					Settings.WindowMode = WindowMode.Normal;
-				Settings.ShowMenu = mainMenuStrip.Visible;
 				Settings.EnableDraggingPalette = enableDraggingPaletteButton.Checked;
 				Settings.EnableDraggingTiles = enableDraggingTilesButton.Checked;
 				Settings.EnableDraggingChunks = enableDraggingChunksButton.Checked;
@@ -2620,10 +2618,6 @@ namespace SonicRetro.SonLVL.GUI
 							Bounds = prevbnds;
 						}
 					}
-					break;
-				case Keys.F5:
-					if (e.Control)
-						mainMenuStrip.ShowHide();
 					break;
 				case Keys.D1:
 				case Keys.NumPad1:

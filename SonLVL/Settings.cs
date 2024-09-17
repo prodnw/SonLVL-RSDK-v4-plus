@@ -61,8 +61,6 @@ namespace SonicRetro.SonLVL
 		public bool SwitchChunkBlockMouseButtons { get; set; }
 		public WindowMode WindowMode { get; set; }
 		[DefaultValue(true)]
-		public bool ShowMenu { get; set; }
-		[DefaultValue(true)]
 		public bool EnableDraggingPalette { get; set; }
 		[DefaultValue(true)]
 		public bool EnableDraggingTiles { get; set; }
@@ -87,7 +85,6 @@ namespace SonicRetro.SonLVL
 				result.TransparentBackgroundExport = true;
 				result.ViewLowPlane = result.ViewHighPlane = true;
 				result.ZoomLevel = "1x";
-				result.ShowMenu = true;
 				result.EnableDraggingPalette = true;
 				result.EnableDraggingTiles = true;
 				result.EnableDraggingChunks = true;

@@ -2715,6 +2715,34 @@ namespace SonicRetro.SonLVL.GUI
 						if (SelectedItems.Count > 0)
 							copyToolStripMenuItem_Click(sender, EventArgs.Empty);
 					break;
+				case Keys.D0:
+				case Keys.D1:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[0]));
+					break;
+				case Keys.D2:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[1]));
+					break;
+				case Keys.D3:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[2]));
+					break;
+				case Keys.D4:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[3]));
+					break;
+				case Keys.D5:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[4]));
+					break;
+				case Keys.D6:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[5]));
+					break;
+				case Keys.D7:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[6]));
+					break;
+				case Keys.D8:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[7]));
+					break;
+				case Keys.D9:
+					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[8]));
+					break;
 				case Keys.J:
 					int gs = ObjGrid + 1;
 					if (gs < objGridSizeDropDownButton.DropDownItems.Count)

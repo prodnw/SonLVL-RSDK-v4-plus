@@ -1552,7 +1552,7 @@ namespace SonicRetro.SonLVL.GUI
 				else
 				{
 					dialog.index.Value = Settings.BackgroundColor.A;
-					dialog.useLevelColor.Checked = true;
+					dialog.constantColorOverlay.Visible = dialog.useLevelColor.Checked = true;
 				}
 
 				dialog.constantColorBox.BackColor = Color.FromArgb(255, Settings.BackgroundColor);

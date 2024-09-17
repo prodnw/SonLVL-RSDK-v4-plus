@@ -782,6 +782,8 @@ namespace SonicRetro.SonLVL.GUI
 			if (invertColorsToolStripMenuItem.Checked)
 				for (int i = 0; i < 256; i++)
 					LevelImgPalette.Entries[i] = LevelImgPalette.Entries[i].Invert();
+			objectListBox_SelectedIndexChanged(this, EventArgs.Empty);
+			sfxListBox_SelectedIndexChanged(this, EventArgs.Empty);
 			findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 			
 			if (File.Exists(LevelData.StageInfo.folder + ".sls"))

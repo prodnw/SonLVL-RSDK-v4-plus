@@ -4038,7 +4038,7 @@
             this.duplicateTilesToolStripMenuItem,
             this.deleteTilesToolStripMenuItem});
             this.tileContextMenuStrip.Name = "contextMenuStrip1";
-            this.tileContextMenuStrip.Size = new System.Drawing.Size(237, 308);
+            this.tileContextMenuStrip.Size = new System.Drawing.Size(212, 308);
             // 
             // cutTilesToolStripMenuItem
             // 
@@ -4075,8 +4075,8 @@
             // importOverToolStripMenuItem
             // 
             this.importOverToolStripMenuItem.Name = "importOverToolStripMenuItem";
-            this.importOverToolStripMenuItem.Size = new System.Drawing.Size(236, 38);
-            this.importOverToolStripMenuItem.Text = "&Import Over...";
+            this.importOverToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
+            this.importOverToolStripMenuItem.Text = "&Reimport...";
             this.importOverToolStripMenuItem.Click += new System.EventHandler(this.importOverToolStripMenuItem_Click);
             // 
             // exportTileToolStripMenuItem

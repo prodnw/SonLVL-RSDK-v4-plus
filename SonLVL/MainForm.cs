@@ -2972,7 +2972,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.S:
 					if (!loaded) return;
-					if (!e.Control)
+					if (!e.Control && layoutSectionListBox.Items.Count > 0)
 					{
 						layoutSectionListBox.SelectedIndex = (layoutSectionListBox.SelectedIndex <= 0 ? layoutSectionListBox.Items.Count - 1 : layoutSectionListBox.SelectedIndex - 1);
 						DrawLevel();
@@ -2980,7 +2980,7 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.X:
 					if (!loaded) return;
-					if (!e.Control)
+					if (!e.Control && layoutSectionListBox.Items.Count > 0)
 					{
 						layoutSectionListBox.SelectedIndex = (layoutSectionListBox.SelectedIndex == layoutSectionListBox.Items.Count - 1 ? 0 : layoutSectionListBox.SelectedIndex + 1);
 						DrawLevel();

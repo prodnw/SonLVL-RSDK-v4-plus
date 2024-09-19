@@ -818,6 +818,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			layoutSectionListBox.EndUpdate();
 			foundobjs = null;
+			BGSelection = FGSelection = Rectangle.Empty;
 			SelectedObjectChanged();
 			UpdateScrollControls();
 			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
@@ -1433,9 +1434,17 @@ namespace SonicRetro.SonLVL.GUI
 						LevelData.ResizeBG(bglayer, (int)dg.levelWidth.Value, (int)dg.levelHeight.Value);
 						if (LevelData.BGScroll[bglayer].Count == 0)
 							LevelData.BGScroll[bglayer].Add(new ScrollData());
+
+						BGSelection.Width = Math.Min(BGSelection.Right, LevelData.BGWidth[bglayer]) - BGSelection.Left;
+						BGSelection.Height = Math.Min(BGSelection.Bottom, LevelData.BGHeight[bglayer]) - BGSelection.Top;
 					}
 					else
+					{
 						LevelData.ResizeFG((int)dg.levelWidth.Value, (int)dg.levelHeight.Value);
+
+						FGSelection.Width = Math.Min(FGSelection.Right, LevelData.FGWidth) - FGSelection.Left;
+						FGSelection.Height = Math.Min(FGSelection.Bottom, LevelData.FGHeight) - FGSelection.Top;
+					}
 					loaded = false;
 					UpdateScrollBars();
 					loaded = true;

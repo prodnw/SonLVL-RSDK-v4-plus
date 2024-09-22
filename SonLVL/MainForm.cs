@@ -1903,10 +1903,8 @@ namespace SonicRetro.SonLVL.GUI
 							pal.Entries[0] = Color.Transparent;
 						res.Palette = pal;
 						res.Save(a.FileName);
-						bmp = LevelData.DrawForegroundCollision(null, 0);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
-						bmp = LevelData.DrawForegroundCollision(null, 1);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
+						LevelData.DrawForegroundCollision(null, 0).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
+						LevelData.DrawForegroundCollision(null, 1).ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
 						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
@@ -6939,7 +6937,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void clearBackgroundToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "Are you sure you want to clear the background layout?", "Clear Background", MessageBoxButtons.OKCancel) == DialogResult.OK)
+			if (MessageBox.Show(this, "Are you sure you want to clear the selected background layer?", "Clear Background", MessageBoxButtons.OKCancel) == DialogResult.OK)
 			{
 				foreach (var row in LevelData.Background.layers[bglayer].layout)
 					Array.Clear(row, 0, row.Length);
@@ -7299,7 +7297,7 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								string pathBase = Path.Combine(Path.GetDirectoryName(a.FileName), Path.GetFileNameWithoutExtension(a.FileName));
 								string pathExt = Path.GetExtension(a.FileName);
-								BitmapBits bmp = LevelData.DrawForeground(area, false, false, false, true, true, false, false);
+								BitmapBits bmp = LevelData.DrawForegroundLayout(area);
 								if (transparentBackgroundToolStripMenuItem.Checked)
 									bmp.ReplaceColor(0, 160);
 								Bitmap res = bmp.ToBitmap();
@@ -7342,7 +7340,7 @@ namespace SonicRetro.SonLVL.GUI
 										palette[0] = Color.Transparent;
 									}
 									else
-										palette = LevelImgPalette.Entries; 
+										palette = LevelImgPalette.Entries;
 									using (Bitmap res = bmp.ToBitmap(palette))
 										res.Save(a.FileName);
 								}
@@ -7534,7 +7532,7 @@ namespace SonicRetro.SonLVL.GUI
 				frametarget = (double)(System.Diagnostics.Stopwatch.Frequency / scrollTargetFPS.Value);
 				layerscrollpos = 0;
 				linescrollpos = new double[LevelData.BGScroll[bglayer].Count];
-				scrolloff = new Point();
+				scrolloff = new Point((int)scrollCamX.Value, (int)scrollCamY.Value);
 				scrollEditPanel.Enabled = false;
 				backgroundPanel.PanelGraphics.Clear(LevelImgPalette.Entries[LevelData.ColorTransparent]);
 				backgroundPanel.FocusPanel();

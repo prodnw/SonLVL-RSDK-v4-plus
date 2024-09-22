@@ -29,6 +29,11 @@ namespace SonicRetro.SonLVL.API
 			Close();
 		}
 
+		private void copyButton_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(log);
+		}
+
 		private void ErrorReportDialog_Load(object sender, EventArgs e)
 		{
 			StringBuilder text = new StringBuilder();

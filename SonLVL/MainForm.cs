@@ -2718,11 +2718,83 @@ namespace SonicRetro.SonLVL.GUI
 						SaveState("Change Objects Type");
 					}
 					break;
+				case Keys.D:
+					if (!loaded) return;
+					objectOrder.BeginUpdate();
+					
+					SelectedItems.Sort((a, b) =>
+					{
+						return LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity));
+					});
+
+					foreach (ObjectEntry obj in SelectedItems)
+					{
+						int index = LevelData.Scene.entities.IndexOf(obj.Entity);
+						if (index == 0)
+							break;
+						
+						loaded = false;
+						ListViewItem lvi = objectOrder.Items[index];
+						objectOrder.Items[index] = (ListViewItem)objectOrder.Items[index - 1].Clone();
+						objectOrder.Items[index - 1] = lvi;
+						loaded = true;
+
+						LevelData.Scene.entities.Swap(index, index - 1);
+						LevelData.Objects.Swap(index, index - 1);
+					}
+
+					foreach (ObjectEntry obj in SelectedItems)
+						obj.UpdateSprite();
+					
+					objectOrder.EndUpdate();
+					if (objectOrder.SelectedIndices.Count > 0)
+						objectOrder.EnsureVisible(objectOrder.SelectedIndices[0]);
+
+					DrawLevel();
+					ObjectProperties.Refresh();
+					SaveState("Change Objects EntityPos");
+					break;
 				case Keys.C:
 					if (!loaded) return;
-					if (e.Control)
-						if (SelectedItems.Count > 0)
+					if (SelectedItems.Count > 0)
+						if (e.Control)
 							copyToolStripMenuItem_Click(sender, EventArgs.Empty);
+						else
+						{
+							objectOrder.BeginUpdate();
+
+							SelectedItems.Sort((a, b) =>
+							{
+								return LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity));
+							});
+
+							foreach (ObjectEntry obj in SelectedItems)
+							{
+								int index = LevelData.Scene.entities.IndexOf(obj.Entity);
+								if (index == LevelData.Scene.entities.Count - 1)
+									break;
+
+								loaded = false;
+								ListViewItem lvi = objectOrder.Items[index];
+								objectOrder.Items[index] = (ListViewItem)objectOrder.Items[index + 1].Clone();
+								objectOrder.Items[index + 1] = lvi;
+								loaded = true;
+
+								LevelData.Scene.entities.Swap(index, index + 1);
+								LevelData.Objects.Swap(index, index + 1);
+							}
+
+							foreach (ObjectEntry obj in SelectedItems)
+								obj.UpdateSprite();
+
+							objectOrder.EndUpdate();
+							if (objectOrder.SelectedIndices.Count > 0)
+								objectOrder.EnsureVisible(objectOrder.SelectedIndices[0]);
+
+							DrawLevel();
+							ObjectProperties.Refresh();
+							SaveState("Change Objects EntityPos");
+						}
 					break;
 				case Keys.D0:
 				case Keys.D1:
@@ -7443,7 +7515,7 @@ namespace SonicRetro.SonLVL.GUI
 					objectOrder.BeginUpdate();
 					ListViewItem item1 = (ListViewItem)item.Clone();
 					objectOrder.Items.Insert(dst, item1);
-					if (item1.Index == src) LevelData.NewChunks.chunkList[700].Clone();
+					//if (item1.Index == src) LevelData.NewChunks.chunkList[700].Clone(); //..huh?
 					objectOrder.Items.Remove(item);
 					objectOrder.EndUpdate();
 					item1.Selected = true;
@@ -7454,6 +7526,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void objectOrder_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (!loaded) return;
 			if (objectOrder.SelectedIndices.Count > 0)
 			{
 				ObjectEntry item = LevelData.Objects[objectOrder.SelectedIndices[0]];

@@ -2723,9 +2723,8 @@ namespace SonicRetro.SonLVL.GUI
 					objectOrder.BeginUpdate();
 					
 					SelectedItems.Sort((a, b) =>
-					{
-						return LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity));
-					});
+						LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity))
+					);
 
 					foreach (ObjectEntry obj in SelectedItems)
 					{
@@ -2764,9 +2763,8 @@ namespace SonicRetro.SonLVL.GUI
 							objectOrder.BeginUpdate();
 
 							SelectedItems.Sort((a, b) =>
-							{
-								return LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity));
-							});
+								LevelData.Scene.entities.IndexOf(((ObjectEntry)b).Entity).CompareTo(LevelData.Scene.entities.IndexOf(((ObjectEntry)a).Entity))
+							);
 
 							foreach (ObjectEntry obj in SelectedItems)
 							{
@@ -4912,9 +4910,9 @@ namespace SonicRetro.SonLVL.GUI
 				case ArtTab.Chunks:
 					ushort tmp = LevelData.GetFreeChunks().First();
 					LevelData.NewChunks.chunkList[tmp] = LevelData.NewChunks.chunkList[SelectedChunk].Clone();
+					LevelData.RedrawChunk(tmp);
 					SelectedChunk = tmp;
 					ChunkSelector.SelectedIndex = tmp;
-					LevelData.RedrawChunk(tmp);
 					SaveState("Duplicate Chunk");
 					break;
 				case ArtTab.Tiles:

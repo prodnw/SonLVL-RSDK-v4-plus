@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29230.47
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonLVL.GUI", "SonLVL\SonLVL.GUI.csproj", "{934ED80F-F466-423E-8203-9A3F35583323}"
 EndProject
@@ -9,15 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonLVL.API", "SonLVLAPI\Son
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelConverter", "LevelConverter\LevelConverter.csproj", "{3E5A1FAB-575A-49DB-9F27-416219B0995F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectLayoutDiff", "ObjectLayoutDiff\ObjectLayoutDiff.csproj", "{1A15F5D8-5539-414F-9BB9-2E823FCDEFFE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectLayoutMerge", "ObjectLayoutMerge\ObjectLayoutMerge.csproj", "{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjDefGen", "ObjDefGen\ObjDefGen.csproj", "{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Object Definitions", "Object Definitions", "{FDF7F714-59B1-41E7-9196-8F3D0B69F474}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCDObjectDefinitions", "SCDObjectDefinitions\SCDObjectDefinitions.csproj", "{77368D75-3F16-4907-971C-9772FAAB1E4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "v5ImageImport", "v5ImageImport\v5ImageImport.csproj", "{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}"
 EndProject
@@ -39,20 +31,10 @@ Global
 		{3E5A1FAB-575A-49DB-9F27-416219B0995F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E5A1FAB-575A-49DB-9F27-416219B0995F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E5A1FAB-575A-49DB-9F27-416219B0995F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A15F5D8-5539-414F-9BB9-2E823FCDEFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A15F5D8-5539-414F-9BB9-2E823FCDEFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A15F5D8-5539-414F-9BB9-2E823FCDEFFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FCB3E21-05F9-4E82-A0E0-F91AE8335516}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1922854-CE98-4660-9A7C-B6FA6CBD84DA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77368D75-3F16-4907-971C-9772FAAB1E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E21A9E9-0FBE-41F2-A1CA-DF6BA15C70CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,9 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{77368D75-3F16-4907-971C-9772FAAB1E4B} = {FDF7F714-59B1-41E7-9196-8F3D0B69F474}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5BB54B-0FB0-4194-B0CD-FA5F328CD910}

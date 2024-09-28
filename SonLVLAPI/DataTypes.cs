@@ -760,7 +760,7 @@ namespace SonicRetro.SonLVL.API
 		}
 
 		[DefaultValue(0)]
-		[Description("Determines the blending mode used with DrawSpriteFX & FX_INK.")]
+		[Description("Determines the blending mode used with DrawSpriteFX && FX_INK.")]
 		public RSDKv4.Scene.Entity.InkEffects InkEffect
 		{
 			get => entity.inkEffect ?? 0;

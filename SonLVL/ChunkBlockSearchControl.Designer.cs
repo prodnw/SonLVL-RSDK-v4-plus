@@ -65,7 +65,8 @@
             "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "Not Solid"});
+            "Not Solid",
+            "Top Solid (No Grip)"});
 			this.solidity2.Location = new System.Drawing.Point(6, 46);
 			this.solidity2.Name = "solidity2";
 			this.solidity2.Size = new System.Drawing.Size(121, 21);
@@ -80,7 +81,8 @@
             "All Solid",
             "Top Solid",
             "Left/Right/Bottom Solid",
-            "Not Solid"});
+            "Not Solid",
+            "Top Solid (No Grip)"});
 			this.solidity1.Location = new System.Drawing.Point(6, 19);
 			this.solidity1.Name = "solidity1";
 			this.solidity1.Size = new System.Drawing.Size(121, 21);

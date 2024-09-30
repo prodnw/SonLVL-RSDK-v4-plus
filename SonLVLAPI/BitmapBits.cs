@@ -268,8 +268,13 @@ namespace SonicRetro.SonLVL.API
 		{
 			Bitmap newbmp = ToBitmap4bpp();
 			ColorPalette pal = newbmp.Palette;
-			for (int i = 0; i < Math.Min(palette.Length, 16); i++)
-				pal.Entries[i] = palette[i];
+			for (int i = 0; i < 16; i++)
+			{
+				if (i < palette.Length)
+					pal.Entries[i] = palette[i];
+				else
+					pal.Entries[i] = palette[0];
+			}
 			newbmp.Palette = pal;
 			return newbmp;
 		}

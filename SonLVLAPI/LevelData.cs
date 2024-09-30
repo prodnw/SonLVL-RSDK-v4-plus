@@ -1466,7 +1466,7 @@ namespace SonicRetro.SonLVL.API
 			{
 				for (int bx = 0; bx < bmpbits.Width / 16; bx++)
 				{
-					ushort[] coltypes = new ushort[3];
+					ushort[] coltypes = new ushort[4];
 					TileConfig.CollisionMask mask = new TileConfig.CollisionMask();
 					int fcnt = 0;
 					int ccnt = 0;
@@ -1556,7 +1556,12 @@ namespace SonicRetro.SonLVL.API
 							max = coltypes[1];
 						}
 						if (coltypes[2] > max)
+						{
 							solid = Tiles128x128.Block.Tile.Solidities.SolidAll;
+							max = coltypes[2];
+						}
+						if (coltypes[3] > max)
+							solid = Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip;
 						if (start.Value.Y != end.Value.Y)
 							if (mask.flipY)
 							{

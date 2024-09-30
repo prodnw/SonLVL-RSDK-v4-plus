@@ -702,10 +702,8 @@ namespace SonicRetro.SonLVL.GUI
 			ChunkSelector.SelectedIndex = 0;
 			flipChunkHButton.Enabled = flipChunkVButton.Enabled = true;
 			remapChunksButton.Enabled = remapTilesButton.Enabled = true;
-			importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
-			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled;
-			importTilesToolStripButton.Enabled = LevelData.HasFreeTiles();
-			drawTileToolStripButton.Enabled = importTilesToolStripButton.Enabled;
+			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
+			drawTileToolStripButton.Enabled = importTilesToolStripButton.Enabled = LevelData.HasFreeTiles();
 			TileSelector.Images = LevelData.NewTileBmps;
 			TileSelector.SelectedIndex = 0;
 			TileSelector.ChangeSize();
@@ -1012,10 +1010,8 @@ namespace SonicRetro.SonLVL.GUI
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 				if (!prevChunks[i].Equal(LevelData.NewChunks.chunkList[i]) || LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a).Any(b => redrawblocks.Contains(b.tileIndex)))
 					LevelData.RedrawChunk(i);
-			importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
-			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled;
-			importTilesToolStripButton.Enabled = LevelData.HasFreeTiles();
-			drawTileToolStripButton.Enabled = importTilesToolStripButton.Enabled;
+			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
+			drawTileToolStripButton.Enabled = importTilesToolStripButton.Enabled = LevelData.HasFreeTiles();
 			InitObjectTypes();
 			UpdateScrollBars();
 			string[] levnam = LevelData.Scene.title.Split('-');
@@ -1872,11 +1868,11 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			using (FolderBrowserDialog a = new FolderBrowserDialog() { SelectedPath = Environment.CurrentDirectory })
 				if (a.ShowDialog() == DialogResult.OK)
-					for (int i = 0; i < LevelData.NewColBmpBits[0].Length; i++)
+					for (int i = 0; i < LevelData.NewColBmpBits.Length; i++)
 					{
-						LevelData.NewColBmpBits[0][i].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
+						LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
 							"0_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
-						LevelData.NewColBmpBits[1][i].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
+						LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
 							"1_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 					}
 		}
@@ -3820,8 +3816,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void ChunkSelector_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (ChunkSelector.SelectedIndex == -1 || ChunkSelector.SelectedIndex >= LevelData.NewChunks.chunkList.Length) return;
-			importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
-			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled;
+			drawChunkToolStripButton.Enabled = importChunksToolStripButton.Enabled = LevelData.HasFreeChunks();
 			SelectedChunk = (ushort)ChunkSelector.SelectedIndex;
 			SelectedChunkBlock = new Rectangle(0, 0, 1, 1);
 			chunkBlockEditor.SelectedObjects = new[] { LevelData.NewChunks.chunkList[SelectedChunk].tiles[0][0] };
@@ -4030,14 +4025,12 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentTab)
 			{
 				case Tab.Objects:
-					gotoToolStripMenuItem.Enabled = true;
-					findToolStripMenuItem.Enabled = true;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = foundobjs == null;
 					objectPanel.Focus();
 					break;
 				case Tab.Foreground:
-					gotoToolStripMenuItem.Enabled = true;
-					findToolStripMenuItem.Enabled = true;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = lastfoundfgchunk.HasValue;
 					tabPage8.Controls.Add(ChunkSelector);
 					tabPage9.Controls.Add(layoutSectionSplitContainer);
@@ -4045,8 +4038,7 @@ namespace SonicRetro.SonLVL.GUI
 					foregroundPanel.Focus();
 					break;
 				case Tab.Background:
-					gotoToolStripMenuItem.Enabled = true;
-					findToolStripMenuItem.Enabled = true;
+					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = true;
 					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = lastfoundbgchunk.HasValue;
 					tabPage10.Controls.Add(ChunkSelector);
 					tabPage11.Controls.Add(layoutSectionSplitContainer);
@@ -5315,6 +5307,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.RedrawBlock(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 			DrawTilePicture();
+			DrawChunkPicture();
 			SaveState("Rotate Tile Right");
 		}
 
@@ -7176,6 +7169,7 @@ namespace SonicRetro.SonLVL.GUI
 						layout[y][x] = chunkMap[layout[y][x]];
 				});
 				DrawLevel();
+				ChunkSelector.Invalidate();
 				SaveState("Remove Duplicate Chunks");
 			}
 			MessageBox.Show(this, $"Removed {deleted} duplicate chunks.", "SonLVL-RSDK");
@@ -8496,23 +8490,9 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					else if (dlg.gotoPosition.Checked)
 					{
-						loaded = false;
-						if (CurrentTab == Tab.Background)
-						{
-							backgroundPanel.HScrollValue = (int)Math.Max(backgroundPanel.HScrollMinimum, Math.Min(backgroundPanel.HScrollMaximum - backgroundPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
-							backgroundPanel.VScrollValue = (int)Math.Max(backgroundPanel.VScrollMinimum, Math.Min(backgroundPanel.VScrollMaximum - backgroundPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
-						}
-						else
-						{
-							objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
-							objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
-							foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
-							foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
-						}
-						loaded = true;
+						panel.HScrollValue = (int)Math.Max(panel.HScrollMinimum, Math.Min(panel.HScrollMaximum - panel.HScrollLargeChange + 1, (int)dlg.xpos.Value));
+						panel.VScrollValue = (int)Math.Max(panel.VScrollMinimum, Math.Min(panel.VScrollMaximum - panel.VScrollLargeChange + 1, (int)dlg.ypos.Value));
 					}
-
-					DrawLevel();
 				}
 			}
 		}
@@ -8595,6 +8575,7 @@ namespace SonicRetro.SonLVL.GUI
 						}
 				chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 				DrawLevel();
+				TileSelector.Invalidate();
 				SaveState("Remove Duplicate Tiles");
 			}
 			MessageBox.Show(this, $"Removed {deleted} duplicate tiles.", "SonLVL-RSDK");

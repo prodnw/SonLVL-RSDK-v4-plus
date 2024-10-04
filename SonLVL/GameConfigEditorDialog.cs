@@ -665,7 +665,7 @@ namespace SonicRetro.SonLVL
 				sounds = sounds.Except(origConf.soundFX.Select(a => (SoundFXXML)a)).ToList();
 				players = players.Except(origConf.players).ToList();
 				for (int i = 0; i < 4; i++)
-					stages[i] = stages[i].Except(LevelData.GameConfig.stageLists[i].list.Select(a => (StageXML)a)).ToList();
+					stages[i] = stages[i].Except(origConf.stageLists[i].list.Select(a => (StageXML)a)).ToList();
 				isxml = true;
 			}
 			convert = true;
@@ -804,8 +804,9 @@ namespace SonicRetro.SonLVL
 							{
 								var modpal = ((RSDKv4.GameConfig)LevelData.GameConfig).masterPalette;
 								var origpal = ((RSDKv4.GameConfig)origConf).masterPalette;
+								int pallen = Math.Min(modpal.colors.Length, origpal.colors.Length);
 								int i = 0;
-								for (int l = 0; l < modpal.colors.Length; l++)
+								for (int l = 0; l < pallen; l++)
 									for (int c = 0; c < modpal.colors[l].Length; c++)
 									{
 										if (i == 256) break;

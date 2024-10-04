@@ -21,7 +21,7 @@ namespace SonicRetro.SonLVL
 			BitmapBits bitmap = new BitmapBits(512, 512);
 			if (LevelData.NewPalette[0] == Color.Empty)
 			{
-				bitmap.FillRectangle(0, 0, 0, 512, 512);
+				bitmap.Bits.FastFill(0);
 				palette = bitmap.ToBitmap(new Color[] { Color.Black });
 			}
 			else
@@ -33,12 +33,13 @@ namespace SonicRetro.SonLVL
 			}
 		}
 
+		Brush brush = new SolidBrush(Color.FromArgb(120, Color.Gray));
 		private void DrawPalette()
 		{
 			PalettePanelGfx.DrawImage(palette, 0, 0, 256, 256);
 			PalettePanelGfx.DrawRectangle(Pens.Yellow, selection.X * 16, selection.Y * 16, 15, 15);
 			if (!useLevelColor.Checked)
-				PalettePanelGfx.FillRectangle(new SolidBrush(Color.FromArgb(120, Color.Gray)), 0, 0, 256, 256);
+				PalettePanelGfx.FillRectangle(brush, 0, 0, 256, 256);
 		}
 		
 		private void palettePanel_MouseDown(object sender, MouseEventArgs e)

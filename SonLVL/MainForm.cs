@@ -390,7 +390,7 @@ namespace SonicRetro.SonLVL.GUI
 					throw new NotImplementedException("Game type is not supported!");
 			}
 			buildAndRunToolStripMenuItem.Enabled = true;
-			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
+			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 		}
 
 		private void NewModToolStripMenuItem_Clicked(object sender, EventArgs e)
@@ -537,12 +537,12 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			string modname;
 			if (path == null)
-				modname = $"No Mod ({LevelData.GameConfig.gameTitle})";
+				modname = $"No Mod ({LevelData.GameTitle})";
 			else
-				modname = $"{IniSerializer.Deserialize<ModInfo>(path).Name ?? "Unknown Mod"} ({LevelData.GameConfig.gameTitle})";
+				modname = $"{IniSerializer.Deserialize<ModInfo>(path).Name ?? "Unknown Mod"} ({LevelData.GameTitle})";
 			Settings.RecentMods.Insert(0, new MRUModItem(modname, LevelData.GamePath, path));
 			recentModsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(modname));
-			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
+			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 		}
 
 		private IEnumerable<string> GetFilesRelative(string folder, string pattern) => Directory.EnumerateFiles(folder, pattern, SearchOption.AllDirectories).Select(a => a.Substring(folder.Length + 1).Replace(Path.DirectorySeparatorChar, '/'));
@@ -636,7 +636,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LoadLevel(LevelStuff level)
 		{
-			Text = $"SonLVL-RSDK - {LevelData.GameConfig.gameTitle} - Loading {levelname}...";
+			Text = $"SonLVL-RSDK - {LevelData.GameTitle} - Loading {levelname}...";
 #if !DEBUG
 			initerror = null;
 			backgroundLevelLoader.RunWorkerAsync(level);
@@ -688,7 +688,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 				using (LoadErrorDialog ed = new LoadErrorDialog(true, msg))
 					ed.ShowDialog(this);
-				Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle;
+				Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 				Enabled = true;
 				return;
 			}
@@ -714,7 +714,7 @@ namespace SonicRetro.SonLVL.GUI
 				ObjectSelect.listView2.SelectedIndexChanged += new EventHandler(ObjectSelect_listView2_SelectedIndexChanged);
 			}
 			InitObjectTypes();
-			Text = "SonLVL-RSDK - " + LevelData.GameConfig.gameTitle + " - " + this.levelname;
+			Text = "SonLVL-RSDK - " + LevelData.GameTitle + " - " + this.levelname;
 			UpdateScrollBars();
 			objectPanel.HScrollValue = 0;
 			objectPanel.HScrollMinimum = -128;

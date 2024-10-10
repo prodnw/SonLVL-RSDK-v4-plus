@@ -2332,6 +2332,11 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 			}
+
+			LevelImg8bpp.Palette[LevelData.ColorWhite] = Color.White;
+			LevelImg8bpp.Palette[LevelData.ColorYellow] = Color.Yellow;
+			LevelImg8bpp.Palette[LevelData.ColorBlack] = Color.Black;
+			
 			if (anglesToolStripMenuItem.Checked && !noneToolStripMenuItem1.Checked)
 				for (int y = Math.Max(camera.Y / 128, 0); y <= Math.Min((camera.Y + (panel.PanelHeight - 1) / ZoomLevel) / 128, lvlsize.Height - 1); y++)
 					for (int x = Math.Max(camera.X / 128, 0); x <= Math.Min((camera.X + (panel.PanelWidth - 1) / ZoomLevel) / 128, lvlsize.Width - 1); x++)
@@ -2402,11 +2407,6 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			if (hUDToolStripMenuItem.Checked)
 			{
-				LevelImg8bpp.Palette[LevelData.ColorWhite] = Color.White;
-				LevelImg8bpp.Palette[LevelData.ColorYellow] = Color.Yellow;
-				LevelImg8bpp.Palette[LevelData.ColorBlack] = Color.Black;
-				LevelImg8bpp.Palette[LevelData.ColorRed] = Color.Red;
-
 				Rectangle hudbnd;
 				Rectangle tmpbnd = hudbnd = DrawHUDStr(8, 8, "Screen Pos: ");
 				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, camera.X.ToString("D5") + ' ' + camera.Y.ToString("D5")));
@@ -2433,9 +2433,10 @@ namespace SonicRetro.SonLVL.GUI
 					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 1"));
 				else if (path2ToolStripMenuItem.Checked)
 					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 2"));
-
-				Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
 			}
+
+			Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
+			
 			if (CurrentTab == Tab.Objects && dragdrop)
 				LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
 			LevelBmp = LevelImg8bpp.ToBitmap();

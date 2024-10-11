@@ -2162,6 +2162,7 @@ namespace SonicRetro.SonLVL.GUI
 				item.Checked = item == e.ClickedItem;
 			bglayer = bgLayerDropDown.DropDownItems.IndexOf(e.ClickedItem);
 			bgLayerDropDown.Text = $"Layer: {bglayer + 1}";
+			BGSelection = Rectangle.Empty;
 			UpdateScrollControls();
 			UpdateScrollBars();
 			DrawLevel();
@@ -3408,7 +3409,11 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			Point chunkpoint = new Point(((int)(e.X / ZoomLevel) + foregroundPanel.HScrollValue) / 128, ((int)(e.Y / ZoomLevel) + foregroundPanel.VScrollValue) / 128);
-			if (chunkpoint.X < 0 || chunkpoint.Y < 0 || chunkpoint.X >= LevelData.FGWidth || chunkpoint.Y >= LevelData.FGHeight) return;
+			if (chunkpoint.X < 0 || chunkpoint.Y < 0 || chunkpoint.X >= LevelData.FGWidth || chunkpoint.Y >= LevelData.FGHeight)
+			{
+				FGSelection = Rectangle.Empty;
+				return;
+			}
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
@@ -3617,7 +3622,11 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				Point chunkpoint = new Point(((int)(e.X / ZoomLevel) + backgroundPanel.HScrollValue) / 128, ((int)(e.Y / ZoomLevel) + backgroundPanel.VScrollValue) / 128);
-				if (chunkpoint.X >= LevelData.BGWidth[bglayer] || chunkpoint.Y >= LevelData.BGHeight[bglayer]) return;
+				if (chunkpoint.X >= LevelData.BGWidth[bglayer] || chunkpoint.Y >= LevelData.BGHeight[bglayer])
+				{
+					BGSelection = Rectangle.Empty;
+					return;
+				}
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
@@ -4055,13 +4064,16 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Tab.Palette:
 					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
-					bool l = loaded;
-					loaded = false;
-					colorRed.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].R;
-					colorGreen.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].G;
-					colorBlue.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].B;
-					colorHex.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].ToArgb() & 0xFFFFFF;
-					loaded = l;
+
+					if (loaded)
+					{
+						loaded = false;
+						colorRed.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].R;
+						colorGreen.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].G;
+						colorBlue.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].B;
+						colorHex.Value = LevelData.NewPalette[(SelectedColor.Y * 16) + SelectedColor.X].ToArgb() & 0xFFFFFF;
+						loaded = true;
+					}
 					break;
 				default:
 					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
@@ -5107,7 +5119,7 @@ namespace SonicRetro.SonLVL.GUI
 					LevelData.NewChunks.chunkList[ind] = cnk;
 					LevelData.RedrawChunk(ind);
 				}
-				if (CurrentTab == Tab.Art && CurrentArtTab == ArtTab.Chunks)
+				if ((CurrentTab == Tab.Foreground || CurrentTab == Tab.Background) || (CurrentTab == Tab.Art && CurrentArtTab == ArtTab.Chunks))
 					ChunkSelector.SelectedIndex = freechunks[0];
 				ChunkSelector.Invalidate();
 			}
@@ -6745,6 +6757,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.Collision.collisionMasks[1][SelectedTile].Flip(false, true);
 			LevelData.RedrawCol(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+			collisionCeiling.Checked = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flipY;
 			DrawTilePicture();
 			TileSelector.Invalidate();
 			DrawColPicture();

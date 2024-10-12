@@ -2310,28 +2310,22 @@ namespace SonicRetro.SonLVL.GUI
 						LevelImg8bpp = LevelData.DrawBackground32(bglayer, dispRect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 					break;
 			}
-			switch (CurrentTab)
+
+			if ((enableGridToolStripMenuItem.Checked) && ((CurrentTab != Tab.Objects) || (ObjGrid > 0)))
 			{
-				case Tab.Objects:
-					if (enableGridToolStripMenuItem.Checked && ObjGrid > 0)
-					{
-						int gs = 1 << ObjGrid;
-						for (int x = (gs - (camera.X % gs)) % gs; x < LevelImg8bpp.Width; x += gs)
-							LevelImg8bpp.DrawLine(Settings.GridColor, x, 0, x, LevelImg8bpp.Height - 1);
-						for (int y = (gs - (camera.Y % gs)) % gs; y < LevelImg8bpp.Height; y += gs)
-							LevelImg8bpp.DrawLine(Settings.GridColor, 0, y, LevelImg8bpp.Width - 1, y);
-					}
-					break;
-				case Tab.Foreground:
-				case Tab.Background:
-					if (enableGridToolStripMenuItem.Checked)
-					{
-						for (int x = Math.Max(camera.X & ~127, 0); x <= Math.Min(camera.X + (LevelImg8bpp.Width - 1), lvlsize.Width * 128); x += 128)
-							LevelImg8bpp.DrawLine(Settings.GridColor, x - camera.X, Math.Max(-camera.Y, 0), x - camera.X, Math.Min(LevelImg8bpp.Height - 1, (lvlsize.Height * 128) - camera.Y - 1));
-						for (int y = Math.Max(camera.Y & ~127, 0); y <= Math.Min(camera.Y + (LevelImg8bpp.Height - 1), lvlsize.Height * 128); y += 128)
-							LevelImg8bpp.DrawLine(Settings.GridColor, Math.Max(-camera.X, 0), y - camera.Y, Math.Min(LevelImg8bpp.Width - 1, (lvlsize.Width * 128) - camera.X - 1), y - camera.Y);
-					}
-					break;
+				int gs = (CurrentTab == Tab.Objects) ? 1 << ObjGrid : 128;
+
+				int a = Math.Max(-camera.Y, 0);
+				int b = Math.Min(LevelImg8bpp.Height - 1, (lvlsize.Height * 128) - camera.Y - 1);
+				int c = Math.Min(camera.X + (LevelImg8bpp.Width - 1), lvlsize.Width * 128);
+				for (int x = Math.Max(camera.X & ~(gs - 1), 0); x <= c; x += gs)
+					LevelImg8bpp.DrawLine(Settings.GridColor, x - camera.X, a, x - camera.X, b);
+
+				a = Math.Max(-camera.X, 0);
+				b = Math.Min(LevelImg8bpp.Width - 1, (lvlsize.Width * 128) - camera.X - 1);
+				c = Math.Min(camera.Y + (LevelImg8bpp.Height - 1), lvlsize.Height * 128);
+				for (int y = Math.Max(camera.Y & ~(gs - 1), 0); y <= c; y += gs)
+					LevelImg8bpp.DrawLine(Settings.GridColor, a, y - camera.Y, b, y - camera.Y);
 			}
 
 			LevelImg8bpp.Palette[LevelData.ColorWhite] = Color.White;

@@ -3731,7 +3731,7 @@ namespace SonicRetro.SonLVL.GUI
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
-						if (LevelData.Background.layers[bglayer].layout[chunkpoint.Y][chunkpoint.X] != SelectedChunk)
+						if (tabControl3.SelectedIndex == 0 && LevelData.Background.layers[bglayer].layout[chunkpoint.Y][chunkpoint.X] != SelectedChunk)
 						{
 							LevelData.Background.layers[bglayer].layout[chunkpoint.Y][chunkpoint.X] = SelectedChunk;
 							DrawLevel();

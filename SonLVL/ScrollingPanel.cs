@@ -32,6 +32,8 @@ namespace SonicRetro.SonLVL
 
 		[Browsable(false)]
 		public Graphics PanelGraphics { get; private set; }
+		[Browsable(false)]
+		public BufferedGraphics GraphicsBuffer { get; private set; }
 
 		[Browsable(false)]
 		public int PanelWidth => panel.Width;
@@ -227,6 +229,10 @@ namespace SonicRetro.SonLVL
 		{
 			PanelGraphics = panel.CreateGraphics();
 			PanelGraphics.SetOptions();
+
+			using (Graphics graphics = CreateGraphics())
+				GraphicsBuffer = BufferedGraphicsManager.Current.Allocate(graphics, new Rectangle(0, 0, PanelWidth, PanelHeight));
+			GraphicsBuffer.Graphics.SetOptions();
 		}
 	}
 }

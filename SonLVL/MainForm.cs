@@ -812,7 +812,7 @@ namespace SonicRetro.SonLVL.GUI
 			foreach (LayoutSection sec in savedLayoutSections)
 			{
 				layoutSectionListBox.Items.Add(sec.Name);
-				savedLayoutSectionImages.Add(MakeLayoutSectionImage(sec));
+				savedLayoutSectionImages.Add(MakeLayoutSectionImage(sec, true));
 			}
 			layoutSectionListBox.EndUpdate();
 			foundobjs = null;
@@ -870,7 +870,7 @@ namespace SonicRetro.SonLVL.GUI
 			objectOrder.EndUpdate();
 		}
 
-		private Bitmap MakeLayoutSectionImage(LayoutSection sec)
+		private Bitmap MakeLayoutSectionImage(LayoutSection sec, bool transparent)
 		{
 			int w = sec.Layout.GetLength(0), h = sec.Layout.GetLength(1);
 			BitmapBits bmp = new BitmapBits(w * 128, h * 128);
@@ -887,7 +887,7 @@ namespace SonicRetro.SonLVL.GUI
 				for (int x = 0; x < w; x++)
 					if (sec.Layout[x, y] < LevelData.NewChunks.chunkList.Length)
 						bmp.DrawSpriteHigh(LevelData.ChunkSprites[sec.Layout[x, y]], x * 128, y * 128);
-			return LevelData.BitmapBitsToBitmap(bmp);
+			return transparent ? LevelData.BitmapBitsToBitmap(bmp) : bmp.ToBitmap(LevelImgPalette);
 		}
 
 		private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3043,11 +3043,23 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.X:
 					if (!loaded) return;
-					if (!e.Control && layoutSectionListBox.Items.Count > 0)
+					if (e.Control)
+						cutToolStripMenuItem1_Click(this, EventArgs.Empty);
+					else if (layoutSectionListBox.Items.Count > 0)
 					{
 						layoutSectionListBox.SelectedIndex = (layoutSectionListBox.SelectedIndex == layoutSectionListBox.Items.Count - 1 ? 0 : layoutSectionListBox.SelectedIndex + 1);
 						DrawLevel();
 					}
+					break;
+				case Keys.C:
+					if (!loaded) return;
+					if (e.Control && !FGSelection.IsEmpty)
+						copyToolStripMenuItem1_Click(this, EventArgs.Empty);
+					break;
+				case Keys.V:
+					if (!loaded) return;
+					if (e.Control && !FGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
+						pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
 					break;
 			}
 			panel_KeyDown(sender, e);
@@ -3114,7 +3126,7 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.S:
 						if (!loaded) return;
-						if (!e.Control)
+						if (!e.Control && layoutSectionListBox.Items.Count > 0)
 						{
 							layoutSectionListBox.SelectedIndex = (layoutSectionListBox.SelectedIndex <= 0 ? layoutSectionListBox.Items.Count - 1 : layoutSectionListBox.SelectedIndex - 1);
 							DrawLevel();
@@ -3122,11 +3134,23 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.X:
 						if (!loaded) return;
-						if (!e.Control)
+						if (e.Control)
+							cutToolStripMenuItem1_Click(this, EventArgs.Empty);
+						else if (layoutSectionListBox.Items.Count > 0)
 						{
 							layoutSectionListBox.SelectedIndex = (layoutSectionListBox.SelectedIndex == layoutSectionListBox.Items.Count - 1 ? 0 : layoutSectionListBox.SelectedIndex + 1);
 							DrawLevel();
 						}
+						break;
+					case Keys.C:
+						if (!loaded) return;
+						if (e.Control && !BGSelection.IsEmpty)
+							copyToolStripMenuItem1_Click(this, EventArgs.Empty);
+						break;
+					case Keys.V:
+						if (!loaded) return;
+						if (e.Control && !BGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
+							pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
 						break;
 				}
 			}
@@ -5477,14 +5501,27 @@ namespace SonicRetro.SonLVL.GUI
 				}
 				SelectedObjectChanged();
 			}
-			Clipboard.SetData(typeof(LayoutSection).AssemblyQualifiedName, new LayoutSection(layoutsection, objectselection));
+
+			if (CurrentTab == Tab.Background)
+				BGSelection = Rectangle.Empty;
+			else
+				FGSelection = Rectangle.Empty;
+
+			LayoutSection ls = new LayoutSection(layoutsection, objectselection);
+			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, ls);
+			d.SetImage(MakeLayoutSectionImage(ls, false));
+			Clipboard.SetDataObject(d);
+			
 			DrawLevel();
 			SaveState($"Cut {(CurrentTab == Tab.Background ? $"Background {bglayer + 1}" : "Foreground")}");
 		}
 
 		private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			Clipboard.SetData(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(includeObjectsWithForegroundSelectionToolStripMenuItem.Checked));
+			LayoutSection ls = CreateLayoutSection(includeObjectsWithForegroundSelectionToolStripMenuItem.Checked);
+			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, ls);
+			d.SetImage(MakeLayoutSectionImage(ls, false));
+			Clipboard.SetDataObject(d);
 		}
 
 		private LayoutSection CreateLayoutSection(bool includeObjects)
@@ -5527,6 +5564,18 @@ namespace SonicRetro.SonLVL.GUI
 		private void pasteOnceToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			LayoutSection section = (LayoutSection)Clipboard.GetData(typeof(LayoutSection).AssemblyQualifiedName);
+			if (CurrentTab == Tab.Background)
+			{
+				BGSelection = new Rectangle(menuLoc.X, menuLoc.Y, section.Layout.GetLength(0), section.Layout.GetLength(1));
+				BGSelection.Width = Math.Min(BGSelection.Right, LevelData.BGWidth[bglayer]) - BGSelection.Left;
+				BGSelection.Height = Math.Min(BGSelection.Bottom, LevelData.BGHeight[bglayer]) - BGSelection.Top;
+			}
+			else
+			{
+				FGSelection = new Rectangle(menuLoc.X, menuLoc.Y, section.Layout.GetLength(0), section.Layout.GetLength(1));
+				FGSelection.Width = Math.Min(FGSelection.Right, LevelData.BGWidth[bglayer]) - FGSelection.Left;
+				FGSelection.Height = Math.Min(FGSelection.Bottom, LevelData.BGHeight[bglayer]) - FGSelection.Top;
+			}
 			PasteLayoutSectionOnce(section);
 			SaveState($"Paste {(CurrentTab == Tab.Background ? $"Background {bglayer + 1}" : "Foreground")} Once");
 		}
@@ -6662,7 +6711,7 @@ namespace SonicRetro.SonLVL.GUI
 					LayoutSection sec = CreateLayoutSection(dlg.includeObjects.Checked);
 					sec.Name = dlg.Value;
 					savedLayoutSections.Add(sec);
-					savedLayoutSectionImages.Add(MakeLayoutSectionImage(sec));
+					savedLayoutSectionImages.Add(MakeLayoutSectionImage(sec, true));
 					layoutSectionListBox.Items.Add(sec.Name);
 					layoutSectionListBox.SelectedIndex = savedLayoutSections.Count - 1;
 					string levelname = this.levelname;
@@ -6941,7 +6990,7 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								section.Name = dlg.Value;
 								savedLayoutSections.Add(section);
-								savedLayoutSectionImages.Add(MakeLayoutSectionImage(section));
+								savedLayoutSectionImages.Add(MakeLayoutSectionImage(section, true));
 								layoutSectionListBox.Items.Add(section.Name);
 								layoutSectionListBox.SelectedIndex = savedLayoutSections.Count - 1;
 								string levelname = this.levelname;

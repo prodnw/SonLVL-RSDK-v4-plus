@@ -7112,8 +7112,8 @@ namespace SonicRetro.SonLVL.GUI
 							cnt++;
 						}
 				SaveState("Replace Foreground");
-				MessageBox.Show(this, $"Replaced {cnt} chunks.", "SonLVL-RSDK");
 				DrawLevel();
+				MessageBox.Show(this, $"Replaced {cnt} chunks.", "SonLVL-RSDK");
 			}
 		}
 
@@ -7132,8 +7132,8 @@ namespace SonicRetro.SonLVL.GUI
 							cnt++;
 						}
 				SaveState($"Replace Background {bglayer + 1}");
-				MessageBox.Show(this, $"Replaced {cnt} chunks.", "SonLVL-RSDK");
 				DrawLevel();
+				MessageBox.Show(this, $"Replaced {cnt} chunks.", "SonLVL-RSDK");
 			}
 		}
 

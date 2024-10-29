@@ -759,6 +759,7 @@ namespace SonicRetro.SonLVL.GUI
 			layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 			layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
 			layer3Box.SelectedIndex = (int)LevelData.Scene.activeLayer3;
+			foregroundDeformation.Checked = LevelData.ForegroundDeformation;
 			loadGlobalObjects.Checked = LevelData.StageConfig.loadGlobalObjects;
 			objectListBox.BeginUpdate();
 			objectListBox.Items.Clear();
@@ -1027,6 +1028,7 @@ namespace SonicRetro.SonLVL.GUI
 			layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 			layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
 			layer3Box.SelectedIndex = (int)LevelData.Scene.activeLayer3;
+			foregroundDeformation.Checked = LevelData.ForegroundDeformation;
 			loadGlobalObjects.Checked = LevelData.StageConfig.loadGlobalObjects;
 			objectListBox.BeginUpdate();
 			objectListBox.Items.Clear();
@@ -1484,6 +1486,7 @@ namespace SonicRetro.SonLVL.GUI
 				layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 				layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
 				layer3Box.SelectedIndex = (int)LevelData.Scene.activeLayer3;
+				foregroundDeformation.Checked = LevelData.ForegroundDeformation;
 				loadGlobalObjects.Checked = LevelData.StageConfig.loadGlobalObjects;
 				objectListBox.Items.Clear();
 				objectAddButton.Enabled = LevelData.ObjTypes.Count < 256;
@@ -8088,6 +8091,13 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			LevelData.Scene.activeLayer3 = (RSDKv3_4.Scene.ActiveLayers)layer3Box.SelectedIndex;
 			SaveState("Change Active Layer 3");
+		}
+
+		private void foregroundDeformation_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!loaded) return;
+			LevelData.ForegroundDeformation = foregroundDeformation.Checked;
+			SaveState("Toggle Foreground Deformation");
 		}
 
 		private void loadGlobalObjects_CheckedChanged(object sender, EventArgs e)

@@ -30,6 +30,7 @@ namespace SonicRetro.SonLVL.API
 		public static TileConfig Collision;
 		public static Backgrounds Background;
 		public static Scene Scene;
+		public static bool ForegroundDeformation;
 		public static List<ObjectEntry> Objects;
 		public static List<ScrollData>[] BGScroll = new List<ScrollData>[8];
 		public static List<GameConfig.StageList.StageInfo>[] StageLists = new List<GameConfig.StageList.StageInfo>[4];
@@ -281,6 +282,7 @@ namespace SonicRetro.SonLVL.API
 			Objects = new List<ObjectEntry>(Scene.entities.Count);
 			foreach (var item in Scene.entities)
 				Objects.Add(ObjectEntry.Create(item));
+			ForegroundDeformation = Background.hScroll[0].deform;
 			for (int i = 0; i < 8; i++)
 			{
 				BGScroll[i] = new List<ScrollData>();
@@ -566,6 +568,15 @@ namespace SonicRetro.SonLVL.API
 			SaveFile("CollisionMasks.bin", fn => Collision.Write(fn));
 			Background.hScroll.Clear();
 			Background.vScroll.Clear();
+			switch (Game.RSDKVer)
+			{
+				case EngineVersion.V3:
+					Background.hScroll.Add(new RSDKv3.Backgrounds.ScrollInfo() { deform = ForegroundDeformation } );
+					break;
+				case EngineVersion.V4:
+					Background.hScroll.Add(new RSDKv4.Backgrounds.ScrollInfo() { deform = ForegroundDeformation } );
+					break;
+			}
 			for (int i = 0; i < 8; i++)
 			{
 				int height;

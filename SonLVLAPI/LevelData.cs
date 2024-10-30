@@ -371,6 +371,28 @@ namespace SonicRetro.SonLVL.API
 			Log($"Level loaded in {stopwatch.Elapsed.TotalSeconds} second(s).");
 		}
 
+		public static void ReloadTiles()
+		{
+			Gif tilebmp = ReadFile<Gif>($"Data/Stages/{StageInfo.folder}/16x16Tiles.gif");
+			if (tilebmp.width >= 16 && tilebmp.height >= 16)
+			{
+				NewTiles = new BitmapBits[tilebmp.height / 16];
+				for (int i = 0; i < tilebmp.height / 16; i++)
+				{
+					NewTiles[i] = new BitmapBits(16, 16);
+					Array.Copy(tilebmp.pixels, i * 256, NewTiles[i].Bits, 0, 256);
+				}
+				for (int i = 128; i < 256; i++)
+					NewPalette[i] = tilebmp.palette[i].ToSystemColor();
+			}
+			else
+			{
+				NewTiles = new BitmapBits[0x400];
+				for (int i = 0; i < 0x400; i++)
+					NewTiles[i] = new BitmapBits(16, 16);
+			}
+		}
+
 		public static void ClearLevel()
 		{
 			Log("Clearing level...");

@@ -826,7 +826,7 @@ namespace SonicRetro.SonLVL.GUI
 			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
 				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
-				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled =
+				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = reloadTilesToolStripButton.Enabled =
 				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled = importToolStripButton.Enabled =
 				deleteToolStripButton.Enabled = replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled =
 				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
@@ -5367,6 +5367,34 @@ namespace SonicRetro.SonLVL.GUI
 					SaveState($"Draw {(CurrentArtTab == ArtTab.Chunks ? "Chunk" : "Tile")}");
 				}
 			}
+		}
+
+		private void reloadTilesToolStripButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Reload 16x16Tiles.gif? Only do this if the file was edited in an external program, it will reset all tile changes made in SonLVL-RSDK!", "SonLVL-RSDK", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+				return;
+
+			prevTiles = LevelData.NewTiles.Select(a => (byte[])a.Bits.Clone()).ToArray();
+			
+			LevelData.ReloadTiles();
+			
+			var redrawblocks = new SortedSet<int>();
+			for (int i = 0; i < LevelData.NewTiles.Length; i++)
+				if (!prevTiles[i].FastArrayEqual(LevelData.NewTiles[i].Bits))
+				{
+					LevelData.RedrawBlock(i, false);
+					redrawblocks.Add(i);
+				}
+
+			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
+				if (LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a).Any(b => redrawblocks.Contains(b.tileIndex)))
+					LevelData.RedrawChunk(i);
+
+			TileSelector.Invalidate();
+			DrawChunkPicture();
+			DrawTilePicture();
+
+			SaveState("Reload Tiles");
 		}
 
 		private void TileList_KeyDown(object sender, KeyEventArgs e)

@@ -4874,7 +4874,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			if (e.Button == MouseButtons.Right)
 			{
-				pasteOverToolStripMenuItem.Enabled = Clipboard.ContainsData("SonLVLRSDKTile");
+				pasteOverToolStripMenuItem.Enabled = Clipboard.ContainsData(typeof(TileCopyData).AssemblyQualifiedName);
 				duplicateTilesToolStripMenuItem.Enabled = LevelData.HasFreeTiles();
 				deepCopyToolStripMenuItem.Visible = false;
 				tileContextMenuStrip.Show(TileSelector, e.Location);
@@ -4886,12 +4886,16 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentArtTab)
 			{
 				case ArtTab.Chunks:
-					Clipboard.SetData(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
+					DataObject d = new DataObject(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
+					d.SetImage(LevelData.ChunkSprites[SelectedChunk].GetBitmap().ToBitmap(LevelImgPalette));
+					Clipboard.SetDataObject(d);
 					DeleteChunk();
 					SaveState("Cut Chunk");
 					break;
 				case ArtTab.Tiles:
-					Clipboard.SetData("SonLVLRSDKTile", LevelData.NewTiles[SelectedTile].Bits);
+					d = new DataObject(typeof(TileCopyData).AssemblyQualifiedName, new TileCopyData(LevelData.NewTiles[SelectedTile], LevelData.Collision.collisionMasks[0][SelectedTile], LevelData.Collision.collisionMasks[1][SelectedTile]));
+					d.SetImage(LevelData.NewTiles[SelectedTile].ToBitmap(LevelImgPalette));
+					Clipboard.SetDataObject(d);
 					DeleteTile();
 					SaveState("Cut Tile");
 					break;
@@ -4925,10 +4929,14 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentArtTab)
 			{
 				case ArtTab.Chunks:
-					Clipboard.SetData(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
+					DataObject d = new DataObject(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
+					d.SetImage(LevelData.ChunkSprites[SelectedChunk].GetBitmap().ToBitmap(LevelImgPalette));
+					Clipboard.SetDataObject(d);
 					break;
 				case ArtTab.Tiles:
-					Clipboard.SetData("SonLVLRSDKTile", LevelData.NewTiles[SelectedTile].Bits);
+					d = new DataObject(typeof(TileCopyData).AssemblyQualifiedName, new TileCopyData(LevelData.NewTiles[SelectedTile], LevelData.Collision.collisionMasks[0][SelectedTile], LevelData.Collision.collisionMasks[1][SelectedTile]));
+					d.SetImage(LevelData.NewTiles[SelectedTile].ToBitmap(LevelImgPalette));
+					Clipboard.SetDataObject(d);
 					break;
 			}
 		}
@@ -5447,7 +5455,7 @@ namespace SonicRetro.SonLVL.GUI
 									}
 										break;
 								case ArtTab.Tiles:
-									if (Clipboard.ContainsData("SonLVLRSDKTile"))
+									if (Clipboard.ContainsData(typeof(TileCopyData).AssemblyQualifiedName))
 									{
 										pasteOverToolStripMenuItem_Click(sender, EventArgs.Empty);
 										TileSelector.Invalidate();
@@ -6805,7 +6813,9 @@ namespace SonicRetro.SonLVL.GUI
 			switch (CurrentArtTab)
 			{
 				case ArtTab.Chunks:
-					Clipboard.SetData(typeof(ChunkCopyData).AssemblyQualifiedName, new ChunkCopyData(LevelData.NewChunks.chunkList[SelectedChunk]));
+					DataObject d = new DataObject(typeof(ChunkCopyData).AssemblyQualifiedName, new ChunkCopyData(LevelData.NewChunks.chunkList[SelectedChunk]));
+					d.SetImage(LevelData.ChunkSprites[SelectedChunk].GetBitmap().ToBitmap(LevelImgPalette));
+					Clipboard.SetDataObject(d);
 					break;
 			}
 		}
@@ -6895,9 +6905,14 @@ namespace SonicRetro.SonLVL.GUI
 					SaveState("Paste Over Chunk");
 					break;
 				case ArtTab.Tiles:
-					((byte[])Clipboard.GetData("SonLVLRSDKTile")).CopyTo(LevelData.NewTiles[SelectedTile].Bits, 0);
-					LevelData.RedrawBlock(SelectedTile, true);
-					chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+					TileCopyData copyData = (TileCopyData)Clipboard.GetData(typeof(TileCopyData).AssemblyQualifiedName);
+					copyData.Bits.CopyTo(LevelData.NewTiles[SelectedTile].Bits, 0);
+					LevelData.Collision.collisionMasks[0][SelectedTile] = copyData.Mask1;
+					LevelData.Collision.collisionMasks[1][SelectedTile] = copyData.Mask2;
+					LevelData.RedrawBlock(SelectedTile, false);
+					LevelData.RedrawCol(SelectedTile, true);
+					DrawChunkPicture();
+					TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 					SaveState("Paste Over Tile");
 					break;
 			}
@@ -8770,6 +8785,21 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Layout = layout;
 			Objects = objects;
+		}
+	}
+
+	[Serializable]
+	public class TileCopyData
+	{
+		public byte[] Bits { get; set; }
+		public RSDKv3_4.TileConfig.CollisionMask Mask1 { get; set; }
+		public RSDKv3_4.TileConfig.CollisionMask Mask2 { get; set; }
+
+		public TileCopyData(BitmapBits bitmap, RSDKv3_4.TileConfig.CollisionMask mask1, RSDKv3_4.TileConfig.CollisionMask mask2)
+		{
+			Bits = new BitmapBits(bitmap).Bits;
+			Mask1 = mask1.Clone();
+			Mask2 = mask2.Clone();
 		}
 	}
 

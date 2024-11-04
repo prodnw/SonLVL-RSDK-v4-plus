@@ -58,7 +58,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Log(e.Exception.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 			File.WriteAllLines("SonLVL-RSDK.log", LogFile.ToArray());
-			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", true))
+			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", !(e.Exception is AggregateException)))
 			{
 				if (ed.ShowDialog(this) == DialogResult.Cancel)
 					Close();

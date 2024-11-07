@@ -887,7 +887,7 @@ namespace SonicRetro.SonLVL.API
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits DrawBackground(int layer, Rectangle? section, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits DrawBackground(int layer, Rectangle? section, bool lowPlane, bool highPlane)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -905,15 +905,11 @@ namespace SonicRetro.SonLVL.API
 							LevelImg8bpp.DrawSpriteLow(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (highPlane)
 							LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
-						if (collisionPath1)
-							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][0], x * 128 - bounds.X, y * 128 - bounds.Y);
-						else if (collisionPath2)
-							LevelImg8bpp.DrawBitmapComposited(ChunkColBmpBits[Background.layers[layer].layout[y][x]][1], x * 128 - bounds.X, y * 128 - bounds.Y);
 					}
 			return LevelImg8bpp;
 		}
 
-		public static BitmapBits32 DrawBackground32(int layer, Rectangle? section, Color backgroundColor, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)
+		public static BitmapBits32 DrawBackground32(int layer, Rectangle? section, Color backgroundColor, bool lowPlane, bool highPlane)
 		{
 			Rectangle bounds;
 			if (section.HasValue)
@@ -923,11 +919,6 @@ namespace SonicRetro.SonLVL.API
 			BitmapBits32 LevelImg8bpp = new BitmapBits32(bounds.Size);
 			NewPalette.CopyTo(LevelImg8bpp.Palette, 0);
 			LevelImg8bpp.Clear(backgroundColor);
-			int colpath = -1;
-			if (collisionPath1)
-				colpath = 0;
-			else if (collisionPath2)
-				colpath = 1;
 			for (int y = Math.Max(bounds.Y / 128, 0); y <= Math.Min((bounds.Bottom - 1) / 128, BGHeight[layer] - 1); y++)
 				for (int x = Math.Max(bounds.X / 128, 0); x <= Math.Min((bounds.Right - 1) / 128, BGWidth[layer] - 1); x++)
 					if (Background.layers[layer].layout[y][x] < NewChunks.chunkList.Length)
@@ -938,15 +929,6 @@ namespace SonicRetro.SonLVL.API
 							LevelImg8bpp.DrawSpriteLow(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
 						else if (highPlane)
 							LevelImg8bpp.DrawSpriteHigh(ChunkSprites[Background.layers[layer].layout[y][x]], x * 128 - bounds.X, y * 128 - bounds.Y);
-						if (colpath != -1)
-						{
-							LevelImg8bpp.Palette[ColorWhite] = Color.White;
-							LevelImg8bpp.Palette[ColorYellow] = Color.Yellow;
-							LevelImg8bpp.Palette[ColorBlack] = Color.Black;
-							LevelImg8bpp.Palette[ColorRed] = Color.Red;
-							LevelImg8bpp.DrawSprite(ChunkColSprites[Background.layers[layer].layout[y][x]][colpath], x * 128 - bounds.X, y * 128 - bounds.Y);
-							Array.Copy(NewPalette, 1, LevelImg8bpp.Palette, 1, 4);
-						}
 					}
 			return LevelImg8bpp;
 		}

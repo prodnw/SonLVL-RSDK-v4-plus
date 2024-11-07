@@ -1994,7 +1994,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						string pathBase = Path.Combine(Path.GetDirectoryName(a.FileName), Path.GetFileNameWithoutExtension(a.FileName));
 						string pathExt = Path.GetExtension(a.FileName);
-						BitmapBits bmp = LevelData.DrawBackground(bglayer, null, true, true, false, false);
+						BitmapBits bmp = LevelData.DrawBackground(bglayer, null, true, true);
 						Bitmap res = bmp.ToBitmap();
 						ColorPalette pal = res.Palette;
 						LevelImgPalette.Entries.CopyTo(pal.Entries, 0);
@@ -2002,21 +2002,7 @@ namespace SonicRetro.SonLVL.GUI
 							pal.Entries[0] = Color.Transparent;
 						res.Palette = pal;
 						res.Save(a.FileName);
-						bmp = LevelData.DrawBackground(bglayer, null, false, false, true, false);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
-						bmp = LevelData.DrawBackground(bglayer, null, false, false, false, true);
-						bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
-						BitmapBits pri = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits fa1 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits fa2 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits la1 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits la2 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits ra1 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits ra2 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits ca1 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits ca2 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits f1 = new BitmapBits(bmp.Width, bmp.Height);
-						BitmapBits f2 = new BitmapBits(bmp.Width, bmp.Height);
+						bmp.Clear();
 						for (int ly = 0; ly < LevelData.BGHeight[bglayer]; ly++)
 							for (int lx = 0; lx < LevelData.BGWidth[bglayer]; lx++)
 							{
@@ -2026,47 +2012,22 @@ namespace SonicRetro.SonLVL.GUI
 									for (int cx = 0; cx < 8; cx++)
 									{
 										if (cnk.tiles[cy][cx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
-											pri.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-										if (cnk.tiles[cy][cx].tileIndex < LevelData.NewTiles.Length)
-										{
-											RSDKv3_4.TileConfig.CollisionMask cm1 = LevelData.Collision.collisionMasks[0][cnk.tiles[cy][cx].tileIndex];
-											RSDKv3_4.TileConfig.CollisionMask cm2 = LevelData.Collision.collisionMasks[1][cnk.tiles[cy][cx].tileIndex];
-											fa1.FillRectangle(cm1.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											fa2.FillRectangle(cm2.floorAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											la1.FillRectangle(cm1.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											la2.FillRectangle(cm2.lWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											ra1.FillRectangle(cm1.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											ra2.FillRectangle(cm2.rWallAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											ca1.FillRectangle(cm1.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											ca2.FillRectangle(cm2.roofAngle, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											f1.FillRectangle(cm1.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-											f2.FillRectangle(cm2.flags, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
-										}
+											bmp.FillRectangle(1, lx * 128 + cx * 16, ly * 128 + cy * 16, 16, 16);
 									}
 							}
-						pri.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
-						fa1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa1" + pathExt);
-						fa2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_fa2" + pathExt);
-						la1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la1" + pathExt);
-						la2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_la2" + pathExt);
-						ra1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra1" + pathExt);
-						ra2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ra2" + pathExt);
-						ca1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca1" + pathExt);
-						ca2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_ca2" + pathExt);
-						f1.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f1" + pathExt);
-						f2.ToBitmap(LevelData.GrayscalePalette).Save(pathBase + "_f2" + pathExt);
+						bmp.ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_pri" + pathExt);
 					}
 					else
 					{
 						if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 						{
-							BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, null, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, null, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 							using (Bitmap res = bmp.ToBitmap())
 								res.Save(a.FileName);
 						}
 						else
 						{
-							BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits bmp = LevelData.DrawBackground(bglayer, null, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 							Color[] palette;
 							if (transparentBackgroundToolStripMenuItem.Checked)
 							{
@@ -2228,11 +2189,11 @@ namespace SonicRetro.SonLVL.GUI
 								Rectangle rect = new Rectangle(0, yoff, widthpx, Math.Min(dispRect.Height, heightpx));
 								if (rect.Bottom <= heightpx)
 								{
-									tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 								}
 								else
 								{
-									tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, heightpx), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, heightpx), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 									tmpimg.ScrollVertical(yoff);
 									tmpimg = tmpimg.GetSection(0, 0, tmpimg.Width, rect.Height);
 								}
@@ -2269,11 +2230,11 @@ namespace SonicRetro.SonLVL.GUI
 								rect = new Rectangle(xoff, 0, Math.Min(dispRect.Width, widthpx), heightpx);
 								if (rect.Right <= widthpx)
 								{
-									tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 								}
 								else
 								{
-									tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, rect.Height), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, rect.Height), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 									tmpimg.ScrollHorizontal(xoff);
 									tmpimg = tmpimg.GetSection(0, 0, rect.Width, tmpimg.Height);
 								}
@@ -2310,7 +2271,7 @@ namespace SonicRetro.SonLVL.GUI
 						LevelImg8bpp.DrawBitmap(tmpimg, 0, 0);
 					}
 					else
-						LevelImg8bpp = LevelData.DrawBackground32(bglayer, dispRect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+						LevelImg8bpp = LevelData.DrawBackground32(bglayer, dispRect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 					break;
 			}
 
@@ -2335,37 +2296,40 @@ namespace SonicRetro.SonLVL.GUI
 			LevelImg8bpp.Palette[LevelData.ColorYellow] = Color.Yellow;
 			LevelImg8bpp.Palette[LevelData.ColorBlack] = Color.Black;
 			
-			if (anglesToolStripMenuItem.Checked && !noneToolStripMenuItem1.Checked)
-				for (int y = Math.Max(camera.Y / 128, 0); y <= Math.Min((camera.Y + (panel.PanelHeight - 1) / ZoomLevel) / 128, lvlsize.Height - 1); y++)
-					for (int x = Math.Max(camera.X / 128, 0); x <= Math.Min((camera.X + (panel.PanelWidth - 1) / ZoomLevel) / 128, lvlsize.Width - 1); x++)
-						for (int b = 0; b < 8; b++)
-							for (int a = 0; a < 8; a++)
-								if (layout[y][x] < LevelData.NewChunks.chunkList.Length)
-								{
-									RSDKv3_4.Tiles128x128.Block.Tile blk = LevelData.NewChunks.chunkList[layout[y][x]].tiles[b][a];
-									if (blk.tileIndex >= LevelData.NewTiles.Length) continue;
-									RSDKv3_4.Tiles128x128.Block.Tile.Solidities solid = path2ToolStripMenuItem.Checked ? blk.solidityB : blk.solidityA;
-									if (solid == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone) continue;
-									RSDKv3_4.TileConfig.CollisionMask mask = LevelData.Collision.collisionMasks[path2ToolStripMenuItem.Checked ? 1 : 0][blk.tileIndex];
-									byte angle = mask.flipY ? mask.roofAngle : mask.floorAngle;
-									if (angle != 0xFF)
+			if (CurrentTab != Tab.Background)
+			{
+				if (anglesToolStripMenuItem.Checked && !noneToolStripMenuItem1.Checked)
+					for (int y = Math.Max(camera.Y / 128, 0); y <= Math.Min((camera.Y + (panel.PanelHeight - 1) / ZoomLevel) / 128, lvlsize.Height - 1); y++)
+						for (int x = Math.Max(camera.X / 128, 0); x <= Math.Min((camera.X + (panel.PanelWidth - 1) / ZoomLevel) / 128, lvlsize.Width - 1); x++)
+							for (int b = 0; b < 8; b++)
+								for (int a = 0; a < 8; a++)
+									if (layout[y][x] < LevelData.NewChunks.chunkList.Length)
 									{
-										switch (blk.direction)
+										RSDKv3_4.Tiles128x128.Block.Tile blk = LevelData.NewChunks.chunkList[layout[y][x]].tiles[b][a];
+										if (blk.tileIndex >= LevelData.NewTiles.Length) continue;
+										RSDKv3_4.Tiles128x128.Block.Tile.Solidities solid = path2ToolStripMenuItem.Checked ? blk.solidityB : blk.solidityA;
+										if (solid == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone) continue;
+										RSDKv3_4.TileConfig.CollisionMask mask = LevelData.Collision.collisionMasks[path2ToolStripMenuItem.Checked ? 1 : 0][blk.tileIndex];
+										byte angle = mask.flipY ? mask.roofAngle : mask.floorAngle;
+										if (angle != 0xFF)
 										{
-											case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX:
-												angle = (byte)(-angle & 0xFF);
-												break;
-											case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY:
-												angle = (byte)((-(angle + 0x40) - 0x40) & 0xFF);
-												break;
-											case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY:
-												angle = (byte)((angle + 0x80) & 0xFF);
-												break;
+											switch (blk.direction)
+											{
+												case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX:
+													angle = (byte)(-angle & 0xFF);
+													break;
+												case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY:
+													angle = (byte)((-(angle + 0x40) - 0x40) & 0xFF);
+													break;
+												case RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY:
+													angle = (byte)((angle + 0x80) & 0xFF);
+													break;
+											}
 										}
+										DrawHUDNum(x * 128 + a * 16 - camera.X, y * 128 + b * 16 - camera.Y, angle.ToString("X2"));
 									}
-									DrawHUDNum(x * 128 + a * 16 - camera.X, y * 128 + b * 16 - camera.Y, angle.ToString("X2"));
-								}
-			if (CurrentTab == Tab.Background && tabControl3.SelectedIndex == 2 && LevelData.BGScroll[bglayer].Count > 0 && showScrollAreas.Checked)
+			}
+			else if (tabControl3.SelectedIndex == 2 && LevelData.BGScroll[bglayer].Count > 0 && showScrollAreas.Checked)
 				switch (LevelData.Background.layers[bglayer].type)
 				{
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
@@ -2427,10 +2391,13 @@ namespace SonicRetro.SonLVL.GUI
 						hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X3")));
 						break;
 				}
-				if (path1ToolStripMenuItem.Checked)
-					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 1"));
-				else if (path2ToolStripMenuItem.Checked)
-					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 2"));
+				if (CurrentTab != Tab.Background)
+				{
+					if (path1ToolStripMenuItem.Checked)
+						hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 1"));
+					else if (path2ToolStripMenuItem.Checked)
+						hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Path 2"));
+				}
 			}
 
 			Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
@@ -6848,7 +6815,6 @@ namespace SonicRetro.SonLVL.GUI
 			DrawTilePicture();
 			TileSelector.Invalidate();
 			DrawColPicture();
-			SaveState("Flip Tile Vert");
 		}
 
 		private void showBlockBehindCollisionCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -7524,7 +7490,7 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								string pathBase = Path.Combine(Path.GetDirectoryName(a.FileName), Path.GetFileNameWithoutExtension(a.FileName));
 								string pathExt = Path.GetExtension(a.FileName);
-								BitmapBits bmp = LevelData.DrawBackground(bglayer, area, true, true, false, false);
+								BitmapBits bmp = LevelData.DrawBackground(bglayer, area, true, true);
 								if (transparentBackgroundToolStripMenuItem.Checked)
 									bmp.ReplaceColor(0, 160);
 								Bitmap res = bmp.ToBitmap();
@@ -7534,10 +7500,6 @@ namespace SonicRetro.SonLVL.GUI
 									pal.Entries[0] = Color.Transparent;
 								res.Palette = pal;
 								res.Save(a.FileName);
-								bmp = LevelData.DrawBackground(bglayer, area, false, false, true, false);
-								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col1" + pathExt);
-								bmp = LevelData.DrawBackground(bglayer, area, false, false, false, true);
-								bmp.ToBitmap4bpp(Color.Magenta, Color.White, Color.Yellow, Color.Black, Color.Red).Save(pathBase + "_col2" + pathExt);
 								bmp.Clear();
 								for (int ly = BGSelection.Top; ly < BGSelection.Bottom; ly++)
 									for (int lx = BGSelection.Left; lx < BGSelection.Right; lx++)
@@ -7555,13 +7517,13 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 								{
-									BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, area, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits32 bmp = LevelData.DrawBackground32(bglayer, area, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 									using (Bitmap res = bmp.ToBitmap())
 										res.Save(a.FileName);
 								}
 								else
 								{
-									BitmapBits bmp = LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits bmp = LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 									Color[] palette;
 									if (transparentBackgroundToolStripMenuItem.Checked)
 									{
@@ -7771,11 +7733,11 @@ namespace SonicRetro.SonLVL.GUI
 						BitmapBits32 tmpimg;
 						if (rect.Bottom <= heightpx)
 						{
-							tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 						}
 						else
 						{
-							tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, heightpx), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, heightpx), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 							tmpimg.ScrollVertical(yoff);
 							tmpimg = tmpimg.GetSection(0, 0, tmpimg.Width, rect.Height);
 						}
@@ -7812,11 +7774,11 @@ namespace SonicRetro.SonLVL.GUI
 						rect = new Rectangle(xoff, 0, Math.Min((int)(backgroundPanel.PanelWidth / ZoomLevel), widthpx), heightpx);
 						if (rect.Right <= widthpx)
 						{
-							tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							tmpimg = LevelData.DrawBackground32(bglayer, rect, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 						}
 						else
 						{
-							tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, rect.Height), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							tmpimg = LevelData.DrawBackground32(bglayer, new Rectangle(0, 0, widthpx, rect.Height), LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked);
 							tmpimg.ScrollHorizontal(xoff);
 							tmpimg = tmpimg.GetSection(0, 0, rect.Width, tmpimg.Height);
 						}

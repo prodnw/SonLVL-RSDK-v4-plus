@@ -154,7 +154,7 @@
 			this.searchBlock.Name = "searchBlock";
 			this.searchBlock.Size = new System.Drawing.Size(56, 17);
 			this.searchBlock.TabIndex = 11;
-			this.searchBlock.Text = "Block:";
+			this.searchBlock.Text = "Tile:";
 			this.searchBlock.UseVisualStyleBackColor = true;
 			this.searchBlock.CheckedChanged += new System.EventHandler(this.searchBlock_CheckedChanged);
 			// 

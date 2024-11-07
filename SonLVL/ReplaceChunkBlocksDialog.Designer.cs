@@ -121,7 +121,7 @@
 			this.Name = "ReplaceChunkBlocksDialog";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "Replace Chunk Blocks";
+			this.Text = "Replace Chunk Tiles";
 			this.VisibleChanged += new System.EventHandler(this.ReplaceChunkBlocksDialog_VisibleChanged);
 			groupBox1.ResumeLayout(false);
 			groupBox2.ResumeLayout(false);

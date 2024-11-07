@@ -99,7 +99,7 @@ namespace SonicRetro.SonLVL
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(44, 16);
             label2.TabIndex = 9;
-            label2.Text = "Block:";
+            label2.Text = "Tile:";
             // 
             // xFlip
             // 

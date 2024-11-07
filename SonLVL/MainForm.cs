@@ -5351,7 +5351,8 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.NewTiles[SelectedTile].Rotate(3);
 			LevelData.RedrawBlock(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
-			DrawTilePicture();
+			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
+			TileSelector.Invalidate();
 			DrawChunkPicture();
 			SaveState("Rotate Tile Right");
 		}
@@ -6828,7 +6829,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.Collision.collisionMasks[1][SelectedTile].Flip(true, false);
 			LevelData.RedrawCol(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
-			DrawTilePicture();
+			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 			TileSelector.Invalidate();
 			DrawColPicture();
 			SaveState("Flip Tile Horiz");
@@ -6843,6 +6844,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.RedrawCol(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
 			collisionCeiling.Checked = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flipY;
+			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 			DrawTilePicture();
 			TileSelector.Invalidate();
 			DrawColPicture();

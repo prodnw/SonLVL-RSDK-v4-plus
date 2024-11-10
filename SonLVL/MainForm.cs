@@ -829,7 +829,8 @@ namespace SonicRetro.SonLVL.GUI
 				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = reloadTilesToolStripButton.Enabled =
 				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled = importToolStripButton.Enabled =
 				deleteToolStripButton.Enabled = replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled =
-				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled = true;
+				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled =
+				objectPanel.PanelAllowDrop = objectOrder.AllowDrop = TileSelector.AllowDrop = true;
 			undoToolStripMenuItem.Enabled = false;
 			undoToolStripMenuItem.DropDownItems.Clear();
 			redoToolStripMenuItem.Enabled = false;
@@ -8572,6 +8573,18 @@ namespace SonicRetro.SonLVL.GUI
 					}
 				}
 			}
+		}
+
+		private void MainForm_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop) && (((string[])e.Data.GetData(DataFormats.FileDrop))[0].ToLower().EndsWith(".ini")))
+				e.Effect = DragDropEffects.Copy;
+		}
+
+		private void MainForm_DragDrop(object sender, DragEventArgs e)
+		{
+			loaded = false;
+			LoadINI(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
 		}
 
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)

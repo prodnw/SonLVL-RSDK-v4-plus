@@ -469,7 +469,7 @@ namespace SonicRetro.SonLVL.API
 
 		public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
 		{
-			return true;
+			return context.PropertyDescriptor is PropertySpecDescriptor;
 		}
 	}
 

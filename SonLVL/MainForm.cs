@@ -8371,12 +8371,7 @@ namespace SonicRetro.SonLVL.GUI
 				idx += (byte)LevelData.GlobalObjects.Count;
 			var def = LevelData.MakeObjectDefinition(info);
 			LevelData.ObjTypes[idx] = def;
-			Bitmap image = def.Image.GetBitmap().ToBitmap(LevelData.BmpPal);
-			if (objectTypeListMap.TryGetValue(idx, out var idx2))
-			{
-				ObjectSelect.imageList1.Images[idx2] = image.Resize(ObjectSelect.imageList1.ImageSize);
-				objectTypeImages.Images[idx2] = image.Resize(objectTypeImages.ImageSize);
-			}
+			InitObjectTypes();
 			foreach (var item in LevelData.Objects)
 				if (item.Type == idx)
 					item.UpdateSprite();

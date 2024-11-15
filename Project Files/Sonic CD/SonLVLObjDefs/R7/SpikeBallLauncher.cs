@@ -51,6 +51,11 @@ namespace SCDObjectDefinitions.R7
 			get { return new ReadOnlyCollection<byte>(new byte[] {0, 1, 2, 3} ); }
 		}
 		
+		public override PropertySpec[] CustomProperties
+		{
+			get { return properties; }
+		}
+		
 		public override string SubtypeName(byte subtype)
 		{
 			switch (subtype)

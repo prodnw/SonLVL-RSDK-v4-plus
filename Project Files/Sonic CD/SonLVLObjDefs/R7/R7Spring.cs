@@ -13,12 +13,12 @@ namespace SCDObjectDefinitions.R7
 		public override void Init(ObjectData data)
 		{
 			BitmapBits sheet = LevelData.GetSpriteSheet("Global/Items.gif");
-			sprites[0] = new Sprite(sheet.GetSection(84, 1, 32, 16), -16, -16);
-			sprites[1] = new Sprite(sheet.GetSection(117, 1, 16, 32), 0, -16);
-			sprites[2] = new Sprite(sheet.GetSection(175, 1, 16, 32), -16, -16);
-			sprites[3] = new Sprite(sheet.GetSection(84, 59, 32, 16), -16, 0);
-			sprites[4] = new Sprite(sheet.GetSection(84, 117, 32, 32), -8, -24);
-			sprites[5] = new Sprite(sheet.GetSection(117, 165, 32, 32), -24, -24);
+			sprites[0] = new Sprite(sheet.GetSection(84, 1, 32, 16), -16, -16);    // Upwards
+			sprites[1] = new Sprite(sheet.GetSection(117, 1, 16, 32), 0, -16);     // Right
+			sprites[2] = new Sprite(sheet.GetSection(175, 1, 16, 32), -16, -16);   // Left
+			sprites[3] = new Sprite(sheet.GetSection(84, 59, 32, 16), -16, 0);     // Downwards
+			sprites[4] = new Sprite(sheet.GetSection(84, 117, 32, 32), -8, -24);   // Down right
+			sprites[5] = new Sprite(sheet.GetSection(117, 165, 32, 32), -24, -24); // Down left
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

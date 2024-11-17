@@ -433,10 +433,6 @@ namespace SonicRetro.SonLVL.API
 				BGScroll[i] = new List<ScrollData>();
 			NewPalette.CopyTo(BmpPal.Entries, 0);
 			BmpPal.Entries[ColorTransparent] = Color.Transparent;
-			BmpPal.Entries[ColorWhite] = Color.White;
-			BmpPal.Entries[ColorYellow] = Color.Yellow;
-			BmpPal.Entries[ColorBlack] = Color.Black;
-			BmpPal.Entries[ColorRed] = Color.Red;
 			UnknownImg.Palette = BmpPal;
 			InitObjectDefinitions();
 			NewTileBmps = new Bitmap[NewTiles.Length];
@@ -701,8 +697,8 @@ namespace SonicRetro.SonLVL.API
 					}
 			if (includeObjects)
 			{
-				foreach (Entry item in Objects)
-					if (!(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).Type).Debug))
+				foreach (ObjectEntry item in Objects)
+					if (!(!includeDebugObjects && GetObjectDefinition(item.Type).Debug))
 						LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
 				if (!objectsAboveHighPlane)
 					for (int y = ct; y <= cb; y++)
@@ -783,8 +779,8 @@ namespace SonicRetro.SonLVL.API
 					}
 			if (includeObjects)
 			{
-				foreach (Entry item in Objects)
-					if (!(!includeDebugObjects && GetObjectDefinition(((ObjectEntry)item).Type).Debug))
+				foreach (ObjectEntry item in Objects)
+					if (!(!includeDebugObjects && GetObjectDefinition(item.Type).Debug))
 						LevelImg8bpp.DrawSprite(item.Sprite, item.X - bounds.X, item.Y - bounds.Y);
 				if (!objectsAboveHighPlane)
 					for (int y = ct; y <= cb; y++)

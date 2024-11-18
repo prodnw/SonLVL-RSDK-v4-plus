@@ -82,6 +82,7 @@ namespace SonicRetro.SonLVL.GUI
 		Bitmap LevelBmp;
 		Graphics LevelGfx, PalettePanelGfx;
 		bool loaded;
+		bool saved;
 		ushort SelectedChunk;
 		List<Entry> SelectedItems;
 		ObjectList ObjectSelect;
@@ -282,7 +283,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			scrollPreviewButton.Checked = false;
-			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
+			if (loaded && LevelData.ModFolder != null && !saved)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -551,7 +552,7 @@ namespace SonicRetro.SonLVL.GUI
 #region File Menu
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
+			if (loaded && LevelData.ModFolder != null && !saved)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -577,7 +578,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void editGameConfigToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			fileToolStripMenuItem.DropDown.Hide();
-			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
+			if (loaded && LevelData.ModFolder != null && !saved)
 			{
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
 				{
@@ -610,7 +611,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LevelToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
-			if (loaded && LevelData.ModFolder != null && (undoSystem.CanUndo || undoSystem.CanRedo))
+			if (loaded && LevelData.ModFolder != null && !saved)
 			{
 				fileToolStripMenuItem.DropDown.Hide();
 				switch (MessageBox.Show(this, "Do you want to save?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
@@ -837,6 +838,7 @@ namespace SonicRetro.SonLVL.GUI
 			redoToolStripMenuItem.DropDownItems.Clear();
 			Enabled = true;
 			UseWaitCursor = false;
+			saved = true;
 			DrawLevel();
 		}
 
@@ -895,6 +897,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void saveToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			LevelData.SaveLevel();
+			saved = true;
 		}
 
 		private void buildAndRunToolStripMenuItem_Click(object sender, EventArgs e)
@@ -947,6 +950,7 @@ namespace SonicRetro.SonLVL.GUI
 				redoToolStripMenuItem.Enabled = false;
 				undoToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(name));
 				undoToolStripMenuItem.Enabled = true;
+				saved = false;
 			}
 		}
 
@@ -1067,6 +1071,8 @@ namespace SonicRetro.SonLVL.GUI
 			undoToolStripMenuItem.Enabled = undoSystem.CanUndo;
 			redoToolStripMenuItem.Enabled = true;
 			RefreshLevel();
+			
+			saved = false;
 		}
 
 		private void Redo()
@@ -1079,6 +1085,8 @@ namespace SonicRetro.SonLVL.GUI
 			redoToolStripMenuItem.Enabled = undoSystem.CanRedo;
 			undoToolStripMenuItem.Enabled = true;
 			RefreshLevel();
+
+			saved = false;
 		}
 
 		private void undoToolStripMenuItem_Click(object sender, EventArgs e) => Undo();
@@ -1097,6 +1105,8 @@ namespace SonicRetro.SonLVL.GUI
 			undoToolStripMenuItem.Enabled = undoSystem.CanUndo;
 			redoToolStripMenuItem.Enabled = true;
 			RefreshLevel();
+
+			saved = false;
 		}
 
 		private void redoToolStripMenuItem_Click(object sender, EventArgs e) => Redo();
@@ -1115,6 +1125,8 @@ namespace SonicRetro.SonLVL.GUI
 			redoToolStripMenuItem.Enabled = undoSystem.CanRedo;
 			undoToolStripMenuItem.Enabled = true;
 			RefreshLevel();
+
+			saved = false;
 		}
 
 		List<ObjectEntry> foundobjs;

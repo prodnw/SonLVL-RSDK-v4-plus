@@ -1626,7 +1626,7 @@
             // 
             this.resizeLevelToolStripMenuItem.Name = "resizeLevelToolStripMenuItem";
             this.resizeLevelToolStripMenuItem.Size = new System.Drawing.Size(590, 44);
-            this.resizeLevelToolStripMenuItem.Text = "Re&size Level...";
+            this.resizeLevelToolStripMenuItem.Text = "Re&size Layer...";
             this.resizeLevelToolStripMenuItem.Click += new System.EventHandler(this.resizeLevelToolStripMenuItem_Click);
             // 
             // clearLevelToolStripMenuItem

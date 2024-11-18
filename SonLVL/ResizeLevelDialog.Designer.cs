@@ -143,7 +143,7 @@ namespace SonicRetro.SonLVL.GUI
 			this.Name = "ResizeLevelDialog";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "Resize Level";
+			this.Text = "Resize Layer";
 			((System.ComponentModel.ISupportInitialize)(this.levelWidth)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.levelHeight)).EndInit();
 			this.ResumeLayout(false);

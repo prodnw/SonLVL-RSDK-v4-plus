@@ -909,8 +909,24 @@ namespace SonicRetro.SonLVL.GUI
 
 			if (!File.Exists(path))
 			{
-				MessageBox.Show(this, $"Unable to locate game executable at \"{path}\". Make sure that \"EXEFile\" is set correctly in the project file.", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return;
+				if (MessageBox.Show(this, $"Unable to locate game executable at \"{path}\". Would you like to select the game executable again?", "SonLVL-RSDK", MessageBoxButtons.YesNo, MessageBoxIcon.Information) != DialogResult.Yes)
+					return;
+				
+				using (OpenFileDialog a = new OpenFileDialog()
+				{
+					DefaultExt = "exe",
+					Filter = "EXE Files|*.exe|All Files|*.*",
+					Title = "Select your game's EXE",
+					InitialDirectory = Path.GetDirectoryName(path)
+				})
+					if (a.ShowDialog(this) == DialogResult.OK)
+					{
+						LevelData.Game.EXEFile = a.FileName;
+						path = Path.GetFullPath(LevelData.Game.EXEFile);
+						LevelData.Game.Save(LevelData.GamePath);
+					}
+					else
+						return;
 			}
 
 			if (loaded)

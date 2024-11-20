@@ -8762,6 +8762,56 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 		}
+		private void drawOverToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (DrawTileDialog dlg = new DrawTileDialog())
+			{
+				switch (CurrentArtTab)
+				{
+					case ArtTab.Chunks:
+						dlg.tile = new BitmapBits(128, 128);
+						dlg.tile.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
+						break;
+					case ArtTab.Tiles:
+						dlg.tile = new BitmapBits(LevelData.NewTiles[SelectedTile]);
+						break;
+				}
+				if (dlg.ShowDialog(this) == DialogResult.OK)
+				{
+					BitmapInfo bmpi = new BitmapInfo(dlg.tile.ToBitmap(LevelData.NewPalette));
+					ImportResult res = LevelData.BitmapToTiles(bmpi, new bool[bmpi.Width / 16, bmpi.Height / 16], null, null, new List<BitmapBits>(), null, false, Application.DoEvents);
+					List<int> editedTiles = new List<int>();
+					switch (CurrentArtTab)
+					{
+						case ArtTab.Chunks:
+							RSDKv3_4.Tiles128x128.Block cnk = LevelData.NewChunks.chunkList[SelectedChunk];
+							for (int by = 0; by < 8; by++)
+								for (int bx = 0; bx < 8; bx++)
+								{
+									RSDKv3_4.Tiles128x128.Block.Tile blk = cnk.tiles[by][bx];
+									if (!editedTiles.Contains(blk.tileIndex))
+									{
+										LevelData.NewTiles[blk.tileIndex] = new BitmapBits(res.Art[res.Mappings[bx, by].tileIndex]);
+										LevelData.NewTiles[blk.tileIndex].Flip(blk.direction);
+										editedTiles.Add(blk.tileIndex);
+									}
+								}
+							break;
+						case ArtTab.Tiles:
+							LevelData.NewTiles[SelectedTile] = res.Art[res.Mappings[0, 0].tileIndex];
+							editedTiles.Add(SelectedTile);
+							break;
+					}
+					TileSelector.Invalidate();
+					LevelData.RedrawBlocks(editedTiles, true);
+					if (editedTiles.Contains(SelectedTile))
+						TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
+					DrawChunkPicture();
+					ChunkSelector.Invalidate();
+					SaveState($"Import Over {(CurrentArtTab == ArtTab.Chunks ? "Chunk" : "Tile")}");
+				}
+			}
+		}
 
 		private void TileSelector_MouseDoubleClick(object sender, MouseEventArgs e)
 		{

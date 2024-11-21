@@ -4861,6 +4861,7 @@ namespace SonicRetro.SonLVL.GUI
 				pasteOverToolStripMenuItem.Enabled = Clipboard.ContainsData(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName) || Clipboard.ContainsData(typeof(ChunkCopyData).AssemblyQualifiedName);
 				duplicateTilesToolStripMenuItem.Enabled = LevelData.HasFreeChunks();
 				deepCopyToolStripMenuItem.Visible = true;
+				importOverToolStripMenuItem.Text = "&Reimport...";
 				tileContextMenuStrip.Show(ChunkSelector, e.Location);
 			}
 		}
@@ -4873,6 +4874,7 @@ namespace SonicRetro.SonLVL.GUI
 				pasteOverToolStripMenuItem.Enabled = Clipboard.ContainsData(typeof(TileCopyData).AssemblyQualifiedName);
 				duplicateTilesToolStripMenuItem.Enabled = LevelData.HasFreeTiles();
 				deepCopyToolStripMenuItem.Visible = false;
+				importOverToolStripMenuItem.Text = "&Import Over...";
 				tileContextMenuStrip.Show(TileSelector, e.Location);
 			}
 		}

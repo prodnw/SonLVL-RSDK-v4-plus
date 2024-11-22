@@ -5611,8 +5611,8 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				FGSelection = new Rectangle(menuLoc.X, menuLoc.Y, section.Layout.GetLength(0), section.Layout.GetLength(1));
-				FGSelection.Width = Math.Min(FGSelection.Right, LevelData.BGWidth[bglayer]) - FGSelection.Left;
-				FGSelection.Height = Math.Min(FGSelection.Bottom, LevelData.BGHeight[bglayer]) - FGSelection.Top;
+				FGSelection.Width = Math.Min(FGSelection.Right, LevelData.FGWidth) - FGSelection.Left;
+				FGSelection.Height = Math.Min(FGSelection.Bottom, LevelData.FGHeight) - FGSelection.Top;
 			}
 			PasteLayoutSectionOnce(section);
 			SaveState($"Paste {(CurrentTab == Tab.Background ? $"Background {bglayer + 1}" : "Foreground")} Once");

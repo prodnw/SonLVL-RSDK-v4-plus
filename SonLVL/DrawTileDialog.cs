@@ -51,6 +51,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void TilePicture_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
+			{
 				switch (tool)
 				{
 					case Tool.Pencil:
@@ -63,6 +64,13 @@ namespace SonicRetro.SonLVL.GUI
 						DrawTile();
 						break;
 				}
+			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				selectedColor.X = tile[e.X / (int)numericUpDown1.Value, e.Y / (int)numericUpDown1.Value] & 15;
+				selectedColor.Y = tile[e.X / (int)numericUpDown1.Value, e.Y / (int)numericUpDown1.Value] / 16;
+				PalettePanel.Invalidate();
+			}
 		}
 
 		Point lastpoint;

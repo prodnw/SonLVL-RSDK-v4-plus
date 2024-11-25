@@ -8749,16 +8749,10 @@ namespace SonicRetro.SonLVL.GUI
 							break;
 					}
 					TileSelector.Invalidate();
+					LevelData.RedrawBlocks(editedTiles, true);
 					if (editedTiles.Contains(SelectedTile))
 						TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
-					chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
-					for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
-						if (LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a).Any(a => editedTiles.Contains(a.tileIndex)))
-						{
-							LevelData.RedrawChunk(i);
-							if (i == SelectedChunk)
-								DrawChunkPicture();
-						}
+					DrawChunkPicture();
 					ChunkSelector.Invalidate();
 					SaveState($"Import Over {(CurrentArtTab == ArtTab.Chunks ? "Chunk" : "Tile")}");
 				}

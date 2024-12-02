@@ -19,10 +19,10 @@ namespace SCDObjectDefinitions.R8
 			
 			// Tube Switch icon
 			sprites[1] = new Sprite(
-			                new Sprite(sprite, -8, -8),
-			                new Sprite(sprite,  8, -8),
-			                new Sprite(sprite, -8,  8),
-			                new Sprite(sprite,  8,  8));
+			                new Sprite(sprites[0], -8, -8),
+			                new Sprite(sprites[0],  8, -8),
+			                new Sprite(sprites[0], -8,  8),
+			                new Sprite(sprites[0],  8,  8));
 			
 			// Which angles each subtype should its lines drawn towards
 			double[][] angles = {
@@ -110,12 +110,12 @@ namespace SCDObjectDefinitions.R8
 		
 		public override Sprite Image
 		{
-			get { return sprite; }
+			get { return sprites[0]; }
 		}
 		
 		public override Sprite SubtypeImage(byte subtype)
 		{
-			return sprite;
+			return sprites[0];
 		}
 		
 		public override Sprite GetSprite(ObjectEntry obj)

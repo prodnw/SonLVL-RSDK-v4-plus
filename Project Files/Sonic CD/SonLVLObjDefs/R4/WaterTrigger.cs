@@ -53,8 +53,8 @@ namespace SCDObjectDefinitions.R4
 				{
 					{ "Up -> Left", 0 },
 					{ "Down Right", 1 },
-					{ "Down Left (Right exit)", 2 },
-					{ "Down Left (Bottom exit)", 3 },
+					{ "Down Left (Series)", 2 },
+					{ "Down Left (Exit)", 3 },
 					{ "Right", 4 },
 					{ "Right -> Down", 5 }
 				},

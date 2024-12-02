@@ -67,7 +67,7 @@ namespace SCDObjectDefinitions.R1
 					{ "Run", 0 },
 					// 1 is unused
 					{ "Exit", 2 },
-					{ "Enterance", 4 },
+					{ "Entrance", 4 },
 					{ "Drop", 5 },
 					{ "Exit (Boost)", 8 },
 					{ "Y Bounds - 1280/1024", 3 },

@@ -6,7 +6,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" description="What condition this Moth should be in. Affects whether this badnik can drop sparkles or not." type="conditions" startbit="0" length="8" />
+    <Property name="Condition" description="What condition this Moth should be in. Good Moths drop sparkles and move faster." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="conditions">

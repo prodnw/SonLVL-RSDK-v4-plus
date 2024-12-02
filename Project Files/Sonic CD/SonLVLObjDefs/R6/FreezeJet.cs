@@ -45,6 +45,9 @@ namespace SCDObjectDefinitions.R6
 		
 		public override Rectangle GetBounds(ObjectEntry obj)
 		{
+			// We're using a C# render solely to let selection bounds not include the beam
+			// (yeah that's it, there's not really any other reason)
+			
 			Rectangle bounds = sprites[0].Bounds;
 			bounds.Offset(obj.X, obj.Y);
 			return bounds;

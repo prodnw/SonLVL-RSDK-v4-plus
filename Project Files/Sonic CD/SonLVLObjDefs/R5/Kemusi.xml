@@ -12,7 +12,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" description="What condition this Kemusi should be in. Affects whether or not this badnik has spikes." type="conditions" startbit="0" length="8" />
+    <Property name="Condition" description="What condition this Kemusi should be in. Only Good badniks have spikes." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="conditions">

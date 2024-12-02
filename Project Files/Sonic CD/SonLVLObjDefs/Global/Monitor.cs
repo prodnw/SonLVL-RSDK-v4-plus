@@ -101,14 +101,18 @@ namespace SCDObjectDefinitions.Global
 				(obj) => (obj.PropertyValue % n),
 				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - (obj.PropertyValue % n) + (int)value));
 			
+			// okay this is technically wrong.. if we wanted to be 100% accurate it would be just ">" instead of ">=" but... 
+			// imo it's easier for the user to present it this way, and they're hopefully not gonna be placing blank low plane monitors
+			// in the level anyways
+			// (ignoring the fact that Origins 2.0.0 has a monitor with a prop val of 11 in R82..)
 			properties[1] = new PropertySpec("Plane", typeof(int), "Extended",
 				"Which Plane this Monitor should be on.", null, new Dictionary<string, int>
 				{
 					{ "High Plane", 0 },
 					{ "Low Plane", n },
 				},
-				(obj) => (obj.PropertyValue > n) ? n : 0,
-				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue > n) ? n : 0) + (int)value));
+				(obj) => (obj.PropertyValue >= n) ? n : 0,
+				(obj, value) => obj.PropertyValue = (byte)(obj.PropertyValue - ((obj.PropertyValue >= n) ? n : 0) + (int)value));
 			
 			// maybe there could be like a `Mode` thing here or something? not a real object property, but a way for the user to switch between Standalone and Plus monitor configs
 		}

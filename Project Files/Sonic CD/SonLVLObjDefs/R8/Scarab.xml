@@ -13,7 +13,7 @@
   </Images>
   <Properties>
     <!-- If only there was a facing left version of holding a monitor, then "Direction" and "Behaviour" could be separate things.. -->
-    <Property name="Direction" description="How direction this Scarab should face." type="directions" startbit="0" length="8" />
+    <Property name="Direction" description="Which direction this Scarab should face." type="directions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="directions">

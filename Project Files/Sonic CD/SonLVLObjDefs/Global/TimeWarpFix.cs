@@ -21,8 +21,8 @@ namespace SCDObjectDefinitions.Global
 				{
 					{ "Erase - Touch", 0 },
 					{ "Erase - Pass", 1 },
-					{ "Pos Fix (Small)", 2 },
-					{ "Pos Fix (Large)", 3 },
+					{ "Fix Position (Small)", 2 },
+					{ "Fix Position (Large)", 3 },
 					{ "Force Erase - Touch (Origins)", 4 }
 				},
                 (obj) => (int)obj.PropertyValue,

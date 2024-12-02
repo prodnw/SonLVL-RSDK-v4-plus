@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" description="What condition this Semi should be in. Affects movement speed." type="conditions" startbit="0" length="8" />
+    <Property name="Condition" description="What condition this Semi should be in. Only Good Semis can drop bombs." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="conditions">

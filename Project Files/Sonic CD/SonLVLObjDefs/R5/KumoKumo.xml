@@ -9,7 +9,7 @@
     </ImageFromSheet>
   </Images>
   <Properties>
-    <Property name="Condition" description="What condition this Kumo Kumo should be in. Affects jump height and whether this badnik can fire webs or not." type="conditions" startbit="0" length="8" />
+    <Property name="Condition" description="What condition this Kumo Kumo should be in. Only Good badniks shoot webs." type="conditions" startbit="0" length="8" />
   </Properties>
   <Enums>
     <Enum name="conditions">

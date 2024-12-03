@@ -5492,17 +5492,23 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void cutToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
+			DataObject d = new DataObject();
 			ushort[][] layout;
 			Rectangle selection;
+			Rectangle area;
 			if (CurrentTab == Tab.Background)
 			{
 				layout = LevelData.Background.layers[bglayer].layout;
 				selection = BGSelection;
+				area = new Rectangle(BGSelection.X * 128, BGSelection.Y * 128, BGSelection.Width * 128, BGSelection.Height * 128);
+				d.SetImage(LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked).ToBitmap(LevelImgPalette));
 			}
 			else
 			{
 				layout = LevelData.Scene.layout;
 				selection = FGSelection;
+				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
+				d.SetImage(LevelData.DrawForeground(area, includeObjectsWithForegroundSelectionToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
 			}
 			ushort[,] layoutsection = new ushort[selection.Width, selection.Height];
 			for (int y = 0; y < selection.Height; y++)
@@ -5540,14 +5546,13 @@ namespace SonicRetro.SonLVL.GUI
 				SelectedObjectChanged();
 			}
 
+			d.SetData(typeof(LayoutSection).AssemblyQualifiedName, new LayoutSection(layoutsection, objectselection));
+
 			if (CurrentTab == Tab.Background)
 				BGSelection = Rectangle.Empty;
 			else
 				FGSelection = Rectangle.Empty;
 
-			LayoutSection ls = new LayoutSection(layoutsection, objectselection);
-			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, ls);
-			d.SetImage(MakeLayoutSectionImage(ls, false));
 			Clipboard.SetDataObject(d);
 			
 			DrawLevel();
@@ -5556,9 +5561,21 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			LayoutSection ls = CreateLayoutSection(includeObjectsWithForegroundSelectionToolStripMenuItem.Checked);
-			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, ls);
-			d.SetImage(MakeLayoutSectionImage(ls, false));
+			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(includeObjectsWithForegroundSelectionToolStripMenuItem.Checked));
+			
+			Rectangle area;
+			
+			if (CurrentTab == Tab.Background)
+			{
+				area = new Rectangle(BGSelection.X * 128, BGSelection.Y * 128, BGSelection.Width * 128, BGSelection.Height * 128);
+				d.SetImage(LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked).ToBitmap(LevelImgPalette));
+			}
+			else
+			{
+				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
+				d.SetImage(LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
+			}
+			
 			Clipboard.SetDataObject(d);
 		}
 

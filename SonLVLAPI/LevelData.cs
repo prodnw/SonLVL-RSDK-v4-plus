@@ -1316,17 +1316,27 @@ namespace SonicRetro.SonLVL.API
 					if (collision != null)
 					{
 						map.solidityA = collision[0][x, y].Solidity;
-						if (collision[1] != null)
-							map.solidityB = collision[1][x, y].Solidity;
+						map.solidityB = (collision[1] != null) ? collision[1][x, y].Solidity : map.solidityA;
 					}
 					BitmapBits tile = BmpToTile(new BitmapInfo(bmpi, x * 16, y * 16, 16, 16), forcepal);
 					TileConfig.CollisionMask mask1 = null;
 					TileConfig.CollisionMask mask2 = null;
 					if (collision != null)
 					{
+						// If the tile is empty on the collision bitmap, then it's hard to differentiate between:
+						// - the collision is SolidNone in the chunk, but the collision mask for the tile still has data
+						// - or, it's empty because the tile's collision mask is actually empty (and the tile's solidity on the chunk doesn't matter)
+						// Here, we wanna try and reduce creating duplicates when possible
+						// So, if the tile's not solid, then let's just act as if we don't have any collision data for it
 						mask1 = collision[0][x, y].CollisionMask;
 						if (collision[1] != null)
 							mask2 = collision[1][x, y].CollisionMask;
+
+						if (map.solidityA == Tiles128x128.Block.Tile.Solidities.SolidNone)
+							mask1 = null;
+
+						if (map.solidityB == Tiles128x128.Block.Tile.Solidities.SolidNone)
+							mask2 = null;
 					}
 					bool match = false;
 					if (optimize)
@@ -1339,11 +1349,11 @@ namespace SonicRetro.SonLVL.API
 						{
 							mask1h = mask1.Clone();
 							mask1h.Flip(true, false);
-							if (mask2 != null)
-							{
-								mask2h = mask2.Clone();
-								mask2h.Flip(true, false);
-							}
+						}
+						if (mask2 != null)
+						{
+							mask2h = mask2.Clone();
+							mask2h.Flip(true, false);
 						}
 						BitmapBits tilev = new BitmapBits(tile);
 						tilev.Flip(false, true);
@@ -1353,11 +1363,11 @@ namespace SonicRetro.SonLVL.API
 						{
 							mask1v = mask1.Clone();
 							mask1v.Flip(false, true);
-							if (mask2 != null)
-							{
-								mask2v = mask2.Clone();
-								mask2v.Flip(false, true);
-							}
+						}
+						if (mask2 != null)
+						{
+							mask2v = mask2.Clone();
+							mask2v.Flip(false, true);
 						}
 						BitmapBits tilehv = new BitmapBits(tilev);
 						tilehv.Flip(true, false);
@@ -1367,25 +1377,26 @@ namespace SonicRetro.SonLVL.API
 						{
 							mask1hv = mask1v.Clone();
 							mask1hv.Flip(true, false);
-							if (mask2v != null)
-							{
-								mask2hv = mask2v.Clone();
-								mask2hv.Flip(true, false);
-							}
 						}
+						if (mask2v != null)
+						{
+							mask2hv = mask2v.Clone();
+							mask2hv.Flip(true, false);
+						}
+
 						for (int i = 0; i < tiles.Count; i++)
 						{
 							if (tiles[i].Bits.FastArrayEqual(tile.Bits)
-								&& (mask1 == null || mask1.Equal(cols[0][i]))
-								&& (mask2 == null || mask2.Equal(cols[0][i])))
+								&& (mask1 == null || mask1.Equal(cols[0][i], 0x12))
+								&& (mask2 == null || mask2.Equal(cols[1][i], 0x12)))
 							{
 								match = true;
 								map.tileIndex = (ushort)i;
 								break;
 							}
 							if (tiles[i].Bits.FastArrayEqual(tileh.Bits)
-								&& (mask1h == null || mask1h.Equal(cols[0][i]))
-								&& (mask2h == null || mask2h.Equal(cols[0][i])))
+								&& (mask1h == null || mask1h.Equal(cols[0][i], 0x12))
+								&& (mask2h == null || mask2h.Equal(cols[1][i], 0x12)))
 							{
 								match = true;
 								map.tileIndex = (ushort)i;
@@ -1393,8 +1404,8 @@ namespace SonicRetro.SonLVL.API
 								break;
 							}
 							if (tiles[i].Bits.FastArrayEqual(tilev.Bits)
-								&& (mask1v == null || mask1v.Equal(cols[0][i]))
-								&& (mask2v == null || mask2v.Equal(cols[0][i])))
+								&& (mask1v == null || mask1v.Equal(cols[0][i], 0x12))
+								&& (mask2v == null || mask2v.Equal(cols[1][i], 0x12)))
 							{
 								match = true;
 								map.tileIndex = (ushort)i;
@@ -1402,8 +1413,8 @@ namespace SonicRetro.SonLVL.API
 								break;
 							}
 							if (tiles[i].Bits.FastArrayEqual(tilehv.Bits)
-								&& (mask1hv == null || mask1hv.Equal(cols[0][i]))
-								&& (mask2hv == null || mask2hv.Equal(cols[0][i])))
+								&& (mask1hv == null || mask1hv.Equal(cols[0][i], 0x12))
+								&& (mask2hv == null || mask2hv.Equal(cols[1][i], 0x12)))
 							{
 								match = true;
 								map.tileIndex = (ushort)i;
@@ -1416,15 +1427,22 @@ namespace SonicRetro.SonLVL.API
 					{
 						tiles.Add(tile);
 						result.Art.Add(tile);
-						if (mask1 != null)
+						if (collision != null)
 						{
+							if (mask1 == null)
+								mask1 = collision[0][x, y].CollisionMask;
+
 							cols[0].Add(mask1);
 							result.Collision1.Add(mask1);
-						}
-						if (mask2 != null)
-						{
-							cols[1].Add(mask2);
-							result.Collision2.Add(mask2);
+
+							if (collision[1] != null)
+							{
+								if (mask2 == null)
+									mask2 = collision[1][x, y].CollisionMask;
+
+								cols[1].Add(mask2);
+								result.Collision2.Add(mask2);
+							}
 						}
 						map.tileIndex = (ushort)(tiles.Count - 1);
 					}
@@ -2075,6 +2093,42 @@ namespace SonicRetro.SonLVL.API
 						return false;
 					if (src.heightMasks[i].solid)
 						if (src.heightMasks[i].height != other.heightMasks[i].height)
+							return false;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		public static bool Equal(this TileConfig.CollisionMask src, TileConfig.CollisionMask other, int threshold)
+		{
+			if (src.flags == other.flags
+				&& src.flipY == other.flipY
+				&& Math.Abs(src.floorAngle - other.floorAngle) < threshold
+				&& Math.Abs(src.rWallAngle - other.rWallAngle) < threshold
+				&& Math.Abs(src.roofAngle - other.roofAngle) < threshold
+				&& Math.Abs(src.lWallAngle - other.lWallAngle) < threshold)
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					if (src.heightMasks[i].solid != other.heightMasks[i].solid)
+						return false;
+					if (src.heightMasks[i].solid)
+						if (src.heightMasks[i].height != other.heightMasks[i].height)
+							return false;
+				}
+				return true;
+			}
+			if (src.flipY != other.flipY)
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					if (src.heightMasks[i].solid != other.heightMasks[i].solid)
+						return false;
+					if (src.heightMasks[i].solid)
+						if (!src.flipY && (15 - src.heightMasks[i].height) != other.heightMasks[i].height)
+							return false;
+						else if (!other.flipY && src.heightMasks[i].height != (15 - other.heightMasks[i].height))
 							return false;
 				}
 				return true;

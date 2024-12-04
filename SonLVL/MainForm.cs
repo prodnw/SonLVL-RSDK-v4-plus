@@ -988,6 +988,7 @@ namespace SonicRetro.SonLVL.GUI
 				LevelData.Objects.Add(ObjectEntry.Create(item));
 			foreach (var obj in LevelData.Objects)
 				obj.UpdateSprite();
+			/*
 			for (int i = 0; i < 8; i++)
 			{
 				LevelData.BGScroll[i] = new List<ScrollData>();
@@ -1016,6 +1017,7 @@ namespace SonicRetro.SonLVL.GUI
 				else
 					LevelData.BGScroll[i].Add(new ScrollData());
 			}
+			*/
 			var redrawblocks = new SortedSet<int>();
 			for (int bi = 0; bi < LevelData.NewTiles.Length; bi++)
 				if (!prevTiles[bi].FastArrayEqual(LevelData.NewTiles[bi].Bits))
@@ -5110,7 +5112,7 @@ namespace SonicRetro.SonLVL.GUI
 				case Tab.Background:
 					for (int cy = 0; cy < h / 128; cy++)
 						for (int cx = 0; cx < w / 128; cx++)
-							ImportChunk(ir.Mappings, chunks, newChunks, layout, cx, cy);
+							ImportChunk(ir.Mappings, chunks, newChunks, layout, cx, cy, blockcoldata != null, (blockcoldata != null && blockcoldata[1] != null), pribmp != null);
 					break;
 				case Tab.Art:
 					switch (CurrentArtTab)
@@ -5118,7 +5120,7 @@ namespace SonicRetro.SonLVL.GUI
 						case ArtTab.Chunks:
 							for (int cy = 0; cy < h / 128; cy++)
 								for (int cx = 0; cx < w / 128; cx++)
-									ImportChunk(ir.Mappings, chunks, newChunks, layout, cx, cy);
+									ImportChunk(ir.Mappings, chunks, newChunks, layout, cx, cy, blockcoldata != null, (blockcoldata != null && blockcoldata[1] != null), pribmp != null);
 							break;
 						case ArtTab.Tiles:
 							break;
@@ -5183,7 +5185,7 @@ namespace SonicRetro.SonLVL.GUI
 			return true;
 		}
 
-		private void ImportChunk(RSDKv3_4.Tiles128x128.Block.Tile[,] map, List<RSDKv3_4.Tiles128x128.Block> chunks, List<RSDKv3_4.Tiles128x128.Block> newChunks, ushort[,] layout, int cx, int cy)
+		private void ImportChunk(RSDKv3_4.Tiles128x128.Block.Tile[,] map, List<RSDKv3_4.Tiles128x128.Block> chunks, List<RSDKv3_4.Tiles128x128.Block> newChunks, ushort[,] layout, int cx, int cy, bool solidityA, bool solidityB, bool priority)
 		{
 			RSDKv3_4.Tiles128x128.Block cnk = new RSDKv3_4.Tiles128x128.Block();
 			for (int by = 0; by < 8; by++)
@@ -5192,12 +5194,20 @@ namespace SonicRetro.SonLVL.GUI
 			for (ushort i = 0; i < chunks.Count; i++)
 			{
 				Application.DoEvents();
-				if (cnk.Equal(chunks[i]))
-				{
-					if (layout != null)
-						layout[cx, cy] = i;
-					return;
-				}
+
+				for (int y = 0; y < 8; y++)
+					for (int x = 0; x < 8; x++)
+						if (!(cnk.tiles[y][x].tileIndex == chunks[i].tiles[y][x].tileIndex
+						&& cnk.tiles[y][x].direction == chunks[i].tiles[y][x].direction
+						&& (!solidityA || cnk.tiles[y][x].solidityA == chunks[i].tiles[y][x].solidityA)
+						&& (!solidityB || cnk.tiles[y][x].solidityB == chunks[i].tiles[y][x].solidityB)
+						&& (!priority || cnk.tiles[y][x].visualPlane == chunks[i].tiles[y][x].visualPlane)))
+							goto next;
+
+				if (layout != null)
+					layout[cx, cy] = i;
+				return;
+			next:;
 			}
 			chunks.Add(cnk);
 			newChunks.Add(cnk);

@@ -5373,9 +5373,11 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					case ArtTab.Chunks:
 						dlg.tile = new BitmapBits(128, 128);
+						dlg.numericUpDown1.Value = 2;
 						break;
 					case ArtTab.Tiles:
 						dlg.tile = new BitmapBits(16, 16);
+						dlg.numericUpDown1.Value = 16;
 						break;
 				}
 				if (dlg.ShowDialog(this) == DialogResult.OK)
@@ -8794,9 +8796,11 @@ namespace SonicRetro.SonLVL.GUI
 					case ArtTab.Chunks:
 						dlg.tile = new BitmapBits(128, 128);
 						dlg.tile.DrawSprite(LevelData.ChunkSprites[SelectedChunk]);
+						dlg.numericUpDown1.Value = 2;
 						break;
 					case ArtTab.Tiles:
 						dlg.tile = new BitmapBits(LevelData.NewTiles[SelectedTile]);
+						dlg.numericUpDown1.Value = 16;
 						break;
 				}
 				if (dlg.ShowDialog(this) == DialogResult.OK)

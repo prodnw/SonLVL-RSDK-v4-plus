@@ -259,7 +259,7 @@ namespace SonicRetro.SonLVL.GUI
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Panel panel4;
-		private System.Windows.Forms.NumericUpDown numericUpDown1;
+		internal System.Windows.Forms.NumericUpDown numericUpDown1;
 		private System.Windows.Forms.Label label1;
 		internal System.Windows.Forms.Panel TilePicture;
 		private System.Windows.Forms.Panel panel5;

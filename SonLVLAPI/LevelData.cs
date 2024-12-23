@@ -321,11 +321,11 @@ namespace SonicRetro.SonLVL.API
 			spriteSheets = new Dictionary<string, BitmapBits>();
 			if (Directory.Exists("SonLVLObjDefs"))
 				foreach (string file in Directory.EnumerateFiles("SonLVLObjDefs", "*.ini"))
-					LoadObjectDefinitionFile(file);
+					LoadObjectDefinitionFile(file, false);
 			if (ModFolder != null && Directory.Exists(Path.Combine(ModFolder, "SonLVLObjDefs")))
 			{
 				foreach (string file in Directory.EnumerateFiles(Path.Combine(ModFolder, "SonLVLObjDefs"), "*.ini"))
-					LoadObjectDefinitionFile(file);
+					LoadObjectDefinitionFile(file, true);
 				dllcache = Path.Combine(ModFolder, "SonLVLObjDefs", "dllcache");
 			}
 			else
@@ -929,7 +929,7 @@ namespace SonicRetro.SonLVL.API
 			return LevelImg8bpp;
 		}
 
-		private static void LoadObjectDefinitionFile(string file)
+		private static void LoadObjectDefinitionFile(string file, bool mod = false)
 		{
 			Log($"Loading object definition file \"{file}\".");
 			string basepath = Path.GetDirectoryName(file);
@@ -939,9 +939,19 @@ namespace SonicRetro.SonLVL.API
 				{
 					INIObjDefs[group.Key] = group.Value;
 					if (!string.IsNullOrEmpty(group.Value.CodeFile))
-						group.Value.CodeFile = Path.Combine(basepath, group.Value.CodeFile);
+					{
+						string path = Path.Combine(basepath, group.Value.CodeFile);
+						if (mod && !File.Exists(path) && File.Exists(Path.Combine("SonLVLObjDefs", group.Value.CodeFile)))
+							path = Path.Combine("SonLVLObjDefs", group.Value.CodeFile);
+						group.Value.CodeFile = path;
+					}
 					if (!string.IsNullOrEmpty(group.Value.XMLFile))
-						group.Value.XMLFile = Path.Combine(basepath, group.Value.XMLFile);
+					{
+						string path = Path.Combine(basepath, group.Value.XMLFile);
+						if (mod && !File.Exists(path) && File.Exists(Path.Combine("SonLVLObjDefs", group.Value.XMLFile)))
+							path = Path.Combine("SonLVLObjDefs", group.Value.XMLFile);
+						group.Value.XMLFile = path;
+					}
 				}
 		}
 

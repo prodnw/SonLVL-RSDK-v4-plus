@@ -58,7 +58,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Log(e.Exception.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 			File.WriteAllLines("SonLVL-RSDK.log", LogFile.ToArray());
-			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", !(e.Exception is AggregateException)))
+			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", loaded))
 			{
 				if (ed.ShowDialog(this) == DialogResult.Cancel)
 					Close();
@@ -909,7 +909,7 @@ namespace SonicRetro.SonLVL.GUI
 
 			if (!File.Exists(path))
 			{
-				if (MessageBox.Show(this, $"Unable to locate game executable at \"{path}\". Would you like to select the game executable again?", "SonLVL-RSDK", MessageBoxButtons.YesNo, MessageBoxIcon.Information) != DialogResult.Yes)
+				if (MessageBox.Show(this, $"Unable to locate game executable at \"{path}\".\n\nWould you like to select the game executable again?", "SonLVL-RSDK", MessageBoxButtons.YesNo, MessageBoxIcon.Information) != DialogResult.Yes)
 					return;
 				
 				using (OpenFileDialog a = new OpenFileDialog()
@@ -3062,6 +3062,11 @@ namespace SonicRetro.SonLVL.GUI
 					if (e.Control && !FGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
 						pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
 					break;
+				case Keys.Escape:
+					if (!loaded) return;
+					FGSelection = Rectangle.Empty;
+					DrawLevel();
+					break;
 			}
 			panel_KeyDown(sender, e);
 		}
@@ -3152,6 +3157,11 @@ namespace SonicRetro.SonLVL.GUI
 						if (!loaded) return;
 						if (e.Control && !BGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
 							pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
+						break;
+					case Keys.Escape:
+						if (!loaded) return;
+						BGSelection = Rectangle.Empty;
+						DrawLevel();
 						break;
 				}
 			}
@@ -5010,6 +5020,7 @@ namespace SonicRetro.SonLVL.GUI
 							}
 							break;
 					}
+
 					Bitmap colbmp1 = null, colbmp2 = null, pribmp = null;
 					if (CurrentArtTab != ArtTab.Tiles)
 					{
@@ -8787,6 +8798,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 		}
+
 		private void drawOverToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			using (DrawTileDialog dlg = new DrawTileDialog())

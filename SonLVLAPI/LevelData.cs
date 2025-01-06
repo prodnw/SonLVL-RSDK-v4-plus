@@ -282,7 +282,7 @@ namespace SonicRetro.SonLVL.API
 			Objects = new List<ObjectEntry>(Scene.entities.Count);
 			foreach (var item in Scene.entities)
 				Objects.Add(ObjectEntry.Create(item));
-			ForegroundDeformation = Background.hScroll[0].deform;
+			ForegroundDeformation = (Background.hScroll.Count > 0) ? Background.hScroll[0].deform : false;
 			for (int i = 0; i < 8; i++)
 			{
 				BGScroll[i] = new List<ScrollData>();

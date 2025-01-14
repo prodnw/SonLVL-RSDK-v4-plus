@@ -4926,21 +4926,24 @@ namespace SonicRetro.SonLVL.GUI
 					}
 
 					Bitmap colbmp1 = null, colbmp2 = null, pribmp = null;
-					if (CurrentArtTab != ArtTab.Tiles)
+					string fmt = Path.Combine(Path.GetDirectoryName(opendlg.FileName),
+						Path.GetFileNameWithoutExtension(opendlg.FileName) + "_{0}" + Path.GetExtension(opendlg.FileName));
+
+					if (File.Exists(string.Format(fmt, "col1")))
 					{
-						string fmt = Path.Combine(Path.GetDirectoryName(opendlg.FileName),
-							Path.GetFileNameWithoutExtension(opendlg.FileName) + "_{0}" + Path.GetExtension(opendlg.FileName));
-						if (File.Exists(string.Format(fmt, "col1")))
-						{
-							colbmp1 = new Bitmap(string.Format(fmt, "col1"));
-							if (File.Exists(string.Format(fmt, "col2")))
-								colbmp2 = new Bitmap(string.Format(fmt, "col2"));
-						}
-						else if (File.Exists(string.Format(fmt, "col")))
-							colbmp1 = new Bitmap(string.Format(fmt, "col"));
+						colbmp1 = new Bitmap(string.Format(fmt, "col1"));
+						if (File.Exists(string.Format(fmt, "col2")))
+							colbmp2 = new Bitmap(string.Format(fmt, "col2"));
+					}
+					else if (File.Exists(string.Format(fmt, "col")))
+						colbmp1 = new Bitmap(string.Format(fmt, "col"));
+
+					if (CurrentArtTab == ArtTab.Chunks)
+					{
 						if (File.Exists(string.Format(fmt, "pri")))
 							pribmp = new Bitmap(string.Format(fmt, "pri"));
 					}
+
 					ImportImage(bmp, colbmp1, colbmp2, pribmp, null);
 					SaveState($"Import {(CurrentArtTab == ArtTab.Chunks ? "Chunks" : "Tiles")}");
 				}

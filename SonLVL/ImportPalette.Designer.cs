@@ -36,6 +36,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
+            this.copyAllButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // sourcePanel
@@ -92,7 +93,7 @@
             // 
             this.okButton.AutoSize = true;
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(652, 535);
+            this.okButton.Location = new System.Drawing.Point(661, 535);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(163, 35);
             this.okButton.TabIndex = 21;
@@ -112,7 +113,7 @@
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(31, 535);
+            this.resetButton.Location = new System.Drawing.Point(200, 530);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(163, 44);
             this.resetButton.TabIndex = 23;
@@ -120,14 +121,25 @@
             this.resetButton.UseVisualStyleBackColor = true;
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
+            // copyAllButton
+            // 
+            this.copyAllButton.Location = new System.Drawing.Point(31, 530);
+            this.copyAllButton.Name = "copyAllButton";
+            this.copyAllButton.Size = new System.Drawing.Size(163, 44);
+            this.copyAllButton.TabIndex = 24;
+            this.copyAllButton.Text = "Copy &All";
+            this.copyAllButton.UseVisualStyleBackColor = true;
+            this.copyAllButton.Click += new System.EventHandler(this.copyAllButton_Click);
+            // 
             // ImportPalette
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(1033, 637);
+            this.ClientSize = new System.Drawing.Size(1029, 633);
             this.ControlBox = false;
+            this.Controls.Add(this.copyAllButton);
             this.Controls.Add(this.resetButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -158,5 +170,6 @@
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button resetButton;
+		private System.Windows.Forms.Button copyAllButton;
 	}
 }

@@ -56,6 +56,28 @@ namespace SonicRetro.SonLVL
 			srcBuffer.Render(srcGfx);
 		}
 
+		private void sourcePanel_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (selection.X > -1 && selection.Y < selection.X)
+				selection = new Point(selection.Y, selection.X);
+		}
+
+		private void sourcePanel_MouseDown(object sender, MouseEventArgs e)
+		{
+			selection.X = selection.Y = Math.Min((e.X / 14) + ((e.Y / 14) * 16), sourcePalette.Length - 1);
+			sourcePanel.Invalidate();
+		}
+
+		private void sourcePanel_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left)
+				return;
+
+			int prevSel = selection.Y;
+			selection.Y = Math.Min((e.X / 14) + ((e.Y / 14) * 16), sourcePalette.Length - 1);
+			if (prevSel != selection.Y)
+				sourcePanel.Invalidate();
+		}
 
 		private void destinationPanel_MouseLeave(object sender, EventArgs e)
 		{
@@ -86,12 +108,6 @@ namespace SonicRetro.SonLVL
 			}
 		}
 
-		private void sourcePanel_MouseUp(object sender, MouseEventArgs e)
-		{
-			if (selection.X > -1 && selection.Y < selection.X)
-				selection = new Point(selection.Y, selection.X);
-		}
-
 		private void destinationPanel_Paint(object sender, PaintEventArgs e)
 		{
 			dstBuffer.Graphics.FillRectangle(new SolidBrush(Color.Black), 0, 0, destinationPanel.Width, destinationPanel.Height);
@@ -116,21 +132,15 @@ namespace SonicRetro.SonLVL
 			destinationPanel.Invalidate();
 		}
 
-		private void sourcePanel_MouseDown(object sender, MouseEventArgs e)
+		private void copyAllButton_Click(object sender, EventArgs e)
 		{
-			selection.X = selection.Y = Math.Min((e.X / 14) + ((e.Y / 14) * 16), sourcePalette.Length - 1);
-			sourcePanel.Invalidate();
-		}
-
-		private void sourcePanel_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left)
-				return;
-
-			int prevSel = selection.Y;
-			selection.Y = Math.Min((e.X / 14) + ((e.Y / 14) * 16), sourcePalette.Length - 1);
-			if (prevSel != selection.Y)
+			for (int i = 0; i < Math.Min(sourcePalette.Length, destinationPalette.Length); i++)
+			{
+				destinationPalette[i] = sourcePalette[i];
+				selection = new Point(-1, -1);
 				sourcePanel.Invalidate();
+				destinationPanel.Invalidate();
+			}
 		}
 	}
 }

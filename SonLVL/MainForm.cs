@@ -1712,68 +1712,47 @@ namespace SonicRetro.SonLVL.GUI
 		#endregion
 
 		#region Export Menu
-		private void paletteToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void paletteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (paletteToolStripMenuItem.DropDownItems.IndexOf(e.ClickedItem) < 3)
-			{
-				exportToolStripMenuItem.DropDown.Hide();
-
-				int[] data =
+			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "act", Filter = "Palette Files|*.act|PNG Files|*.png|JASC-PAL Files|*.pal;*.PspPalette", RestoreDirectory = true })
+				if (a.ShowDialog(this) == DialogResult.OK)
 				{
-					0, 6,
-					6, 10,
-					0, 16
-				};
-
-				int start = data[paletteToolStripMenuItem.DropDownItems.IndexOf(e.ClickedItem) * 2];
-				int rows = data[paletteToolStripMenuItem.DropDownItems.IndexOf(e.ClickedItem) * 2 + 1];
-
-				using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "png", Filter = "PNG Files|*.png|Palette Files|*.act|JASC-PAL Files|*.pal;*.PspPalette", RestoreDirectory = true })
-					if (a.ShowDialog(this) == DialogResult.OK)
+					switch (Path.GetExtension(a.FileName).ToLower())
 					{
-						switch (Path.GetExtension(a.FileName).ToLower())
-						{
-							default:
-							case ".png":
-								BitmapBits bmp = new BitmapBits(16 * 8, rows * 8);
-								for (int y = start; y < (start + rows); y++)
-									for (int x = 0; x < 16; x++)
-										bmp.FillRectangle((byte)((y * 16) + x), x * 8, (y - start) * 8, 8, 8);
+						default:
+						case ".png":
+							BitmapBits bmp = new BitmapBits(16 * 8, 16 * 8);
+							for (int y = 0; y < 16; y++)
+								for (int x = 0; x < 16; x++)
+									bmp.FillRectangle((byte)((y * 16) + x), x * 8, y * 8, 8, 8);
+							bmp.ToBitmap(LevelData.NewPalette).Save(a.FileName);
+							break;
 
-								Color[] palette = (Color[])LevelData.NewPalette.Clone();
-								if (start > 0)
-									palette.Fill(LevelData.NewPalette[0], 0, start * 16);
-								if ((start + rows) < 16)
-									palette.Fill(LevelData.NewPalette[0], (start + rows) * 16, palette.Length - ((start + rows) * 16));
-								bmp.ToBitmap(palette).Save(a.FileName);
-								break;
-
-							case ".act":
-								using (FileStream str = File.Create(a.FileName))
-								using (BinaryWriter bw = new BinaryWriter(str))
-									for (int i = (start * 16); i < (start + rows) * 16; i++)
-									{
-										bw.Write(LevelData.NewPalette[i].R);
-										bw.Write(LevelData.NewPalette[i].G);
-										bw.Write(LevelData.NewPalette[i].B);
-									}
-								break;
-
-							case ".pal":
-							case ".psppalette":
-								using (StreamWriter writer = File.CreateText(a.FileName))
+						case ".act":
+							using (FileStream str = File.Create(a.FileName))
+							using (BinaryWriter bw = new BinaryWriter(str))
+								for (int i = 0; i < 256; i++)
 								{
-									writer.WriteLine("JASC-PAL");
-									writer.WriteLine("0100");
-									writer.WriteLine(rows * 16);
-									for (int i = (start * 16); i < (start + rows) * 16; i++)
-										writer.WriteLine("{0} {1} {2}", LevelData.NewPalette[i].R, LevelData.NewPalette[i].G, LevelData.NewPalette[i].B);
-									writer.Close();
+									bw.Write(LevelData.NewPalette[i].R);
+									bw.Write(LevelData.NewPalette[i].G);
+									bw.Write(LevelData.NewPalette[i].B);
 								}
-								break;
-						}
+							break;
+
+						case ".pal":
+						case ".psppalette":
+							using (StreamWriter writer = File.CreateText(a.FileName))
+							{
+								writer.WriteLine("JASC-PAL");
+								writer.WriteLine("0100");
+								writer.WriteLine("256");
+								for (int i = 0; i < 256; i++)
+									writer.WriteLine("{0} {1} {2}", LevelData.NewPalette[i].R, LevelData.NewPalette[i].G, LevelData.NewPalette[i].B);
+								writer.Close();
+							}
+							break;
 					}
-			}
+				}
 		}
 
 		private void tilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4654,31 +4633,24 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState($"{(ModifierKeys.HasFlag(Keys.Control) ? "Swap" : "Move")} Color");
 		}
 
-		private void importGlobalPaletteToolStripButton_Click(object sender, EventArgs e)
-		{
-			importPalette(0, 6);
-		}
-
-		private void importStagePaletteToolStripButton_Click(object sender, EventArgs e)
-		{
-			importPalette(96, 10);
-		}
-
-		private void importPalette(int start, int rows)
+		private void importPaletteToolStripButton_Click(object sender, EventArgs e)
 		{
 			using (OpenFileDialog a = new OpenFileDialog())
 			{
-				a.DefaultExt = "act";
-				a.Filter = "Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";
+				/*a.DefaultExt = "act";
+				a.Filter = "Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";*/
+				a.DefaultExt = "";
+				a.Filter = "All|*.act;*.bmp;*.png;*.jpg;*.gif|Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";
 				a.RestoreDirectory = true;
 				if (a.ShowDialog(this) == DialogResult.OK)
 				{
+					List<Color> colors = new List<Color>();
 					switch (Path.GetExtension(a.FileName))
 					{
 						case ".act":
 							byte[] palette = File.ReadAllBytes(a.FileName);
-							for (int i = 0; i < Math.Min(palette.Length / 3, rows * 16); i++)
-								LevelData.NewPalette[start + i] = Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
+							for (int i = 0; i < Math.Min(palette.Length / 3, 256); i++)
+								colors.Add(Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]));
 							break;
 						case ".bmp":
 						case ".png":
@@ -4688,17 +4660,15 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								if ((bmp.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
 								{
-									Color[] pal = bmp.Palette.Entries;
-									for (int i = start; i < Math.Min(Math.Min(pal.Length, 255), start + (rows * 16)); i++)
-										LevelData.NewPalette[i] = pal[i];
+									colors.AddRange(bmp.Palette.Entries);
 								}
 								else
 									for (int y = 0; y < bmp.Height; y += 8)
 									{
 										for (int x = 0; x < bmp.Width; x += 8)
 										{
-											int index = start + ((y / 8) * (bmp.Width)) + (x / 8);
-											LevelData.NewPalette[index] = bmp.GetPixel(x, y);
+											int index = ((y / 8) * (bmp.Width)) + (x / 8);
+											colors.Add(bmp.GetPixel(x, y));
 											if (index > 255)
 											{
 												y = bmp.Height;
@@ -4708,85 +4678,19 @@ namespace SonicRetro.SonLVL.GUI
 									}
 							}
 							break;
+						default:
+							return;
+					}
+
+					using (ImportPalette dialog = new ImportPalette(colors.ToArray(), LevelData.NewPalette))
+					{
+						if (dialog.ShowDialog(this) == DialogResult.OK)
+							LevelData.NewPalette = dialog.destinationPalette;
 					}
 				}
 			}
 			LevelData.PaletteChanged();
 			SaveState("Import Palette");
-		}
-
-		private void importPaletteToolStripButton_Click(object sender, EventArgs e)
-		{
-			/*using (OpenFileDialog a = new OpenFileDialog())
-			{
-				a.DefaultExt = "bin";
-				a.Filter = "MD Palettes|*.bin|Image Files|*.bmp;*.png;*.jpg;*.gif";
-				a.RestoreDirectory = true;
-				if (a.ShowDialog(this) == DialogResult.OK)
-				{
-					int l = SelectedColor.Y;
-					int x = SelectedColor.X;
-					switch (Path.GetExtension(a.FileName))
-					{
-						case ".bin":
-							SonLVLColor[] colors = SonLVLColor.Load(a.FileName, LevelData.Level.PaletteFormat);
-							for (int i = 0; i < colors.Length; i++)
-							{
-								LevelData.Palette[LevelData.CurPal][l, x] = colors[i];
-								x++;
-								if (x == 16)
-								{
-									x = 0;
-									l++;
-									if (l == 4)
-										break;
-								}
-							}
-							break;
-						case ".bmp":
-						case ".png":
-						case ".jpg":
-						case ".gif":
-							using (Bitmap bmp = new Bitmap(a.FileName))
-							{
-								if ((bmp.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
-								{
-									Color[] pal = bmp.Palette.Entries;
-									for (int i = 0; i < pal.Length; i++)
-									{
-										LevelData.ColorToPalette(l, x++, pal[i]);
-										if (x == 16)
-										{
-											x = 0;
-											l++;
-											if (l == 4)
-												break;
-										}
-									}
-								}
-								else
-									for (int y = 0; y < bmp.Height; y += 8)
-									{
-										for (int ix = 0; ix < bmp.Width; ix += 8)
-										{
-											LevelData.ColorToPalette(l, x++, bmp.GetPixel(ix, y));
-											if (x == 16)
-											{
-												x = 0;
-												l++;
-												if (l == 4)
-													break;
-											}
-										}
-										if (l == 4)
-											break;
-									}
-							}
-							break;
-					}
-				}
-			}
-			LevelData.PaletteChanged();*/
 		}
 
 		private void TileSelector_SelectedIndexChanged(object sender, EventArgs e)

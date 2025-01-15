@@ -823,8 +823,8 @@ namespace SonicRetro.SonLVL.GUI
 			UpdateScrollControls();
 			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
-			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
-			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
+			ChunkCount.Text = $"/ {(LevelData.NewChunks.chunkList.Length - 1):X}";
+			TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1):X}";
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
 				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
 				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = reloadTilesToolStripButton.Enabled =
@@ -1069,13 +1069,10 @@ namespace SonicRetro.SonLVL.GUI
 			SelectedItems = new List<Entry>();
 			findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = false;
 			LevelData.PaletteChanged();
+			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 			foundobjs = null;
 			SelectedObjectChanged();
 			UpdateScrollControls();
-			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
-			TileID.Maximum = LevelData.NewTiles.Length - 1;
-			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
-			TileCount.Text = LevelData.NewTiles.Length.ToString("X");
 			DrawLevel();
 		}
 
@@ -1535,10 +1532,6 @@ namespace SonicRetro.SonLVL.GUI
 				foundobjs = null;
 				SelectedObjectChanged();
 				UpdateScrollControls();
-				ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
-				TileID.Maximum = LevelData.NewTiles.Length - 1;
-				ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
-				TileCount.Text = LevelData.NewTiles.Length.ToString("X");
 				DrawLevel();
 				SaveState("Clear Level");
 			}
@@ -3843,7 +3836,6 @@ namespace SonicRetro.SonLVL.GUI
 			chunkBlockEditor.SelectedObjects = new[] { LevelData.NewChunks.chunkList[SelectedChunk].tiles[0][0] };
 			DrawChunkPicture();
 			ChunkID.Value = SelectedChunk;
-			ChunkCount.Text = LevelData.NewChunks.chunkList.Length.ToString("X");
 			DrawLevel();
 		}
 

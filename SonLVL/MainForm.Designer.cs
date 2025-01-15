@@ -805,7 +805,7 @@
             this.TileCount.Name = "TileCount";
             this.TileCount.Size = new System.Drawing.Size(78, 25);
             this.TileCount.TabIndex = 4;
-            this.TileCount.Text = "0 / 800";
+            this.TileCount.Text = "/ 3FF";
             // 
             // tableLayoutPanel5
             // 
@@ -889,7 +889,7 @@
             this.ChunkCount.Name = "ChunkCount";
             this.ChunkCount.Size = new System.Drawing.Size(78, 25);
             this.ChunkCount.TabIndex = 3;
-            this.ChunkCount.Text = "0 / 100";
+            this.ChunkCount.Text = "/ 1FF";
             // 
             // chunkCtrlLabel
             // 

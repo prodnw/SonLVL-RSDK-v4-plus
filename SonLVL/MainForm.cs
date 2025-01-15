@@ -4308,6 +4308,10 @@ namespace SonicRetro.SonLVL.GUI
 						SaveState("Change Chunk Blocks Y Flip");
 					}
 					break;
+				case Keys.P:
+					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+						item.visualPlane ^= RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High;
+					break;
 				default:
 					return;
 			}
@@ -6766,10 +6770,10 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.Collision.collisionMasks[1][SelectedTile].Flip(true, false);
 			LevelData.RedrawCol(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+			SaveState("Flip Tile Horizontally");
 			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 			TileSelector.Invalidate();
 			DrawColPicture();
-			SaveState("Flip Tile Horiz");
 		}
 
 		private void flipTileVButton_Click(object sender, EventArgs e)
@@ -6780,6 +6784,7 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.Collision.collisionMasks[1][SelectedTile].Flip(false, true);
 			LevelData.RedrawCol(SelectedTile, true);
 			chunkBlockEditor.SelectedObjects = chunkBlockEditor.SelectedObjects;
+			SaveState("Flip Tile Vertically");
 			collisionCeiling.Checked = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].flipY;
 			TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 			DrawTilePicture();
@@ -8746,7 +8751,7 @@ namespace SonicRetro.SonLVL.GUI
 						TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 					DrawChunkPicture();
 					ChunkSelector.Invalidate();
-					SaveState($"Import Over {(CurrentArtTab == ArtTab.Chunks ? "Chunk" : "Tile")}");
+					SaveState($"Draw Over {(CurrentArtTab == ArtTab.Chunks ? "Chunk" : "Tile")}");
 				}
 			}
 		}

@@ -2089,7 +2089,7 @@
             this.splitContainer4.Panel2.Controls.Add(this.objectPanel);
             this.splitContainer4.Panel2.Controls.Add(this.objToolStrip);
             this.splitContainer4.Size = new System.Drawing.Size(953, 923);
-            this.splitContainer4.SplitterDistance = 98;
+            this.splitContainer4.SplitterDistance = 104;
             this.splitContainer4.SplitterWidth = 8;
             this.splitContainer4.TabIndex = 3;
             // 

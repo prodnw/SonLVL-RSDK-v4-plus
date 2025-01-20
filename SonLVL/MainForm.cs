@@ -1440,7 +1440,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 		}
 
-		private void resizeLevelToolStripMenuItem_Click(object sender, EventArgs e)
+		private void resizeLayerToolStripButton_Click(object sender, EventArgs e)
 		{
 			using (ResizeLevelDialog dg = new ResizeLevelDialog())
 			{

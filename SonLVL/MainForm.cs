@@ -1754,9 +1754,19 @@ namespace SonicRetro.SonLVL.GUI
 			using (FolderBrowserDialog a = new FolderBrowserDialog() { SelectedPath = Environment.CurrentDirectory })
 				if (a.ShowDialog() == DialogResult.OK)
 					for (int i = 0; i < LevelData.NewTileBmps.Length; i++)
-						LevelData.NewTileBmps[i]
-							.Save(Path.Combine(a.SelectedPath,
-							(useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
+					{
+						if (exportArtcollisionpriorityToolStripMenuItem.Checked)
+						{
+							string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
+							LevelData.NewTileBmps[i].Save(Path.Combine(pathBase + ".png"));
+							LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col1.png");
+							LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col2.png");
+						}
+						else
+							LevelData.NewTileBmps[i]
+								.Save(Path.Combine(a.SelectedPath,
+								(useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
+					}
 		}
 
 		private void chunksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -7385,7 +7395,17 @@ namespace SonicRetro.SonLVL.GUI
 				case ArtTab.Tiles:
 					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalIndexesToolStripMenuItem.Checked ? SelectedTile.ToString("X2") : SelectedTile.ToString()) + ".png", Filter = "PNG Images|*.png" })
 						if (a.ShowDialog() == DialogResult.OK)
-							LevelData.NewTiles[SelectedTile].ToBitmap(pal).Save(a.FileName);
+						{
+							if (exportArtcollisionpriorityToolStripMenuItem.Checked)
+							{
+								string pathBase = Path.ChangeExtension(a.FileName, null);
+								LevelData.NewTiles[SelectedTile].ToBitmap(pal).Save(pathBase + ".png");
+								LevelData.NewColBmpBits[SelectedTile][0].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col1.png");
+								LevelData.NewColBmpBits[SelectedTile][1].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col2.png");
+							}
+							else
+								LevelData.NewTiles[SelectedTile].ToBitmap(pal).Save(a.FileName);
+						}
 
 					break;
 			}

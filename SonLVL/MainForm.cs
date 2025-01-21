@@ -4049,7 +4049,7 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				case Tab.Objects:
 					gotoToolStripMenuItem.Enabled = findToolStripMenuItem.Enabled = true;
-					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = foundobjs == null;
+					findNextToolStripMenuItem.Enabled = findPreviousToolStripMenuItem.Enabled = foundobjs != null;
 					objectPanel.Focus();
 					break;
 				case Tab.Foreground:

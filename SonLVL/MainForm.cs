@@ -3643,7 +3643,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					case MouseButtons.Left:
 						BGSelection = Rectangle.Empty;
-						if (tabControl2.SelectedIndex == 0)
+						if (tabControl3.SelectedIndex == 0)
 							LevelData.Background.layers[bglayer].layout[chunkpoint.Y][chunkpoint.X] = SelectedChunk;
 						else if (layoutSectionListBox.SelectedIndex != -1)
 						{

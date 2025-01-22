@@ -5735,12 +5735,17 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectDrop"))
 			{
-				e.Effect = DragDropEffects.All;
-				dragdrop = true;
-				dragobj = (byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop");
-				dragpoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
-				dragpoint = new Point((int)(dragpoint.X / ZoomLevel), (int)(dragpoint.Y / ZoomLevel));
-				DrawLevel();
+				if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
+				{
+					e.Effect = DragDropEffects.All;
+					dragdrop = true;
+					dragobj = (byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop");
+					dragpoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
+					dragpoint = new Point((int)(dragpoint.X / ZoomLevel), (int)(dragpoint.Y / ZoomLevel));
+					DrawLevel();
+				}
+				else
+					e.Effect = DragDropEffects.None;
 			}
 			else
 				dragdrop = false;
@@ -5750,12 +5755,17 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectDrop"))
 			{
-				e.Effect = DragDropEffects.All;
-				dragdrop = true;
-				dragobj = (byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop");
-				dragpoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
-				dragpoint = new Point((int)(dragpoint.X / ZoomLevel), (int)(dragpoint.Y / ZoomLevel));
-				DrawLevel();
+				if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
+				{
+					e.Effect = DragDropEffects.All;
+					dragdrop = true;
+					dragobj = (byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop");
+					dragpoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
+					dragpoint = new Point((int)(dragpoint.X / ZoomLevel), (int)(dragpoint.Y / ZoomLevel));
+					DrawLevel();
+				}
+				else
+					e.Effect = DragDropEffects.None;
 			}
 			else
 				dragdrop = false;

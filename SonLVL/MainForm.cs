@@ -2385,25 +2385,23 @@ namespace SonicRetro.SonLVL.GUI
 				Rectangle hudbnd;
 				Rectangle tmpbnd = hudbnd = DrawHUDStr(8, 8, "Screen Pos: ");
 				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, camera.X.ToString("D5") + ' ' + camera.Y.ToString("D5")));
-				tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Level Size: ");
+				tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Layer Size: ");
 				hudbnd = Rectangle.Union(hudbnd, tmpbnd);
-				hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, (lvlsize.Width * 128).ToString("D5") + ' ' + (lvlsize.Height * 128).ToString("D5")));
-				switch (CurrentTab)
+				if (lvlsize.IsEmpty)
+					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(tmpbnd.Right, tmpbnd.Top, "Empty"));
+				else
+					hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, (lvlsize.Width * 128).ToString("D5") + ' ' + (lvlsize.Height * 128).ToString("D5")));
+				
+				if (CurrentTab != Tab.Background)
+					hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, $"Objects: {LevelData.Objects.Count}/{RSDKv3_4.Scene.ENTITY_LIST_SIZE}"));
+
+				if (CurrentTab != Tab.Objects)
 				{
-					case Tab.Objects:
-					case Tab.Foreground:
-						hudbnd = Rectangle.Union(hudbnd, DrawHUDStr(hudbnd.Left, hudbnd.Bottom, $"Objects: {LevelData.Objects.Count}/{RSDKv3_4.Scene.ENTITY_LIST_SIZE}"));
-						break;
+					tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Chunk: ");
+					hudbnd = Rectangle.Union(hudbnd, tmpbnd);
+					hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X3")));
 				}
-				switch (CurrentTab)
-				{
-					case Tab.Foreground:
-					case Tab.Background:
-						tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Chunk: ");
-						hudbnd = Rectangle.Union(hudbnd, tmpbnd);
-						hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X3")));
-						break;
-				}
+				
 				if (CurrentTab != Tab.Background)
 				{
 					if (path1ToolStripMenuItem.Checked)

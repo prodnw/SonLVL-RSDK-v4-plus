@@ -1759,8 +1759,8 @@ namespace SonicRetro.SonLVL.GUI
 						{
 							string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
 							LevelData.NewTileBmps[i].Save(Path.Combine(pathBase + ".png"));
-							LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col1.png");
-							LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col2.png");
+							LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col1.png");
+							LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col2.png");
 						}
 						else
 							LevelData.NewTileBmps[i]
@@ -7410,8 +7410,8 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								string pathBase = Path.ChangeExtension(a.FileName, null);
 								LevelData.NewTiles[SelectedTile].ToBitmap(pal).Save(pathBase + ".png");
-								LevelData.NewColBmpBits[SelectedTile][0].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col1.png");
-								LevelData.NewColBmpBits[SelectedTile][1].ToBitmap1bpp(Color.Black, Color.White).Save(pathBase + "_col2.png");
+								LevelData.NewColBmpBits[SelectedTile][0].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col1.png");
+								LevelData.NewColBmpBits[SelectedTile][1].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col2.png");
 							}
 							else
 								LevelData.NewTiles[SelectedTile].ToBitmap(pal).Save(a.FileName);

@@ -3552,7 +3552,7 @@
             this.sfxFileBox.Enabled = false;
             this.sfxFileBox.Location = new System.Drawing.Point(422, 142);
             this.sfxFileBox.Margin = new System.Windows.Forms.Padding(6);
-            this.sfxFileBox.MaxLength = 255;
+            this.sfxFileBox.MaxLength = 64;
             this.sfxFileBox.Name = "sfxFileBox";
             this.sfxFileBox.Size = new System.Drawing.Size(296, 31);
             this.sfxFileBox.TabIndex = 15;
@@ -3573,7 +3573,7 @@
             this.sfxNameBox.Enabled = false;
             this.sfxNameBox.Location = new System.Drawing.Point(422, 67);
             this.sfxNameBox.Margin = new System.Windows.Forms.Padding(6);
-            this.sfxNameBox.MaxLength = 255;
+            this.sfxNameBox.MaxLength = 16;
             this.sfxNameBox.Name = "sfxNameBox";
             this.sfxNameBox.Size = new System.Drawing.Size(296, 31);
             this.sfxNameBox.TabIndex = 13;
@@ -3702,7 +3702,7 @@
             this.objectScriptBox.Enabled = false;
             this.objectScriptBox.Location = new System.Drawing.Point(422, 186);
             this.objectScriptBox.Margin = new System.Windows.Forms.Padding(6);
-            this.objectScriptBox.MaxLength = 255;
+            this.objectScriptBox.MaxLength = 64;
             this.objectScriptBox.Name = "objectScriptBox";
             this.objectScriptBox.Size = new System.Drawing.Size(296, 31);
             this.objectScriptBox.TabIndex = 7;
@@ -3723,7 +3723,7 @@
             this.objectNameBox.Enabled = false;
             this.objectNameBox.Location = new System.Drawing.Point(422, 111);
             this.objectNameBox.Margin = new System.Windows.Forms.Padding(6);
-            this.objectNameBox.MaxLength = 255;
+            this.objectNameBox.MaxLength = 16;
             this.objectNameBox.Name = "objectNameBox";
             this.objectNameBox.Size = new System.Drawing.Size(296, 31);
             this.objectNameBox.TabIndex = 5;

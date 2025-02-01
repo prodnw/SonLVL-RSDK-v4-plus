@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
@@ -25,7 +26,8 @@ namespace SonicRetro.SonLVL.GUI
 			pid = System.Diagnostics.Process.GetCurrentProcess().Id;
 			if (Program.IsMonoRuntime)
 				Log("Mono runtime detected.");
-			Log("Operating system: " + Environment.OSVersion.ToString());
+			Log($"SonLVL-RSDK Build Date: {File.GetLastWriteTimeUtc(Application.ExecutablePath).ToString(CultureInfo.InvariantCulture)}");
+			Log($"Operating system: {Environment.OSVersion}");
 			LevelData.LogEvent += Log;
 			LevelData.PaletteChangedEvent += LevelData_PaletteChangedEvent;
 			InitializeComponent();

@@ -1707,7 +1707,7 @@ namespace SonicRetro.SonLVL.GUI
 		#region Export Menu
 		private void paletteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "act", Filter = "Palette Files|*.act|PNG Files|*.png|JASC-PAL Files|*.pal;*.PspPalette", RestoreDirectory = true })
+			using (SaveFileDialog a = new SaveFileDialog() { DefaultExt = "act", Filter = "Palette Files|*.act|PNG Files|*.png|Replace GIF Palette|*.gif|JASC-PAL Files|*.pal;*.PspPalette", RestoreDirectory = true })
 				if (a.ShowDialog(this) == DialogResult.OK)
 				{
 					switch (Path.GetExtension(a.FileName).ToLower())
@@ -1719,6 +1719,18 @@ namespace SonicRetro.SonLVL.GUI
 								for (int x = 0; x < 16; x++)
 									bmp.FillRectangle((byte)((y * 16) + x), x * 8, y * 8, 8, 8);
 							bmp.ToBitmap(LevelData.NewPalette).Save(a.FileName);
+							break;
+
+						case ".gif":
+							if (File.Exists(a.FileName))
+							{
+								var gif = new RSDKv3_4.Gif(a.FileName);
+								for (int i = 0; i < 256; i++)
+									gif.palette[i] = new RSDKv3_4.Palette.Color(LevelData.NewPalette[i].R, LevelData.NewPalette[i].G, LevelData.NewPalette[i].B);
+								gif.Write(a.FileName);
+							}
+							else
+								MessageBox.Show(this, $"\"{a.FileName}\" not found, please select the existing GIF spritesheet you wish to save the palette to!", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 							break;
 
 						case ".act":

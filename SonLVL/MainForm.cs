@@ -8130,63 +8130,69 @@ namespace SonicRetro.SonLVL.GUI
 			bool reload = false;
 			if (loadGlobalObjects.Checked)
 			{
-				switch (MessageBox.Show(this, "Enabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match?", "Enable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
+				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Max(a => a.Scene.entities.Count) > 0))
 				{
-					case DialogResult.Yes:
-						foreach (var item in LevelData.Objects)
-							if (item.Type > 0)
-								item.Type += (byte)LevelData.GlobalObjects.Count;
-						foreach (var astg in LevelData.AdditionalScenes)
-							foreach (var item in astg.Scene.entities)
-								if (item.type > 0)
-									item.type += (byte)LevelData.GlobalObjects.Count;
-						break;
-					case DialogResult.No:
-						reload = true;
-						break;
-					default:
-						loaded = false;
-						loadGlobalObjects.Checked = false;
-						loaded = true;
-						return;
+					switch (MessageBox.Show(this, "Enabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match?", "Enable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
+					{
+						case DialogResult.Yes:
+							foreach (var item in LevelData.Objects)
+								if (item.Type > 0)
+									item.Type += (byte)LevelData.GlobalObjects.Count;
+							foreach (var astg in LevelData.AdditionalScenes)
+								foreach (var item in astg.Scene.entities)
+									if (item.type > 0)
+										item.type += (byte)LevelData.GlobalObjects.Count;
+							break;
+						case DialogResult.No:
+							reload = true;
+							break;
+						default:
+							loaded = false;
+							loadGlobalObjects.Checked = false;
+							loaded = true;
+							return;
+					}
 				}
 				LevelData.ObjTypes.InsertRange(1, LevelData.GlobalObjects.Select(o => LevelData.MakeObjectDefinition(o)));
 			}
 			else
 			{
-				switch (MessageBox.Show(this, "Disabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match and delete entities using global types?", "Disable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
+				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Max(a => a.Scene.entities.Count) > 0))
 				{
-					case DialogResult.Yes:
-						List<ObjectEntry> todelete = new List<ObjectEntry>();
-						foreach (var item in LevelData.Objects)
-							if (item.Type > 0)
-							{
-								if (item.Type > LevelData.GlobalObjects.Count + 1)
-									item.Type -= (byte)LevelData.GlobalObjects.Count;
-								else
-									todelete.Add(item);
-							}
-						foreach (var item in todelete)
-						{
-							LevelData.DeleteObject(item);
-							SelectedItems.Remove(item);
-						}
-						foreach (var astg in LevelData.AdditionalScenes)
-							for (int i = 0; i < astg.Scene.entities.Count; i++)
-								if (astg.Scene.entities[i].type > 0)
-									if (astg.Scene.entities[i].type > LevelData.GlobalObjects.Count + 1)
-										astg.Scene.entities[i].type -= (byte)LevelData.GlobalObjects.Count;
+					switch (MessageBox.Show(this, "Disabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match and delete entities using global types?", "Disable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
+					{
+						case DialogResult.Yes:
+							List<ObjectEntry> todelete = new List<ObjectEntry>();
+							foreach (var item in LevelData.Objects)
+								if (item.Type > 0)
+								{
+									if (item.Type > LevelData.GlobalObjects.Count + 1)
+										item.Type -= (byte)LevelData.GlobalObjects.Count;
 									else
-										astg.Scene.entities.RemoveAt(i--);
-						break;
-					case DialogResult.No:
-						reload = true;
-						break;
-					default:
-						loaded = false;
-						loadGlobalObjects.Checked = true;
-						loaded = true;
-						return;
+										todelete.Add(item);
+								}
+							foreach (var item in todelete)
+							{
+								LevelData.DeleteObject(item);
+								SelectedItems.Remove(item);
+							}
+							foreach (var astg in LevelData.AdditionalScenes)
+								for (int i = 0; i < astg.Scene.entities.Count; i++)
+									if (astg.Scene.entities[i].type > 0)
+										if (astg.Scene.entities[i].type > LevelData.GlobalObjects.Count + 1)
+											astg.Scene.entities[i].type -= (byte)LevelData.GlobalObjects.Count;
+										else
+											astg.Scene.entities.RemoveAt(i--);
+							break;
+						case DialogResult.No:
+							reload = true;
+							break;
+						default:
+							loaded = false;
+							loadGlobalObjects.Checked = true;
+							loaded = true;
+							return;
+					}
 				}
 				LevelData.ObjTypes.RemoveRange(1, LevelData.GlobalObjects.Count);
 			}

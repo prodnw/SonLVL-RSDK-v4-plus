@@ -3056,6 +3056,11 @@ namespace SonicRetro.SonLVL.GUI
 					if (e.Control && !FGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
 						pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
 					break;
+				case Keys.H:
+					if (!loaded) return;
+					if (e.Control)
+						replaceForegroundToolStripButton_Click(this, EventArgs.Empty);
+					break;
 				case Keys.Escape:
 					if (!loaded) return;
 					FGSelection = Rectangle.Empty;
@@ -3152,6 +3157,11 @@ namespace SonicRetro.SonLVL.GUI
 						if (e.Control && !BGSelection.IsEmpty && Clipboard.ContainsData(typeof(LayoutSection).AssemblyQualifiedName))
 							pasteOnceToolStripMenuItem_Click(this, EventArgs.Empty);
 						break;
+					case Keys.H:
+						if (!loaded) return;
+						if (e.Control)
+							replaceBackgroundToolStripButton_Click(this, EventArgs.Empty);
+						break;
 					case Keys.Escape:
 						if (!loaded) return;
 						BGSelection = Rectangle.Empty;
@@ -3219,6 +3229,9 @@ namespace SonicRetro.SonLVL.GUI
 					enableGridToolStripMenuItem.Checked = !enableGridToolStripMenuItem.Checked;
 					DrawLevel();
 					break;
+				case Keys.K:
+					snapToolStripMenuItem.Checked = !snapToolStripMenuItem.Checked;
+					break;
 				case Keys.O:
 					if (!e.Control)
 					{
@@ -3227,7 +3240,10 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Keys.P:
-					snapToolStripMenuItem.Checked = !snapToolStripMenuItem.Checked;
+					includeobjectsWithFGToolStripMenuItem.Checked = !includeobjectsWithFGToolStripMenuItem.Checked;
+					break;
+				case Keys.L:
+					includeObjectsWithForegroundSelectionToolStripMenuItem.Checked = !includeObjectsWithForegroundSelectionToolStripMenuItem.Checked;
 					break;
 				case Keys.OemMinus:
 				case Keys.Subtract:

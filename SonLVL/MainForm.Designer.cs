@@ -1530,6 +1530,7 @@
             // 
             this.includeObjectsWithForegroundSelectionToolStripMenuItem.CheckOnClick = true;
             this.includeObjectsWithForegroundSelectionToolStripMenuItem.Name = "includeObjectsWithForegroundSelectionToolStripMenuItem";
+            this.includeObjectsWithForegroundSelectionToolStripMenuItem.ShortcutKeyDisplayString = "L";
             this.includeObjectsWithForegroundSelectionToolStripMenuItem.Size = new System.Drawing.Size(590, 44);
             this.includeObjectsWithForegroundSelectionToolStripMenuItem.Text = "&Include objects with foreground selection";
             // 
@@ -1566,6 +1567,7 @@
             this.includeobjectsWithFGToolStripMenuItem.CheckOnClick = true;
             this.includeobjectsWithFGToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.includeobjectsWithFGToolStripMenuItem.Name = "includeobjectsWithFGToolStripMenuItem";
+            this.includeobjectsWithFGToolStripMenuItem.ShortcutKeyDisplayString = "P";
             this.includeobjectsWithFGToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
             this.includeobjectsWithFGToolStripMenuItem.Text = "Include &objects with FG";
             this.includeobjectsWithFGToolStripMenuItem.CheckedChanged += new System.EventHandler(this.includeObjectsWithFGToolStripMenuItem_CheckedChanged);
@@ -1711,7 +1713,7 @@
             this.snapToolStripMenuItem.CheckOnClick = true;
             this.snapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.snapToolStripMenuItem.Name = "snapToolStripMenuItem";
-            this.snapToolStripMenuItem.ShortcutKeyDisplayString = "P";
+            this.snapToolStripMenuItem.ShortcutKeyDisplayString = "K";
             this.snapToolStripMenuItem.Size = new System.Drawing.Size(394, 44);
             this.snapToolStripMenuItem.Text = "Sna&p Objects to Grid";
             // 

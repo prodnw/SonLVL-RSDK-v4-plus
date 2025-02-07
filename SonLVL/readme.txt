@@ -45,6 +45,7 @@ D: Decrease EntityPos of all selected objects.
 C: Increase EntityPos of all selected objects.
 J: Increase grid size.
 M: Decrease grid size.
+K: Toggle grid snapping.
 Ctrl+X: Cut selected objects.
 Ctrl+C: Copy selected objects.
 Ctrl+V: Paste copied objects.
@@ -57,6 +58,10 @@ Right click, drag: Select an area.
 Right click inside selected area: Open context menu.
 A: Decrease index of selected chunk.
 Z: Increase index of selected chunk.
+P: View Objects (Foreground Tab Only).
+L: Include Objects with selection (Foreground Tab Only).
+Ctrl+F: Find chunk.
+Ctrl+H: Find and replace chunk.
 Use the list on the right to select a chunk.
 
 Chunk Editing:

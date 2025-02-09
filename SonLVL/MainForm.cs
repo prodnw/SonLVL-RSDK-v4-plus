@@ -7249,6 +7249,10 @@ namespace SonicRetro.SonLVL.GUI
 				foreach (var item in chunks)
 					if (cnk.Equal(item.Value))
 					{
+						// ignore chunk 0 (presumably the blank chunk, we don't need to "erase" chunks that are already blank)
+						if (item.Key == 0)
+							break;
+						
 						chunkMap[(ushort)i] = item.Key;
 						LevelData.NewChunks.chunkList[i] = new RSDKv3_4.Tiles128x128.Block();
 						LevelData.RedrawChunk(i);
@@ -8638,48 +8642,63 @@ namespace SonicRetro.SonLVL.GUI
 				datahv.Flip(true, false);
 				foreach (var item in tiles)
 				{
+					// not gonna repeat the same comment for every item.Key check, but-
+					// We wanna skip tile 0 (the presumably blank tile), since
+					//  we don't need to erase tiles that are already blank
 					if (data.Equals(item.Value))
 					{
-						tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key };
-						LevelData.NewTiles[i].Clear();
-						LevelData.RedrawBlock(i, false);
-						LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.RedrawCol(i, false);
-						deleted++;
+						if (item.Key > 0)
+						{
+							tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key };
+							LevelData.NewTiles[i].Clear();
+							LevelData.RedrawBlock(i, false);
+							LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.RedrawCol(i, false);
+							deleted++;
+						}
 						break;
 					}
 					if (datah.Equals(item.Value))
 					{
-						tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX };
-						LevelData.NewTiles[i].Clear();
-						LevelData.RedrawBlock(i, false);
-						LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.RedrawCol(i, false);
-						deleted++;
+						if (item.Key > 0)
+						{
+							tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX };
+							LevelData.NewTiles[i].Clear();
+							LevelData.RedrawBlock(i, false);
+							LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.RedrawCol(i, false);
+							deleted++;
+						}
 						break;
 					}
 					if (datav.Equals(item.Value))
 					{
-						tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY };
-						LevelData.NewTiles[i].Clear();
-						LevelData.RedrawBlock(i, false);
-						LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.RedrawCol(i, false);
-						deleted++;
+						if (item.Key > 0)
+						{
+							tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY };
+							LevelData.NewTiles[i].Clear();
+							LevelData.RedrawBlock(i, false);
+							LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.RedrawCol(i, false);
+							deleted++;
+						}
 						break;
 					}
 					if (datahv.Equals(item.Value))
 					{
-						tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY };
-						LevelData.NewTiles[i].Clear();
-						LevelData.RedrawBlock(i, false);
-						LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
-						LevelData.RedrawCol(i, false);
-						deleted++;
+						if (item.Key > 0)
+						{
+							tileMap[i] = new RSDKv3_4.Tiles128x128.Block.Tile() { tileIndex = item.Key, direction = RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipXY };
+							LevelData.NewTiles[i].Clear();
+							LevelData.RedrawBlock(i, false);
+							LevelData.Collision.collisionMasks[0][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.Collision.collisionMasks[1][i] = new RSDKv3_4.TileConfig.CollisionMask();
+							LevelData.RedrawCol(i, false);
+							deleted++;
+						}
 						break;
 					}
 				}

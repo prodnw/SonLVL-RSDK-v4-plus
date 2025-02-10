@@ -8244,7 +8244,7 @@ namespace SonicRetro.SonLVL.GUI
 				objectDeleteButton.Enabled = true;
 				objectNameBox.Enabled = true;
 				objectScriptBox.Enabled = true;
-				browseScriptButton.Enabled = true;
+				browseScriptButton.Enabled = scriptFiles.Count > 0;
 				objectUpButton.Enabled = objectListBox.SelectedIndex > 0;
 				objectDownButton.Enabled = objectListBox.SelectedIndex < LevelData.StageConfig.objects.Count - 1;
 				objectTypeID.Text = $"Object Type ID: {objectListBox.SelectedIndex + (LevelData.StageConfig.loadGlobalObjects ? LevelData.GameConfig.objects.Count : 0) + 1}";
@@ -8446,7 +8446,7 @@ namespace SonicRetro.SonLVL.GUI
 				sfxDeleteButton.Enabled = true;
 				sfxNameBox.Enabled = LevelData.Game.RSDKVer == EngineVersion.V4;
 				sfxFileBox.Enabled = true;
-				sfxBrowseButton.Enabled = true;
+				sfxBrowseButton.Enabled = sfxFiles.Count > 0;
 				sfxUpButton.Enabled = sfxListBox.SelectedIndex > 0;
 				sfxDownButton.Enabled = sfxListBox.SelectedIndex < LevelData.StageConfig.soundFX.Count - 1;
 				sfxID.Text = $"Sound ID: {sfxListBox.SelectedIndex + (LevelData.Game.RSDKVer == EngineVersion.V3 ? 0 : LevelData.GameConfig.soundFX.Count)}";

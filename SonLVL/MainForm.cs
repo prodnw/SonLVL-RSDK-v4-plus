@@ -8602,6 +8602,7 @@ namespace SonicRetro.SonLVL.GUI
 						SelectedItems.Add(LevelData.Objects[(int)dlg.entityPos.Value - 32]);
 						SelectedObjectChanged();
 						ScrollToObject(SelectedItems[0]);
+						DrawLevel();
 					}
 					else if (dlg.gotoPosition.Checked)
 					{

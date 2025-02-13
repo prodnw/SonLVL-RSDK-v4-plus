@@ -990,36 +990,6 @@ namespace SonicRetro.SonLVL.GUI
 				LevelData.Objects.Add(ObjectEntry.Create(item));
 			foreach (var obj in LevelData.Objects)
 				obj.UpdateSprite();
-			/*
-			for (int i = 0; i < 8; i++)
-			{
-				LevelData.BGScroll[i] = new List<ScrollData>();
-				List<RSDKv3_4.Backgrounds.ScrollInfo> info;
-				switch (LevelData.Background.layers[i].type)
-				{
-					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
-						info = LevelData.Background.hScroll;
-						break;
-					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
-						info = LevelData.Background.vScroll;
-						break;
-					default:
-						continue;
-				}
-				if (info.Count > 0)
-				{
-					int lastind = -1;
-					for (ushort y = 0; y < LevelData.Background.layers[i].lineScroll.Length; y++)
-						if (LevelData.Background.layers[i].lineScroll[y] != lastind)
-						{
-							lastind = LevelData.Background.layers[i].lineScroll[y];
-							LevelData.BGScroll[i].Add(new ScrollData(y, info[lastind]));
-						}
-				}
-				else
-					LevelData.BGScroll[i].Add(new ScrollData());
-			}
-			*/
 			var redrawblocks = new SortedSet<int>();
 			for (int bi = 0; bi < LevelData.NewTiles.Length; bi++)
 				if (!prevTiles[bi].FastArrayEqual(LevelData.NewTiles[bi].Bits))
@@ -3612,9 +3582,9 @@ namespace SonicRetro.SonLVL.GUI
 								ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
 							});
 							scrollList.Items.Insert(i + 1, mouse.Y.ToString("X4"));
+							SaveState("Insert Scroll Line");
 							scrollList.SelectedIndex = i + 1;
 							DrawLevel();
-							SaveState("Insert Scroll Line");
 						}
 						break;
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:

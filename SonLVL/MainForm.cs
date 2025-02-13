@@ -1455,7 +1455,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void clearLevelToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "This will reset ALL data for this level. Are you sure?", "Clear Level", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.OK)
+			if (MessageBox.Show(this, "This will reset ALL data for this stage folder. Are you sure?", "Clear Level", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.OK)
 			{
 				loaded = false;
 				LevelData.ClearLevel();
@@ -5194,6 +5194,9 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			LevelData.RedrawCol(SelectedTile, false);
 			DrawColPicture();
+			
+			if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+				DrawChunkPicture();
 		}
 
 		private void ColPicture_MouseMove(object sender, MouseEventArgs e)
@@ -5215,6 +5218,9 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			LevelData.RedrawCol(SelectedTile, false);
 			DrawColPicture();
+			
+			if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+				DrawChunkPicture();
 		}
 
 		private void ColPicture_MouseUp(object sender, MouseEventArgs e)
@@ -5223,6 +5229,9 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.RedrawCol(SelectedTile, true);
 			DrawColPicture();
 			SaveState("Edit Collision Mask");
+			
+			if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
+				DrawChunkPicture();
 		}
 
 		private void collisionCeiling_CheckedChanged(object sender, EventArgs e)
@@ -5312,7 +5321,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void reloadTilesToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show("Reload 16x16Tiles.gif? Only do this if the file was edited in an external program, it will reset all tile changes made in SonLVL-RSDK!", "SonLVL-RSDK", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+			if (MessageBox.Show("Reload 16x16Tiles.gif? Only do this if the file was edited in an external program, it will reset all tile changes made in SonLVL-RSDK!", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 
 			prevTiles = LevelData.NewTiles.Select(a => (byte[])a.Bits.Clone()).ToArray();
@@ -5679,7 +5688,7 @@ namespace SonicRetro.SonLVL.GUI
 			for (int y = selection.Top; y < selection.Bottom; y++)
 				for (int x = selection.Left; x < selection.Right; x++)
 					layout[y][x] = 0;
-			if (includeObjectsWithForegroundSelectionToolStripMenuItem.Checked & CurrentTab == Tab.Foreground)
+			if (includeObjectsWithForegroundSelectionToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
 			{
 				List<Entry> objectselection = new List<Entry>();
 				if (LevelData.Objects != null)

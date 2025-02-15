@@ -5807,10 +5807,9 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void insertLayoutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (InsertDeleteDialog dlg = new InsertDeleteDialog())
+			using (InsertDeleteDialog dlg = new InsertDeleteDialog((CurrentTab == Tab.Background) ? (int)LevelData.Background.layers[bglayer].type : 0))
 			{
 				dlg.Text = "Insert";
-				dlg.moveObjects.Visible = dlg.moveObjects.Checked = CurrentTab == Tab.Foreground;
 				if (dlg.ShowDialog(this) != DialogResult.OK) return;
 				Rectangle selection;
 				if (CurrentTab == Tab.Background)
@@ -5840,7 +5839,7 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.Y >= selection.Top * 128 && item.Y < selection.Bottom * 128 && item.X >= selection.Left * 128)
 								{
@@ -5872,7 +5871,7 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.X >= selection.Left * 128 && item.X < selection.Right * 128 && item.Y >= selection.Top * 128)
 								{
@@ -5907,13 +5906,26 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
+						{
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.Y >= selection.Top * 128)
 								{
 									item.Y += (short)(selection.Height * 128);
 									item.UpdateSprite();
 								}
+						}
+						else if (LevelData.Background.layers[bglayer].type == RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll)
+						{
+							for (int i = 1; i < LevelData.BGScroll[bglayer].Count; i++)
+							{
+								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Top * 128)
+								{
+									LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Height * 128);
+									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+								}
+							}
+						}
 					}
 				}
 				else if (dlg.entireColumn.Checked)
@@ -5939,13 +5951,26 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
+						{
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.X >= selection.Left * 128)
 								{
 									item.X += (short)(selection.Width * 128);
 									item.UpdateSprite();
 								}
+						}
+						else if (LevelData.Background.layers[bglayer].type == RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll)
+						{
+							for (int i = 1; i < LevelData.BGScroll[bglayer].Count; i++)
+							{
+								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Left * 128)
+								{
+									LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Width * 128);
+									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+								}
+							}
+						}
 					}
 				}
 				UpdateScrollBars();
@@ -5956,12 +5981,11 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void deleteLayoutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (InsertDeleteDialog dlg = new InsertDeleteDialog())
+			using (InsertDeleteDialog dlg = new InsertDeleteDialog((CurrentTab == Tab.Background) ? (int)LevelData.Background.layers[bglayer].type : 0))
 			{
 				dlg.Text = "Delete";
-				dlg.shiftH.Text = "Shift cells left";
-				dlg.shiftV.Text = "Shift cells up";
-				dlg.moveObjects.Visible = dlg.moveObjects.Checked = CurrentTab == Tab.Foreground;
+				dlg.shiftH.Text = "Shift chunks left";
+				dlg.shiftV.Text = "Shift chunks up";
 				if (dlg.ShowDialog(this) != DialogResult.OK) return;
 				Rectangle selection;
 				if (CurrentTab == Tab.Background)
@@ -6038,13 +6062,35 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
+						{
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.Y >= selection.Bottom * 128)
 								{
 									item.Y -= (short)(selection.Height * 128);
 									item.UpdateSprite();
 								}
+						}
+						else if (LevelData.Background.layers[bglayer].type == RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll)
+						{
+							for (int i = 1; i < LevelData.BGScroll[bglayer].Count; i++)
+							{
+								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Top * 128)
+								{
+									if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Bottom * 128)
+									{
+										LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Height * 128);
+										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+										
+										if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
+											continue;
+									}
+
+									LevelData.BGScroll[bglayer].Remove(LevelData.BGScroll[bglayer][i]);
+									scrollList.Items.RemoveAt(i--);
+								}
+							}
+						}
 					}
 					if (CurrentTab == Tab.Background)
 					{
@@ -6080,13 +6126,35 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
+						if (CurrentTab == Tab.Foreground)
+						{
 							foreach (ObjectEntry item in LevelData.Objects)
 								if (item.X >= selection.Right * 128)
 								{
 									item.X -= (short)(selection.Width * 128);
 									item.UpdateSprite();
 								}
+						}
+						else if (LevelData.Background.layers[bglayer].type == RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll)
+						{
+							for (int i = 1; i < LevelData.BGScroll[bglayer].Count; i++)
+							{
+								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Left * 128)
+								{
+									if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Right * 128)
+									{
+										LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Width * 128);
+										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+
+										if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
+											continue;
+									}
+
+									LevelData.BGScroll[bglayer].Remove(LevelData.BGScroll[bglayer][i]);
+									scrollList.Items.RemoveAt(i--);
+								}
+							}
+						}
 					}
 					if (CurrentTab == Tab.Background)
 					{

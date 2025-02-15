@@ -7148,6 +7148,20 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				foreach (var row in LevelData.Background.layers[bglayer].layout)
 					Array.Clear(row, 0, row.Length);
+				LevelData.BGScroll[bglayer].Clear();
+				switch (LevelData.Background.layers[bglayer].type)
+				{
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						LevelData.BGScroll[bglayer].Add(new ScrollData());
+						break;
+				}
+				scrollList.BeginUpdate();
+				scrollList.Items.Clear();
+				foreach (var item in LevelData.BGScroll[bglayer])
+					scrollList.Items.Add(item.StartPos.ToString("X4"));
+				scrollList.EndUpdate();
+				scrollList.SelectedIndex = 0;
 				SaveState($"Clear Background {bglayer + 1}");
 			}
 		}

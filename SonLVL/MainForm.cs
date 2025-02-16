@@ -189,7 +189,6 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				}
 			objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[Settings.ObjectGridSize]));
-			includeObjectsWithForegroundSelectionToolStripMenuItem.Checked = Settings.IncludeObjectsInForegroundSelection;
 			transparentBackgroundToolStripMenuItem.Checked = Settings.TransparentBackgroundExport;
 			hideDebugObjectsToolStripMenuItem.Checked = Settings.HideDebugObjectsExport;
 			includeobjectsWithFGToolStripMenuItem.Checked = Settings.IncludeObjectsFG;
@@ -311,7 +310,6 @@ namespace SonicRetro.SonLVL.GUI
 				Settings.ShowGrid = enableGridToolStripMenuItem.Checked;
 				Settings.ZoomLevel = zoomToolStripMenuItem.DropDownItems.Cast<ToolStripMenuItem>().Single((a) => a.Checked).Text;
 				Settings.ObjectGridSize = ObjGrid;
-				Settings.IncludeObjectsInForegroundSelection = includeObjectsWithForegroundSelectionToolStripMenuItem.Checked;
 				Settings.CurrentTab = CurrentTab;
 				Settings.CurrentArtTab = CurrentArtTab;
 				if (TopMost)
@@ -3212,9 +3210,6 @@ namespace SonicRetro.SonLVL.GUI
 				case Keys.P:
 					includeobjectsWithFGToolStripMenuItem.Checked = !includeobjectsWithFGToolStripMenuItem.Checked;
 					break;
-				case Keys.L:
-					includeObjectsWithForegroundSelectionToolStripMenuItem.Checked = !includeObjectsWithForegroundSelectionToolStripMenuItem.Checked;
-					break;
 				case Keys.OemMinus:
 				case Keys.Subtract:
 					for (int i = 1; i < zoomToolStripMenuItem.DropDownItems.Count; i++)
@@ -5451,7 +5446,7 @@ namespace SonicRetro.SonLVL.GUI
 				layout = LevelData.Scene.layout;
 				selection = FGSelection;
 				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
-				d.SetImage(LevelData.DrawForeground(area, includeObjectsWithForegroundSelectionToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
+				d.SetImage(LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
 			}
 			ushort[,] layoutsection = new ushort[selection.Width, selection.Height];
 			for (int y = 0; y < selection.Height; y++)
@@ -5462,7 +5457,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			List<Entry> objectselection = new List<Entry>();
 			List<Entry> objstodelete = new List<Entry>();
-			if (includeObjectsWithForegroundSelectionToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
 			{
 				int x = selection.Left * 128;
 				int y = selection.Top * 128;
@@ -5504,7 +5499,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(includeObjectsWithForegroundSelectionToolStripMenuItem.Checked));
+			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(includeobjectsWithFGToolStripMenuItem.Checked));
 			
 			Rectangle area;
 			
@@ -5642,7 +5637,7 @@ namespace SonicRetro.SonLVL.GUI
 			for (int y = 0; y < selection.Height; y++)
 				for (int x = 0; x < selection.Width; x++)
 					layout[y + selection.Y][x + selection.X] = section.Layout[x % width, y % height];
-			if (includeObjectsWithForegroundSelectionToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
 			{
 				int w = (int)Math.Ceiling(selection.Width / (double)width);
 				int h = (int)Math.Ceiling(selection.Height / (double)height);
@@ -5688,7 +5683,7 @@ namespace SonicRetro.SonLVL.GUI
 			for (int y = selection.Top; y < selection.Bottom; y++)
 				for (int x = selection.Left; x < selection.Right; x++)
 					layout[y][x] = 0;
-			if (includeObjectsWithForegroundSelectionToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
 			{
 				List<Entry> objectselection = new List<Entry>();
 				if (LevelData.Objects != null)
@@ -6779,7 +6774,7 @@ namespace SonicRetro.SonLVL.GUI
 				if (CurrentTab == Tab.Foreground)
 				{
 					dlg.includeObjects.Visible = true;
-					dlg.includeObjects.Checked = includeObjectsWithForegroundSelectionToolStripMenuItem.Checked;
+					dlg.includeObjects.Checked = includeobjectsWithFGToolStripMenuItem.Checked;
 				}
 
 				if (dlg.ShowDialog(this) == DialogResult.OK)

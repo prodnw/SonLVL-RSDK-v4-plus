@@ -67,23 +67,13 @@ Chunk Editing:
 Click and drag chunks in the chunk list to re-order them, hold Ctrl to swap two chunks.
 On the chunk preview:
 Page Up, Page Down, Home, End: Change current chunk.
-Up, Down, Left, Right: Change selected chunk block.
+Up, Down, Left, Right: Change selected chunk tile.
 X: Flip horizontally.
 Y: Flip vertically.
 P: Toggle visual plane.
-S: Increment layer 1 solidity.
-Shift+S: Decrement layer 1 solidity.
-T: Increment layer 2 solidity.
-Shift+T: Decrement layer 2 solidity.
-B: Increment block index.
-Shift+B: Decrement block index.
+S: Increment Plane A solidity. (Hold Shift to decrement instead)
+T: Increment Plane B solidity. (Hold Shift to decrement instead)
+B: Increment tile index. (Hold Shift to decrement instead)
 
 Tile Editing:
-Click and drag blocks in the block list to re-order them, hold Ctrl to swap two blocks.
-On the block preview:
-Page Up, Page Down, Home, End: Change current block.
-Up, Down, Left, Right: Change selected block tile.
-X: Flip horizontally.
-Y: Flip vertically.
-T: Increment tile index.
-Shift+T: Decrement tile index.
+Click and drag tiles in the tile list to re-order them, hold Ctrl to swap two tiles.

@@ -6235,7 +6235,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Objects to Left Wall");
 		}
@@ -6257,7 +6258,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Objects to Ground");
 		}
@@ -6279,7 +6281,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Objects to Right Wall");
 		}
@@ -6301,7 +6304,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Objects to Ceiling");
 		}
@@ -6317,7 +6321,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Lefts");
 		}
@@ -6340,7 +6345,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Centers");
 		}
@@ -6356,7 +6362,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Rights");
 		}
@@ -6372,7 +6379,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Tops");
 		}
@@ -6395,7 +6403,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Middles");
 		}
@@ -6411,7 +6420,8 @@ namespace SonicRetro.SonLVL.GUI
 				item.UpdateSprite();
 			}
 			SelectedObjectChanged();
-			ScrollToObject(SelectedItems[0]);
+			if (!SelectedItems[0].Bounds.IntersectsWith(new Rectangle(objectPanel.HScrollValue, objectPanel.VScrollValue, (int)(objectPanel.PanelHeight / ZoomLevel), (int)(objectPanel.PanelWidth / ZoomLevel))))
+				ScrollToObject(SelectedItems[0]);
 			DrawLevel();
 			SaveState("Align Object Bottoms");
 		}

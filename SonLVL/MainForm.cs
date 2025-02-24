@@ -390,7 +390,7 @@ namespace SonicRetro.SonLVL.GUI
 				default:
 					throw new NotImplementedException("Game type is not supported!");
 			}
-			saveToolStripMenuItem.Enabled = editGameConfigToolStripMenuItem.Enabled = changeLevelToolStripMenuItem.Enabled = false;
+			tabControl1.Enabled = editToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = saveToolStripMenuItem.Enabled = editGameConfigToolStripMenuItem.Enabled = changeLevelToolStripMenuItem.Enabled = false;
 			selectModToolStripMenuItem.Enabled = buildAndRunToolStripMenuItem.Enabled = true;
 			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 		}
@@ -422,13 +422,8 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void LoadMod(string path)
 		{
-			if (path == null)
-			{
-				saveToolStripMenuItem.Enabled = false;
-				editGameConfigToolStripMenuItem.Enabled = false;
-			}
-			else
-				editGameConfigToolStripMenuItem.Enabled = true;
+			saveToolStripMenuItem.Enabled = editToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = tabControl1.Enabled = false;
+			editGameConfigToolStripMenuItem.Enabled = path != null;
 			try
 			{
 				LevelData.LoadMod(Path.GetDirectoryName(path));
@@ -781,8 +776,7 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = true;
 			SelectedItems = new List<Entry>();
 			saveToolStripMenuItem.Enabled = LevelData.ModFolder != null;
-			editToolStripMenuItem.Enabled = true;
-			exportToolStripMenuItem.Enabled = true;
+			editToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = true;
 			if (invertColorsToolStripMenuItem.Checked)
 				for (int i = 0; i < 256; i++)
 					LevelImgPalette.Entries[i] = LevelImgPalette.Entries[i].Invert();
@@ -840,6 +834,7 @@ namespace SonicRetro.SonLVL.GUI
 			undoToolStripMenuItem.DropDownItems.Clear();
 			redoToolStripMenuItem.Enabled = false;
 			redoToolStripMenuItem.DropDownItems.Clear();
+			tabControl1.Enabled = true;
 			Enabled = true;
 			UseWaitCursor = false;
 			saved = true;

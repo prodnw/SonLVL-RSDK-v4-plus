@@ -4645,10 +4645,8 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			using (OpenFileDialog a = new OpenFileDialog())
 			{
-				/*a.DefaultExt = "act";
-				a.Filter = "Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";*/
 				a.DefaultExt = "";
-				a.Filter = "All|*.act;*.bmp;*.png;*.jpg;*.gif|Palette Files|*.act|Image Files|*.bmp;*.png;*.jpg;*.gif";
+				a.Filter = "All|*.act;*.bmp;*.png;*.gif|Palette Files|*.act|Image Files|*.bmp;*.png;*.gif";
 				a.RestoreDirectory = true;
 				if (a.ShowDialog(this) == DialogResult.OK)
 				{
@@ -4662,28 +4660,16 @@ namespace SonicRetro.SonLVL.GUI
 							break;
 						case ".bmp":
 						case ".png":
-						case ".jpg":
 						case ".gif":
 							using (Bitmap bmp = new Bitmap(a.FileName))
 							{
 								if ((bmp.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
-								{
 									colors.AddRange(bmp.Palette.Entries);
-								}
 								else
-									for (int y = 0; y < bmp.Height; y += 8)
-									{
-										for (int x = 0; x < bmp.Width; x += 8)
-										{
-											int index = ((y / 8) * (bmp.Width)) + (x / 8);
-											colors.Add(bmp.GetPixel(x, y));
-											if (index > 255)
-											{
-												y = bmp.Height;
-												break;
-											}
-										}
-									}
+								{
+									MessageBox.Show(this, "No palette found in image!", "SonLVL-RSDK", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+									return;
+								}
 							}
 							break;
 						default:

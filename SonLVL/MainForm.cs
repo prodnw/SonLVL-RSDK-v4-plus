@@ -7353,10 +7353,20 @@ namespace SonicRetro.SonLVL.GUI
 		private void flipChunkBlocksVerticallyToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			RSDKv3_4.Tiles128x128.Block chunk = LevelData.NewChunks.chunkList[SelectedChunk];
-			Array.Reverse(chunk.tiles, SelectedChunkBlock.Y, SelectedChunkBlock.Height);
+			for (int y = 0; y < (SelectedChunkBlock.Bottom - SelectedChunkBlock.Top) / 2; y++)
+			{
+				for (int x = SelectedChunkBlock.X; x < SelectedChunkBlock.X + SelectedChunkBlock.Width; x++)
+				{
+					var temp = chunk.tiles[SelectedChunkBlock.Top + y][x];
+					chunk.tiles[SelectedChunkBlock.Top + y][x] = chunk.tiles[SelectedChunkBlock.Bottom - 1 - y][x];
+					chunk.tiles[SelectedChunkBlock.Bottom - 1 - y][x] = temp;
+				}
+			}
+			
 			for (int y = SelectedChunkBlock.Top; y < SelectedChunkBlock.Bottom; y++)
 				for (int x = SelectedChunkBlock.Left; x < SelectedChunkBlock.Right; x++)
 					chunk.tiles[y][x].direction ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY;
+			
 			LevelData.RedrawChunk(SelectedChunk);
 			copiedChunkBlock = (chunkBlockEditor.SelectedObjects = GetSelectedChunkBlocks())[0];
 			if (copiedChunkBlock.tileIndex < LevelData.NewTiles.Length)

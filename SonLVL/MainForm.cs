@@ -390,7 +390,8 @@ namespace SonicRetro.SonLVL.GUI
 				default:
 					throw new NotImplementedException("Game type is not supported!");
 			}
-			buildAndRunToolStripMenuItem.Enabled = true;
+			saveToolStripMenuItem.Enabled = editGameConfigToolStripMenuItem.Enabled = changeLevelToolStripMenuItem.Enabled = false;
+			selectModToolStripMenuItem.Enabled = buildAndRunToolStripMenuItem.Enabled = true;
 			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 		}
 
@@ -494,6 +495,9 @@ namespace SonicRetro.SonLVL.GUI
 					}
 				}
 			}
+
+			changeLevelToolStripMenuItem.Enabled = true;
+
 			scriptFiles = new List<string>();
 			
 			// originally "Scripts" was supposed to be in the EXE folder, but both work

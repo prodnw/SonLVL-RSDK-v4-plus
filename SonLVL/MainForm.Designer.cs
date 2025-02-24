@@ -1309,11 +1309,12 @@
             this.openToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(342, 44);
-            this.openToolStripMenuItem.Text = "&Open...";
+            this.openToolStripMenuItem.Text = "&Open Game...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // selectModToolStripMenuItem
             // 
+            this.selectModToolStripMenuItem.Enabled = false;
             this.selectModToolStripMenuItem.Name = "selectModToolStripMenuItem";
             this.selectModToolStripMenuItem.Size = new System.Drawing.Size(342, 44);
             this.selectModToolStripMenuItem.Text = "Select &Mod";
@@ -1333,6 +1334,7 @@
             this.regularStagesToolStripMenuItem,
             this.specialStagesToolStripMenuItem,
             this.bonusStagesToolStripMenuItem});
+            this.changeLevelToolStripMenuItem.Enabled = false;
             this.changeLevelToolStripMenuItem.Name = "changeLevelToolStripMenuItem";
             this.changeLevelToolStripMenuItem.Size = new System.Drawing.Size(342, 44);
             this.changeLevelToolStripMenuItem.Text = "&Change Level...";

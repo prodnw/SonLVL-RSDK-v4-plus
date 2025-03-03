@@ -1121,6 +1121,7 @@ namespace SonicRetro.SonLVL.GUI
 		ushort searchbgchunk;
 		private void findToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			if (!loaded) return;
 			switch (CurrentTab)
 			{
 				case Tab.Objects:
@@ -8618,6 +8619,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void gotoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			if (!loaded) return;
 			using (GoToDialog dlg = new GoToDialog())
 			{
 				dlg.entityPos.Maximum = 31 + LevelData.Objects.Count;

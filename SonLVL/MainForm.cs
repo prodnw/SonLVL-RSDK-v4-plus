@@ -3980,12 +3980,22 @@ namespace SonicRetro.SonLVL.GUI
 			if (Clipboard.ContainsData(typeof(List<Entry>).AssemblyQualifiedName))
 			{
 				List<Entry> objs = (Clipboard.GetData(typeof(List<Entry>).AssemblyQualifiedName) as List<Entry>).Select(a => a.Clone()).ToList();
+				
+				// Let's make sure we aren't going over the entity limit
+				if (LevelData.Objects.Count + objs.Count > RSDKv3_4.Scene.ENTITY_LIST_SIZE)
+				{
+					int count = RSDKv3_4.Scene.ENTITY_LIST_SIZE - LevelData.Objects.Count;
+					if (count <= 0) return;
+					objs.RemoveRange(count, objs.Count - count);
+				}
+				
 				Point upleft = new Point(int.MaxValue, int.MaxValue);
 				foreach (Entry item in objs)
 				{
 					upleft.X = Math.Min(upleft.X, item.X);
 					upleft.Y = Math.Min(upleft.Y, item.Y);
 				}
+				
 				Size off = new Size(((int)(menuLoc.X / ZoomLevel) + objectPanel.HScrollValue) - upleft.X, ((int)(menuLoc.Y / ZoomLevel) + objectPanel.VScrollValue) - upleft.Y);
 				SelectedItems = new List<Entry>(objs);
 				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;

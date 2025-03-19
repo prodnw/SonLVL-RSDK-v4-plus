@@ -83,6 +83,7 @@ namespace SonicRetro.SonLVL.GUI
             this.XDist.Name = "XDist";
             this.XDist.Size = new System.Drawing.Size(63, 22);
             this.XDist.TabIndex = 2;
+            this.XDist.ValueChanged += new System.EventHandler(this.value_ValueChanged);
             // 
             // label1
             // 
@@ -117,6 +118,7 @@ namespace SonicRetro.SonLVL.GUI
             this.YDist.Name = "YDist";
             this.YDist.Size = new System.Drawing.Size(63, 22);
             this.YDist.TabIndex = 4;
+            this.YDist.ValueChanged += new System.EventHandler(this.value_ValueChanged);
             // 
             // label3
             // 
@@ -146,6 +148,7 @@ namespace SonicRetro.SonLVL.GUI
             0,
             0,
             0});
+            this.Rows.ValueChanged += new System.EventHandler(this.value_ValueChanged);
             // 
             // label4
             // 
@@ -175,12 +178,14 @@ namespace SonicRetro.SonLVL.GUI
             0,
             0,
             0});
+            this.Columns.ValueChanged += new System.EventHandler(this.value_ValueChanged);
             // 
             // AddGroupDialog
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(239, 191);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.Columns);

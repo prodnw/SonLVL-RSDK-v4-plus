@@ -95,6 +95,7 @@ namespace SonicRetro.SonLVL.GUI
 		byte ObjGrid = 0;
 		bool objdrag = false;
 		bool dragdrop = false;
+		internal Rectangle AddObjectsPreview = Rectangle.Empty;
 		byte dragobj;
 		Point dragpoint;
 		bool selecting = false;
@@ -2388,9 +2389,31 @@ namespace SonicRetro.SonLVL.GUI
 			}
 
 			Array.Copy(LevelData.NewPalette, 1, LevelImg8bpp.Palette, 1, 3);
-			
-			if (CurrentTab == Tab.Objects && dragdrop)
-				LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
+
+			if (CurrentTab == Tab.Objects)
+			{
+				if (dragdrop)
+					LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
+				else if (AddObjectsPreview != Rectangle.Empty)
+				{
+					double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+					Point pt = new Point(
+						(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
+						(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
+						);
+					int xst = pt.X;
+					for (int y = 0; y < AddObjectsPreview.Width; y++)
+					{
+						for (int x = 0; x < AddObjectsPreview.Height; x++)
+						{
+							LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, pt.X - camera.X, pt.Y - camera.Y);
+							pt.X += AddObjectsPreview.X;
+						}
+						pt.X = xst;
+						pt.Y += AddObjectsPreview.Y;
+					}
+				}
+			}
 			LevelBmp = LevelImg8bpp.ToBitmap();
 			LevelGfx = Graphics.FromImage(LevelBmp);
 			LevelGfx.SetOptions();
@@ -3903,11 +3926,13 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
 			{
-				byte ID = (byte)ObjectSelect.numericUpDown1.Value;
+				byte ID = dragobj = (byte)ObjectSelect.numericUpDown1.Value;
 				byte sub = (byte)ObjectSelect.numericUpDown2.Value;
 				using (AddGroupDialog dlg = new AddGroupDialog())
 				{
 					dlg.Text = "Add Group of Objects";
+					dlg.XDist.Value = LevelData.GetObjectDefinition(ID).Image.Width + 8;
+					dlg.YDist.Value = LevelData.GetObjectDefinition(ID).Image.Height + 8;
 					if (dlg.ShowDialog(this) == DialogResult.OK)
 					{
 						double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
@@ -3923,24 +3948,37 @@ namespace SonicRetro.SonLVL.GUI
 						{
 							for (int x = 0; x < dlg.Columns.Value; x++)
 							{
-								ObjectEntry ent = LevelData.CreateObject(ID);
-								objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
-								ent.PropertyValue = sub;
-								ent.X = (short)(pt.X);
-								ent.Y = (short)(pt.Y);
-								ent.UpdateSprite();
-								SelectedItems.Add(ent);
-								pt += xsz;
+								if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
+								{
+									ObjectEntry ent = LevelData.CreateObject(ID);
+									objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
+									ent.PropertyValue = sub;
+									ent.X = (short)(pt.X);
+									ent.Y = (short)(pt.Y);
+									ent.UpdateSprite();
+									SelectedItems.Add(ent);
+									pt += xsz;
+								}
+								else
+								{
+									y = (int)dlg.Rows.Value;
+									break;
+								}
 							}
 							pt.X = xst;
 							pt += ysz;
 						}
+						AddObjectsPreview = Rectangle.Empty;
 						SelectedObjectChanged();
 						DrawLevel();
 						SaveState("Add Objects");
+						return;
 					}
 				}
 			}
+
+			AddObjectsPreview = Rectangle.Empty;
+			DrawLevel();
 		}
 
 		private void cutToolStripMenuItem_Click(object sender, EventArgs e)

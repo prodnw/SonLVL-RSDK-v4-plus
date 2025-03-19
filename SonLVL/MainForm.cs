@@ -60,7 +60,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Log(e.Exception.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 			File.WriteAllLines("SonLVL-RSDK.log", LogFile.ToArray());
-			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", loaded))
+			using (ErrorDialog ed = new ErrorDialog("Unhandled Exception " + e.Exception.GetType().Name + "\nLog file has been saved.\n\nDo you want to try to continue running?", Enabled))
 			{
 				if (ed.ShowDialog(this) == DialogResult.Cancel)
 					Close();
@@ -183,6 +183,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			anglesToolStripMenuItem.Checked = Settings.ViewAngles;
 			enableGridToolStripMenuItem.Checked = Settings.ShowGrid;
+			snapToolStripMenuItem.Checked = Settings.SnapObjectsToGrid;
 			foreach (ToolStripMenuItem item in zoomToolStripMenuItem.DropDownItems)
 				if (item.Text == Settings.ZoomLevel)
 				{
@@ -309,6 +310,7 @@ namespace SonicRetro.SonLVL.GUI
 					Settings.ViewCollision = CollisionPath.None;
 				Settings.ViewAngles = anglesToolStripMenuItem.Checked;
 				Settings.ShowGrid = enableGridToolStripMenuItem.Checked;
+				Settings.SnapObjectsToGrid = snapToolStripMenuItem.Checked;
 				Settings.ZoomLevel = zoomToolStripMenuItem.DropDownItems.Cast<ToolStripMenuItem>().Single((a) => a.Checked).Text;
 				Settings.ObjectGridSize = ObjGrid;
 				Settings.CurrentTab = CurrentTab;
@@ -2810,7 +2812,7 @@ namespace SonicRetro.SonLVL.GUI
 					if (!loaded) return;
 					if (!e.Control)
 					{
-						foreach (ObjectEntry item in SelectedItems.OfType<ObjectEntry>())
+						foreach (ObjectEntry item in SelectedItems)
 						{
 							unchecked
 							{
@@ -2840,7 +2842,7 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					else
 					{
-						foreach (ObjectEntry item in SelectedItems.OfType<ObjectEntry>())
+						foreach (ObjectEntry item in SelectedItems)
 						{
 							++item.PropertyValue;
 							item.UpdateSprite();
@@ -2877,7 +2879,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						ent.X -= (short)gs;
 						ent.Y += (short)gs;
-						ent.AdjustSpritePosition(-gs, gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2889,7 +2891,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (Entry ent in SelectedItems)
 					{
 						ent.Y += (short)gs;
-						ent.AdjustSpritePosition(0, gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2902,7 +2904,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						ent.X += (short)gs;
 						ent.Y += (short)gs;
-						ent.AdjustSpritePosition(gs, gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2914,7 +2916,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (Entry ent in SelectedItems)
 					{
 						ent.X -= (short)gs;
-						ent.AdjustSpritePosition(-gs, 0);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2926,7 +2928,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (Entry ent in SelectedItems)
 					{
 						ent.X += (short)gs;
-						ent.AdjustSpritePosition(gs, 0);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2939,7 +2941,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						ent.X -= (short)gs;
 						ent.Y -= (short)gs;
-						ent.AdjustSpritePosition(-gs, -gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2951,7 +2953,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (Entry ent in SelectedItems)
 					{
 						ent.Y -= (short)gs;
-						ent.AdjustSpritePosition(0, -gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -2964,7 +2966,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						ent.X += (short)gs;
 						ent.Y -= (short)gs;
-						ent.AdjustSpritePosition(gs, -gs);
+						ent.UpdateSprite();
 					}
 					DrawLevel();
 					ObjectProperties.Refresh();
@@ -3376,7 +3378,7 @@ namespace SonicRetro.SonLVL.GUI
 						{
 							item.X = (short)(item.X + difX);
 							item.Y = (short)(item.Y + difY);
-							item.AdjustSpritePosition(difX, difY);
+							item.UpdateSprite();
 						}
 						redraw = true;
 					}

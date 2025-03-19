@@ -20,6 +20,8 @@ namespace SonicRetro.SonLVL
 		[IniCollection(IniCollectionMode.NoSquareBrackets, StartIndex = 1)]
 		public List<MRUModItem> RecentMods { get; set; }
 		public bool ShowGrid { get; set; }
+		[DefaultValue(true)]
+		public bool SnapObjectsToGrid { get; set; }
 		[IniIgnore]
 		public Color GridColor { get; set; }
 		[IniName("GridColor")]
@@ -77,6 +79,7 @@ namespace SonicRetro.SonLVL
 				result.ShowHUD = true;
 				result.MRUList = new List<string>();
 				result.ShowGrid = false;
+				result.SnapObjectsToGrid = true;
 				result.GridColor = Color.Red;
 				result.Username = null;
 				result.BackgroundColor = Color.FromArgb(160, 0, 0, 192);

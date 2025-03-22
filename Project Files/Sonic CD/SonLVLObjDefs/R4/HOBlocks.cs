@@ -85,7 +85,7 @@ namespace SCDObjectDefinitions.R4
 			
 			// technically it should just be shown as a normal int to the user.. but this is cleaner imo
 			properties[0] = new PropertySpec("Start From", typeof(int), "Extended",
-				"Which position this block should start from and which direction it should be moving.", null, new Dictionary<string, int>
+				"Which position this block should start from and which direction it should be moving towards.", null, new Dictionary<string, int>
 				{
 					{ "Middle (-> Right)", 0xc0 },
 					{ "Middle Right (-> Right)", 0xe0 },

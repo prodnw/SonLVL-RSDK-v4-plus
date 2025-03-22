@@ -13,8 +13,8 @@ namespace SCDObjectDefinitions.R1
 			if (length == 0)
 				return sprite;
 			
-			List<Sprite> sprites = new List<Sprite>();
-			int sx = -((length * 16) / 2) + 8;
+			List<Sprite> sprites = new List<Sprite>(length);
+			int sx = -(length * 8) + 8;
 			for (int i = 0; i < length; i++)
 				sprites.Add(new Sprite(sprite, sx + (i * 16), 0));
 			
@@ -102,8 +102,8 @@ namespace SCDObjectDefinitions.R1
 			if (length == 0)
 				return sprite;
 			
-			List<Sprite> sprites = new List<Sprite>();
-			int sy = -((length * 16) / 2) + 8;
+			List<Sprite> sprites = new List<Sprite>(length);
+			int sy = -(length * 8) + 8;
 			for (int i = 0; i < length; i++)
 				sprites.Add(new Sprite(sprite, 0, sy + (i * 16)));
 			

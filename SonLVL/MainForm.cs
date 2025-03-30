@@ -249,6 +249,11 @@ namespace SonicRetro.SonLVL.GUI
 				Settings.RecentMods = mru;
 				if (mru.Count > 0) recentModsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem);
 			}
+
+			// SplitterDistance is relative to the left, but let's make it so that we can fit exactly two chunks in
+			splitContainer2.SplitterDistance = splitContainer2.Size.Width - 293;
+			splitContainer3.SplitterDistance = splitContainer3.Size.Width - 293;
+
 			findObjectsDialog = new FindObjectsDialog();
 			findFGChunksDialog = new FindChunksDialog();
 			findBGChunksDialog = new FindChunksDialog();

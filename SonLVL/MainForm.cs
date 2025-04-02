@@ -183,7 +183,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			anglesToolStripMenuItem.Checked = Settings.ViewAngles;
 			enableGridToolStripMenuItem.Checked = Settings.ShowGrid;
-			snapToolStripMenuItem.Checked = Settings.SnapObjectsToGrid;
+			snapObjectsToolStripCheckBoxButton.Checked = Settings.SnapObjectsToGrid;
 			foreach (ToolStripMenuItem item in zoomToolStripMenuItem.DropDownItems)
 				if (item.Text == Settings.ZoomLevel)
 				{
@@ -193,7 +193,7 @@ namespace SonicRetro.SonLVL.GUI
 			objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[Settings.ObjectGridSize]));
 			transparentBackgroundToolStripMenuItem.Checked = Settings.TransparentBackgroundExport;
 			hideDebugObjectsToolStripMenuItem.Checked = Settings.HideDebugObjectsExport;
-			includeobjectsWithFGToolStripMenuItem.Checked = Settings.IncludeObjectsFG;
+			displayObjectsToolStripCheckBoxButton.Checked = Settings.IncludeObjectsFG;
 			exportArtcollisionpriorityToolStripMenuItem.Checked = Settings.ExportArtCollisionPriority;
 			CurrentTab = Settings.CurrentTab;
 			CurrentArtTab = Settings.CurrentArtTab;
@@ -315,7 +315,7 @@ namespace SonicRetro.SonLVL.GUI
 					Settings.ViewCollision = CollisionPath.None;
 				Settings.ViewAngles = anglesToolStripMenuItem.Checked;
 				Settings.ShowGrid = enableGridToolStripMenuItem.Checked;
-				Settings.SnapObjectsToGrid = snapToolStripMenuItem.Checked;
+				Settings.SnapObjectsToGrid = snapObjectsToolStripCheckBoxButton.Checked;
 				Settings.ZoomLevel = zoomToolStripMenuItem.DropDownItems.Cast<ToolStripMenuItem>().Single((a) => a.Checked).Text;
 				Settings.ObjectGridSize = ObjGrid;
 				Settings.CurrentTab = CurrentTab;
@@ -833,9 +833,8 @@ namespace SonicRetro.SonLVL.GUI
 			TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1):X}";
 			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
 				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
-				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = bgLayerDropDown.Enabled = reloadTilesToolStripButton.Enabled =
-				resizeBackgroundToolStripButton.Enabled = replaceBackgroundToolStripButton.Enabled = resizeForegroundToolStripButton.Enabled = importToolStripButton.Enabled =
-				deleteToolStripButton.Enabled = replaceForegroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = clearForegroundToolStripButton.Enabled =
+				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = reloadTilesToolStripButton.Enabled =
+				importToolStripButton.Enabled = deleteToolStripButton.Enabled = fgToolStrip.Enabled = bgToolStrip.Enabled =
 				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled =
 				objectPanel.PanelAllowDrop = objectOrder.AllowDrop = TileSelector.AllowDrop = true;
 			undoToolStripMenuItem.Enabled = false;
@@ -1418,6 +1417,12 @@ namespace SonicRetro.SonLVL.GUI
 			}
 		}
 
+		private void displayObjectsToolStripCheckBoxButton_CheckedChanged(object sender, EventArgs e)
+		{
+			Settings.IncludeObjectsFG = displayObjectsToolStripCheckBoxButton.Checked;
+			DrawLevel();
+		}
+
 		private void resizeLayerToolStripButton_Click(object sender, EventArgs e)
 		{
 			using (ResizeLevelDialog dg = new ResizeLevelDialog())
@@ -1534,12 +1539,6 @@ namespace SonicRetro.SonLVL.GUI
 		#endregion
 
 		#region View Menu
-		private void includeObjectsWithFGToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-		{
-			Settings.IncludeObjectsFG = includeobjectsWithFGToolStripMenuItem.Checked;
-			DrawLevel();
-		}
-
 		private void objectsAboveHighPlaneToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			objectsAboveHighPlaneToolStripMenuItem.Checked = !objectsAboveHighPlaneToolStripMenuItem.Checked;
@@ -1964,13 +1963,13 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 						{
-							BitmapBits32 bmp = LevelData.DrawForeground32(null, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits32 bmp = LevelData.DrawForeground32(null, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], displayObjectsToolStripCheckBoxButton.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 							using (Bitmap res = bmp.ToBitmap())
 								res.Save(a.FileName);
 						}
 						else
 						{
-							BitmapBits bmp = LevelData.DrawForeground(null, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+							BitmapBits bmp = LevelData.DrawForeground(null, displayObjectsToolStripCheckBoxButton.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 							Color[] palette;
 							if (transparentBackgroundToolStripMenuItem.Checked)
 							{
@@ -2166,7 +2165,7 @@ namespace SonicRetro.SonLVL.GUI
 				case Tab.Foreground:
 					lvlsize = LevelData.FGSize;
 					layout = LevelData.Scene.layout;
-					LevelImg8bpp = LevelData.DrawForeground32(dispRect, LevelImgPalette.Entries[LevelData.ColorTransparent], CurrentTab == Tab.Objects || includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+					LevelImg8bpp = LevelData.DrawForeground32(dispRect, LevelImgPalette.Entries[LevelData.ColorTransparent], CurrentTab == Tab.Objects || displayObjectsToolStripCheckBoxButton.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 					break;
 				case Tab.Background:
 					lvlsize = LevelData.BGSize[bglayer];
@@ -2403,7 +2402,7 @@ namespace SonicRetro.SonLVL.GUI
 					LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
 				else if (AddObjectsPreview != Rectangle.Empty)
 				{
-					double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+					double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 					Point pt = new Point(
 						(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
 						(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
@@ -2778,30 +2777,39 @@ namespace SonicRetro.SonLVL.GUI
 					break;
 				case Keys.D0:
 				case Keys.D1:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[0]));
 					break;
 				case Keys.D2:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[1]));
 					break;
 				case Keys.D3:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[2]));
 					break;
 				case Keys.D4:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[3]));
 					break;
 				case Keys.D5:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[4]));
 					break;
 				case Keys.D6:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[5]));
 					break;
 				case Keys.D7:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[6]));
 					break;
 				case Keys.D8:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[7]));
 					break;
 				case Keys.D9:
+					if (e.Control) return;
 					objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[8]));
 					break;
 				case Keys.J:
@@ -3222,7 +3230,7 @@ namespace SonicRetro.SonLVL.GUI
 					DrawLevel();
 					break;
 				case Keys.K:
-					snapToolStripMenuItem.Checked = !snapToolStripMenuItem.Checked;
+					snapObjectsToolStripCheckBoxButton.Checked = !snapObjectsToolStripCheckBoxButton.Checked;
 					break;
 				case Keys.O:
 					if (!e.Control)
@@ -3232,7 +3240,7 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Keys.P:
-					includeobjectsWithFGToolStripMenuItem.Checked = !includeobjectsWithFGToolStripMenuItem.Checked;
+					displayObjectsToolStripCheckBoxButton.Checked = !displayObjectsToolStripCheckBoxButton.Checked;
 					break;
 				case Keys.OemMinus:
 				case Keys.Subtract:
@@ -3266,7 +3274,7 @@ namespace SonicRetro.SonLVL.GUI
 		private void objectPanel_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (!loaded) return;
-			double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+			double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 			int curx = (int)(e.X / ZoomLevel) + objectPanel.HScrollValue;
 			int cury = (int)(e.Y / ZoomLevel) + objectPanel.VScrollValue;
 			short gridx = (short)(Math.Round(curx / gs, MidpointRounding.AwayFromZero) * gs);
@@ -3413,7 +3421,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (objdrag)
 			{
-				if (ObjGrid > 0 && snapToolStripMenuItem.Checked)
+				if (ObjGrid > 0 && snapObjectsToolStripCheckBoxButton.Checked)
 				{
 					double gs = 1 << ObjGrid;
 					foreach (Entry item in SelectedItems)
@@ -3917,7 +3925,7 @@ namespace SonicRetro.SonLVL.GUI
 				ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
 				objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
 				ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
-				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+				double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 				ent.X = (short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				ent.Y = (short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				ent.UpdateSprite();
@@ -3942,7 +3950,7 @@ namespace SonicRetro.SonLVL.GUI
 					dlg.YDist.Value = LevelData.GetObjectDefinition(ID).Image.Height + 8;
 					if (dlg.ShowDialog(this) == DialogResult.OK)
 					{
-						double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+						double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 						Point pt = new Point(
 							(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
 							(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
@@ -4043,7 +4051,7 @@ namespace SonicRetro.SonLVL.GUI
 				
 				Size off = new Size(((int)(menuLoc.X / ZoomLevel) + objectPanel.HScrollValue) - upleft.X, ((int)(menuLoc.Y / ZoomLevel) + objectPanel.VScrollValue) - upleft.Y);
 				SelectedItems = new List<Entry>(objs);
-				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+				double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 				foreach (Entry item in objs)
 				{
 					item.X += (short)off.Width;
@@ -5492,7 +5500,7 @@ namespace SonicRetro.SonLVL.GUI
 				layout = LevelData.Scene.layout;
 				selection = FGSelection;
 				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
-				d.SetImage(LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
+				d.SetImage(LevelData.DrawForeground(area, displayObjectsToolStripCheckBoxButton.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
 			}
 			ushort[,] layoutsection = new ushort[selection.Width, selection.Height];
 			for (int y = 0; y < selection.Height; y++)
@@ -5503,7 +5511,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			List<Entry> objectselection = new List<Entry>();
 			List<Entry> objstodelete = new List<Entry>();
-			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (displayObjectsToolStripCheckBoxButton.Checked && CurrentTab == Tab.Foreground)
 			{
 				int x = selection.Left * 128;
 				int y = selection.Top * 128;
@@ -5545,7 +5553,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(includeobjectsWithFGToolStripMenuItem.Checked));
+			DataObject d = new DataObject(typeof(LayoutSection).AssemblyQualifiedName, CreateLayoutSection(displayObjectsToolStripCheckBoxButton.Checked));
 			
 			Rectangle area;
 			
@@ -5557,7 +5565,7 @@ namespace SonicRetro.SonLVL.GUI
 			else
 			{
 				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
-				d.SetImage(LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
+				d.SetImage(LevelData.DrawForeground(area, displayObjectsToolStripCheckBoxButton.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
 			}
 			
 			Clipboard.SetDataObject(d);
@@ -5683,7 +5691,7 @@ namespace SonicRetro.SonLVL.GUI
 			for (int y = 0; y < selection.Height; y++)
 				for (int x = 0; x < selection.Width; x++)
 					layout[y + selection.Y][x + selection.X] = section.Layout[x % width, y % height];
-			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (displayObjectsToolStripCheckBoxButton.Checked && CurrentTab == Tab.Foreground)
 			{
 				int w = (int)Math.Ceiling(selection.Width / (double)width);
 				int h = (int)Math.Ceiling(selection.Height / (double)height);
@@ -5729,7 +5737,7 @@ namespace SonicRetro.SonLVL.GUI
 			for (int y = selection.Top; y < selection.Bottom; y++)
 				for (int x = selection.Left; x < selection.Right; x++)
 					layout[y][x] = 0;
-			if (includeobjectsWithFGToolStripMenuItem.Checked && CurrentTab == Tab.Foreground)
+			if (displayObjectsToolStripCheckBoxButton.Checked && CurrentTab == Tab.Foreground)
 			{
 				List<Entry> objectselection = new List<Entry>();
 				if (LevelData.Objects != null)
@@ -5830,7 +5838,7 @@ namespace SonicRetro.SonLVL.GUI
 			dragdrop = false;
 			if (e.Data.GetDataPresent("SonicRetro.SonLVLRSDK.GUI.ObjectDrop") && LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
 			{
-				double gs = snapToolStripMenuItem.Checked ? 1 << ObjGrid : 1;
+				double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 				Point clientPoint = objectPanel.PanelPointToClient(new Point(e.X, e.Y));
 				clientPoint = new Point((int)(clientPoint.X / ZoomLevel), (int)(clientPoint.Y / ZoomLevel));
 				ObjectEntry obj = LevelData.CreateObject((byte)e.Data.GetData("SonicRetro.SonLVLRSDK.GUI.ObjectDrop"));
@@ -6269,7 +6277,7 @@ namespace SonicRetro.SonLVL.GUI
 			foreach (Entry item in SelectedItems)
 			{
 				Rectangle bounds = item.Bounds;
-				int x = bounds.Left - 1;
+				int x = Math.Min(bounds.Left - 1, LevelData.FGWidth * 128 - 1);
 				int y = bounds.Top + (bounds.Height / 2);
 				while (x > 0)
 				{
@@ -6485,6 +6493,11 @@ namespace SonicRetro.SonLVL.GUI
 		private void highToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			Settings.ViewHighPlane = highToolStripMenuItem.Checked;
+		}
+
+		private void snapObjectsToolStripCheckBoxButton_CheckedChanged(object sender, EventArgs e)
+		{
+			Settings.SnapObjectsToGrid = snapObjectsToolStripCheckBoxButton.Checked;
 		}
 
 		private void objGridSizeDropDownButton_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -6830,7 +6843,7 @@ namespace SonicRetro.SonLVL.GUI
 				if (CurrentTab == Tab.Foreground)
 				{
 					dlg.includeObjects.Visible = true;
-					dlg.includeObjects.Checked = includeobjectsWithFGToolStripMenuItem.Checked;
+					dlg.includeObjects.Checked = displayObjectsToolStripCheckBoxButton.Checked;
 				}
 
 				if (dlg.ShowDialog(this) == DialogResult.OK)
@@ -7623,13 +7636,13 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								if (path1ToolStripMenuItem.Checked || path2ToolStripMenuItem.Checked)
 								{
-									BitmapBits32 bmp = LevelData.DrawForeground32(area, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits32 bmp = LevelData.DrawForeground32(area, transparentBackgroundToolStripMenuItem.Checked ? Color.Transparent : LevelImgPalette.Entries[LevelData.ColorTransparent], displayObjectsToolStripCheckBoxButton.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 									using (Bitmap res = bmp.ToBitmap())
 										res.Save(a.FileName);
 								}
 								else
 								{
-									BitmapBits bmp = LevelData.DrawForeground(area, includeobjectsWithFGToolStripMenuItem.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
+									BitmapBits bmp = LevelData.DrawForeground(area, displayObjectsToolStripCheckBoxButton.Checked, !hideDebugObjectsToolStripMenuItem.Checked, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked);
 									Color[] palette;
 									if (transparentBackgroundToolStripMenuItem.Checked)
 									{

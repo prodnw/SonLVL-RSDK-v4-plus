@@ -132,7 +132,6 @@
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.includeobjectsWithFGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.objectsAboveHighPlaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hUDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bgColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -148,7 +147,6 @@
             this.anglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.snapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
@@ -206,6 +204,7 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
+            this.snapObjectsToolStripCheckBoxButton = new ToolStripCheckBoxButton();
             this.alignLeftWallToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.alignGroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.alignRightWallToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -224,6 +223,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.fgToolStrip = new System.Windows.Forms.ToolStrip();
+            this.displayObjectsToolStripCheckBoxButton = new ToolStripCheckBoxButton();
             this.resizeForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.replaceForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -1544,7 +1544,6 @@
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.includeobjectsWithFGToolStripMenuItem,
             this.objectsAboveHighPlaneToolStripMenuItem,
             this.hUDToolStripMenuItem,
             this.bgColorToolStripMenuItem,
@@ -1559,17 +1558,6 @@
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(85, 36);
             this.viewToolStripMenuItem.Text = "&View";
-            // 
-            // includeobjectsWithFGToolStripMenuItem
-            // 
-            this.includeobjectsWithFGToolStripMenuItem.Checked = true;
-            this.includeobjectsWithFGToolStripMenuItem.CheckOnClick = true;
-            this.includeobjectsWithFGToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.includeobjectsWithFGToolStripMenuItem.Name = "includeobjectsWithFGToolStripMenuItem";
-            this.includeobjectsWithFGToolStripMenuItem.ShortcutKeyDisplayString = "P";
-            this.includeobjectsWithFGToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
-            this.includeobjectsWithFGToolStripMenuItem.Text = "Include &objects with FG";
-            this.includeobjectsWithFGToolStripMenuItem.CheckedChanged += new System.EventHandler(this.includeObjectsWithFGToolStripMenuItem_CheckedChanged);
             // 
             // objectsAboveHighPlaneToolStripMenuItem
             // 
@@ -1692,7 +1680,6 @@
             // 
             this.gridToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.enableGridToolStripMenuItem,
-            this.snapToolStripMenuItem,
             this.gridColorToolStripMenuItem});
             this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
             this.gridToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
@@ -1706,16 +1693,6 @@
             this.enableGridToolStripMenuItem.Size = new System.Drawing.Size(395, 44);
             this.enableGridToolStripMenuItem.Text = "&Enable";
             this.enableGridToolStripMenuItem.Click += new System.EventHandler(this.enableGridToolStripMenuItem_Click);
-            // 
-            // snapToolStripMenuItem
-            // 
-            this.snapToolStripMenuItem.Checked = true;
-            this.snapToolStripMenuItem.CheckOnClick = true;
-            this.snapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.snapToolStripMenuItem.Name = "snapToolStripMenuItem";
-            this.snapToolStripMenuItem.ShortcutKeyDisplayString = "K";
-            this.snapToolStripMenuItem.Size = new System.Drawing.Size(395, 44);
-            this.snapToolStripMenuItem.Text = "Sna&p Objects to Grid";
             // 
             // gridColorToolStripMenuItem
             // 
@@ -2121,6 +2098,7 @@
             this.objToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.objToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.objGridSizeDropDownButton,
+            this.snapObjectsToolStripCheckBoxButton,
             toolStripSeparator10,
             this.alignLeftWallToolStripButton,
             this.alignGroundToolStripButton,
@@ -2228,6 +2206,15 @@
             this.toolStripMenuItem12.Name = "toolStripMenuItem12";
             this.toolStripMenuItem12.Size = new System.Drawing.Size(199, 44);
             this.toolStripMenuItem12.Text = "1024";
+            // 
+            // snapObjectsToolStripCheckBoxButton
+            // 
+            this.snapObjectsToolStripCheckBoxButton.Checked = false;
+            this.snapObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.snapObjectsToolStripCheckBoxButton.Name = "snapObjectsToolStripCheckBoxButton";
+            this.snapObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(186, 42);
+            this.snapObjectsToolStripCheckBoxButton.Text = "Snap Objects";
+            this.snapObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.snapObjectsToolStripCheckBoxButton_CheckedChanged);
             // 
             // alignLeftWallToolStripButton
             // 
@@ -2432,9 +2419,11 @@
             // 
             // fgToolStrip
             // 
+            this.fgToolStrip.Enabled = false;
             this.fgToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.fgToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.fgToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.displayObjectsToolStripCheckBoxButton,
             this.resizeForegroundToolStripButton,
             this.replaceForegroundToolStripButton,
             this.clearForegroundToolStripButton});
@@ -2445,10 +2434,18 @@
             this.fgToolStrip.TabIndex = 4;
             this.fgToolStrip.Text = "toolStrip1";
             // 
+            // displayObjectsToolStripCheckBoxButton
+            // 
+            this.displayObjectsToolStripCheckBoxButton.Checked = false;
+            this.displayObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.displayObjectsToolStripCheckBoxButton.Name = "displayObjectsToolStripCheckBoxButton";
+            this.displayObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(210, 42);
+            this.displayObjectsToolStripCheckBoxButton.Text = "Display Objects";
+            this.displayObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.displayObjectsToolStripCheckBoxButton_CheckedChanged);
+            // 
             // resizeForegroundToolStripButton
             // 
             this.resizeForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.resizeForegroundToolStripButton.Enabled = false;
             this.resizeForegroundToolStripButton.Name = "resizeForegroundToolStripButton";
             this.resizeForegroundToolStripButton.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.resizeForegroundToolStripButton.Size = new System.Drawing.Size(84, 44);
@@ -2458,7 +2455,6 @@
             // replaceForegroundToolStripButton
             // 
             this.replaceForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.replaceForegroundToolStripButton.Enabled = false;
             this.replaceForegroundToolStripButton.Name = "replaceForegroundToolStripButton";
             this.replaceForegroundToolStripButton.Size = new System.Drawing.Size(100, 44);
             this.replaceForegroundToolStripButton.Text = "Replace";
@@ -2467,7 +2463,6 @@
             // clearForegroundToolStripButton
             // 
             this.clearForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.clearForegroundToolStripButton.Enabled = false;
             this.clearForegroundToolStripButton.Name = "clearForegroundToolStripButton";
             this.clearForegroundToolStripButton.Size = new System.Drawing.Size(72, 44);
             this.clearForegroundToolStripButton.Text = "Clear";
@@ -2611,6 +2606,7 @@
             // 
             // bgToolStrip
             // 
+            this.bgToolStrip.Enabled = false;
             this.bgToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.bgToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.bgToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -2637,7 +2633,6 @@
             toolStripMenuItem18,
             toolStripMenuItem19,
             toolStripMenuItem20});
-            this.bgLayerDropDown.Enabled = false;
             this.bgLayerDropDown.Name = "bgLayerDropDown";
             this.bgLayerDropDown.Size = new System.Drawing.Size(117, 44);
             this.bgLayerDropDown.Text = "Layer: 1";
@@ -2646,7 +2641,6 @@
             // resizeBackgroundToolStripButton
             // 
             this.resizeBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.resizeBackgroundToolStripButton.Enabled = false;
             this.resizeBackgroundToolStripButton.Name = "resizeBackgroundToolStripButton";
             this.resizeBackgroundToolStripButton.Size = new System.Drawing.Size(84, 44);
             this.resizeBackgroundToolStripButton.Text = "Resize";
@@ -2655,7 +2649,6 @@
             // replaceBackgroundToolStripButton
             // 
             this.replaceBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.replaceBackgroundToolStripButton.Enabled = false;
             this.replaceBackgroundToolStripButton.Name = "replaceBackgroundToolStripButton";
             this.replaceBackgroundToolStripButton.Size = new System.Drawing.Size(100, 44);
             this.replaceBackgroundToolStripButton.Text = "Replace";
@@ -2664,7 +2657,6 @@
             // clearBackgroundToolStripButton
             // 
             this.clearBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.clearBackgroundToolStripButton.Enabled = false;
             this.clearBackgroundToolStripButton.Name = "clearBackgroundToolStripButton";
             this.clearBackgroundToolStripButton.Size = new System.Drawing.Size(72, 44);
             this.clearBackgroundToolStripButton.Text = "Clear";
@@ -4470,7 +4462,6 @@
 		private System.Windows.Forms.ToolStripMenuItem foregroundToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem backgroundToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem transparentBackgroundToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem includeobjectsWithFGToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem objectsAboveHighPlaneToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
@@ -4576,6 +4567,7 @@
 		private System.Windows.Forms.NumericUpDown colorGreen;
 		private System.Windows.Forms.NumericUpDown colorRed;
 		private System.Windows.Forms.ToolStripDropDownButton objGridSizeDropDownButton;
+		private ToolStripCheckBoxButton snapObjectsToolStripCheckBoxButton;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
@@ -4753,13 +4745,13 @@
 		private System.Windows.Forms.Button sfxDownButton;
 		private System.Windows.Forms.Button objectDownButton;
 		private System.Windows.Forms.Button objectUpButton;
+		private ToolStripCheckBoxButton displayObjectsToolStripCheckBoxButton;
 		private System.Windows.Forms.ToolStripButton resizeForegroundToolStripButton;
 		private System.Windows.Forms.ToolStripButton resizeBackgroundToolStripButton;
 		private System.Windows.Forms.ToolStripMenuItem hideDebugObjectsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem gotoToolStripMenuItem;
 		private System.Windows.Forms.TabControl tabControl2;
 		private System.Windows.Forms.ToolStripButton deleteToolStripButton;
-		private System.Windows.Forms.ToolStripMenuItem snapToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem bgColorToolStripMenuItem;
 		private System.Windows.Forms.CheckBox foregroundDeformation;
 		private System.Windows.Forms.ToolStripButton reloadTilesToolStripButton;

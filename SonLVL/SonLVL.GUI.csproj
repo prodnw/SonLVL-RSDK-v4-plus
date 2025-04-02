@@ -219,6 +219,9 @@
     <Compile Include="TileRemappingDialog.Designer.cs">
       <DependentUpon>TileRemappingDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolStripCheckBoxButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="AddGroupDialog.resx">
       <DependentUpon>AddGroupDialog.cs</DependentUpon>
     </EmbeddedResource>

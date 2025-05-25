@@ -143,7 +143,7 @@ namespace SonicRetro.SonLVL
 			foreach (var item in variables)
 				variableListBox.Items.Add(item.name);
 			variableListBox.EndUpdate();
-			variableAddButton.Enabled = variables.Count < 255;
+			variableAddButton.Enabled = variables.Count < 2048;
 			sfxListBox.BeginUpdate();
 			sfxListBox.Items.Clear();
 			foreach (var sfx in sounds)
@@ -291,14 +291,14 @@ namespace SonicRetro.SonLVL
 			variables.Add(info);
 			variableListBox.Items.Add(info.name);
 			variableListBox.SelectedIndex = variableListBox.Items.Count - 1;
-			variableAddButton.Enabled = variables.Count < 255;
+			variableAddButton.Enabled = variables.Count < 2048;
 		}
 
 		private void variableDeleteButton_Click(object sender, EventArgs e)
 		{
 			variables.RemoveAt(variableListBox.SelectedIndex);
 			variableListBox.Items.RemoveAt(variableListBox.SelectedIndex);
-			variableAddButton.Enabled = variables.Count < 255;
+			variableAddButton.Enabled = variables.Count < 2048;
 		}
 
 		private void variableUpButton_Click(object sender, EventArgs e)

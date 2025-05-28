@@ -1258,8 +1258,8 @@ namespace SonicRetro.SonLVL.GUI
 			loaded = false;
 			objectPanel.HScrollValue = (int)Math.Max(objectPanel.HScrollMinimum, Math.Min(objectPanel.HScrollMaximum - objectPanel.HScrollLargeChange + 1, item.X - ((objectPanel.PanelWidth / 2) / ZoomLevel)));
 			objectPanel.VScrollValue = (int)Math.Max(objectPanel.VScrollMinimum, Math.Min(objectPanel.VScrollMaximum - objectPanel.VScrollLargeChange + 1, item.Y - ((objectPanel.PanelHeight / 2) / ZoomLevel)));
-			foregroundPanel.HScrollValue = (int)Math.Max(foregroundPanel.HScrollMinimum, Math.Min(foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1, item.X - ((foregroundPanel.PanelWidth / 2) / ZoomLevel)));
-			foregroundPanel.VScrollValue = (int)Math.Max(foregroundPanel.VScrollMinimum, Math.Min(foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1, item.Y - ((foregroundPanel.PanelHeight / 2) / ZoomLevel)));
+			foregroundPanel.HScrollValue = Math.Min(objectPanel.HScrollValue, foregroundPanel.HScrollMaximum - foregroundPanel.HScrollLargeChange + 1);
+			foregroundPanel.VScrollValue = Math.Min(objectPanel.VScrollValue, foregroundPanel.VScrollMaximum - foregroundPanel.VScrollLargeChange + 1);
 			loaded = true;
 		}
 

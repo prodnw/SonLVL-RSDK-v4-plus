@@ -6713,6 +6713,7 @@ namespace SonicRetro.SonLVL.GUI
 				Rectangle bounds = item.Bounds;
 				int x = Math.Min(bounds.Left - 1, LevelData.FGWidth * 128 - 1);
 				int y = bounds.Top + (bounds.Height / 2);
+				if (x < 0 || y < 0 || y >= LevelData.FGHeight * 128) continue;
 				while (x > 0)
 				{
 					if (alignWall_common(x, y, false))
@@ -6735,7 +6736,8 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				Rectangle bounds = item.Bounds;
 				int x = bounds.Left + (bounds.Width / 2);
-				int y = bounds.Bottom;
+				int y = Math.Max(bounds.Bottom, 0);
+				if (x < 0 || x >= LevelData.FGWidth * 128 || y >= LevelData.FGHeight * 128) continue;
 				while (y < LevelData.FGHeight * 128 - 1)
 				{
 					if (alignWall_common(x, y, true))
@@ -6757,8 +6759,9 @@ namespace SonicRetro.SonLVL.GUI
 			foreach (Entry item in SelectedItems)
 			{
 				Rectangle bounds = item.Bounds;
-				int x = bounds.Right;
+				int x = Math.Max(bounds.Left - 1, 0);
 				int y = bounds.Top + (bounds.Height / 2);
+				if (x >= LevelData.FGWidth * 128 || y < 0 || y >= LevelData.FGHeight * 128) continue;
 				while (x < LevelData.FGWidth * 128 - 1)
 				{
 					if (alignWall_common(x, y, false))
@@ -6781,7 +6784,8 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				Rectangle bounds = item.Bounds;
 				int x = bounds.Left + (bounds.Width / 2);
-				int y = bounds.Top - 1;
+				int y = Math.Min(bounds.Top - 1, (LevelData.FGHeight * 128) - 1);
+				if (x < 0 || x >= LevelData.FGWidth * 128 || y < 0) continue;
 				while (y > 0)
 				{
 					if (alignWall_common(x, y, false))

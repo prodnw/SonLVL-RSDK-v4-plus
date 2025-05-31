@@ -30,24 +30,20 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ObjectList));
-			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Rotating cylinder in Metropolis Zone, twisting pathway in Emerald Hill Zone", 0);
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("2", 0);
-			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("3", 0);
-			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Rotating cylinder in Metropolis Zone, twisting pathway in Emerald Hill Zone", 0);
-			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("2", 0);
-			System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("3", 0);
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.listView1 = new System.Windows.Forms.ListView();
-			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.typeLabel = new System.Windows.Forms.Label();
+			this.typeValue = new System.Windows.Forms.NumericUpDown();
+			this.propertyValueLabel = new System.Windows.Forms.Label();
+			this.propertyValue = new System.Windows.Forms.NumericUpDown();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.listView2 = new System.Windows.Forms.ListView();
 			this.imageList2 = new System.Windows.Forms.ImageList(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.typeValue)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.propertyValue)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -62,10 +58,6 @@ namespace SonicRetro.SonLVL.GUI
 			// 
 			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView1.HideSelection = false;
-			this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-			listViewItem1,
-			listViewItem2,
-			listViewItem3});
 			this.listView1.LargeImageList = this.imageList1;
 			this.listView1.Location = new System.Drawing.Point(3, 3);
 			this.listView1.MultiSelect = false;
@@ -75,32 +67,50 @@ namespace SonicRetro.SonLVL.GUI
 			this.listView1.TileSize = new System.Drawing.Size(180, 64);
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Tile;
+            // 
+            // typeLabel
+            // 
+			this.typeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.typeLabel.AutoSize = true;
+            this.typeLabel.Location = new System.Drawing.Point(3, 9);
+            this.typeLabel.Name = "typeLabel";
+            this.typeLabel.Size = new System.Drawing.Size(72, 25);
+            this.typeLabel.Text = "Type: ";
 			// 
-			// numericUpDown1
+			// typeValue
 			// 
-			this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDown1.Location = new System.Drawing.Point(3, 9);
-			this.numericUpDown1.Maximum = new decimal(new int[] {
+			this.typeValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.typeValue.Location = new System.Drawing.Point(42, 7);
+			this.typeValue.Maximum = new decimal(new int[] {
 			255,
 			0,
 			0,
 			0});
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size(38, 20);
-			this.numericUpDown1.TabIndex = 2;
+			this.typeValue.Name = "typeValue";
+			this.typeValue.Size = new System.Drawing.Size(38, 20);
+			this.typeValue.TabIndex = 2;
+            // 
+            // propertyValueLabel
+            // 
+			this.propertyValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.propertyValueLabel.AutoSize = true;
+            this.propertyValueLabel.Location = new System.Drawing.Point(117, 9);
+            this.propertyValueLabel.Name = "propertyValueLabel";
+            this.propertyValueLabel.Size = new System.Drawing.Size(166, 25);
+            this.propertyValueLabel.Text = "Property Value: ";
 			// 
-			// numericUpDown2
+			// propertyValue
 			// 
-			this.numericUpDown2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDown2.Location = new System.Drawing.Point(47, 9);
-			this.numericUpDown2.Maximum = new decimal(new int[] {
+			this.propertyValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.propertyValue.Location = new System.Drawing.Point(202, 7);
+			this.propertyValue.Maximum = new decimal(new int[] {
 			255,
 			0,
 			0,
 			0});
-			this.numericUpDown2.Name = "numericUpDown2";
-			this.numericUpDown2.Size = new System.Drawing.Size(38, 20);
-			this.numericUpDown2.TabIndex = 3;
+			this.propertyValue.Name = "propertyValue";
+			this.propertyValue.Size = new System.Drawing.Size(38, 20);
+			this.propertyValue.TabIndex = 3;
 			// 
 			// button1
 			// 
@@ -143,10 +153,6 @@ namespace SonicRetro.SonLVL.GUI
 			// 
 			this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView2.HideSelection = false;
-			this.listView2.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-			listViewItem4,
-			listViewItem5,
-			listViewItem6});
 			this.listView2.LargeImageList = this.imageList2;
 			this.listView2.Location = new System.Drawing.Point(245, 3);
 			this.listView2.MultiSelect = false;
@@ -166,8 +172,10 @@ namespace SonicRetro.SonLVL.GUI
 			// panel1
 			// 
 			this.panel1.AutoScroll = true;
-			this.panel1.Controls.Add(this.numericUpDown1);
-			this.panel1.Controls.Add(this.numericUpDown2);
+			this.panel1.Controls.Add(this.typeLabel);
+			this.panel1.Controls.Add(this.typeValue);
+			this.panel1.Controls.Add(this.propertyValueLabel);
+			this.panel1.Controls.Add(this.propertyValue);
 			this.panel1.Controls.Add(this.button2);
 			this.panel1.Controls.Add(this.button1);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -190,8 +198,8 @@ namespace SonicRetro.SonLVL.GUI
 			this.Name = "ObjectList";
 			this.ShowInTaskbar = false;
 			this.Text = "Add Object...";
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.typeValue)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.propertyValue)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -203,8 +211,10 @@ namespace SonicRetro.SonLVL.GUI
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
 		internal System.Windows.Forms.ListView listView1;
-		internal System.Windows.Forms.NumericUpDown numericUpDown1;
-		internal System.Windows.Forms.NumericUpDown numericUpDown2;
+		internal System.Windows.Forms.Label typeLabel;
+		internal System.Windows.Forms.NumericUpDown typeValue;
+		internal System.Windows.Forms.Label propertyValueLabel;
+		internal System.Windows.Forms.NumericUpDown propertyValue;
 		internal System.Windows.Forms.ImageList imageList1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		internal System.Windows.Forms.ListView listView2;

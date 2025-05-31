@@ -2079,7 +2079,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			if (ObjectSelect.listView1.SelectedIndices.Count == 0) return;
 			if (ObjectSelect.listView2.SelectedIndices.Count == 0) return;
-			ObjectSelect.numericUpDown2.Value = (byte)ObjectSelect.listView2.SelectedItems[0].Tag;
+			ObjectSelect.propertyValue.Value = (byte)ObjectSelect.listView2.SelectedItems[0].Tag;
 		}
 
 		void ObjectSelect_listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -2087,8 +2087,8 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded) return;
 			if (ObjectSelect.listView1.SelectedIndices.Count == 0) return;
 			byte ID = (byte)ObjectSelect.listView1.SelectedItems[0].Tag;
-			ObjectSelect.numericUpDown1.Value = ID;
-			ObjectSelect.numericUpDown2.Value = LevelData.ObjTypes[ID].DefaultSubtype;
+			ObjectSelect.typeValue.Value = ID;
+			ObjectSelect.propertyValue.Value = LevelData.ObjTypes[ID].DefaultSubtype;
 			ObjectSelect.listView2.Items.Clear();
 			ObjectSelect.imageList2.Images.Clear();
 			foreach (byte item in LevelData.ObjTypes[ID].Subtypes)
@@ -3288,9 +3288,9 @@ namespace SonicRetro.SonLVL.GUI
 						{
 							if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
 							{
-								ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
+								ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.typeValue.Value);
 								objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
-								ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
+								ent.PropertyValue = (byte)ObjectSelect.propertyValue.Value;
 								ent.X = gridx;
 								ent.Y = gridy;
 								ent.UpdateSprite();
@@ -3972,9 +3972,9 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
 			{
-				ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.numericUpDown1.Value);
+				ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.typeValue.Value);
 				objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
-				ent.PropertyValue = (byte)ObjectSelect.numericUpDown2.Value;
+				ent.PropertyValue = (byte)ObjectSelect.propertyValue.Value;
 				double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 				ent.X = (short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
 				ent.Y = (short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs);
@@ -3991,8 +3991,8 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
 			{
-				byte ID = dragobj = (byte)ObjectSelect.numericUpDown1.Value;
-				byte sub = (byte)ObjectSelect.numericUpDown2.Value;
+				byte ID = dragobj = (byte)ObjectSelect.typeValue.Value;
+				byte sub = (byte)ObjectSelect.propertyValue.Value;
 				using (AddGroupDialog dlg = new AddGroupDialog())
 				{
 					dlg.Text = "Add Group of Objects";

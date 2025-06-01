@@ -578,8 +578,11 @@ namespace SonicRetro.SonLVL
 
 		private void stageDeleteButton_Click(object sender, EventArgs e)
 		{
+			int backupIndex = stageListBox.SelectedIndex;
 			stages[stageCategory.SelectedIndex].RemoveAt(stageListBox.SelectedIndex);
 			stageListBox.Items.RemoveAt(stageListBox.SelectedIndex);
+			if (stages[stageCategory.SelectedIndex].Count > 0)
+				stageListBox.SelectedIndex = Math.Min(backupIndex, stageListBox.Items.Count - 1);
 			stageAddButton.Enabled = stages[stageCategory.SelectedIndex].Count < 255;
 		}
 

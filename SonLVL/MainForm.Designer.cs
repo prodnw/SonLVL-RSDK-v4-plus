@@ -145,8 +145,6 @@
             this.path2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.anglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
@@ -204,6 +202,7 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
+            this.showGridToolStripCheckBoxButton = new ToolStripCheckBoxButton();
             this.snapObjectsToolStripCheckBoxButton = new ToolStripCheckBoxButton();
             this.alignLeftWallToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.alignGroundToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -1547,10 +1546,10 @@
             this.objectsAboveHighPlaneToolStripMenuItem,
             this.hUDToolStripMenuItem,
             this.bgColorToolStripMenuItem,
-            this.invertColorsToolStripMenuItem,
+			this.gridColorToolStripMenuItem,
+			this.invertColorsToolStripMenuItem,
             this.layersToolStripMenuItem,
             this.collisionToolStripMenuItem,
-            this.gridToolStripMenuItem,
             this.zoomToolStripMenuItem,
             this.toolStripSeparator4,
             this.usageCountsToolStripMenuItem,
@@ -1584,10 +1583,17 @@
             this.bgColorToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
             this.bgColorToolStripMenuItem.Text = "Background Color...";
             this.bgColorToolStripMenuItem.Click += new System.EventHandler(this.bgColorToolStripMenuItem_Click);
-            // 
-            // invertColorsToolStripMenuItem
-            // 
-            this.invertColorsToolStripMenuItem.CheckOnClick = true;
+			// 
+			// gridColorToolStripMenuItem
+			// 
+			this.gridColorToolStripMenuItem.Name = "gridColorToolStripMenuItem";
+			this.gridColorToolStripMenuItem.Size = new System.Drawing.Size(395, 44);
+			this.gridColorToolStripMenuItem.Text = "&Grid Color...";
+			this.gridColorToolStripMenuItem.Click += new System.EventHandler(this.gridColorToolStripMenuItem_Click);
+			// 
+			// invertColorsToolStripMenuItem
+			// 
+			this.invertColorsToolStripMenuItem.CheckOnClick = true;
             this.invertColorsToolStripMenuItem.Name = "invertColorsToolStripMenuItem";
             this.invertColorsToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
             this.invertColorsToolStripMenuItem.Text = "I&nvert Colors";
@@ -1675,31 +1681,6 @@
             this.anglesToolStripMenuItem.ShortcutKeyDisplayString = "R";
             this.anglesToolStripMenuItem.Size = new System.Drawing.Size(249, 44);
             this.anglesToolStripMenuItem.Text = "Angles";
-            // 
-            // gridToolStripMenuItem
-            // 
-            this.gridToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enableGridToolStripMenuItem,
-            this.gridColorToolStripMenuItem});
-            this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
-            this.gridToolStripMenuItem.Size = new System.Drawing.Size(447, 44);
-            this.gridToolStripMenuItem.Text = "&Grid";
-            // 
-            // enableGridToolStripMenuItem
-            // 
-            this.enableGridToolStripMenuItem.CheckOnClick = true;
-            this.enableGridToolStripMenuItem.Name = "enableGridToolStripMenuItem";
-            this.enableGridToolStripMenuItem.ShortcutKeyDisplayString = "I";
-            this.enableGridToolStripMenuItem.Size = new System.Drawing.Size(395, 44);
-            this.enableGridToolStripMenuItem.Text = "&Enable";
-            this.enableGridToolStripMenuItem.Click += new System.EventHandler(this.enableGridToolStripMenuItem_Click);
-            // 
-            // gridColorToolStripMenuItem
-            // 
-            this.gridColorToolStripMenuItem.Name = "gridColorToolStripMenuItem";
-            this.gridColorToolStripMenuItem.Size = new System.Drawing.Size(395, 44);
-            this.gridColorToolStripMenuItem.Text = "&Color...";
-            this.gridColorToolStripMenuItem.Click += new System.EventHandler(this.gridColorToolStripMenuItem_Click);
             // 
             // zoomToolStripMenuItem
             // 
@@ -2098,6 +2079,7 @@
             this.objToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.objToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.objGridSizeDropDownButton,
+            this.showGridToolStripCheckBoxButton,
             this.snapObjectsToolStripCheckBoxButton,
             toolStripSeparator10,
             this.alignLeftWallToolStripButton,
@@ -2207,13 +2189,22 @@
             this.toolStripMenuItem12.Size = new System.Drawing.Size(199, 44);
             this.toolStripMenuItem12.Text = "1024";
             // 
+            // showGridToolStripCheckBoxButton
+            // 
+            this.showGridToolStripCheckBoxButton.Checked = false;
+            this.showGridToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.showGridToolStripCheckBoxButton.Name = "showGridToolStripCheckBoxButton";
+            this.showGridToolStripCheckBoxButton.Size = new System.Drawing.Size(186, 42);
+            this.showGridToolStripCheckBoxButton.Text = "Show &Grid";
+            this.showGridToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.showGridToolStripCheckBoxButton_CheckedChanged);
+            // 
             // snapObjectsToolStripCheckBoxButton
             // 
             this.snapObjectsToolStripCheckBoxButton.Checked = false;
             this.snapObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.snapObjectsToolStripCheckBoxButton.Name = "snapObjectsToolStripCheckBoxButton";
             this.snapObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(186, 42);
-            this.snapObjectsToolStripCheckBoxButton.Text = "Snap Objects";
+            this.snapObjectsToolStripCheckBoxButton.Text = "Snap &Objects";
             this.snapObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.snapObjectsToolStripCheckBoxButton_CheckedChanged);
             // 
             // alignLeftWallToolStripButton
@@ -4512,8 +4503,6 @@
 		private System.Windows.Forms.ToolStripMenuItem copyTilesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem deleteTilesToolStripMenuItem;
 		private System.Windows.Forms.Panel panel10;
-		private System.Windows.Forms.ToolStripMenuItem gridToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem enableGridToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem gridColorToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem zoomToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -4567,6 +4556,7 @@
 		private System.Windows.Forms.NumericUpDown colorGreen;
 		private System.Windows.Forms.NumericUpDown colorRed;
 		private System.Windows.Forms.ToolStripDropDownButton objGridSizeDropDownButton;
+		private ToolStripCheckBoxButton showGridToolStripCheckBoxButton;
 		private ToolStripCheckBoxButton snapObjectsToolStripCheckBoxButton;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;

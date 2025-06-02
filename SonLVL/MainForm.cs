@@ -4093,6 +4093,21 @@ namespace SonicRetro.SonLVL.GUI
 					objs.RemoveRange(count, objs.Count - count);
 				}
 				
+				// Manual fixes for when pasting v3 entities into a v4 scene/vice versa..
+				// (Surely there's a better way to do this.. right?)
+				if (LevelData.Game.RSDKVer == EngineVersion.V4)
+				{
+					for (int i = 0; i < objs.Count; i++)
+						if (objs[i] is V3ObjectEntry v3obj)
+							objs[i] = new V4ObjectEntry(new RSDKv4.Scene.Entity(v3obj.Type, v3obj.PropertyValue, v3obj.X << 16, v3obj.Y << 16));
+				}
+				else
+				{
+					for (int i = 0; i < objs.Count; i++)
+						if (objs[i] is V4ObjectEntry v4obj)
+							objs[i] = new V3ObjectEntry(new RSDKv3.Scene.Entity(v4obj.Type, v4obj.PropertyValue, v4obj.X << 16, v4obj.Y << 16));
+				}
+				
 				Point upleft = new Point(int.MaxValue, int.MaxValue);
 				foreach (Entry item in objs)
 				{

@@ -2404,8 +2404,8 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 					Point pt = new Point(
-						(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
-						(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
+						(short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
+						(short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
 						);
 					int xst = pt.X;
 					for (int y = 0; y < AddObjectsPreview.Width; y++)
@@ -3286,19 +3286,27 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						if (LevelData.Scene.entities.Count < RSDKv3_4.Scene.ENTITY_LIST_SIZE)
 						{
-							if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
+							if ((ModifierKeys & Keys.Shift) == Keys.Shift)
 							{
-								ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.typeValue.Value);
-								objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
-								ent.PropertyValue = (byte)ObjectSelect.propertyValue.Value;
-								ent.X = gridx;
-								ent.Y = gridy;
-								ent.UpdateSprite();
-								SelectedItems.Clear();
-								SelectedItems.Add(ent);
-								SelectedObjectChanged();
-								DrawLevel();
-								SaveState("Add Object");
+								menuLoc = e.Location;
+								addGroupOfObjectsToolStripMenuItem_Click(this, EventArgs.Empty);
+							}
+							else
+							{
+								if (ObjectSelect.ShowDialog(this) == DialogResult.OK)
+								{
+									ObjectEntry ent = LevelData.CreateObject((byte)ObjectSelect.typeValue.Value);
+									objectOrder.Items.Add(ent.Name, ent.Type < objectTypeImages.Images.Count ? ent.Type : 0);
+									ent.PropertyValue = (byte)ObjectSelect.propertyValue.Value;
+									ent.X = gridx;
+									ent.Y = gridy;
+									ent.UpdateSprite();
+									SelectedItems.Clear();
+									SelectedItems.Add(ent);
+									SelectedObjectChanged();
+									DrawLevel();
+									SaveState("Add Object");
+								}
 							}
 							return;
 						}
@@ -4002,8 +4010,8 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 						Point pt = new Point(
-							(ushort)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
-							(ushort)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
+							(short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
+							(short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
 							);
 						int xst = pt.X;
 						Size xsz = new Size((int)dlg.XDist.Value, 0);

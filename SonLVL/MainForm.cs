@@ -922,7 +922,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					DefaultExt = "exe",
 					Filter = "EXE Files|*.exe|All Files|*.*",
-					Title = "Select your game's EXE",
+					Title = "Select your decompilation EXE",
 					InitialDirectory = Path.GetDirectoryName(path)
 				})
 					if (a.ShowDialog(this) == DialogResult.OK)

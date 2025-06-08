@@ -168,21 +168,21 @@ namespace SonicRetro.SonLVL.GUI
 			objectsAboveHighPlaneToolStripMenuItem.Checked = Settings.ObjectsAboveHighPlane;
 			hUDToolStripMenuItem.Checked = Settings.ShowHUD;
 			//invertColorsToolStripMenuItem.Checked = Settings.InvertColors;
-			lowToolStripMenuItem.Checked = Settings.ViewLowPlane;
-			highToolStripMenuItem.Checked = Settings.ViewHighPlane;
+			chunkShowLowTilesCheckBox.Checked = lowToolStripMenuItem.Checked = Settings.ViewLowPlane;
+			chunkShowHighTilesCheckBox.Checked = highToolStripMenuItem.Checked = Settings.ViewHighPlane;
 			switch (Settings.ViewCollision)
 			{
 				case CollisionPath.Path1:
-					noneToolStripMenuItem1.Checked = false;
-					path1ToolStripMenuItem.Checked = true;
+					chunkColNoneRadioButton.Checked = noneToolStripMenuItem1.Checked = false;
+					chunkColARadioButton.Checked = path1ToolStripMenuItem.Checked = true;
 					break;
 				case CollisionPath.Path2:
-					noneToolStripMenuItem1.Checked = false;
-					path2ToolStripMenuItem.Checked = true;
+					chunkColNoneRadioButton.Checked = noneToolStripMenuItem1.Checked = false;
+					chunkColBRadioButton.Checked = path2ToolStripMenuItem.Checked = true;
 					break;
 			}
 			anglesToolStripMenuItem.Checked = Settings.ViewAngles;
-			showGridToolStripCheckBoxButton.Checked = Settings.ShowGrid;
+			chunkShowGridCheckBox.Checked = showGridToolStripCheckBoxButton.Checked = Settings.ShowGrid;
 			snapObjectsToolStripCheckBoxButton.Checked = Settings.SnapObjectsToGrid;
 			foreach (ToolStripMenuItem item in zoomToolStripMenuItem.DropDownItems)
 				if (item.Text == Settings.ZoomLevel)
@@ -831,12 +831,11 @@ namespace SonicRetro.SonLVL.GUI
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
 			ChunkCount.Text = $"/ {(LevelData.NewChunks.chunkList.Length - 1):X}";
 			TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1):X}";
-			deleteUnusedTilesToolStripButton.Enabled = deleteUnusedChunksToolStripButton.Enabled = ChunkID.Enabled = TileID.Enabled =
-				removeDuplicateTilesToolStripButton.Enabled = copyCollisionAllButton.Enabled = copyCollisionSingleButton.Enabled = calculateAngleButton.Enabled =
-				removeDuplicateChunksToolStripButton.Enabled = replaceChunkBlocksToolStripButton.Enabled = reloadTilesToolStripButton.Enabled =
-				importToolStripButton.Enabled = deleteToolStripButton.Enabled = fgToolStrip.Enabled = bgToolStrip.Enabled =
+
+			tableLayoutPanel4.Enabled = importToolStripButton.Enabled = deleteToolStripButton.Enabled = fgToolStrip.Enabled = bgToolStrip.Enabled =
 				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled =
 				objectPanel.PanelAllowDrop = objectOrder.AllowDrop = TileSelector.AllowDrop = true;
+			
 			undoToolStripMenuItem.Enabled = false;
 			undoToolStripMenuItem.DropDownItems.Clear();
 			redoToolStripMenuItem.Enabled = false;
@@ -1590,12 +1589,20 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void lowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			if (!loaded) return;
+
+			chunkShowLowTilesCheckBox.Checked = lowToolStripMenuItem.Checked;
+
 			DrawLevel();
 			DrawChunkPicture();
 		}
 
 		private void highToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			if (!loaded) return;
+
+			chunkShowHighTilesCheckBox.Checked = highToolStripMenuItem.Checked;
+
 			DrawLevel();
 			DrawChunkPicture();
 		}
@@ -4316,14 +4323,6 @@ namespace SonicRetro.SonLVL.GUI
 			RSDKv3_4.Tiles128x128.Block.Tile[] blocks = GetSelectedChunkBlocks();
 			switch (e.KeyCode)
 			{
-				case Keys.B:
-					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-						if (e.Shift)
-							item.tileIndex = (ushort)(item.tileIndex == 0 ? LevelData.NewTiles.Length - 1 : item.tileIndex - 1);
-						else
-							item.tileIndex = (ushort)((item.tileIndex + 1) % LevelData.NewTiles.Length);
-					SaveState("Change Chunk Tiles Index");
-					break;
 				case Keys.Down:
 					if (SelectedChunkBlock.Y < 7)
 					{
@@ -4379,7 +4378,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
 						if (item is ToolStripMenuItem item1)
 							item1.Checked = false;
-					noneToolStripMenuItem1.Checked = true;
+					chunkColNoneRadioButton.Checked = noneToolStripMenuItem1.Checked = true;
 					anglesToolStripMenuItem.Checked = angles;
 					break;
 				case Keys.W:
@@ -4387,7 +4386,7 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
 						if (item is ToolStripMenuItem item1)
 							item1.Checked = false;
-					path1ToolStripMenuItem.Checked = true;
+					chunkColARadioButton.Checked = path1ToolStripMenuItem.Checked = true;
 					anglesToolStripMenuItem.Checked = angles;
 					break;
 				case Keys.E:
@@ -4395,27 +4394,8 @@ namespace SonicRetro.SonLVL.GUI
 					foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
 						if (item is ToolStripMenuItem item1)
 							item1.Checked = false;
-					path2ToolStripMenuItem.Checked = true;
+					chunkColBRadioButton.Checked = path2ToolStripMenuItem.Checked = true;
 					anglesToolStripMenuItem.Checked = angles;
-					break;
-				case Keys.S:
-					if (!e.Control)
-					{
-						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-							if (e.Shift)
-								item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityA + 1);
-							else
-								item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityA - 1);
-						SaveState("Change Chunk Tiles Solidity A");
-					}
-					break;
-				case Keys.T:
-					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-						if (e.Shift)
-							item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityB + 1);
-						else
-							item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityB - 1);
-					SaveState("Change Chunk Tiles Solidity B");
 					break;
 				case Keys.Up:
 					if (SelectedChunkBlock.Y > 0)
@@ -4429,12 +4409,42 @@ namespace SonicRetro.SonLVL.GUI
 					else
 						return;
 					break;
-				case Keys.X:
-					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
-						item.direction ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX;
-					SaveState("Change Chunk Tiles X Flip");
-					break;
 				case Keys.Y:
+					if (!e.Control)
+					{
+						lowToolStripMenuItem.Checked = !lowToolStripMenuItem.Checked;
+						DrawLevel();
+					}
+					break;
+				case Keys.U:
+					highToolStripMenuItem.Checked = !highToolStripMenuItem.Checked;
+					DrawLevel();
+					break;
+				case Keys.I:
+					showGridToolStripCheckBoxButton.Checked = !showGridToolStripCheckBoxButton.Checked;
+					break;
+				case Keys.A: // Decrease all selected tile indexes
+					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+						item.tileIndex = (ushort)(item.tileIndex == 0 ? LevelData.NewTiles.Length - 1 : item.tileIndex - 1);
+					SaveState("Change Chunk Tiles Index");
+					break;
+				case Keys.Z: // Increase all selected tile indexes
+					if (!e.Control)
+					{
+						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+							item.tileIndex = (ushort)((item.tileIndex + 1) % LevelData.NewTiles.Length);
+						SaveState("Change Chunk Tiles Index");
+					}
+					break;
+				case Keys.S:
+					if (!e.Control)
+					{
+						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+							item.direction ^= RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX;
+						SaveState("Change Chunk Tiles X Flip");
+					}
+					break;
+				case Keys.X:
 					if (!e.Control)
 					{
 						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
@@ -4442,12 +4452,41 @@ namespace SonicRetro.SonLVL.GUI
 						SaveState("Change Chunk Tiles Y Flip");
 					}
 					break;
-				case Keys.I:
-					showGridToolStripCheckBoxButton.Checked = !showGridToolStripCheckBoxButton.Checked;
+				case Keys.D:
+					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+						if (e.Shift)
+							item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityA + 1);
+						else
+							item.solidityA = (item.solidityA == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityA - 1);
+					SaveState("Change Chunk Tiles Solidity A");
+					break;
+				case Keys.C:
+					if (e.Control)
+						copyChunkBlocksToolStripMenuItem_Click(this, EventArgs.Empty);
+					else
+					{
+						foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
+							if (e.Shift)
+								item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll : item.solidityB + 1);
+							else
+								item.solidityB = (item.solidityB == RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidAll ? RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidTopNoGrip : item.solidityB - 1);
+						SaveState("Change Chunk Tiles Solidity B");
+					}
 					break;
 				case Keys.P:
+					chunkHighlightHighTilesCheckBox.Checked = !chunkHighlightHighTilesCheckBox.Checked;
+					break;
+				case Keys.F:
 					foreach (RSDKv3_4.Tiles128x128.Block.Tile item in blocks)
 						item.visualPlane ^= RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High;
+					SaveState("Change Chunk Tiles Visual Plane");
+					break;
+				case Keys.V:
+					if (e.Control)
+						pasteChunkBlocksToolStripMenuItem_Click(this, EventArgs.Empty);
+					break;
+				case Keys.Delete:
+					clearChunkBlocksToolStripMenuItem_Click(this, EventArgs.Empty);
 					break;
 				default:
 					return;
@@ -4465,6 +4504,67 @@ namespace SonicRetro.SonLVL.GUI
 			DrawLevel();
 			DrawChunkPicture();
 			SaveState("Change Chunk Tiles Property");
+		}
+
+		private void chunkColNoneRadioButton_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!loaded || !chunkColNoneRadioButton.Checked) return;
+
+			bool angles = anglesToolStripMenuItem.Checked;
+			foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+				if (item is ToolStripMenuItem toolStripMenuItem)
+					toolStripMenuItem.Checked = false;
+			noneToolStripMenuItem1.Checked = true;
+			anglesToolStripMenuItem.Checked = angles;
+			DrawChunkPicture();
+		}
+
+		private void chunkColARadioButton_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!loaded || !chunkColARadioButton.Checked) return;
+
+			bool angles = anglesToolStripMenuItem.Checked;
+			foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+				if (item is ToolStripMenuItem toolStripMenuItem)
+					toolStripMenuItem.Checked = false;
+			path1ToolStripMenuItem.Checked = true;
+			anglesToolStripMenuItem.Checked = angles;
+			DrawChunkPicture();
+		}
+		private void chunkColBRadioButton_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!loaded || !chunkColBRadioButton.Checked) return;
+
+			bool angles = anglesToolStripMenuItem.Checked;
+			foreach (ToolStripItem item in collisionToolStripMenuItem.DropDownItems)
+				if (item is ToolStripMenuItem toolStripMenuItem)
+					toolStripMenuItem.Checked = false;
+			path2ToolStripMenuItem.Checked = true;
+			anglesToolStripMenuItem.Checked = angles;
+			DrawChunkPicture();
+		}
+
+		private void chunkShowLowTilesCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			lowToolStripMenuItem.Checked = chunkShowLowTilesCheckBox.Checked;
+			DrawChunkPicture();
+		}
+
+		private void chunkShowHighTilesCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			highToolStripMenuItem.Checked = chunkShowHighTilesCheckBox.Checked;
+			DrawChunkPicture();
+		}
+
+		private void chunkShowGridCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			showGridToolStripCheckBoxButton.Checked = chunkShowGridCheckBox.Checked;
+			DrawChunkPicture();
+		}
+
+		private void chunkHighlightHighTilesCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			DrawChunkPicture();
 		}
 
 		private void DrawChunkPicture()
@@ -4500,7 +4600,18 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 
-			bmp.DrawRectangle(Color.White, SelectedChunkBlock.X * 32, SelectedChunkBlock.Y * 32, SelectedChunkBlock.Width * 32, SelectedChunkBlock.Height * 32);
+			if (chunkHighlightHighTilesCheckBox.Checked)
+			{
+				Color c = Color.FromArgb(254, Settings.GridColor);
+				for (int by = 0; by < 8; by++)
+					for (int bx = 0; bx < 8; bx++)
+					{
+						if (LevelData.NewChunks.chunkList[SelectedChunk].tiles[by][bx].visualPlane == RSDKv3_4.Tiles128x128.Block.Tile.VisualPlanes.High)
+							bmp.FillRectangle(c, bx * 32, by * 32, 32, 32);
+					}
+			}
+
+			bmp.FillRectangle(Color.FromArgb(254, Color.White), SelectedChunkBlock.X * 32, SelectedChunkBlock.Y * 32, SelectedChunkBlock.Width * 32, SelectedChunkBlock.Height * 32);
 
 			using (Graphics gfx = ChunkPicture.CreateGraphics())
 			{
@@ -6972,6 +7083,8 @@ namespace SonicRetro.SonLVL.GUI
 				DrawChunkPicture();
 			else
 				DrawLevel();
+
+			chunkShowGridCheckBox.Checked = showGridToolStripCheckBoxButton.Checked;
 		}
 
 		private void snapObjectsToolStripCheckBoxButton_CheckedChanged(object sender, EventArgs e)
@@ -9318,12 +9431,6 @@ namespace SonicRetro.SonLVL.GUI
 				SaveState("Remove Duplicate Tiles");
 			}
 			MessageBox.Show(this, $"Removed {deleted} duplicate tiles.", "SonLVL-RSDK");
-		}
-
-		private void enableGridToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (CurrentTab == Tab.Art)
-				DrawChunkPicture();
 		}
 
 		private void importOverToolStripMenuItem_Click(object sender, EventArgs e)

@@ -2127,12 +2127,36 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			foreach (var item in bgLayerDropDown.DropDownItems.OfType<ToolStripMenuItem>())
 				item.Checked = item == e.ClickedItem;
+			foreach (var item in bgDuplicateLayerOverToolStripButton.DropDownItems.OfType<ToolStripMenuItem>())
+				item.Visible = true;
 			bglayer = bgLayerDropDown.DropDownItems.IndexOf(e.ClickedItem);
+			bgDuplicateLayerOverToolStripButton.DropDownItems[bglayer].Visible = false;
 			bgLayerDropDown.Text = $"Layer: {bglayer + 1}";
 			BGSelection = Rectangle.Empty;
 			UpdateScrollControls();
 			UpdateScrollBars();
 			DrawLevel();
+		}
+
+		private void bgDuplicateLayerOverToolStripButton_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			bgDuplicateLayerOverToolStripButton.HideDropDown();
+
+			int destLayer = bgDuplicateLayerOverToolStripButton.DropDownItems.IndexOf(e.ClickedItem);
+			if (MessageBox.Show(this, $"This action will ENTIRELY replace both the chunk layout and parallax data of background layer {destLayer + 1}.\n\nAre you sure you want duplicate layer {bglayer + 1} over layer {destLayer + 1}?", "Duplicate Background Layer", MessageBoxButtons.OKCancel) != DialogResult.OK)
+				return;
+
+			LevelData.Background.layers[destLayer].type = LevelData.Background.layers[bglayer].type;
+			LevelData.Background.layers[destLayer].scrollSpeed = LevelData.Background.layers[bglayer].scrollSpeed;
+			LevelData.Background.layers[destLayer].parallaxFactor = LevelData.Background.layers[bglayer].parallaxFactor;
+			LevelData.ResizeBG(destLayer, LevelData.BGSize[bglayer]);
+			for (int y = 0; y < LevelData.BGHeight[bglayer]; y++)
+				for (int x = 0; x < LevelData.BGWidth[bglayer]; x++)
+					LevelData.Background.layers[destLayer].layout[y][x] = LevelData.Background.layers[bglayer].layout[y][x];
+
+			LevelData.BGScroll[destLayer] = LevelData.BGScroll[bglayer].Select(a => a.Clone()).ToList();
+
+			SaveState("Duplicate Background Layer");
 		}
 
 		BitmapBits32 LevelImg8bpp;
@@ -8354,10 +8378,13 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.BGSize[bglayer].IsEmpty)
 			{
 				tabPage13.Hide();
+				bgDuplicateLayerOverToolStripButton.Enabled = false;
 				return;
 			}
-			else
-				tabPage13.Show();
+			
+			tabPage13.Show();
+			bgDuplicateLayerOverToolStripButton.Enabled = true;
+
 			layerScrollType.SelectedIndex = (int)LevelData.Background.layers[bglayer].type - 1;
 			switch (LevelData.Background.layers[bglayer].type)
 			{

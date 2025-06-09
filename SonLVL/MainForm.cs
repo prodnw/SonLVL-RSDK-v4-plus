@@ -3658,6 +3658,7 @@ namespace SonicRetro.SonLVL.GUI
 								case MouseButtons.Right:
 									LevelData.BGScroll[bglayer].RemoveAt(i);
 									scrollList.Items.RemoveAt(i);
+									scrollList.SelectedIndex = -1;
 									DrawLevel();
 									SaveState("Delete Scroll Line");
 									break;
@@ -7765,7 +7766,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void deleteUnusedTilesToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "Are you sure you want to clear all tiles not used in chunks?", "Delete Unused Tiles", MessageBoxButtons.OKCancel) != DialogResult.OK)
+			if (MessageBox.Show(this, "This action may break levels that alter tiles through scripts, such as animated tile patterns.\n\nAre you sure you want to clear all tiles not used in chunks?", "Delete Unused Tiles", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			int numdel = 0;
 			foreach (var i in Enumerable.Range(0, LevelData.NewTiles.Length).Select(a => (ushort)a).Except(LevelData.NewChunks.chunkList.SelectMany(a => a.tiles.SelectMany(b => b).Select(c => c.tileIndex))))
@@ -7786,7 +7787,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void deleteUnusedChunksToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "This action may break other levels that share the same chunk set, or levels that alter the level layout dynamically.\n\nAre you sure you want to clear all chunks not used in the layout?", "Delete Unused Chunks", MessageBoxButtons.OKCancel) != DialogResult.OK)
+			if (MessageBox.Show(this, "This action may break levels that alter the level layout through scripts.\n\nAre you sure you want to clear all chunks not used in the layout?", "Delete Unused Chunks", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			int numdel = 0;
 			foreach (var i in Enumerable.Range(0, LevelData.NewChunks.chunkList.Length).Select(a => (ushort)a).Except(LevelData.Scene.layout.SelectMany(a => a).Union(LevelData.Background.layers.SelectMany(a => a.layout.SelectMany(b => b))).Union(LevelData.AdditionalScenes.SelectMany(a => a.Scene.layout.SelectMany(b => b)))))
@@ -7969,7 +7970,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void removeDuplicateChunksToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "This action may break other levels that share the same chunk set, or levels that alter the level layout dynamically.\n\nAre you sure you want to remove all duplicate chunks?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
+			if (MessageBox.Show(this, "This action may break levels that alter the level layout through scripts.\n\nAre you sure you want to remove all duplicate chunks?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			Dictionary<ushort, RSDKv3_4.Tiles128x128.Block> chunks = new Dictionary<ushort, RSDKv3_4.Tiles128x128.Block>(LevelData.NewChunks.chunkList.Length);
 			Dictionary<ushort, ushort> chunkMap = new Dictionary<ushort, ushort>(LevelData.NewChunks.chunkList.Length);
@@ -9377,7 +9378,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void removeDuplicateTilesToolStripButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "Are you sure you want to remove all duplicate tiles?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
+			if (MessageBox.Show(this, "This action may break levels that alter tiles through scripts, such as animated tile patterns.\n\nAre you sure you want to remove all duplicate tiles?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
 				return;
 			Dictionary<ushort, TileData> tiles = new Dictionary<ushort, TileData>(LevelData.NewTiles.Length);
 			Dictionary<ushort, RSDKv3_4.Tiles128x128.Block.Tile> tileMap = new Dictionary<ushort, RSDKv3_4.Tiles128x128.Block.Tile>(LevelData.NewTiles.Length);

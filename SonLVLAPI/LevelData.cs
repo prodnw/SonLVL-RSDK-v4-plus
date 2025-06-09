@@ -101,20 +101,29 @@ namespace SonicRetro.SonLVL.API
 			if (File.Exists(dataFile))
 			{
 				if (Game.IsV5U)
+				{
+					Log($"Using RSDKv5u DataFile {dataFile}...");
 					DataFile = new RSDKv5.DataPack(dataFile, rsdk_files_list);
+				}
 				else
 					switch (Game.RSDKVer)
 					{
 						case EngineVersion.V4:
+							Log($"Using RSDKv4 DataFile {dataFile}...");
 							DataFile = new RSDKv4.DataPack(dataFile, rsdk_files_list);
 							break;
 						case EngineVersion.V3:
+							Log($"Using RSDKv3 DataFile {dataFile}...");
 							DataFile = new RSDKv3.DataPack(dataFile);
 							break;
 					}
 			}
 			else
+			{
+				Log($"No DataFile found at {dataFile}, assuming Data Folder mode in folder {EXEFolder}...");
 				DataFile = new DataFolder(EXEFolder);
+			}
+
 			ModFolder = null;
 			switch (Game.RSDKVer)
 			{
@@ -228,7 +237,7 @@ namespace SonicRetro.SonLVL.API
 		{
 			System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 			stopwatch.Start();
-			Log("Loading " + stage.name + "...");
+			Log("Loading level " + stage.name + "...");
 			StageInfo = stage;
 			string stgfol = $"Data/Stages/{stage.folder}/";
 			switch (Game.RSDKVer)

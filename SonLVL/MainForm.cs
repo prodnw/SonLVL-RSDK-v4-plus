@@ -5067,7 +5067,28 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				case ArtTab.Chunks:
 					DataObject d = new DataObject(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
-					d.SetImage(LevelData.ChunkSprites[SelectedChunk].GetBitmap().ToBitmap(LevelImgPalette));
+
+					BitmapBits32 bmp = new BitmapBits32(128, 128);
+					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
+					bmp.Clear(bmp.Palette[LevelData.ColorTransparent]);
+					if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
+						bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+					else if (lowToolStripMenuItem.Checked)
+						bmp.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+					else if (highToolStripMenuItem.Checked)
+						bmp.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+
+					bmp.Palette[LevelData.ColorWhite] = Color.White;
+					bmp.Palette[LevelData.ColorYellow] = Color.Yellow;
+					bmp.Palette[LevelData.ColorBlack] = Color.Black;
+					bmp.Palette[LevelData.ColorRed] = Color.Red;
+
+					if (path1ToolStripMenuItem.Checked)
+						bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
+					else if (path2ToolStripMenuItem.Checked)
+						bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
+
+					d.SetImage(bmp.ToBitmap());
 					Clipboard.SetDataObject(d);
 					DeleteChunk();
 					SaveState("Cut Chunk");
@@ -5110,7 +5131,29 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				case ArtTab.Chunks:
 					DataObject d = new DataObject(typeof(RSDKv3_4.Tiles128x128.Block).AssemblyQualifiedName, LevelData.NewChunks.chunkList[SelectedChunk]);
-					d.SetImage(LevelData.ChunkSprites[SelectedChunk].GetBitmap().ToBitmap(LevelImgPalette));
+
+					BitmapBits32 bmp = new BitmapBits32(128, 128);
+					LevelImgPalette.Entries.CopyTo(bmp.Palette, 0);
+					bmp.Clear(bmp.Palette[LevelData.ColorTransparent]);
+					if (lowToolStripMenuItem.Checked && highToolStripMenuItem.Checked)
+						bmp.DrawSprite(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+					else if (lowToolStripMenuItem.Checked)
+						bmp.DrawSpriteLow(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+					else if (highToolStripMenuItem.Checked)
+						bmp.DrawSpriteHigh(LevelData.ChunkSprites[SelectedChunk], 0, 0);
+
+					bmp.Palette[LevelData.ColorWhite] = Color.White;
+					bmp.Palette[LevelData.ColorYellow] = Color.Yellow;
+					bmp.Palette[LevelData.ColorBlack] = Color.Black;
+					bmp.Palette[LevelData.ColorRed] = Color.Red;
+
+					if (path1ToolStripMenuItem.Checked)
+						bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][0], 0, 0);
+					else if (path2ToolStripMenuItem.Checked)
+						bmp.DrawBitmap(LevelData.ChunkColBmpBits[SelectedChunk][1], 0, 0);
+
+					d.SetImage(bmp.ToBitmap());
+
 					Clipboard.SetDataObject(d);
 					break;
 				case ArtTab.Tiles:
@@ -5773,12 +5816,12 @@ namespace SonicRetro.SonLVL.GUI
 			if (CurrentTab == Tab.Background)
 			{
 				area = new Rectangle(BGSelection.X * 128, BGSelection.Y * 128, BGSelection.Width * 128, BGSelection.Height * 128);
-				d.SetImage(LevelData.DrawBackground(bglayer, area, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked).ToBitmap(LevelImgPalette));
+				d.SetImage(LevelData.DrawBackground32(bglayer, area, LevelImgPalette.Entries[LevelData.ColorTransparent], lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked).ToBitmap());
 			}
 			else
 			{
 				area = new Rectangle(FGSelection.X * 128, FGSelection.Y * 128, FGSelection.Width * 128, FGSelection.Height * 128);
-				d.SetImage(LevelData.DrawForeground(area, displayObjectsToolStripCheckBoxButton.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, false, false).ToBitmap(LevelImgPalette));
+				d.SetImage(LevelData.DrawForeground32(area, LevelImgPalette.Entries[LevelData.ColorTransparent], displayObjectsToolStripCheckBoxButton.Checked, true, objectsAboveHighPlaneToolStripMenuItem.Checked, lowToolStripMenuItem.Checked, highToolStripMenuItem.Checked, path1ToolStripMenuItem.Checked, path2ToolStripMenuItem.Checked).ToBitmap());
 			}
 			
 			Clipboard.SetDataObject(d);

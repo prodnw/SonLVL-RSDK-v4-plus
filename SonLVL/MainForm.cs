@@ -762,7 +762,7 @@ namespace SonicRetro.SonLVL.GUI
 				levelNameBox2.Text = string.Empty;
 			levelNameBox.MaxLength = 255 - LevelData.Scene.title.Length;
 			levelNameBox2.MaxLength = 255 - LevelData.Scene.title.Length;
-			midpointBox.SelectedIndex = (int)LevelData.Scene.layerMidpoint;
+			midpointTrackBar.Value = 4 - (int)LevelData.Scene.layerMidpoint;
 			layer0Box.SelectedIndex = (int)LevelData.Scene.activeLayer0;
 			layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 			layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
@@ -1021,7 +1021,7 @@ namespace SonicRetro.SonLVL.GUI
 				levelNameBox2.Text = string.Empty;
 			levelNameBox.MaxLength = 255 - LevelData.Scene.title.Length;
 			levelNameBox2.MaxLength = 255 - LevelData.Scene.title.Length;
-			midpointBox.SelectedIndex = (int)LevelData.Scene.layerMidpoint;
+			midpointTrackBar.Value = 4 - (int)LevelData.Scene.layerMidpoint;
 			layer0Box.SelectedIndex = (int)LevelData.Scene.activeLayer0;
 			layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 			layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
@@ -1491,7 +1491,7 @@ namespace SonicRetro.SonLVL.GUI
 					levelNameBox2.Text = levnam[1];
 				levelNameBox.MaxLength = 255 - LevelData.Scene.title.Length;
 				levelNameBox2.MaxLength = 255 - LevelData.Scene.title.Length;
-				midpointBox.SelectedIndex = (int)LevelData.Scene.layerMidpoint;
+				midpointTrackBar.Value = 4 - (int)LevelData.Scene.layerMidpoint;
 				layer0Box.SelectedIndex = (int)LevelData.Scene.activeLayer0;
 				layer1Box.SelectedIndex = (int)LevelData.Scene.activeLayer1;
 				layer2Box.SelectedIndex = (int)LevelData.Scene.activeLayer2;
@@ -8837,10 +8837,24 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState("Change Level Name");
 		}
 
-		private void midpointBox_SelectedIndexChanged(object sender, EventArgs e)
+		private void midpointTrackBar_ValueChanged(object sender, EventArgs e)
 		{
+			string[] names = new string[] {
+				"Midpoint: Before Layer 0",
+				"Midpoint: After Layer 0",
+				"Midpoint: After Layer 1",
+				"Midpoint: After Layer 2",
+				"Midpoint: After Layer 3"};
+
+			int midpoint = 4 - midpointTrackBar.Value;
+			midpointLabel.Text = names[midpoint];
+
+			lowTilesLabel.Text = "";
+			for (int i = 0; i < 4; i++)
+				lowTilesLabel.Text += $"Draw {((i < midpoint) ? "Low" : "High")} Tiles" + Environment.NewLine + Environment.NewLine;
+
 			if (!loaded) return;
-			LevelData.Scene.layerMidpoint = (RSDKv3_4.Scene.LayerMidpoints)midpointBox.SelectedIndex;
+			LevelData.Scene.layerMidpoint = (RSDKv3_4.Scene.LayerMidpoints)(midpoint);
 			SaveState("Change Layer Midpoint");
 		}
 

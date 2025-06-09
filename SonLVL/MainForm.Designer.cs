@@ -92,7 +92,6 @@
             this.chunkShowHighTilesCheckBox = new System.Windows.Forms.CheckBox();
             this.label28 = new System.Windows.Forms.Label();
             this.flipChunkVButton = new System.Windows.Forms.Button();
-            this.chunkBlockEditor = new SonicRetro.SonLVL.ChunkBlockEditor();
             this.flipChunkHButton = new System.Windows.Forms.Button();
             this.ChunkCount = new System.Windows.Forms.Label();
             this.chunkCtrlLabel = new System.Windows.Forms.Label();
@@ -200,7 +199,6 @@
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.objectTypeList = new System.Windows.Forms.ListView();
             this.objectTypeImages = new System.Windows.Forms.ImageList(this.components);
-            this.objectPanel = new SonicRetro.SonLVL.ScrollingPanel();
             this.objToolStrip = new System.Windows.Forms.ToolStrip();
             this.objGridSizeDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -214,8 +212,6 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
-            this.showGridToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
-            this.snapObjectsToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
             this.alignLeftWallToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.alignGroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.alignRightWallToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -233,9 +229,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.foregroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
             this.fgToolStrip = new System.Windows.Forms.ToolStrip();
-            this.displayObjectsToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
             this.resizeForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.replaceForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearForegroundToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -248,12 +242,20 @@
             this.layoutSectionPreview = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.backgroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
             this.bgToolStrip = new System.Windows.Forms.ToolStrip();
             this.bgLayerDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.resizeBackgroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.replaceBackgroundToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearBackgroundToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.bgDuplicateLayerOverToolStripButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.layer1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer6ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layer8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tabPage11 = new System.Windows.Forms.TabPage();
@@ -295,7 +297,6 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.PalettePanel = new System.Windows.Forms.Panel();
             this.colorEditingPanel = new System.Windows.Forms.Panel();
-            this.colorHex = new SonicRetro.SonLVL.NumericUpDownPadded();
             this.colorBlue = new System.Windows.Forms.NumericUpDown();
             this.colorGreen = new System.Windows.Forms.NumericUpDown();
             this.colorRed = new System.Windows.Forms.NumericUpDown();
@@ -330,6 +331,7 @@
             this.objectListBox = new System.Windows.Forms.ListBox();
             this.loadGlobalObjects = new System.Windows.Forms.CheckBox();
             this.layerSettingsGroup = new System.Windows.Forms.GroupBox();
+            this.midpointTrackBar = new System.Windows.Forms.TrackBar();
             this.foregroundDeformation = new System.Windows.Forms.CheckBox();
             this.layer3Box = new System.Windows.Forms.ComboBox();
             this.label21 = new System.Windows.Forms.Label();
@@ -339,8 +341,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.layer0Box = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.midpointBox = new System.Windows.Forms.ComboBox();
-            this.label17 = new System.Windows.Forms.Label();
+            this.midpointLabel = new System.Windows.Forms.Label();
             this.titleCardGroup = new System.Windows.Forms.GroupBox();
             this.levelNameBox = new System.Windows.Forms.TextBox();
             this.levelNameBox2 = new System.Windows.Forms.TextBox();
@@ -377,16 +378,16 @@
             this.copyChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearChunkBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lowTilesLabel = new System.Windows.Forms.Label();
+            this.objectPanel = new SonicRetro.SonLVL.ScrollingPanel();
+            this.showGridToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
+            this.snapObjectsToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
+            this.foregroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
+            this.displayObjectsToolStripCheckBoxButton = new SonicRetro.SonLVL.ToolStripCheckBoxButton();
+            this.backgroundPanel = new SonicRetro.SonLVL.ScrollingPanel();
+            this.chunkBlockEditor = new SonicRetro.SonLVL.ChunkBlockEditor();
+            this.colorHex = new SonicRetro.SonLVL.NumericUpDownPadded();
             this.importProgressControl1 = new SonicRetro.SonLVL.ImportProgressControl();
-            this.bgDuplicateLayerOverToolStripButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.layer1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer6ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             label4 = new System.Windows.Forms.Label();
@@ -489,7 +490,6 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel8.SuspendLayout();
             this.colorEditingPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.colorHex)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBlue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorRed)).BeginInit();
@@ -498,16 +498,18 @@
             this.soundEffectsGroup.SuspendLayout();
             this.objectListGroup.SuspendLayout();
             this.layerSettingsGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.midpointTrackBar)).BeginInit();
             this.titleCardGroup.SuspendLayout();
             this.tileContextMenuStrip.SuspendLayout();
             this.layoutContextMenuStrip.SuspendLayout();
             this.chunkBlockContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.colorHex)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripSeparator8
             // 
             toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new System.Drawing.Size(6, 42);
+            toolStripSeparator8.Size = new System.Drawing.Size(6, 50);
             // 
             // toolStripSeparator9
             // 
@@ -547,7 +549,7 @@
             // toolStripSeparator10
             // 
             toolStripSeparator10.Name = "toolStripSeparator10";
-            toolStripSeparator10.Size = new System.Drawing.Size(6, 42);
+            toolStripSeparator10.Size = new System.Drawing.Size(6, 50);
             // 
             // chunkListToolStrip
             // 
@@ -573,7 +575,7 @@
             this.importChunksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.importChunksToolStripButton.Enabled = false;
             this.importChunksToolStripButton.Name = "importChunksToolStripButton";
-            this.importChunksToolStripButton.Size = new System.Drawing.Size(104, 36);
+            this.importChunksToolStripButton.Size = new System.Drawing.Size(104, 44);
             this.importChunksToolStripButton.Text = "Import...";
             this.importChunksToolStripButton.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -582,7 +584,7 @@
             this.drawChunkToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.drawChunkToolStripButton.Enabled = false;
             this.drawChunkToolStripButton.Name = "drawChunkToolStripButton";
-            this.drawChunkToolStripButton.Size = new System.Drawing.Size(87, 36);
+            this.drawChunkToolStripButton.Size = new System.Drawing.Size(87, 44);
             this.drawChunkToolStripButton.Text = "Draw...";
             this.drawChunkToolStripButton.Click += new System.EventHandler(this.drawToolStripButton_Click);
             // 
@@ -590,7 +592,7 @@
             // 
             this.deleteUnusedChunksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.deleteUnusedChunksToolStripButton.Name = "deleteUnusedChunksToolStripButton";
-            this.deleteUnusedChunksToolStripButton.Size = new System.Drawing.Size(176, 36);
+            this.deleteUnusedChunksToolStripButton.Size = new System.Drawing.Size(176, 44);
             this.deleteUnusedChunksToolStripButton.Text = "Delete Unused";
             this.deleteUnusedChunksToolStripButton.Click += new System.EventHandler(this.deleteUnusedChunksToolStripButton_Click);
             // 
@@ -598,7 +600,7 @@
             // 
             this.removeDuplicateChunksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.removeDuplicateChunksToolStripButton.Name = "removeDuplicateChunksToolStripButton";
-            this.removeDuplicateChunksToolStripButton.Size = new System.Drawing.Size(222, 36);
+            this.removeDuplicateChunksToolStripButton.Size = new System.Drawing.Size(222, 44);
             this.removeDuplicateChunksToolStripButton.Text = "Remove Duplicates";
             this.removeDuplicateChunksToolStripButton.Click += new System.EventHandler(this.removeDuplicateChunksToolStripButton_Click);
             // 
@@ -606,7 +608,7 @@
             // 
             this.replaceChunkBlocksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.replaceChunkBlocksToolStripButton.Name = "replaceChunkBlocksToolStripButton";
-            this.replaceChunkBlocksToolStripButton.Size = new System.Drawing.Size(100, 36);
+            this.replaceChunkBlocksToolStripButton.Size = new System.Drawing.Size(100, 44);
             this.replaceChunkBlocksToolStripButton.Text = "Replace";
             this.replaceChunkBlocksToolStripButton.Click += new System.EventHandler(this.replaceChunkBlocksToolStripButton_Click);
             // 
@@ -628,7 +630,7 @@
             this.enableDraggingChunksButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.enableDraggingChunksButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.enableDraggingChunksButton.Name = "enableDraggingChunksButton";
-            this.enableDraggingChunksButton.Size = new System.Drawing.Size(195, 36);
+            this.enableDraggingChunksButton.Size = new System.Drawing.Size(195, 44);
             this.enableDraggingChunksButton.Text = "Enable Dragging";
             // 
             // tileListToolStrip
@@ -656,7 +658,7 @@
             this.importTilesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.importTilesToolStripButton.Enabled = false;
             this.importTilesToolStripButton.Name = "importTilesToolStripButton";
-            this.importTilesToolStripButton.Size = new System.Drawing.Size(104, 36);
+            this.importTilesToolStripButton.Size = new System.Drawing.Size(104, 44);
             this.importTilesToolStripButton.Text = "Import...";
             this.importTilesToolStripButton.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -665,7 +667,7 @@
             this.drawTileToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.drawTileToolStripButton.Enabled = false;
             this.drawTileToolStripButton.Name = "drawTileToolStripButton";
-            this.drawTileToolStripButton.Size = new System.Drawing.Size(87, 36);
+            this.drawTileToolStripButton.Size = new System.Drawing.Size(87, 44);
             this.drawTileToolStripButton.Text = "Draw...";
             this.drawTileToolStripButton.Click += new System.EventHandler(this.drawToolStripButton_Click);
             // 
@@ -673,7 +675,7 @@
             // 
             this.deleteUnusedTilesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.deleteUnusedTilesToolStripButton.Name = "deleteUnusedTilesToolStripButton";
-            this.deleteUnusedTilesToolStripButton.Size = new System.Drawing.Size(176, 36);
+            this.deleteUnusedTilesToolStripButton.Size = new System.Drawing.Size(176, 44);
             this.deleteUnusedTilesToolStripButton.Text = "Delete Unused";
             this.deleteUnusedTilesToolStripButton.Click += new System.EventHandler(this.deleteUnusedTilesToolStripButton_Click);
             // 
@@ -681,7 +683,7 @@
             // 
             this.removeDuplicateTilesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.removeDuplicateTilesToolStripButton.Name = "removeDuplicateTilesToolStripButton";
-            this.removeDuplicateTilesToolStripButton.Size = new System.Drawing.Size(222, 36);
+            this.removeDuplicateTilesToolStripButton.Size = new System.Drawing.Size(222, 44);
             this.removeDuplicateTilesToolStripButton.Text = "Remove Duplicates";
             this.removeDuplicateTilesToolStripButton.Click += new System.EventHandler(this.removeDuplicateTilesToolStripButton_Click);
             // 
@@ -689,7 +691,7 @@
             // 
             this.reloadTilesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.reloadTilesToolStripButton.Name = "reloadTilesToolStripButton";
-            this.reloadTilesToolStripButton.Size = new System.Drawing.Size(145, 36);
+            this.reloadTilesToolStripButton.Size = new System.Drawing.Size(145, 44);
             this.reloadTilesToolStripButton.Text = "Reload Tiles";
             this.reloadTilesToolStripButton.Click += new System.EventHandler(this.reloadTilesToolStripButton_Click);
             // 
@@ -697,7 +699,7 @@
             // 
             this.copyCollisionAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.copyCollisionAllButton.Name = "copyCollisionAllButton";
-            this.copyCollisionAllButton.Size = new System.Drawing.Size(373, 36);
+            this.copyCollisionAllButton.Size = new System.Drawing.Size(373, 44);
             this.copyCollisionAllButton.Text = "Copy Plane A Collision to Plane B";
             this.copyCollisionAllButton.Click += new System.EventHandler(this.copyCollisionAllButton_Click);
             // 
@@ -707,7 +709,7 @@
             this.remapTilesButton.Enabled = false;
             this.remapTilesButton.Image = ((System.Drawing.Image)(resources.GetObject("remapTilesButton.Image")));
             this.remapTilesButton.Name = "remapTilesButton";
-            this.remapTilesButton.Size = new System.Drawing.Size(266, 36);
+            this.remapTilesButton.Size = new System.Drawing.Size(266, 44);
             this.remapTilesButton.Text = "Advanced Remapping...";
             this.remapTilesButton.Click += new System.EventHandler(this.remapTilesButton_Click);
             // 
@@ -719,7 +721,7 @@
             this.enableDraggingTilesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.enableDraggingTilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.enableDraggingTilesButton.Name = "enableDraggingTilesButton";
-            this.enableDraggingTilesButton.Size = new System.Drawing.Size(195, 36);
+            this.enableDraggingTilesButton.Size = new System.Drawing.Size(195, 44);
             this.enableDraggingTilesButton.Text = "Enable Dragging";
             // 
             // toolStripSeparator1
@@ -1003,18 +1005,6 @@
             this.flipChunkVButton.Text = "Flip Chunk Vertically";
             this.flipChunkVButton.UseVisualStyleBackColor = true;
             this.flipChunkVButton.Click += new System.EventHandler(this.flipChunkVButton_Click);
-            // 
-            // chunkBlockEditor
-            // 
-            this.chunkBlockEditor.AutoSize = true;
-            this.chunkBlockEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.chunkBlockEditor.Location = new System.Drawing.Point(6, 182);
-            this.chunkBlockEditor.Margin = new System.Windows.Forms.Padding(8);
-            this.chunkBlockEditor.Name = "chunkBlockEditor";
-            this.chunkBlockEditor.SelectedObjects = null;
-            this.chunkBlockEditor.Size = new System.Drawing.Size(506, 248);
-            this.chunkBlockEditor.TabIndex = 3;
-            this.chunkBlockEditor.PropertyValueChanged += new System.EventHandler(this.chunkBlockEditor_PropertyValueChanged);
             // 
             // flipChunkHButton
             // 
@@ -1343,7 +1333,7 @@
             layoutSectionListToolStrip.Location = new System.Drawing.Point(0, 0);
             layoutSectionListToolStrip.Name = "layoutSectionListToolStrip";
             layoutSectionListToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            layoutSectionListToolStrip.Size = new System.Drawing.Size(357, 42);
+            layoutSectionListToolStrip.Size = new System.Drawing.Size(365, 42);
             layoutSectionListToolStrip.TabIndex = 1;
             layoutSectionListToolStrip.Text = "toolStrip1";
             // 
@@ -1352,7 +1342,7 @@
             this.importToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.importToolStripButton.Enabled = false;
             this.importToolStripButton.Name = "importToolStripButton";
-            this.importToolStripButton.Size = new System.Drawing.Size(104, 36);
+            this.importToolStripButton.Size = new System.Drawing.Size(104, 44);
             this.importToolStripButton.Text = "I&mport...";
             this.importToolStripButton.Click += new System.EventHandler(this.importToolStripButton_Click);
             // 
@@ -1361,7 +1351,7 @@
             this.deleteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.deleteToolStripButton.Enabled = false;
             this.deleteToolStripButton.Name = "deleteToolStripButton";
-            this.deleteToolStripButton.Size = new System.Drawing.Size(88, 36);
+            this.deleteToolStripButton.Size = new System.Drawing.Size(88, 44);
             this.deleteToolStripButton.Text = "&Delete";
             this.deleteToolStripButton.Click += new System.EventHandler(this.deleteToolStripButton_Click);
             // 
@@ -1438,7 +1428,7 @@
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 42);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // openToolStripMenuItem
@@ -1592,7 +1582,7 @@
             this.switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem});
             this.editToolStripMenuItem.Enabled = false;
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(74, 36);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(74, 42);
             this.editToolStripMenuItem.Text = "&Edit";
             // 
             // undoToolStripMenuItem
@@ -1694,7 +1684,7 @@
             this.usageCountsToolStripMenuItem,
             this.logToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(85, 36);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(85, 42);
             this.viewToolStripMenuItem.Text = "&View";
             // 
             // objectsAboveHighPlaneToolStripMenuItem
@@ -1924,7 +1914,7 @@
             this.exportArtcollisionpriorityToolStripMenuItem});
             this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(101, 36);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(101, 42);
             this.exportToolStripMenuItem.Text = "E&xport";
             // 
             // paletteToolStripMenuItem
@@ -2009,7 +1999,7 @@
             this.viewReadmeToolStripMenuItem,
             this.reportBugToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(84, 36);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(84, 42);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // viewReadmeToolStripMenuItem
@@ -2117,7 +2107,7 @@
             this.ObjectProperties.Margin = new System.Windows.Forms.Padding(0);
             this.ObjectProperties.Name = "ObjectProperties";
             this.ObjectProperties.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-            this.ObjectProperties.Size = new System.Drawing.Size(367, 866);
+            this.ObjectProperties.Size = new System.Drawing.Size(375, 860);
             this.ObjectProperties.TabIndex = 12;
             this.ObjectProperties.ToolbarVisible = false;
             this.ObjectProperties.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.ObjectProperties_PropertyValueChanged);
@@ -2146,7 +2136,7 @@
             this.tabPage1.Location = new System.Drawing.Point(8, 39);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1300, 925);
+            this.tabPage1.Size = new System.Drawing.Size(1300, 919);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Objects";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -2166,8 +2156,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl5);
-            this.splitContainer1.Size = new System.Drawing.Size(1300, 925);
-            this.splitContainer1.SplitterDistance = 897;
+            this.splitContainer1.Size = new System.Drawing.Size(1300, 919);
+            this.splitContainer1.SplitterDistance = 889;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 3;
             // 
@@ -2187,7 +2177,7 @@
             // 
             this.splitContainer4.Panel2.Controls.Add(this.objectPanel);
             this.splitContainer4.Panel2.Controls.Add(this.objToolStrip);
-            this.splitContainer4.Size = new System.Drawing.Size(897, 925);
+            this.splitContainer4.Size = new System.Drawing.Size(889, 919);
             this.splitContainer4.SplitterDistance = 104;
             this.splitContainer4.SplitterWidth = 8;
             this.splitContainer4.TabIndex = 3;
@@ -2201,7 +2191,7 @@
             this.objectTypeList.Margin = new System.Windows.Forms.Padding(6);
             this.objectTypeList.MultiSelect = false;
             this.objectTypeList.Name = "objectTypeList";
-            this.objectTypeList.Size = new System.Drawing.Size(104, 925);
+            this.objectTypeList.Size = new System.Drawing.Size(104, 919);
             this.objectTypeList.TabIndex = 0;
             this.objectTypeList.UseCompatibleStateImageBehavior = false;
             this.objectTypeList.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.objectTypeList_ItemDrag);
@@ -2211,40 +2201,6 @@
             this.objectTypeImages.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.objectTypeImages.ImageSize = new System.Drawing.Size(32, 32);
             this.objectTypeImages.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // objectPanel
-            // 
-            this.objectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.objectPanel.HScrollEnabled = false;
-            this.objectPanel.HScrollLargeChange = 128;
-            this.objectPanel.HScrollMaximum = 128;
-            this.objectPanel.HScrollMinimum = 0;
-            this.objectPanel.HScrollSmallChange = 16;
-            this.objectPanel.HScrollValue = 0;
-            this.objectPanel.Location = new System.Drawing.Point(0, 42);
-            this.objectPanel.Margin = new System.Windows.Forms.Padding(8);
-            this.objectPanel.Name = "objectPanel";
-            this.objectPanel.PanelAllowDrop = false;
-            this.objectPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-            this.objectPanel.Size = new System.Drawing.Size(785, 883);
-            this.objectPanel.TabIndex = 5;
-            this.objectPanel.VScrollEnabled = false;
-            this.objectPanel.VScrollLargeChange = 128;
-            this.objectPanel.VScrollMaximum = 128;
-            this.objectPanel.VScrollMinimum = 0;
-            this.objectPanel.VScrollSmallChange = 16;
-            this.objectPanel.VScrollValue = 0;
-            this.objectPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-            this.objectPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.objectPanel_KeyDown);
-            this.objectPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseDown);
-            this.objectPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseUp);
-            this.objectPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseMove);
-            this.objectPanel.PanelDragEnter += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragEnter);
-            this.objectPanel.PanelDragOver += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragOver);
-            this.objectPanel.PanelDragLeave += new System.EventHandler(this.objectPanel_DragLeave);
-            this.objectPanel.PanelDragDrop += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragDrop);
-            this.objectPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-            this.objectPanel.Resize += new System.EventHandler(this.panel_Resize);
             // 
             // objToolStrip
             // 
@@ -2270,7 +2226,7 @@
             this.objToolStrip.Location = new System.Drawing.Point(0, 0);
             this.objToolStrip.Name = "objToolStrip";
             this.objToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.objToolStrip.Size = new System.Drawing.Size(785, 42);
+            this.objToolStrip.Size = new System.Drawing.Size(777, 42);
             this.objToolStrip.TabIndex = 4;
             this.objToolStrip.Text = "toolStrip1";
             // 
@@ -2292,7 +2248,7 @@
             this.objGridSizeDropDownButton.Image = ((System.Drawing.Image)(resources.GetObject("objGridSizeDropDownButton.Image")));
             this.objGridSizeDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.objGridSizeDropDownButton.Name = "objGridSizeDropDownButton";
-            this.objGridSizeDropDownButton.Size = new System.Drawing.Size(155, 36);
+            this.objGridSizeDropDownButton.Size = new System.Drawing.Size(155, 44);
             this.objGridSizeDropDownButton.Text = "Grid Size: 1";
             this.objGridSizeDropDownButton.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.objGridSizeDropDownButton_DropDownItemClicked);
             // 
@@ -2362,24 +2318,6 @@
             this.toolStripMenuItem12.Size = new System.Drawing.Size(199, 44);
             this.toolStripMenuItem12.Text = "1024";
             // 
-            // showGridToolStripCheckBoxButton
-            // 
-            this.showGridToolStripCheckBoxButton.Checked = false;
-            this.showGridToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.showGridToolStripCheckBoxButton.Name = "showGridToolStripCheckBoxButton";
-            this.showGridToolStripCheckBoxButton.Size = new System.Drawing.Size(155, 42);
-            this.showGridToolStripCheckBoxButton.Text = "Show &Grid";
-            this.showGridToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.showGridToolStripCheckBoxButton_CheckedChanged);
-            // 
-            // snapObjectsToolStripCheckBoxButton
-            // 
-            this.snapObjectsToolStripCheckBoxButton.Checked = false;
-            this.snapObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.snapObjectsToolStripCheckBoxButton.Name = "snapObjectsToolStripCheckBoxButton";
-            this.snapObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(186, 42);
-            this.snapObjectsToolStripCheckBoxButton.Text = "Snap &Objects";
-            this.snapObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.snapObjectsToolStripCheckBoxButton_CheckedChanged);
-            // 
             // alignLeftWallToolStripButton
             // 
             this.alignLeftWallToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -2387,7 +2325,7 @@
             this.alignLeftWallToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("alignLeftWallToolStripButton.Image")));
             this.alignLeftWallToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.alignLeftWallToolStripButton.Name = "alignLeftWallToolStripButton";
-            this.alignLeftWallToolStripButton.Size = new System.Drawing.Size(46, 36);
+            this.alignLeftWallToolStripButton.Size = new System.Drawing.Size(46, 44);
             this.alignLeftWallToolStripButton.Text = "Align with Left Wall";
             this.alignLeftWallToolStripButton.Click += new System.EventHandler(this.alignLeftWallToolStripButton_Click);
             // 
@@ -2398,7 +2336,7 @@
             this.alignGroundToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("alignGroundToolStripButton.Image")));
             this.alignGroundToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.alignGroundToolStripButton.Name = "alignGroundToolStripButton";
-            this.alignGroundToolStripButton.Size = new System.Drawing.Size(46, 36);
+            this.alignGroundToolStripButton.Size = new System.Drawing.Size(46, 44);
             this.alignGroundToolStripButton.Text = "Align with Ground";
             this.alignGroundToolStripButton.Click += new System.EventHandler(this.alignGroundToolStripButton_Click);
             // 
@@ -2409,7 +2347,7 @@
             this.alignRightWallToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("alignRightWallToolStripButton.Image")));
             this.alignRightWallToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.alignRightWallToolStripButton.Name = "alignRightWallToolStripButton";
-            this.alignRightWallToolStripButton.Size = new System.Drawing.Size(46, 36);
+            this.alignRightWallToolStripButton.Size = new System.Drawing.Size(46, 44);
             this.alignRightWallToolStripButton.Text = "Align with Right Wall";
             this.alignRightWallToolStripButton.Click += new System.EventHandler(this.alignRightWallToolStripButton_Click);
             // 
@@ -2420,7 +2358,7 @@
             this.alignCeilingToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("alignCeilingToolStripButton.Image")));
             this.alignCeilingToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.alignCeilingToolStripButton.Name = "alignCeilingToolStripButton";
-            this.alignCeilingToolStripButton.Size = new System.Drawing.Size(46, 36);
+            this.alignCeilingToolStripButton.Size = new System.Drawing.Size(46, 44);
             this.alignCeilingToolStripButton.Text = "Align with Ceiling";
             this.alignCeilingToolStripButton.Click += new System.EventHandler(this.alignCeilingToolStripButton_Click);
             // 
@@ -2499,7 +2437,7 @@
             this.tabControl5.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl5.Name = "tabControl5";
             this.tabControl5.SelectedIndex = 0;
-            this.tabControl5.Size = new System.Drawing.Size(395, 925);
+            this.tabControl5.Size = new System.Drawing.Size(403, 919);
             this.tabControl5.TabIndex = 13;
             // 
             // tabPage5
@@ -2509,7 +2447,7 @@
             this.tabPage5.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage5.Size = new System.Drawing.Size(379, 878);
+            this.tabPage5.Size = new System.Drawing.Size(387, 872);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "Properties";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2521,7 +2459,7 @@
             this.tabPage7.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage7.Size = new System.Drawing.Size(379, 878);
+            this.tabPage7.Size = new System.Drawing.Size(387, 872);
             this.tabPage7.TabIndex = 1;
             this.tabPage7.Text = "Order";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -2538,7 +2476,7 @@
             this.objectOrder.Margin = new System.Windows.Forms.Padding(6);
             this.objectOrder.MultiSelect = false;
             this.objectOrder.Name = "objectOrder";
-            this.objectOrder.Size = new System.Drawing.Size(367, 866);
+            this.objectOrder.Size = new System.Drawing.Size(375, 860);
             this.objectOrder.TabIndex = 0;
             this.objectOrder.UseCompatibleStateImageBehavior = false;
             this.objectOrder.View = System.Windows.Forms.View.Tile;
@@ -2555,7 +2493,7 @@
             this.tabPage2.Location = new System.Drawing.Point(8, 39);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(1300, 925);
+            this.tabPage2.Size = new System.Drawing.Size(1300, 919);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Foreground";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -2576,40 +2514,10 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.tabControl2);
-            this.splitContainer2.Size = new System.Drawing.Size(1300, 925);
-            this.splitContainer2.SplitterDistance = 919;
+            this.splitContainer2.Size = new System.Drawing.Size(1300, 919);
+            this.splitContainer2.SplitterDistance = 911;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 4;
-            // 
-            // foregroundPanel
-            // 
-            this.foregroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.foregroundPanel.HScrollEnabled = false;
-            this.foregroundPanel.HScrollLargeChange = 128;
-            this.foregroundPanel.HScrollMaximum = 128;
-            this.foregroundPanel.HScrollMinimum = 0;
-            this.foregroundPanel.HScrollSmallChange = 16;
-            this.foregroundPanel.HScrollValue = 0;
-            this.foregroundPanel.Location = new System.Drawing.Point(0, 42);
-            this.foregroundPanel.Margin = new System.Windows.Forms.Padding(8);
-            this.foregroundPanel.Name = "foregroundPanel";
-            this.foregroundPanel.PanelAllowDrop = false;
-            this.foregroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-            this.foregroundPanel.Size = new System.Drawing.Size(919, 883);
-            this.foregroundPanel.TabIndex = 5;
-            this.foregroundPanel.VScrollEnabled = false;
-            this.foregroundPanel.VScrollLargeChange = 128;
-            this.foregroundPanel.VScrollMaximum = 128;
-            this.foregroundPanel.VScrollMinimum = 0;
-            this.foregroundPanel.VScrollSmallChange = 16;
-            this.foregroundPanel.VScrollValue = 0;
-            this.foregroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-            this.foregroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.foregroundPanel_KeyDown);
-            this.foregroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseDown);
-            this.foregroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseUp);
-            this.foregroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseMove);
-            this.foregroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-            this.foregroundPanel.Resize += new System.EventHandler(this.panel_Resize);
             // 
             // fgToolStrip
             // 
@@ -2624,25 +2532,16 @@
             this.fgToolStrip.Location = new System.Drawing.Point(0, 0);
             this.fgToolStrip.Name = "fgToolStrip";
             this.fgToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.fgToolStrip.Size = new System.Drawing.Size(919, 42);
+            this.fgToolStrip.Size = new System.Drawing.Size(911, 42);
             this.fgToolStrip.TabIndex = 4;
             this.fgToolStrip.Text = "toolStrip1";
-            // 
-            // displayObjectsToolStripCheckBoxButton
-            // 
-            this.displayObjectsToolStripCheckBoxButton.Checked = false;
-            this.displayObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.displayObjectsToolStripCheckBoxButton.Name = "displayObjectsToolStripCheckBoxButton";
-            this.displayObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(210, 42);
-            this.displayObjectsToolStripCheckBoxButton.Text = "Display Objects";
-            this.displayObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.displayObjectsToolStripCheckBoxButton_CheckedChanged);
             // 
             // resizeForegroundToolStripButton
             // 
             this.resizeForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.resizeForegroundToolStripButton.Name = "resizeForegroundToolStripButton";
             this.resizeForegroundToolStripButton.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.resizeForegroundToolStripButton.Size = new System.Drawing.Size(84, 36);
+            this.resizeForegroundToolStripButton.Size = new System.Drawing.Size(84, 44);
             this.resizeForegroundToolStripButton.Text = "Resize";
             this.resizeForegroundToolStripButton.Click += new System.EventHandler(this.resizeLayerToolStripButton_Click);
             // 
@@ -2650,7 +2549,7 @@
             // 
             this.replaceForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.replaceForegroundToolStripButton.Name = "replaceForegroundToolStripButton";
-            this.replaceForegroundToolStripButton.Size = new System.Drawing.Size(100, 36);
+            this.replaceForegroundToolStripButton.Size = new System.Drawing.Size(100, 44);
             this.replaceForegroundToolStripButton.Text = "Replace";
             this.replaceForegroundToolStripButton.Click += new System.EventHandler(this.replaceForegroundToolStripButton_Click);
             // 
@@ -2658,7 +2557,7 @@
             // 
             this.clearForegroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.clearForegroundToolStripButton.Name = "clearForegroundToolStripButton";
-            this.clearForegroundToolStripButton.Size = new System.Drawing.Size(72, 36);
+            this.clearForegroundToolStripButton.Size = new System.Drawing.Size(72, 44);
             this.clearForegroundToolStripButton.Text = "Clear";
             this.clearForegroundToolStripButton.Click += new System.EventHandler(this.clearForegroundToolStripButton_Click);
             // 
@@ -2671,7 +2570,7 @@
             this.tabControl2.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(373, 925);
+            this.tabControl2.Size = new System.Drawing.Size(381, 919);
             this.tabControl2.TabIndex = 2;
             // 
             // tabPage8
@@ -2680,7 +2579,7 @@
             this.tabPage8.Location = new System.Drawing.Point(8, 39);
             this.tabPage8.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(357, 878);
+            this.tabPage8.Size = new System.Drawing.Size(365, 872);
             this.tabPage8.TabIndex = 0;
             this.tabPage8.Text = "Chunks";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -2697,7 +2596,7 @@
             this.ChunkSelector.Name = "ChunkSelector";
             this.ChunkSelector.ScrollValue = 0;
             this.ChunkSelector.SelectedIndex = -1;
-            this.ChunkSelector.Size = new System.Drawing.Size(357, 878);
+            this.ChunkSelector.Size = new System.Drawing.Size(365, 872);
             this.ChunkSelector.TabIndex = 1;
             this.ChunkSelector.SelectedIndexChanged += new System.EventHandler(this.ChunkSelector_SelectedIndexChanged);
             this.ChunkSelector.ItemDrag += new System.EventHandler(this.ChunkSelector_ItemDrag);
@@ -2715,7 +2614,7 @@
             this.tabPage9.Location = new System.Drawing.Point(8, 39);
             this.tabPage9.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(357, 878);
+            this.tabPage9.Size = new System.Drawing.Size(365, 872);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Layout Sections";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -2736,8 +2635,8 @@
             // layoutSectionSplitContainer.Panel2
             // 
             this.layoutSectionSplitContainer.Panel2.Controls.Add(this.layoutSectionPreview);
-            this.layoutSectionSplitContainer.Size = new System.Drawing.Size(357, 878);
-            this.layoutSectionSplitContainer.SplitterDistance = 376;
+            this.layoutSectionSplitContainer.Size = new System.Drawing.Size(365, 872);
+            this.layoutSectionSplitContainer.SplitterDistance = 373;
             this.layoutSectionSplitContainer.SplitterWidth = 8;
             this.layoutSectionSplitContainer.TabIndex = 0;
             // 
@@ -2750,7 +2649,7 @@
             this.layoutSectionListBox.Location = new System.Drawing.Point(0, 42);
             this.layoutSectionListBox.Margin = new System.Windows.Forms.Padding(6);
             this.layoutSectionListBox.Name = "layoutSectionListBox";
-            this.layoutSectionListBox.Size = new System.Drawing.Size(357, 334);
+            this.layoutSectionListBox.Size = new System.Drawing.Size(365, 331);
             this.layoutSectionListBox.TabIndex = 0;
             this.layoutSectionListBox.SelectedIndexChanged += new System.EventHandler(this.layoutSectionListBox_SelectedIndexChanged);
             this.layoutSectionListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.layoutSectionListBox_KeyDown);
@@ -2761,7 +2660,7 @@
             this.layoutSectionPreview.Location = new System.Drawing.Point(0, 0);
             this.layoutSectionPreview.Margin = new System.Windows.Forms.Padding(0);
             this.layoutSectionPreview.Name = "layoutSectionPreview";
-            this.layoutSectionPreview.Size = new System.Drawing.Size(357, 494);
+            this.layoutSectionPreview.Size = new System.Drawing.Size(365, 491);
             this.layoutSectionPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.layoutSectionPreview.TabIndex = 0;
             this.layoutSectionPreview.TabStop = false;
@@ -2772,7 +2671,7 @@
             this.tabPage3.Location = new System.Drawing.Point(8, 39);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1300, 925);
+            this.tabPage3.Size = new System.Drawing.Size(1300, 919);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Background";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -2793,40 +2692,10 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.tabControl3);
-            this.splitContainer3.Size = new System.Drawing.Size(1300, 925);
-            this.splitContainer3.SplitterDistance = 915;
+            this.splitContainer3.Size = new System.Drawing.Size(1300, 919);
+            this.splitContainer3.SplitterDistance = 907;
             this.splitContainer3.SplitterWidth = 8;
             this.splitContainer3.TabIndex = 4;
-            // 
-            // backgroundPanel
-            // 
-            this.backgroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backgroundPanel.HScrollEnabled = false;
-            this.backgroundPanel.HScrollLargeChange = 128;
-            this.backgroundPanel.HScrollMaximum = 128;
-            this.backgroundPanel.HScrollMinimum = 0;
-            this.backgroundPanel.HScrollSmallChange = 16;
-            this.backgroundPanel.HScrollValue = 0;
-            this.backgroundPanel.Location = new System.Drawing.Point(0, 42);
-            this.backgroundPanel.Margin = new System.Windows.Forms.Padding(8);
-            this.backgroundPanel.Name = "backgroundPanel";
-            this.backgroundPanel.PanelAllowDrop = false;
-            this.backgroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
-            this.backgroundPanel.Size = new System.Drawing.Size(915, 883);
-            this.backgroundPanel.TabIndex = 6;
-            this.backgroundPanel.VScrollEnabled = false;
-            this.backgroundPanel.VScrollLargeChange = 128;
-            this.backgroundPanel.VScrollMaximum = 128;
-            this.backgroundPanel.VScrollMinimum = 0;
-            this.backgroundPanel.VScrollSmallChange = 16;
-            this.backgroundPanel.VScrollValue = 0;
-            this.backgroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-            this.backgroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.backgroundPanel_KeyDown);
-            this.backgroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseDown);
-            this.backgroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseUp);
-            this.backgroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseMove);
-            this.backgroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
-            this.backgroundPanel.Resize += new System.EventHandler(this.panel_Resize);
             // 
             // bgToolStrip
             // 
@@ -2842,7 +2711,7 @@
             this.bgToolStrip.Location = new System.Drawing.Point(0, 0);
             this.bgToolStrip.Name = "bgToolStrip";
             this.bgToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.bgToolStrip.Size = new System.Drawing.Size(915, 42);
+            this.bgToolStrip.Size = new System.Drawing.Size(907, 42);
             this.bgToolStrip.TabIndex = 5;
             this.bgToolStrip.Text = "toolStrip1";
             // 
@@ -2859,7 +2728,7 @@
             toolStripMenuItem19,
             toolStripMenuItem20});
             this.bgLayerDropDown.Name = "bgLayerDropDown";
-            this.bgLayerDropDown.Size = new System.Drawing.Size(117, 36);
+            this.bgLayerDropDown.Size = new System.Drawing.Size(117, 44);
             this.bgLayerDropDown.Text = "Layer: 1";
             this.bgLayerDropDown.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bgLayerDropDown_DropDownItemClicked);
             // 
@@ -2867,7 +2736,7 @@
             // 
             this.resizeBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.resizeBackgroundToolStripButton.Name = "resizeBackgroundToolStripButton";
-            this.resizeBackgroundToolStripButton.Size = new System.Drawing.Size(84, 36);
+            this.resizeBackgroundToolStripButton.Size = new System.Drawing.Size(84, 44);
             this.resizeBackgroundToolStripButton.Text = "Resize";
             this.resizeBackgroundToolStripButton.Click += new System.EventHandler(this.resizeLayerToolStripButton_Click);
             // 
@@ -2875,7 +2744,7 @@
             // 
             this.replaceBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.replaceBackgroundToolStripButton.Name = "replaceBackgroundToolStripButton";
-            this.replaceBackgroundToolStripButton.Size = new System.Drawing.Size(100, 36);
+            this.replaceBackgroundToolStripButton.Size = new System.Drawing.Size(100, 44);
             this.replaceBackgroundToolStripButton.Text = "Replace";
             this.replaceBackgroundToolStripButton.Click += new System.EventHandler(this.replaceBackgroundToolStripButton_Click);
             // 
@@ -2883,9 +2752,76 @@
             // 
             this.clearBackgroundToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.clearBackgroundToolStripButton.Name = "clearBackgroundToolStripButton";
-            this.clearBackgroundToolStripButton.Size = new System.Drawing.Size(72, 36);
+            this.clearBackgroundToolStripButton.Size = new System.Drawing.Size(72, 44);
             this.clearBackgroundToolStripButton.Text = "Clear";
             this.clearBackgroundToolStripButton.Click += new System.EventHandler(this.clearBackgroundToolStripButton_Click);
+            // 
+            // bgDuplicateLayerOverToolStripButton
+            // 
+            this.bgDuplicateLayerOverToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.bgDuplicateLayerOverToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.layer1ToolStripMenuItem,
+            this.layer2ToolStripMenuItem,
+            this.layer3ToolStripMenuItem,
+            this.layer4ToolStripMenuItem,
+            this.layer5ToolStripMenuItem,
+            this.layer6ToolStripMenuItem,
+            this.layer7ToolStripMenuItem,
+            this.layer8ToolStripMenuItem});
+            this.bgDuplicateLayerOverToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bgDuplicateLayerOverToolStripButton.Name = "bgDuplicateLayerOverToolStripButton";
+            this.bgDuplicateLayerOverToolStripButton.Size = new System.Drawing.Size(210, 44);
+            this.bgDuplicateLayerOverToolStripButton.Text = "Duplicate Over...";
+            this.bgDuplicateLayerOverToolStripButton.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bgDuplicateLayerOverToolStripButton_DropDownItemClicked);
+            // 
+            // layer1ToolStripMenuItem
+            // 
+            this.layer1ToolStripMenuItem.Name = "layer1ToolStripMenuItem";
+            this.layer1ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer1ToolStripMenuItem.Text = "Layer 1";
+            this.layer1ToolStripMenuItem.Visible = false;
+            // 
+            // layer2ToolStripMenuItem
+            // 
+            this.layer2ToolStripMenuItem.Name = "layer2ToolStripMenuItem";
+            this.layer2ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer2ToolStripMenuItem.Text = "Layer 2";
+            // 
+            // layer3ToolStripMenuItem
+            // 
+            this.layer3ToolStripMenuItem.Name = "layer3ToolStripMenuItem";
+            this.layer3ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer3ToolStripMenuItem.Text = "Layer 3";
+            // 
+            // layer4ToolStripMenuItem
+            // 
+            this.layer4ToolStripMenuItem.Name = "layer4ToolStripMenuItem";
+            this.layer4ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer4ToolStripMenuItem.Text = "Layer 4";
+            // 
+            // layer5ToolStripMenuItem
+            // 
+            this.layer5ToolStripMenuItem.Name = "layer5ToolStripMenuItem";
+            this.layer5ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer5ToolStripMenuItem.Text = "Layer 5";
+            // 
+            // layer6ToolStripMenuItem
+            // 
+            this.layer6ToolStripMenuItem.Name = "layer6ToolStripMenuItem";
+            this.layer6ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer6ToolStripMenuItem.Text = "Layer 6";
+            // 
+            // layer7ToolStripMenuItem
+            // 
+            this.layer7ToolStripMenuItem.Name = "layer7ToolStripMenuItem";
+            this.layer7ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer7ToolStripMenuItem.Text = "Layer 7";
+            // 
+            // layer8ToolStripMenuItem
+            // 
+            this.layer8ToolStripMenuItem.Name = "layer8ToolStripMenuItem";
+            this.layer8ToolStripMenuItem.Size = new System.Drawing.Size(223, 44);
+            this.layer8ToolStripMenuItem.Text = "Layer 8";
             // 
             // tabControl3
             // 
@@ -2897,7 +2833,7 @@
             this.tabControl3.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(377, 925);
+            this.tabControl3.Size = new System.Drawing.Size(385, 919);
             this.tabControl3.TabIndex = 0;
             this.tabControl3.SelectedIndexChanged += new System.EventHandler(this.tabControl3_SelectedIndexChanged);
             // 
@@ -2906,7 +2842,7 @@
             this.tabPage10.Location = new System.Drawing.Point(8, 39);
             this.tabPage10.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(361, 878);
+            this.tabPage10.Size = new System.Drawing.Size(369, 872);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Chunks";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2916,7 +2852,7 @@
             this.tabPage11.Location = new System.Drawing.Point(8, 39);
             this.tabPage11.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(361, 878);
+            this.tabPage11.Size = new System.Drawing.Size(369, 872);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Layout Sections";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -2939,7 +2875,7 @@
             this.tabPage13.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage13.Name = "tabPage13";
             this.tabPage13.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage13.Size = new System.Drawing.Size(361, 878);
+            this.tabPage13.Size = new System.Drawing.Size(369, 872);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "Scrolling";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -3415,7 +3351,7 @@
             this.tabPage6.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage6.Size = new System.Drawing.Size(1300, 925);
+            this.tabPage6.Size = new System.Drawing.Size(1300, 919);
             this.tabPage6.TabIndex = 4;
             this.tabPage6.Text = "Palette";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -3435,7 +3371,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(1288, 913);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1288, 907);
             this.tableLayoutPanel8.TabIndex = 4;
             // 
             // panel8
@@ -3446,7 +3382,7 @@
             this.panel8.Location = new System.Drawing.Point(214, 42);
             this.panel8.Margin = new System.Windows.Forms.Padding(0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1074, 871);
+            this.panel8.Size = new System.Drawing.Size(1074, 865);
             this.panel8.TabIndex = 3;
             // 
             // PalettePanel
@@ -3480,22 +3416,6 @@
             this.colorEditingPanel.Name = "colorEditingPanel";
             this.colorEditingPanel.Size = new System.Drawing.Size(214, 209);
             this.colorEditingPanel.TabIndex = 5;
-            // 
-            // colorHex
-            // 
-            this.colorHex.Hexadecimal = true;
-            this.colorHex.Location = new System.Drawing.Point(74, 172);
-            this.colorHex.Margin = new System.Windows.Forms.Padding(6);
-            this.colorHex.Maximum = new decimal(new int[] {
-            16777215,
-            0,
-            0,
-            0});
-            this.colorHex.Name = "colorHex";
-            this.colorHex.Size = new System.Drawing.Size(134, 31);
-            this.colorHex.TabIndex = 7;
-            this.colorHex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colorHex.ValueChanged += new System.EventHandler(this.colorHex_ValueChanged);
             // 
             // colorBlue
             // 
@@ -3566,14 +3486,14 @@
             this.enableDraggingPaletteButton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.enableDraggingPaletteButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.enableDraggingPaletteButton.Name = "enableDraggingPaletteButton";
-            this.enableDraggingPaletteButton.Size = new System.Drawing.Size(195, 36);
+            this.enableDraggingPaletteButton.Size = new System.Drawing.Size(195, 44);
             this.enableDraggingPaletteButton.Text = "Enable &Dragging";
             // 
             // exportPaletteToolStripButton
             // 
             this.exportPaletteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exportPaletteToolStripButton.Name = "exportPaletteToolStripButton";
-            this.exportPaletteToolStripButton.Size = new System.Drawing.Size(85, 36);
+            this.exportPaletteToolStripButton.Size = new System.Drawing.Size(85, 44);
             this.exportPaletteToolStripButton.Text = "&Export";
             this.exportPaletteToolStripButton.Click += new System.EventHandler(this.paletteToolStripMenuItem_Click);
             // 
@@ -3581,7 +3501,7 @@
             // 
             this.importPaletteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.importPaletteToolStripButton.Name = "importPaletteToolStripButton";
-            this.importPaletteToolStripButton.Size = new System.Drawing.Size(89, 36);
+            this.importPaletteToolStripButton.Size = new System.Drawing.Size(89, 44);
             this.importPaletteToolStripButton.Text = "&Import";
             this.importPaletteToolStripButton.Click += new System.EventHandler(this.importPaletteToolStripButton_Click);
             // 
@@ -3616,7 +3536,7 @@
             this.soundEffectsGroup.Controls.Add(this.sfxAddButton);
             this.soundEffectsGroup.Controls.Add(this.sfxListBox);
             this.soundEffectsGroup.Enabled = false;
-            this.soundEffectsGroup.Location = new System.Drawing.Point(406, 473);
+            this.soundEffectsGroup.Location = new System.Drawing.Point(672, 472);
             this.soundEffectsGroup.Margin = new System.Windows.Forms.Padding(6);
             this.soundEffectsGroup.Name = "soundEffectsGroup";
             this.soundEffectsGroup.Padding = new System.Windows.Forms.Padding(6);
@@ -3766,7 +3686,7 @@
             this.objectListGroup.Controls.Add(this.objectListBox);
             this.objectListGroup.Controls.Add(this.loadGlobalObjects);
             this.objectListGroup.Enabled = false;
-            this.objectListGroup.Location = new System.Drawing.Point(406, 11);
+            this.objectListGroup.Location = new System.Drawing.Point(672, 10);
             this.objectListGroup.Margin = new System.Windows.Forms.Padding(6);
             this.objectListGroup.Name = "objectListGroup";
             this.objectListGroup.Padding = new System.Windows.Forms.Padding(6, 6, 6, 0);
@@ -3913,8 +3833,9 @@
             // 
             // layerSettingsGroup
             // 
-            this.layerSettingsGroup.AutoSize = true;
             this.layerSettingsGroup.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.layerSettingsGroup.Controls.Add(this.lowTilesLabel);
+            this.layerSettingsGroup.Controls.Add(this.midpointTrackBar);
             this.layerSettingsGroup.Controls.Add(this.foregroundDeformation);
             this.layerSettingsGroup.Controls.Add(this.layer3Box);
             this.layerSettingsGroup.Controls.Add(this.label21);
@@ -3924,22 +3845,35 @@
             this.layerSettingsGroup.Controls.Add(this.label19);
             this.layerSettingsGroup.Controls.Add(this.layer0Box);
             this.layerSettingsGroup.Controls.Add(this.label18);
-            this.layerSettingsGroup.Controls.Add(this.midpointBox);
-            this.layerSettingsGroup.Controls.Add(this.label17);
+            this.layerSettingsGroup.Controls.Add(this.midpointLabel);
             this.layerSettingsGroup.Enabled = false;
             this.layerSettingsGroup.Location = new System.Drawing.Point(16, 178);
             this.layerSettingsGroup.Margin = new System.Windows.Forms.Padding(6);
             this.layerSettingsGroup.Name = "layerSettingsGroup";
             this.layerSettingsGroup.Padding = new System.Windows.Forms.Padding(6, 6, 6, 0);
-            this.layerSettingsGroup.Size = new System.Drawing.Size(374, 353);
+            this.layerSettingsGroup.Size = new System.Drawing.Size(644, 375);
             this.layerSettingsGroup.TabIndex = 4;
             this.layerSettingsGroup.TabStop = false;
             this.layerSettingsGroup.Text = "Layer Settings";
             // 
+            // midpointTrackBar
+            // 
+            this.midpointTrackBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(249)))), ((int)(((byte)(249)))));
+            this.midpointTrackBar.LargeChange = 1;
+            this.midpointTrackBar.Location = new System.Drawing.Point(22, 70);
+            this.midpointTrackBar.Maximum = 4;
+            this.midpointTrackBar.Name = "midpointTrackBar";
+            this.midpointTrackBar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.midpointTrackBar.Size = new System.Drawing.Size(90, 240);
+            this.midpointTrackBar.TabIndex = 11;
+            this.midpointTrackBar.TickFrequency = 0;
+            this.midpointTrackBar.Value = 4;
+            this.midpointTrackBar.ValueChanged += new System.EventHandler(this.midpointTrackBar_ValueChanged);
+            // 
             // foregroundDeformation
             // 
             this.foregroundDeformation.AutoSize = true;
-            this.foregroundDeformation.Location = new System.Drawing.Point(12, 297);
+            this.foregroundDeformation.Location = new System.Drawing.Point(31, 319);
             this.foregroundDeformation.Name = "foregroundDeformation";
             this.foregroundDeformation.Size = new System.Drawing.Size(277, 29);
             this.foregroundDeformation.TabIndex = 10;
@@ -3962,7 +3896,7 @@
             "Background 7",
             "Background 8",
             "None"});
-            this.layer3Box.Location = new System.Drawing.Point(124, 244);
+            this.layer3Box.Location = new System.Drawing.Point(222, 250);
             this.layer3Box.Margin = new System.Windows.Forms.Padding(6);
             this.layer3Box.Name = "layer3Box";
             this.layer3Box.Size = new System.Drawing.Size(238, 33);
@@ -3972,7 +3906,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(12, 250);
+            this.label21.Location = new System.Drawing.Point(110, 256);
             this.label21.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(90, 25);
@@ -3994,7 +3928,7 @@
             "Background 7",
             "Background 8",
             "None"});
-            this.layer2Box.Location = new System.Drawing.Point(124, 192);
+            this.layer2Box.Location = new System.Drawing.Point(222, 198);
             this.layer2Box.Margin = new System.Windows.Forms.Padding(6);
             this.layer2Box.Name = "layer2Box";
             this.layer2Box.Size = new System.Drawing.Size(238, 33);
@@ -4004,7 +3938,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(12, 198);
+            this.label20.Location = new System.Drawing.Point(110, 204);
             this.label20.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(90, 25);
@@ -4026,7 +3960,7 @@
             "Background 7",
             "Background 8",
             "None"});
-            this.layer1Box.Location = new System.Drawing.Point(124, 141);
+            this.layer1Box.Location = new System.Drawing.Point(222, 147);
             this.layer1Box.Margin = new System.Windows.Forms.Padding(6);
             this.layer1Box.Name = "layer1Box";
             this.layer1Box.Size = new System.Drawing.Size(238, 33);
@@ -4036,7 +3970,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(12, 147);
+            this.label19.Location = new System.Drawing.Point(110, 153);
             this.label19.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(90, 25);
@@ -4058,7 +3992,7 @@
             "Background 7",
             "Background 8",
             "None"});
-            this.layer0Box.Location = new System.Drawing.Point(124, 89);
+            this.layer0Box.Location = new System.Drawing.Point(222, 95);
             this.layer0Box.Margin = new System.Windows.Forms.Padding(6);
             this.layer0Box.Name = "layer0Box";
             this.layer0Box.Size = new System.Drawing.Size(238, 33);
@@ -4068,39 +4002,22 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(12, 94);
+            this.label18.Location = new System.Drawing.Point(110, 100);
             this.label18.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(90, 25);
             this.label18.TabIndex = 2;
             this.label18.Text = "Layer 0:";
             // 
-            // midpointBox
+            // midpointLabel
             // 
-            this.midpointBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.midpointBox.FormattingEnabled = true;
-            this.midpointBox.Items.AddRange(new object[] {
-            "Before Layer 0",
-            "After Layer 0",
-            "After Layer 1",
-            "After Layer 2",
-            "After Layer 3"});
-            this.midpointBox.Location = new System.Drawing.Point(124, 36);
-            this.midpointBox.Margin = new System.Windows.Forms.Padding(6);
-            this.midpointBox.Name = "midpointBox";
-            this.midpointBox.Size = new System.Drawing.Size(238, 33);
-            this.midpointBox.TabIndex = 1;
-            this.midpointBox.SelectedIndexChanged += new System.EventHandler(this.midpointBox_SelectedIndexChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(12, 42);
-            this.label17.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(100, 25);
-            this.label17.TabIndex = 0;
-            this.label17.Text = "Midpoint:";
+            this.midpointLabel.AutoSize = true;
+            this.midpointLabel.Location = new System.Drawing.Point(12, 46);
+            this.midpointLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.midpointLabel.Name = "midpointLabel";
+            this.midpointLabel.Size = new System.Drawing.Size(247, 25);
+            this.midpointLabel.TabIndex = 0;
+            this.midpointLabel.Text = "Midpoint: Before Layer 0";
             // 
             // titleCardGroup
             // 
@@ -4412,6 +4329,164 @@
             this.clearChunkBlocksToolStripMenuItem.Text = "&Clear";
             this.clearChunkBlocksToolStripMenuItem.Click += new System.EventHandler(this.clearChunkBlocksToolStripMenuItem_Click);
             // 
+            // lowTilesLabel
+            // 
+            this.lowTilesLabel.AutoSize = true;
+            this.lowTilesLabel.Location = new System.Drawing.Point(470, 101);
+            this.lowTilesLabel.Name = "lowTilesLabel";
+            this.lowTilesLabel.Size = new System.Drawing.Size(163, 175);
+            this.lowTilesLabel.TabIndex = 12;
+            this.lowTilesLabel.Text = "Draw High Tiles\r\n\r\nDraw High Tiles\r\n\r\nDraw High Tiles\r\n\r\nDraw High Tiles\r\n";
+            // 
+            // objectPanel
+            // 
+            this.objectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.objectPanel.HScrollEnabled = false;
+            this.objectPanel.HScrollLargeChange = 128;
+            this.objectPanel.HScrollMaximum = 128;
+            this.objectPanel.HScrollMinimum = 0;
+            this.objectPanel.HScrollSmallChange = 16;
+            this.objectPanel.HScrollValue = 0;
+            this.objectPanel.Location = new System.Drawing.Point(0, 42);
+            this.objectPanel.Margin = new System.Windows.Forms.Padding(8);
+            this.objectPanel.Name = "objectPanel";
+            this.objectPanel.PanelAllowDrop = false;
+            this.objectPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+            this.objectPanel.Size = new System.Drawing.Size(777, 877);
+            this.objectPanel.TabIndex = 5;
+            this.objectPanel.VScrollEnabled = false;
+            this.objectPanel.VScrollLargeChange = 128;
+            this.objectPanel.VScrollMaximum = 128;
+            this.objectPanel.VScrollMinimum = 0;
+            this.objectPanel.VScrollSmallChange = 16;
+            this.objectPanel.VScrollValue = 0;
+            this.objectPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+            this.objectPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.objectPanel_KeyDown);
+            this.objectPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseDown);
+            this.objectPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseUp);
+            this.objectPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.objectPanel_MouseMove);
+            this.objectPanel.PanelDragEnter += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragEnter);
+            this.objectPanel.PanelDragOver += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragOver);
+            this.objectPanel.PanelDragLeave += new System.EventHandler(this.objectPanel_DragLeave);
+            this.objectPanel.PanelDragDrop += new System.Windows.Forms.DragEventHandler(this.objectPanel_DragDrop);
+            this.objectPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+            this.objectPanel.Resize += new System.EventHandler(this.panel_Resize);
+            // 
+            // showGridToolStripCheckBoxButton
+            // 
+            this.showGridToolStripCheckBoxButton.Checked = false;
+            this.showGridToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.showGridToolStripCheckBoxButton.Name = "showGridToolStripCheckBoxButton";
+            this.showGridToolStripCheckBoxButton.Size = new System.Drawing.Size(155, 50);
+            this.showGridToolStripCheckBoxButton.Text = "Show &Grid";
+            this.showGridToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.showGridToolStripCheckBoxButton_CheckedChanged);
+            // 
+            // snapObjectsToolStripCheckBoxButton
+            // 
+            this.snapObjectsToolStripCheckBoxButton.Checked = false;
+            this.snapObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.snapObjectsToolStripCheckBoxButton.Name = "snapObjectsToolStripCheckBoxButton";
+            this.snapObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(186, 50);
+            this.snapObjectsToolStripCheckBoxButton.Text = "Snap &Objects";
+            this.snapObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.snapObjectsToolStripCheckBoxButton_CheckedChanged);
+            // 
+            // foregroundPanel
+            // 
+            this.foregroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.foregroundPanel.HScrollEnabled = false;
+            this.foregroundPanel.HScrollLargeChange = 128;
+            this.foregroundPanel.HScrollMaximum = 128;
+            this.foregroundPanel.HScrollMinimum = 0;
+            this.foregroundPanel.HScrollSmallChange = 16;
+            this.foregroundPanel.HScrollValue = 0;
+            this.foregroundPanel.Location = new System.Drawing.Point(0, 42);
+            this.foregroundPanel.Margin = new System.Windows.Forms.Padding(8);
+            this.foregroundPanel.Name = "foregroundPanel";
+            this.foregroundPanel.PanelAllowDrop = false;
+            this.foregroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+            this.foregroundPanel.Size = new System.Drawing.Size(911, 877);
+            this.foregroundPanel.TabIndex = 5;
+            this.foregroundPanel.VScrollEnabled = false;
+            this.foregroundPanel.VScrollLargeChange = 128;
+            this.foregroundPanel.VScrollMaximum = 128;
+            this.foregroundPanel.VScrollMinimum = 0;
+            this.foregroundPanel.VScrollSmallChange = 16;
+            this.foregroundPanel.VScrollValue = 0;
+            this.foregroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+            this.foregroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.foregroundPanel_KeyDown);
+            this.foregroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseDown);
+            this.foregroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseUp);
+            this.foregroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.foregroundPanel_MouseMove);
+            this.foregroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+            this.foregroundPanel.Resize += new System.EventHandler(this.panel_Resize);
+            // 
+            // displayObjectsToolStripCheckBoxButton
+            // 
+            this.displayObjectsToolStripCheckBoxButton.Checked = false;
+            this.displayObjectsToolStripCheckBoxButton.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.displayObjectsToolStripCheckBoxButton.Name = "displayObjectsToolStripCheckBoxButton";
+            this.displayObjectsToolStripCheckBoxButton.Size = new System.Drawing.Size(210, 50);
+            this.displayObjectsToolStripCheckBoxButton.Text = "Display Objects";
+            this.displayObjectsToolStripCheckBoxButton.CheckedChanged += new System.EventHandler(this.displayObjectsToolStripCheckBoxButton_CheckedChanged);
+            // 
+            // backgroundPanel
+            // 
+            this.backgroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.backgroundPanel.HScrollEnabled = false;
+            this.backgroundPanel.HScrollLargeChange = 128;
+            this.backgroundPanel.HScrollMaximum = 128;
+            this.backgroundPanel.HScrollMinimum = 0;
+            this.backgroundPanel.HScrollSmallChange = 16;
+            this.backgroundPanel.HScrollValue = 0;
+            this.backgroundPanel.Location = new System.Drawing.Point(0, 42);
+            this.backgroundPanel.Margin = new System.Windows.Forms.Padding(8);
+            this.backgroundPanel.Name = "backgroundPanel";
+            this.backgroundPanel.PanelAllowDrop = false;
+            this.backgroundPanel.PanelCursor = System.Windows.Forms.Cursors.Default;
+            this.backgroundPanel.Size = new System.Drawing.Size(907, 877);
+            this.backgroundPanel.TabIndex = 6;
+            this.backgroundPanel.VScrollEnabled = false;
+            this.backgroundPanel.VScrollLargeChange = 128;
+            this.backgroundPanel.VScrollMaximum = 128;
+            this.backgroundPanel.VScrollMinimum = 0;
+            this.backgroundPanel.VScrollSmallChange = 16;
+            this.backgroundPanel.VScrollValue = 0;
+            this.backgroundPanel.PanelPaint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+            this.backgroundPanel.PanelKeyDown += new System.Windows.Forms.KeyEventHandler(this.backgroundPanel_KeyDown);
+            this.backgroundPanel.PanelMouseDown += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseDown);
+            this.backgroundPanel.PanelMouseUp += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseUp);
+            this.backgroundPanel.PanelMouseMove += new System.Windows.Forms.MouseEventHandler(this.backgroundPanel_MouseMove);
+            this.backgroundPanel.ScrollBarValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
+            this.backgroundPanel.Resize += new System.EventHandler(this.panel_Resize);
+            // 
+            // chunkBlockEditor
+            // 
+            this.chunkBlockEditor.AutoSize = true;
+            this.chunkBlockEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.chunkBlockEditor.Location = new System.Drawing.Point(6, 182);
+            this.chunkBlockEditor.Margin = new System.Windows.Forms.Padding(8);
+            this.chunkBlockEditor.Name = "chunkBlockEditor";
+            this.chunkBlockEditor.SelectedObjects = null;
+            this.chunkBlockEditor.Size = new System.Drawing.Size(506, 248);
+            this.chunkBlockEditor.TabIndex = 3;
+            this.chunkBlockEditor.PropertyValueChanged += new System.EventHandler(this.chunkBlockEditor_PropertyValueChanged);
+            // 
+            // colorHex
+            // 
+            this.colorHex.Hexadecimal = true;
+            this.colorHex.Location = new System.Drawing.Point(74, 172);
+            this.colorHex.Margin = new System.Windows.Forms.Padding(6);
+            this.colorHex.Maximum = new decimal(new int[] {
+            16777215,
+            0,
+            0,
+            0});
+            this.colorHex.Name = "colorHex";
+            this.colorHex.Size = new System.Drawing.Size(134, 31);
+            this.colorHex.TabIndex = 7;
+            this.colorHex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colorHex.ValueChanged += new System.EventHandler(this.colorHex_ValueChanged);
+            // 
             // importProgressControl1
             // 
             this.importProgressControl1.AutoSize = true;
@@ -4426,73 +4501,6 @@
             this.importProgressControl1.UseWaitCursor = true;
             this.importProgressControl1.Visible = false;
             this.importProgressControl1.SizeChanged += new System.EventHandler(this.importProgressControl1_SizeChanged);
-            // 
-            // bgDuplicateLayerOverToolStripButton
-            // 
-            this.bgDuplicateLayerOverToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.bgDuplicateLayerOverToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.layer1ToolStripMenuItem,
-            this.layer2ToolStripMenuItem,
-            this.layer3ToolStripMenuItem,
-            this.layer4ToolStripMenuItem,
-            this.layer5ToolStripMenuItem,
-            this.layer6ToolStripMenuItem,
-            this.layer7ToolStripMenuItem,
-            this.layer8ToolStripMenuItem});
-            this.bgDuplicateLayerOverToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bgDuplicateLayerOverToolStripButton.Name = "bgDuplicateLayerOverToolStripButton";
-            this.bgDuplicateLayerOverToolStripButton.Size = new System.Drawing.Size(210, 36);
-            this.bgDuplicateLayerOverToolStripButton.Text = "Duplicate Over...";
-            this.bgDuplicateLayerOverToolStripButton.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bgDuplicateLayerOverToolStripButton_DropDownItemClicked);
-			// 
-			// layer1ToolStripMenuItem
-			// 
-			this.layer1ToolStripMenuItem.Name = "layer1ToolStripMenuItem";
-            this.layer1ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer1ToolStripMenuItem.Text = "Layer 1";
-			this.layer1ToolStripMenuItem.Visible = false;
-			// 
-			// layer2ToolStripMenuItem
-			// 
-			this.layer2ToolStripMenuItem.Name = "layer2ToolStripMenuItem";
-            this.layer2ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer2ToolStripMenuItem.Text = "Layer 2";
-            // 
-            // layer3ToolStripMenuItem
-            // 
-            this.layer3ToolStripMenuItem.Name = "layer3ToolStripMenuItem";
-            this.layer3ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer3ToolStripMenuItem.Text = "Layer 3";
-            // 
-            // layer4ToolStripMenuItem
-            // 
-            this.layer4ToolStripMenuItem.Name = "layer4ToolStripMenuItem";
-            this.layer4ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer4ToolStripMenuItem.Text = "Layer 4";
-            // 
-            // layer5ToolStripMenuItem
-            // 
-            this.layer5ToolStripMenuItem.Name = "layer5ToolStripMenuItem";
-            this.layer5ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer5ToolStripMenuItem.Text = "Layer 5";
-            // 
-            // layer6ToolStripMenuItem
-            // 
-            this.layer6ToolStripMenuItem.Name = "layer6ToolStripMenuItem";
-            this.layer6ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer6ToolStripMenuItem.Text = "Layer 6";
-            // 
-            // layer7ToolStripMenuItem
-            // 
-            this.layer7ToolStripMenuItem.Name = "layer7ToolStripMenuItem";
-            this.layer7ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer7ToolStripMenuItem.Text = "Layer 7";
-            // 
-            // layer8ToolStripMenuItem
-            // 
-            this.layer8ToolStripMenuItem.Name = "layer8ToolStripMenuItem";
-            this.layer8ToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.layer8ToolStripMenuItem.Text = "Layer 8";
             // 
             // MainForm
             // 
@@ -4612,7 +4620,6 @@
             this.panel8.ResumeLayout(false);
             this.colorEditingPanel.ResumeLayout(false);
             this.colorEditingPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.colorHex)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBlue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorRed)).EndInit();
@@ -4626,11 +4633,13 @@
             this.objectListGroup.PerformLayout();
             this.layerSettingsGroup.ResumeLayout(false);
             this.layerSettingsGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.midpointTrackBar)).EndInit();
             this.titleCardGroup.ResumeLayout(false);
             this.titleCardGroup.PerformLayout();
             this.tileContextMenuStrip.ResumeLayout(false);
             this.layoutContextMenuStrip.ResumeLayout(false);
             this.chunkBlockContextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.colorHex)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4892,8 +4901,7 @@
 		private System.Windows.Forms.Label label19;
 		private System.Windows.Forms.ComboBox layer0Box;
 		private System.Windows.Forms.Label label18;
-		private System.Windows.Forms.ComboBox midpointBox;
-		private System.Windows.Forms.Label label17;
+		private System.Windows.Forms.Label midpointLabel;
 		private System.Windows.Forms.GroupBox objectListGroup;
 		private System.Windows.Forms.CheckBox loadGlobalObjects;
 		private System.Windows.Forms.Button browseScriptButton;
@@ -4966,5 +4974,7 @@
 		private System.Windows.Forms.ToolStripMenuItem layer6ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem layer7ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem layer8ToolStripMenuItem;
+		private System.Windows.Forms.TrackBar midpointTrackBar;
+		private System.Windows.Forms.Label lowTilesLabel;
 	}
 }

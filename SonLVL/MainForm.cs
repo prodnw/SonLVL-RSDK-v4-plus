@@ -7917,7 +7917,7 @@ namespace SonicRetro.SonLVL.GUI
 
 			LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex ^ 1][SelectedTile] = LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].Clone();
 			LevelData.RedrawCol(SelectedTile, true);
-			SaveState($"Copy Tile Collision to Path {(collisionLayerSelector.SelectedIndex ^ 1) + 1}");
+			SaveState($"Copy Tile Collision to Plane {(collisionLayerSelector.SelectedIndex ^ 1) + 1}");
 		}
 
 		private void usageCountsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -9338,39 +9338,63 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void copyCollisionAllButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(this, "Are you sure you want to replace all of Path 2's collision with Path 1's?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
-				return;
-			
-			var redrawblocks = new SortedSet<int>();
-			for (int i = 0; i < LevelData.Collision.collisionMasks[0].Length; i++)
+			using (CopyCollisionDialog dialog = new CopyCollisionDialog())
 			{
-				if (!LevelData.Collision.collisionMasks[0][i].Equal(LevelData.Collision.collisionMasks[1][i]))
+				if (dialog.ShowDialog(this) == DialogResult.OK)
 				{
-					LevelData.Collision.collisionMasks[1][i] = LevelData.Collision.collisionMasks[0][i].Clone();
+					if (!dialog.tileCheckBox.Checked && !dialog.chunkCheckBox.Checked) return;
 
-					LevelData.RedrawCol(i, false);
-					redrawblocks.Add(i);
+					int src = dialog.planeBOverARadioButton.Checked ? 1 : 0;
+					int dst = dialog.planeBOverARadioButton.Checked ? 0 : 1;
+
+					string n = dialog.tileCheckBox.Checked ? (dialog.chunkCheckBox.Checked ? "chunk solidity and tile collision" : "tile collision") : "chunk solidity";
+
+					if (MessageBox.Show(this, $"This will overwrite ALL of Plane {(char)(dst + 'A')}'s {n} data.\n\nAre you sure you want to replace all of Plane {(char)(dst + 'A')}'s {n} with Plane {(char)(src + 'A')}'s?", "SonLVL-RSDK", MessageBoxButtons.OKCancel) != DialogResult.OK)
+						return;
+
+					var redrawblocks = new SortedSet<int>();
+
+					if (dialog.tileCheckBox.Checked)
+					{
+						for (int i = 0; i < LevelData.Collision.collisionMasks[0].Length; i++)
+						{
+							if (!LevelData.Collision.collisionMasks[src][i].Equal(LevelData.Collision.collisionMasks[dst][i]))
+							{
+								LevelData.Collision.collisionMasks[dst][i] = LevelData.Collision.collisionMasks[src][i].Clone();
+
+								LevelData.RedrawCol(i, false);
+								redrawblocks.Add(i);
+							}
+						}
+					}
+
+					if (dialog.chunkCheckBox.Checked)
+					{
+						for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
+						{
+							bool redraw = false;
+							foreach (RSDKv3_4.Tiles128x128.Block.Tile tile in LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a))
+							{
+								redraw |= redrawblocks.Contains(tile.tileIndex) || (tile.solidityA != tile.solidityB);
+								
+								if (dialog.planeAOverBRadioButton.Checked)
+									tile.solidityB = tile.solidityA;
+								else
+									tile.solidityA = tile.solidityB;
+							}
+
+							if (redraw)
+							{
+								LevelData.RedrawChunk(i);
+								if (i == SelectedChunk)
+									DrawChunkPicture();
+							}
+						}
+					}
+
+					SaveState($"Copy Plane {(char)(src + 'A')} Coll1ision to Plane {(char)(dst + 'A')}");
 				}
 			}
-
-			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
-			{
-				bool redraw = false;
-				foreach (RSDKv3_4.Tiles128x128.Block.Tile tile in LevelData.NewChunks.chunkList[i].tiles.SelectMany(a => a))
-				{
-					redraw |= redrawblocks.Contains(tile.tileIndex) || (tile.solidityA != tile.solidityB);
-					tile.solidityB = tile.solidityA;
-				}
-
-				if (redraw)
-				{
-					LevelData.RedrawChunk(i);
-					if (i == SelectedChunk)
-						DrawChunkPicture();
-				}
-			}
-
-			SaveState("Copy Path 1 Collision to Path 2");
 		}
 
 		private void gotoToolStripMenuItem_Click(object sender, EventArgs e)

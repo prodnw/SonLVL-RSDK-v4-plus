@@ -5903,7 +5903,7 @@ namespace SonicRetro.SonLVL.GUI
 				Size off = new Size(menuLoc.X * 128, menuLoc.Y * 128);
 				foreach (ObjectEntry obj in section.Objects)
 				{
-					Entry newent;
+					ObjectEntry newent;
 
 					// Manual fixes for when pasting v3 entities into a v4 scene/vice versa..
 					// (Surely there's a better way to do this.. right?)
@@ -5912,20 +5912,20 @@ namespace SonicRetro.SonLVL.GUI
 						if (obj is V3ObjectEntry v3obj)
 							newent = new V4ObjectEntry(new RSDKv4.Scene.Entity(v3obj.Type, v3obj.PropertyValue, v3obj.X << 16, v3obj.Y << 16));
 						else
-							newent = obj.Clone();
+							newent = (ObjectEntry)obj.Clone();
 					}
 					else
 					{
 						if (obj is V4ObjectEntry v4obj)
 							newent = new V3ObjectEntry(new RSDKv3.Scene.Entity(v4obj.Type, v4obj.PropertyValue, v4obj.X << 16, v4obj.Y << 16));
 						else
-							newent = obj.Clone();
+							newent = (ObjectEntry)obj.Clone();
 					}
 					
 					newent.X = (short)(newent.X + off.Width);
 					newent.Y = (short)(newent.Y + off.Height);
-					LevelData.AddObject(obj);
-					objectOrder.Items.Add(obj.Name, obj.Type < objectTypeImages.Images.Count ? obj.Type : 0);
+					LevelData.AddObject(newent);
+					objectOrder.Items.Add(newent.Name, newent.Type < objectTypeImages.Images.Count ? newent.Type : 0);
 					newent.UpdateSprite();
 				}
 			}

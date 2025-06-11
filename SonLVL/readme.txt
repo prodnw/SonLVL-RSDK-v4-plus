@@ -68,12 +68,13 @@ Click and drag chunks in the chunk list to re-order them, hold Ctrl to swap two 
 On the chunk preview:
 Page Up, Page Down, Home, End: Change current chunk.
 Up, Down, Left, Right: Change selected chunk tile.
-X: Flip horizontally.
-Y: Flip vertically.
-P: Toggle visual plane.
-S: Increment Plane A solidity. (Hold Shift to decrement instead)
-T: Increment Plane B solidity. (Hold Shift to decrement instead)
-B: Increment tile index. (Hold Shift to decrement instead)
+A: Decrease index of all selected tiles.
+Z: Decrease index of all selected tiles.
+S: Flip horizontally
+X: Flip vertically
+D: Increment Plane A solidity. (Hold Shift to decrement instead)
+C: Increment Plane B solidity. (Hold Shift to decrement instead)
+F: Toggle visual plane.
 
 Tile Editing:
 Click and drag tiles in the tile list to re-order them, hold Ctrl to swap two tiles.

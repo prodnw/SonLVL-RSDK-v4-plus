@@ -314,7 +314,7 @@ namespace SonicRetro.SonLVL.API
 						if (Background.layers[i].lineScroll[y] != lastind)
 						{
 							lastind = Background.layers[i].lineScroll[y];
-							BGScroll[i].Add(new ScrollData(y, info[lastind]));
+							BGScroll[i].Add(new ScrollData(y, info[(lastind < info.Count) ? lastind : info.Count - 1]));
 						}
 				}
 				else

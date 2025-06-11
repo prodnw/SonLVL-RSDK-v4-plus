@@ -5901,16 +5901,31 @@ namespace SonicRetro.SonLVL.GUI
 			if (CurrentTab == Tab.Foreground)
 			{
 				Size off = new Size(menuLoc.X * 128, menuLoc.Y * 128);
-				foreach (Entry item in section.Objects)
+				foreach (ObjectEntry obj in section.Objects)
 				{
-					Entry newent = item.Clone();
+					Entry newent;
+
+					// Manual fixes for when pasting v3 entities into a v4 scene/vice versa..
+					// (Surely there's a better way to do this.. right?)
+					if (LevelData.Game.RSDKVer == EngineVersion.V4)
+					{
+						if (obj is V3ObjectEntry v3obj)
+							newent = new V4ObjectEntry(new RSDKv4.Scene.Entity(v3obj.Type, v3obj.PropertyValue, v3obj.X << 16, v3obj.Y << 16));
+						else
+							newent = obj.Clone();
+					}
+					else
+					{
+						if (obj is V4ObjectEntry v4obj)
+							newent = new V3ObjectEntry(new RSDKv3.Scene.Entity(v4obj.Type, v4obj.PropertyValue, v4obj.X << 16, v4obj.Y << 16));
+						else
+							newent = obj.Clone();
+					}
+					
 					newent.X = (short)(newent.X + off.Width);
 					newent.Y = (short)(newent.Y + off.Height);
-					if (newent is ObjectEntry oe)
-					{
-						LevelData.AddObject(oe);
-						objectOrder.Items.Add(oe.Name, oe.Type < objectTypeImages.Images.Count ? oe.Type : 0);
-					}
+					LevelData.AddObject(obj);
+					objectOrder.Items.Add(obj.Name, obj.Type < objectTypeImages.Images.Count ? obj.Type : 0);
 					newent.UpdateSprite();
 				}
 			}

@@ -6910,13 +6910,22 @@ namespace SonicRetro.SonLVL.GUI
 					case RSDKv3_4.Tiles128x128.Block.Tile.Solidities.SolidNone:
 						return false;
 				}
-			var height = mask.heightMasks[colx];
-			if (!height.solid)
+
+			if (blk.direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipX))
+				colx = 15 - colx;
+			
+			var heightMask = mask.heightMasks[colx];
+			if (!heightMask.solid)
 				return false;
-			if (mask.flipY)
-				return coly <= height.height;
+
+			int height = heightMask.height;
+			if (blk.direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY))
+				height = 15 - height;
+
+			if (mask.flipY ^ blk.direction.HasFlag(RSDKv3_4.Tiles128x128.Block.Tile.Directions.FlipY))
+				return coly <= height;
 			else
-				return coly >= height.height;
+				return coly >= height;
 		}
 
 		private void alignLeftWallToolStripButton_Click(object sender, EventArgs e)

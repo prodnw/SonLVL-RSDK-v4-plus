@@ -3669,7 +3669,7 @@ namespace SonicRetro.SonLVL.GUI
 								ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
 								ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
 							});
-							scrollList.Items.Insert(i + 1, mouse.Y.ToString("X4"));
+							scrollList.Items.Insert(i + 1, mouse.Y.ToString("D4"));
 							SaveState("Insert Scroll Line");
 							scrollList.SelectedIndex = i + 1;
 							DrawLevel();
@@ -3709,7 +3709,7 @@ namespace SonicRetro.SonLVL.GUI
 								ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
 								ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
 							});
-							scrollList.Items.Insert(i + 1, mouse.X.ToString("X4"));
+							scrollList.Items.Insert(i + 1, mouse.X.ToString("D4"));
 							scrollList.SelectedIndex = i + 1;
 							DrawLevel();
 							SaveState("Insert Scroll Line");
@@ -3883,7 +3883,7 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				if (selectedScrollLine != -1)
 				{
-					scrollList.Items[selectedScrollLine] = LevelData.BGScroll[bglayer][selectedScrollLine].StartPos.ToString("X4");
+					scrollList.Items[selectedScrollLine] = LevelData.BGScroll[bglayer][selectedScrollLine].StartPos.ToString("D4");
 					scrollOffset.Value = LevelData.BGScroll[bglayer][selectedScrollLine].StartPos;
 					SaveState("Move Scroll Line");
 				}
@@ -6238,7 +6238,7 @@ namespace SonicRetro.SonLVL.GUI
 								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Top * 128)
 								{
 									LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Height * 128);
-									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 								}
 							}
 						}
@@ -6283,7 +6283,7 @@ namespace SonicRetro.SonLVL.GUI
 								if (LevelData.BGScroll[bglayer][i].StartPos > selection.Left * 128)
 								{
 									LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Width * 128);
-									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+									scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 								}
 							}
 						}
@@ -6396,7 +6396,7 @@ namespace SonicRetro.SonLVL.GUI
 									if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Bottom * 128)
 									{
 										LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Height * 128);
-										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 										
 										if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
 											continue;
@@ -6460,7 +6460,7 @@ namespace SonicRetro.SonLVL.GUI
 									if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Right * 128)
 									{
 										LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Width * 128);
-										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+										scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 
 										if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
 											continue;
@@ -6537,7 +6537,7 @@ namespace SonicRetro.SonLVL.GUI
 					if (LevelData.BGScroll[bglayer][i].StartPos > selection.Top * 128)
 					{
 						LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Height * 128);
-						scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+						scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 					}
 				}
 			}
@@ -6587,7 +6587,7 @@ namespace SonicRetro.SonLVL.GUI
 					if (LevelData.BGScroll[bglayer][i].StartPos > selection.Left * 128)
 					{
 						LevelData.BGScroll[bglayer][i].StartPos += (ushort)(selection.Width * 128);
-						scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+						scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 					}
 				}
 			}
@@ -6638,7 +6638,7 @@ namespace SonicRetro.SonLVL.GUI
 						if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Bottom * 128)
 						{
 							LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Height * 128);
-							scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+							scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 
 							if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
 								continue;
@@ -6705,7 +6705,7 @@ namespace SonicRetro.SonLVL.GUI
 						if (LevelData.BGScroll[bglayer][i].StartPos >= selection.Right * 128)
 						{
 							LevelData.BGScroll[bglayer][i].StartPos -= (ushort)(selection.Width * 128);
-							scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("X4");
+							scrollList.Items[i] = LevelData.BGScroll[bglayer][i].StartPos.ToString("D4");
 
 							if (LevelData.BGScroll[bglayer][i].StartPos != LevelData.BGScroll[bglayer][i - 1].StartPos)
 								continue;
@@ -7893,7 +7893,7 @@ namespace SonicRetro.SonLVL.GUI
 				scrollList.BeginUpdate();
 				scrollList.Items.Clear();
 				foreach (var item in LevelData.BGScroll[bglayer])
-					scrollList.Items.Add(item.StartPos.ToString("X4"));
+					scrollList.Items.Add(item.StartPos.ToString("D4"));
 				scrollList.EndUpdate();
 				scrollList.SelectedIndex = 0;
 				SaveState($"Clear Background {bglayer + 1}");
@@ -8460,7 +8460,7 @@ namespace SonicRetro.SonLVL.GUI
 					scrollList.BeginUpdate();
 					scrollList.Items.Clear();
 					foreach (var item in LevelData.BGScroll[bglayer])
-						scrollList.Items.Add(item.StartPos.ToString("X4"));
+						scrollList.Items.Add(item.StartPos.ToString("D4"));
 					scrollList.EndUpdate();
 					scrollList.SelectedIndex = 0;
 					break;
@@ -8685,6 +8685,7 @@ namespace SonicRetro.SonLVL.GUI
 						max = LevelData.BGHeight[bglayer] * 128 - 1;
 						break;
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+						// note: in S2's unused MBZ layer 2 bg, there's a line at 1537px... but the layer's only 1536px wide? not sure what we can even do about that..
 						max = LevelData.BGWidth[bglayer] * 128 - 1;
 						break;
 				}
@@ -8736,7 +8737,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos != max - 1)
 				max = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos + ((max - LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos) / 2);
 			LevelData.BGScroll[bglayer].Insert(scrollList.SelectedIndex + 1, new ScrollData((ushort)max));
-			scrollList.Items.Insert(scrollList.SelectedIndex + 1, max.ToString("X4"));
+			scrollList.Items.Insert(scrollList.SelectedIndex + 1, max.ToString("D4"));
 			scrollList.SelectedIndex++;
 			SaveState("Insert Scroll Line");
 		}
@@ -8756,7 +8757,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos = (ushort)scrollOffset.Value;
-			scrollList.Items[scrollList.SelectedIndex] = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos.ToString("X4");
+			scrollList.Items[scrollList.SelectedIndex] = LevelData.BGScroll[bglayer][scrollList.SelectedIndex].StartPos.ToString("D4");
 			DrawLevel();
 			SaveState("Change Scroll Line Offset");
 		}

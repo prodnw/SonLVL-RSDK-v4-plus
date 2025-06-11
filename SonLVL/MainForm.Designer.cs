@@ -3032,7 +3032,6 @@
             // 
             // scrollOffset
             // 
-            this.scrollOffset.Hexadecimal = true;
             this.scrollOffset.Location = new System.Drawing.Point(236, 464);
             this.scrollOffset.Margin = new System.Windows.Forms.Padding(6);
             this.scrollOffset.Name = "scrollOffset";

@@ -1591,8 +1591,6 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			if (!loaded) return;
 
-			chunkShowLowTilesCheckBox.Checked = lowToolStripMenuItem.Checked;
-
 			DrawLevel();
 			DrawChunkPicture();
 		}
@@ -1600,8 +1598,6 @@ namespace SonicRetro.SonLVL.GUI
 		private void highToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (!loaded) return;
-
-			chunkShowHighTilesCheckBox.Checked = highToolStripMenuItem.Checked;
 
 			DrawLevel();
 			DrawChunkPicture();
@@ -7127,12 +7123,12 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void lowToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
-			Settings.ViewLowPlane = lowToolStripMenuItem.Checked;
+			Settings.ViewLowPlane = chunkShowLowTilesCheckBox.Checked = lowToolStripMenuItem.Checked;
 		}
 
 		private void highToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
-			Settings.ViewHighPlane = highToolStripMenuItem.Checked;
+			Settings.ViewHighPlane = chunkShowHighTilesCheckBox.Checked = highToolStripMenuItem.Checked;
 		}
 
 		private void objGridSizeDropDownButton_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)

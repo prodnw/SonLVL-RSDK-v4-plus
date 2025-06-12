@@ -8442,12 +8442,12 @@ namespace SonicRetro.SonLVL.GUI
 			if (LevelData.BGSize[bglayer].IsEmpty)
 			{
 				tabPage13.Hide();
-				bgDuplicateLayerOverToolStripButton.Enabled = false;
+				replaceBackgroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = bgDuplicateLayerOverToolStripButton.Enabled = false;
 				return;
 			}
 			
 			tabPage13.Show();
-			bgDuplicateLayerOverToolStripButton.Enabled = true;
+			replaceBackgroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = bgDuplicateLayerOverToolStripButton.Enabled = true;
 
 			layerScrollType.SelectedIndex = (int)LevelData.Background.layers[bglayer].type - 1;
 			switch (LevelData.Background.layers[bglayer].type)

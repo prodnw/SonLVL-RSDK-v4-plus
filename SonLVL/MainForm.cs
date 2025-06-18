@@ -2710,16 +2710,13 @@ namespace SonicRetro.SonLVL.GUI
 						selectAllObjectsToolStripMenuItem_Click(sender, EventArgs.Empty);
 					else
 					{
-						for (int i = 0; i < SelectedItems.Count; i++)
+						foreach (ObjectEntry obj in SelectedItems)
 						{
-							if (SelectedItems[i] is ObjectEntry oi)
-							{
-								oi.Type = (byte)(oi.Type == 0 ? 255 : oi.Type - 1);
-								var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
-								lvi.Text = oi.Name;
-								lvi.ImageIndex = oi.Type < objectTypeImages.Images.Count ? oi.Type : 0;
-								SelectedItems[i].UpdateSprite();
-							}
+							obj.Type = (byte)(obj.Type == 0 ? 255 : obj.Type - 1);
+							var lvi = objectOrder.Items[LevelData.Objects.IndexOf(obj)];
+							lvi.Text = obj.Name;
+							lvi.ImageIndex = obj.Type < objectTypeImages.Images.Count ? obj.Type : 0;
+							obj.UpdateSprite();
 						}
 						DrawLevel();
 						ObjectProperties.Refresh();
@@ -2896,16 +2893,13 @@ namespace SonicRetro.SonLVL.GUI
 					if (!loaded) return;
 					if (!e.Control)
 					{
-						for (int i = 0; i < SelectedItems.Count; i++)
+						foreach (ObjectEntry obj in SelectedItems)
 						{
-							if (SelectedItems[i] is ObjectEntry oi)
-							{
-								oi.Type = (byte)(oi.Type == 255 ? 0 : oi.Type + 1);
-								var lvi = objectOrder.Items[LevelData.Objects.IndexOf(oi)];
-								lvi.Text = oi.Name;
-								lvi.ImageIndex = oi.Type < objectTypeImages.Images.Count ? oi.Type : 0;
-								SelectedItems[i].UpdateSprite();
-							}
+							obj.Type = (byte)(obj.Type == 255 ? 0 : obj.Type + 1);
+							var lvi = objectOrder.Items[LevelData.Objects.IndexOf(obj)];
+							lvi.Text = obj.Name;
+							lvi.ImageIndex = obj.Type < objectTypeImages.Images.Count ? obj.Type : 0;
+							obj.UpdateSprite();
 						}
 						DrawLevel();
 						ObjectProperties.Refresh();
@@ -8902,17 +8896,17 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState("Change Level Name");
 		}
 
+		static readonly string[] midpointNames = new string[] {
+			"Midpoint: Before Layer 0",
+			"Midpoint: Between Layer 0 and Layer 1",
+			"Midpoint: Between Layer 1 and Layer 2",
+			"Midpoint: Between Layer 2 and Layer 3",
+			"Midpoint: After Layer 3"};
+
 		private void midpointTrackBar_ValueChanged(object sender, EventArgs e)
 		{
-			string[] names = new string[] {
-				"Midpoint: Before Layer 0",
-				"Midpoint: After Layer 0",
-				"Midpoint: After Layer 1",
-				"Midpoint: After Layer 2",
-				"Midpoint: After Layer 3"};
-
 			int midpoint = 4 - midpointTrackBar.Value;
-			midpointLabel.Text = names[midpoint];
+			midpointLabel.Text = midpointNames[midpoint];
 
 			lowTilesLabel.Text = "";
 			for (int i = 0; i < 4; i++)

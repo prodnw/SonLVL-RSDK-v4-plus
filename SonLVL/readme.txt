@@ -34,6 +34,7 @@ Left click: Select an object or ring group. Hold Ctrl to select multiple objects
 Left click empty area, drag: Select all objects within an area.
 Left click object, drag: Move object(s).
 Double left click: Create a new object.
+Shift + double left click: Add a new group of objects.
 Right click: Bring up a context menu.
 Delete: Delete all selected objects.
 Numpad 12346789: Move selected objects by grid size in direction of number.

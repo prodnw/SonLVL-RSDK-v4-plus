@@ -47,7 +47,7 @@ namespace S2ObjectDefinitions.OOZ
 					{ "Small", 1 }
 				},
 				(obj) => ((V4ObjectEntry)obj).Frame == 0 ? 0 : 1,
-				(obj, value) => ((V4ObjectEntry)obj).Frame = (int)value);
+				(obj, value) => ((V4ObjectEntry)obj).Frame = (byte)value);
 		}
 
 		public override ReadOnlyCollection<byte> Subtypes

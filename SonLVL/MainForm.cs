@@ -5840,16 +5840,14 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				int x = selection.Left * 128;
 				int y = selection.Top * 128;
-				if (LevelData.Objects != null)
-					foreach (ObjectEntry item in LevelData.Objects)
-						if (item.Y >= y & item.Y < selection.Bottom * 128
-							& item.X >= x & item.X < selection.Right * 128)
-						{
-							Entry ent = item.Clone();
-							ent.X -= (short)x;
-							ent.Y -= (short)y;
-							objectselection.Add(ent);
-						}
+				foreach (ObjectEntry item in LevelData.Objects)
+					if (item.Y >= y && item.Y < selection.Bottom * 128 && item.X >= x && item.X < selection.Right * 128)
+					{
+						Entry ent = item.Clone();
+						ent.X -= (short)x;
+						ent.Y -= (short)y;
+						objectselection.Add(ent);
+					}
 			}
 			return new LayoutSection(layoutsection, objectselection);
 		}
@@ -6001,11 +5999,9 @@ namespace SonicRetro.SonLVL.GUI
 			if (displayObjectsToolStripCheckBoxButton.Checked && CurrentTab == Tab.Foreground)
 			{
 				List<Entry> objectselection = new List<Entry>();
-				if (LevelData.Objects != null)
-					foreach (ObjectEntry item in LevelData.Objects)
-						if (item.Y >= selection.Top * 128 & item.Y < selection.Bottom * 128
-							& item.X >= selection.Left * 128 & item.X < selection.Right * 128)
-							objectselection.Add(item);
+				foreach (ObjectEntry item in LevelData.Objects)
+					if (item.Y >= selection.Top * 128 && item.Y < selection.Bottom * 128 && item.X >= selection.Left * 128 && item.X < selection.Right * 128)
+						objectselection.Add(item);
 				foreach (Entry item in objectselection)
 				{
 					if (item is ObjectEntry oe)
@@ -6317,13 +6313,12 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
-							foreach (ObjectEntry item in LevelData.Objects)
-								if (item.Y >= selection.Top * 128 & item.Y < selection.Bottom * 128 & item.X >= selection.Right * 128)
-								{
-									item.X -= (short)(selection.Width * 128);
-									item.UpdateSprite();
-								}
+						foreach (ObjectEntry item in LevelData.Objects)
+							if (item.Y >= selection.Top * 128 && item.Y < selection.Bottom * 128 && item.X >= selection.Right * 128)
+							{
+								item.X -= (short)(selection.Width * 128);
+								item.UpdateSprite();
+							}
 					}
 				}
 				else if (dlg.shiftV.Checked)
@@ -6341,13 +6336,12 @@ namespace SonicRetro.SonLVL.GUI
 							layout[y][x] = 0;
 					if (dlg.moveObjects.Checked)
 					{
-						if (LevelData.Objects != null)
-							foreach (ObjectEntry item in LevelData.Objects)
-								if (item.X >= selection.Left * 128 & item.X < selection.Right * 128 & item.Y >= selection.Bottom * 128)
-								{
-									item.Y -= (short)(selection.Height * 128);
-									item.UpdateSprite();
-								}
+						foreach (ObjectEntry item in LevelData.Objects)
+							if (item.X >= selection.Left * 128 && item.X < selection.Right * 128 && item.Y >= selection.Bottom * 128)
+							{
+								item.Y -= (short)(selection.Height * 128);
+								item.UpdateSprite();
+							}
 					}
 				}
 				else if (dlg.entireRow.Checked)

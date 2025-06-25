@@ -1172,6 +1172,7 @@ namespace SonicRetro.SonLVL.GUI
 					DrawLevel();
 					break;
 				case Tab.Foreground:
+					findFGChunksDialog.chunkSelect.Value = SelectedChunk;
 					switch (findFGChunksDialog.ShowDialog(this))
 					{
 						case DialogResult.Yes:
@@ -1213,6 +1214,7 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Tab.Background:
+					findBGChunksDialog.chunkSelect.Value = SelectedChunk;
 					switch (findBGChunksDialog.ShowDialog(this))
 					{
 						case DialogResult.Yes:

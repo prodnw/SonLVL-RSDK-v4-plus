@@ -599,8 +599,29 @@ namespace SonicRetro.SonLVL.API
 			});
 			SaveFile("128x128Tiles.bin", fn => NewChunks.Write(fn));
 			SaveFile("CollisionMasks.bin", fn => Collision.Write(fn));
+
+			// Now, let's save the Backgrounds.bin file
+			// The tilelayer part of it is simple enough, but for scrolling, we need to reconstruct the entire list
+			// (this note fits in both LoadLevel as well as here, but) This can cause some issues with scripts that directly access parallax indexes
+			// Namely:
+			// - Because the list gets reconstructed, indexes may be shuffled around
+			// - This doesn't only matter when creating new zones, but even just opening an S1 Special Stage, making no changes, and saving it is enough to break the background effects
+			// - However.. I'm not sure what a good solution would be? In the aforementioned example, there are several duplicate hParallax
+			//    entries, so even if they're different in the script's eyes.. *we* don't know that, nor do we have any way to find out..
+			// - Another notable example is HTZ, where the Earthquakes also break when opening the level and resaving it in SonLVL-RSDK with no extra changes
+			// - The "ForegroundDeformation" somewhat alleviates this problem in a roundabout way, where if an HScroll layer has 1.0 parallaxFactor, 0.0 scrollSpeed, and matches ForegroundDeformation, then
+			//    It will use hParallax[0] all the time, no matter what other parallax there is
+			// - However.. that's still a different index than the script expects, which is hParallax[20]...
+			// - I'm.. not quite sure what the best solution to this problem is? Should we just try and preserve the original indexes all the time where possible? But.. how do we handle editing, then?
+			// So... just gonna leave this note here for future me to come back to, I suppose..
+			// TODO: fix it ig idk tbh
+
+			// Should already be cleared, but let's go ahead and clear 'em again anyways just in case
 			Background.hScroll.Clear();
 			Background.vScroll.Clear();
+
+			// First off, let's add our ForegroundDeformation parallax index, since the FG uses parallax index 0
+			// (We add it even when it's false, since there are cases where FG doesn't deform while BG[0] does, or vice versa)
 			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V3:
@@ -610,6 +631,8 @@ namespace SonicRetro.SonLVL.API
 					Background.hScroll.Add(new RSDKv4.Backgrounds.ScrollInfo() { deform = ForegroundDeformation } );
 					break;
 			}
+
+			// Now, let's go through the 8 layers and rebuild that scrolling list!-
 			for (int i = 0; i < 8; i++)
 			{
 				int height;
@@ -627,6 +650,7 @@ namespace SonicRetro.SonLVL.API
 					default:
 						continue;
 				}
+
 				Background.layers[i].lineScroll = new byte[height];
 				byte scrind = 0;
 				int datind = 0;
@@ -652,10 +676,13 @@ namespace SonicRetro.SonLVL.API
 						}
 						scrind = (byte)tmpind;
 					}
+
 					Background.layers[i].lineScroll[y] = scrind;
 				}
 			}
+
 			SaveFile("Backgrounds.bin", fn => Background.Write(fn));
+			
 			SaveFile($"Act{StageInfo.actID}.bin", fn => Scene.Write(fn));
 			foreach (var astg in AdditionalScenes)
 				SaveFile($"Act{astg.StageInfo.actID}.bin", fn => astg.Scene.Write(fn));

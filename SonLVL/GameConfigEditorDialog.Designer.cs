@@ -848,7 +848,7 @@ namespace SonicRetro.SonLVL
             this.stageAct.Enabled = false;
             this.stageAct.Location = new System.Drawing.Point(281, 95);
             this.stageAct.Margin = new System.Windows.Forms.Padding(4);
-            this.stageAct.MaxLength = 7;
+            this.stageAct.MaxLength = 3;
             this.stageAct.Name = "stageAct";
             this.stageAct.Size = new System.Drawing.Size(211, 22);
             this.stageAct.TabIndex = 8;

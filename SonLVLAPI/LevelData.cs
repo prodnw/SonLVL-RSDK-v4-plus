@@ -269,6 +269,8 @@ namespace SonicRetro.SonLVL.API
 				NewTiles = new BitmapBits[0x400];
 				for (int i = 0; i < 0x400; i++)
 					NewTiles[i] = new BitmapBits(16, 16);
+
+				NewPalette.Fill(NewPalette[0], 128, 128);
 			}
 			NewChunks = ReadFile<Tiles128x128>(stgfol + "128x128Tiles.bin");
 			Collision = ReadFile<TileConfig>(stgfol + "CollisionMasks.bin");
@@ -405,6 +407,8 @@ namespace SonicRetro.SonLVL.API
 				NewTiles = new BitmapBits[0x400];
 				for (int i = 0; i < 0x400; i++)
 					NewTiles[i] = new BitmapBits(16, 16);
+
+				NewPalette.Fill(NewPalette[0], 128, 128);
 			}
 		}
 
@@ -425,7 +429,7 @@ namespace SonicRetro.SonLVL.API
 					NewPalette[(l * 16) + c + 96] = StageConfig.stagePalette.colors[l][c].ToSystemColor();
 			foreach (var item in NewTiles)
 				item.Clear();
-			NewPalette.Fill(Color.Black, 128, 128);
+			NewPalette.Fill(NewPalette[0], 128, 128);
 			NewChunks = new Tiles128x128();
 			Collision = new TileConfig();
 			switch (Game.RSDKVer)

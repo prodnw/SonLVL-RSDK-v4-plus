@@ -197,6 +197,14 @@ namespace SonicRetro.SonLVL.GUI
 			exportArtcollisionpriorityToolStripMenuItem.Checked = Settings.ExportArtCollisionPriority;
 			CurrentTab = Settings.CurrentTab;
 			CurrentArtTab = Settings.CurrentArtTab;
+			useHexadecimalToolStripMenuItem.Checked = Settings.UseHexadecimalIndexesForArt;
+
+			if (!useHexadecimalToolStripMenuItem.Checked)
+			{
+				ChunkCount.Text = $"/ 511";
+				TileCount.Text = $"/ 1023";
+			}
+
 			switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem.Checked = Settings.SwitchChunkBlockMouseButtons;
 			switch (Settings.WindowMode)
 			{
@@ -829,9 +837,7 @@ namespace SonicRetro.SonLVL.GUI
 			UpdateScrollControls();
 			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
-			ChunkCount.Text = $"/ {(LevelData.NewChunks.chunkList.Length - 1):X}";
-			TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1):X}";
-
+			useHexadecimalToolStripMenuItem_CheckedChanged(this, EventArgs.Empty);
 			tableLayoutPanel4.Enabled = importToolStripButton.Enabled = deleteToolStripButton.Enabled = fgToolStrip.Enabled = bgToolStrip.Enabled =
 				usageCountsToolStripMenuItem.Enabled = titleCardGroup.Enabled = layerSettingsGroup.Enabled = objectListGroup.Enabled = soundEffectsGroup.Enabled =
 				objectPanel.PanelAllowDrop = objectOrder.AllowDrop = TileSelector.AllowDrop = true;
@@ -1521,6 +1527,29 @@ namespace SonicRetro.SonLVL.GUI
 			}
 		}
 
+		private void useHexadecimalToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			Settings.UseHexadecimalIndexesForArt = useHexadecimalToolStripMenuItem.Checked;
+
+			chunkBlockEditor.Hexadecimal = TileID.Hexadecimal = ChunkID.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
+
+			if (!loaded) return;
+			
+			if (CurrentTab == Tab.Foreground || CurrentTab == Tab.Background)
+				DrawLevel();
+
+			if (useHexadecimalToolStripMenuItem.Checked)
+			{
+				ChunkCount.Text = $"/ {(LevelData.NewChunks.chunkList.Length - 1):X}";
+				TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1):X}";
+			}
+			else
+			{
+				ChunkCount.Text = $"/ {(LevelData.NewChunks.chunkList.Length - 1)}";
+				TileCount.Text = $"/ {(LevelData.NewTiles.Length - 1)}";
+			}
+		}
+
 		private void switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			if (switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem.Checked)
@@ -1757,7 +1786,7 @@ namespace SonicRetro.SonLVL.GUI
 					{
 						if (exportArtcollisionpriorityToolStripMenuItem.Checked)
 						{
-							string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
+							string pathBase = Path.Combine(a.SelectedPath, useHexadecimalToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
 							LevelData.NewTileBmps[i].Save(Path.Combine(pathBase + ".png"));
 							LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col1.png");
 							LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Magenta, Color.White).Save(pathBase + "_col2.png");
@@ -1765,7 +1794,7 @@ namespace SonicRetro.SonLVL.GUI
 						else
 							LevelData.NewTileBmps[i]
 								.Save(Path.Combine(a.SelectedPath,
-								(useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
+								(useHexadecimalToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 					}
 		}
 
@@ -1787,7 +1816,7 @@ namespace SonicRetro.SonLVL.GUI
 						pal.Entries[0] = Color.Transparent;
 					for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 					{
-						string pathBase = Path.Combine(a.SelectedPath, useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
+						string pathBase = Path.Combine(a.SelectedPath, useHexadecimalToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString());
 						if (exportArtcollisionpriorityToolStripMenuItem.Checked)
 						{
 							BitmapBits bits = new BitmapBits(128, 128);
@@ -1887,9 +1916,9 @@ namespace SonicRetro.SonLVL.GUI
 					for (int i = 0; i < LevelData.NewColBmpBits.Length; i++)
 					{
 						LevelData.NewColBmpBits[i][0].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
-							"0_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
+							"0_" + (useHexadecimalToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 						LevelData.NewColBmpBits[i][1].ToBitmap1bpp(Color.Transparent, Color.White).Save(Path.Combine(a.SelectedPath,
-							"1_" + (useHexadecimalIndexesToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
+							"1_" + (useHexadecimalToolStripMenuItem.Checked ? i.ToString("X3") : i.ToString()) + ".png"));
 					}
 		}
 
@@ -2055,11 +2084,6 @@ namespace SonicRetro.SonLVL.GUI
 		private void hideDebugObjectsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			Settings.HideDebugObjectsExport = hideDebugObjectsToolStripMenuItem.Checked;
-		}
-
-		private void useHexadecimalIndexesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-		{
-			Settings.UseHexadecimalIndexesExport = useHexadecimalIndexesToolStripMenuItem.Checked;
 		}
 
 		private void exportArtcollisionpriorityToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -2331,7 +2355,7 @@ namespace SonicRetro.SonLVL.GUI
 				{
 					tmpbnd = DrawHUDStr(hudbnd.Left, hudbnd.Bottom, "Chunk: ");
 					hudbnd = Rectangle.Union(hudbnd, tmpbnd);
-					hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString("X3")));
+					hudbnd = Rectangle.Union(hudbnd, DrawHUDNum(tmpbnd.Right, tmpbnd.Top, SelectedChunk.ToString(useHexadecimalToolStripMenuItem.Checked ? "X3" : "D3")));
 				}
 				
 				if (CurrentTab != Tab.Background)
@@ -8102,7 +8126,7 @@ namespace SonicRetro.SonLVL.GUI
 						MessageBox.Show(this, "Cannot export chunk with nothing visible.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						return;
 					}
-					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalIndexesToolStripMenuItem.Checked ? SelectedChunk.ToString("X2") : SelectedChunk.ToString()) + ".png", Filter = "PNG Images|*.png" })
+					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalToolStripMenuItem.Checked ? SelectedChunk.ToString("X2") : SelectedChunk.ToString()) + ".png", Filter = "PNG Images|*.png" })
 						if (a.ShowDialog() == DialogResult.OK)
 						{
 							string pathBase = Path.ChangeExtension(a.FileName, null);
@@ -8160,7 +8184,7 @@ namespace SonicRetro.SonLVL.GUI
 						}
 					break;
 				case ArtTab.Tiles:
-					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalIndexesToolStripMenuItem.Checked ? SelectedTile.ToString("X2") : SelectedTile.ToString()) + ".png", Filter = "PNG Images|*.png" })
+					using (SaveFileDialog a = new SaveFileDialog() { FileName = (useHexadecimalToolStripMenuItem.Checked ? SelectedTile.ToString("X2") : SelectedTile.ToString()) + ".png", Filter = "PNG Images|*.png" })
 						if (a.ShowDialog() == DialogResult.OK)
 						{
 							if (exportArtcollisionpriorityToolStripMenuItem.Checked)

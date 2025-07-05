@@ -39,14 +39,13 @@ namespace SonicRetro.SonLVL
 		}
 		[IniIgnore]
 		public byte ObjectGridSize { get; set; }
-		public string Username { get; set; }
 		public Color BackgroundColor { get; set; }
 		[DefaultValue(true)]
 		public bool TransparentBackgroundExport { get; set; }
 		[DefaultValue(true)]
 		public bool IncludeObjectsFG { get; set; }
 		public bool HideDebugObjectsExport { get; set; }
-		public bool UseHexadecimalIndexesExport { get; set; }
+		public bool UseHexadecimalIndexesForArt { get; set; }
 		public bool ExportArtCollisionPriority { get; set; }
 		public bool ObjectsAboveHighPlane { get; set; }
 		[DefaultValue(true)]
@@ -81,9 +80,10 @@ namespace SonicRetro.SonLVL
 				result.ShowGrid = false;
 				result.SnapObjectsToGrid = true;
 				result.GridColor = Color.Red;
-				result.Username = null;
-				result.BackgroundColor = Color.FromArgb(160, 0, 0, 192);
+				result.BackgroundColor = Color.FromArgb(160, 30, 80, 100);
 				result.TransparentBackgroundExport = true;
+				result.UseHexadecimalIndexesForArt = true;
+				result.ObjectsAboveHighPlane = true;
 				result.ViewLowPlane = result.ViewHighPlane = true;
 				result.ZoomLevel = "1x";
 				result.EnableDraggingPalette = true;

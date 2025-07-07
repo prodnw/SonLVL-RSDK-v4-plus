@@ -8889,7 +8889,7 @@ namespace SonicRetro.SonLVL.GUI
 			bool reload = false;
 			if (loadGlobalObjects.Checked)
 			{
-				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Max(a => a.Scene.entities.Count) > 0))
+				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Count > 0 && LevelData.AdditionalScenes.Any(a => a.Scene.entities.Count > 0)))
 				{
 					switch (MessageBox.Show(this, "Enabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match?", "Enable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 					{
@@ -8916,7 +8916,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			else
 			{
-				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Max(a => a.Scene.entities.Count) > 0))
+				if ((LevelData.Objects.Count > 0) || (LevelData.AdditionalScenes.Count > 0 && LevelData.AdditionalScenes.Any(a => a.Scene.entities.Count > 0)))
 				{
 					switch (MessageBox.Show(this, "Disabling global objects will cause all the object types currently in the level to be shifted.\n\nDo you want to adjust the types of all the entities in the level to match and delete entities using global types?", "Disable Global Objects", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3))
 					{

@@ -8,6 +8,12 @@ namespace SonicRetro.SonLVL
 {
 	public partial class FindChunksDialog : Form
 	{
+		public bool Hexadecimal
+		{
+			get => chunkSelect.Hexadecimal;
+			set => chunkSelect.Hexadecimal = value;
+		}
+
 		public FindChunksDialog()
 		{
 			InitializeComponent();

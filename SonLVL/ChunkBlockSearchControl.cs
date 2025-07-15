@@ -14,6 +14,12 @@ namespace SonicRetro.SonLVL
 			solidity1.SelectedIndex = solidity2.SelectedIndex = 0;
 		}
 
+		public bool Hexadecimal
+		{
+			get => block.Hexadecimal;
+			set => block.Hexadecimal = value;
+		}
+
 		bool initializing;
 
 		public void UpdateStuff()

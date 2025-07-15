@@ -110,12 +110,12 @@ namespace SonicRetro.SonLVL.GUI
 		List<string> scriptFiles;
 		List<string> sfxFiles;
 		Dictionary<char, HUDImage> HUDLetters, HUDNumbers;
-		FindObjectsDialog findObjectsDialog;
-		FindChunksDialog findFGChunksDialog;
-		FindChunksDialog findBGChunksDialog;
-		ReplaceChunksDialog replaceFGChunksDialog;
-		ReplaceChunksDialog replaceBGChunksDialog;
-		ReplaceChunkBlocksDialog replaceChunkBlocksDialog;
+		FindObjectsDialog findObjectsDialog = new FindObjectsDialog();
+		FindChunksDialog findFGChunksDialog = new FindChunksDialog();
+		FindChunksDialog findBGChunksDialog = new FindChunksDialog();
+		ReplaceChunksDialog replaceFGChunksDialog = new ReplaceChunksDialog();
+		ReplaceChunksDialog replaceBGChunksDialog = new ReplaceChunksDialog();
+		ReplaceChunkBlocksDialog replaceChunkBlocksDialog = new ReplaceChunkBlocksDialog();
 		List<LayoutSection> savedLayoutSections;
 		List<Bitmap> savedLayoutSectionImages;
 		MouseButtons chunkblockMouseDraw = MouseButtons.Left;
@@ -151,6 +151,7 @@ namespace SonicRetro.SonLVL.GUI
 			imageTransparency.SetColorMatrix(new ColorMatrix() { Matrix33 = 0.75f }, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 			PalettePanelGfx = PalettePanel.CreateGraphics();
 			string HUDpath = Path.Combine(Application.StartupPath, "HUD");
+			
 			HUDLetters = new Dictionary<char, HUDImage>();
 			Dictionary<char, string> huditems = IniSerializer.Deserialize<Dictionary<char, string>>(Path.Combine(HUDpath, "HUD.ini"));
 			foreach (KeyValuePair<char, string> item in huditems)
@@ -158,6 +159,7 @@ namespace SonicRetro.SonLVL.GUI
 				BitmapBits bmp = new BitmapBits(Path.Combine(HUDpath, item.Value + ".png"));
 				HUDLetters.Add(item.Key, new HUDImage(bmp));
 			}
+			
 			HUDNumbers = new Dictionary<char, HUDImage>();
 			huditems = IniSerializer.Deserialize<Dictionary<char, string>>(Path.Combine(HUDpath, "HUDnum.ini"));
 			foreach (KeyValuePair<char, string> item in huditems)
@@ -165,11 +167,14 @@ namespace SonicRetro.SonLVL.GUI
 				BitmapBits bmp = new BitmapBits(Path.Combine(HUDpath, item.Value + ".png"));
 				HUDNumbers.Add(item.Key, new HUDImage(bmp));
 			}
+			
+			// First, let's load settings
 			objectsAboveHighPlaneToolStripMenuItem.Checked = Settings.ObjectsAboveHighPlane;
 			hUDToolStripMenuItem.Checked = Settings.ShowHUD;
 			//invertColorsToolStripMenuItem.Checked = Settings.InvertColors;
 			chunkShowLowTilesCheckBox.Checked = lowToolStripMenuItem.Checked = Settings.ViewLowPlane;
 			chunkShowHighTilesCheckBox.Checked = highToolStripMenuItem.Checked = Settings.ViewHighPlane;
+			
 			switch (Settings.ViewCollision)
 			{
 				case CollisionPath.Path1:
@@ -181,16 +186,20 @@ namespace SonicRetro.SonLVL.GUI
 					chunkColBRadioButton.Checked = path2ToolStripMenuItem.Checked = true;
 					break;
 			}
+			
 			anglesToolStripMenuItem.Checked = Settings.ViewAngles;
 			chunkShowGridCheckBox.Checked = showGridToolStripCheckBoxButton.Checked = Settings.ShowGrid;
 			snapObjectsToolStripCheckBoxButton.Checked = Settings.SnapObjectsToGrid;
+			
 			foreach (ToolStripMenuItem item in zoomToolStripMenuItem.DropDownItems)
 				if (item.Text == Settings.ZoomLevel)
 				{
 					zoomToolStripMenuItem_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(item));
 					break;
 				}
+			
 			objGridSizeDropDownButton_DropDownItemClicked(this, new ToolStripItemClickedEventArgs(objGridSizeDropDownButton.DropDownItems[Settings.ObjectGridSize]));
+			
 			transparentBackgroundToolStripMenuItem.Checked = Settings.TransparentBackgroundExport;
 			hideDebugObjectsToolStripMenuItem.Checked = Settings.HideDebugObjectsExport;
 			displayObjectsToolStripCheckBoxButton.Checked = Settings.IncludeObjectsFG;
@@ -199,6 +208,7 @@ namespace SonicRetro.SonLVL.GUI
 			CurrentArtTab = Settings.CurrentArtTab;
 			useHexadecimalToolStripMenuItem.Checked = Settings.UseHexadecimalIndexesForArt;
 
+			// Without a level loaded, we can't know the real chunk/tile max, so let's hardcode some default placeholder text
 			if (!useHexadecimalToolStripMenuItem.Checked)
 			{
 				ChunkCount.Text = $"/ 511";
@@ -206,6 +216,7 @@ namespace SonicRetro.SonLVL.GUI
 			}
 
 			switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem.Checked = Settings.SwitchChunkBlockMouseButtons;
+			
 			switch (Settings.WindowMode)
 			{
 				case WindowMode.Maximized:
@@ -220,11 +231,15 @@ namespace SonicRetro.SonLVL.GUI
 					Bounds = Screen.FromControl(this).Bounds;
 					break;
 			}
+
 			enableDraggingPaletteButton.Checked = Settings.EnableDraggingPalette;
 			enableDraggingTilesButton.Checked = Settings.EnableDraggingTiles;
 			enableDraggingChunksButton.Checked = Settings.EnableDraggingChunks;
+			
 			if (System.Diagnostics.Debugger.IsAttached)
 				logToolStripMenuItem_Click(sender, e);
+			
+			// Now, load the "Recent Games" list
 			if (Settings.MRUList == null)
 				Settings.MRUList = new List<string>();
 			else
@@ -241,6 +256,8 @@ namespace SonicRetro.SonLVL.GUI
 				Settings.MRUList = mru;
 				if (mru.Count > 0) recentProjectsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem2);
 			}
+
+			// After that, let's load the "Recent Mods" list
 			if (Settings.RecentMods == null)
 				Settings.RecentMods = new List<MRUModItem>();
 			else
@@ -262,12 +279,6 @@ namespace SonicRetro.SonLVL.GUI
 			splitContainer2.SplitterDistance = splitContainer2.Size.Width - 293;
 			splitContainer3.SplitterDistance = splitContainer3.Size.Width - 293;
 
-			findObjectsDialog = new FindObjectsDialog();
-			findFGChunksDialog = new FindChunksDialog();
-			findBGChunksDialog = new FindChunksDialog();
-			replaceFGChunksDialog = new ReplaceChunksDialog();
-			replaceBGChunksDialog = new ReplaceChunksDialog();
-			replaceChunkBlocksDialog = new ReplaceChunkBlocksDialog();
 			collisionLayerSelector.SelectedIndex = 0;
 			objectOrder.ListViewItemSorter = new ListViewIndexComparer();
 
@@ -1531,7 +1542,11 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			Settings.UseHexadecimalIndexesForArt = useHexadecimalToolStripMenuItem.Checked;
 
-			chunkBlockEditor.Hexadecimal = TileID.Hexadecimal = ChunkID.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
+			// Not pretty, but..
+			// Set every tile-related control to either use hex or dec
+			replaceFGChunksDialog.Hexadecimal = replaceBGChunksDialog.Hexadecimal = replaceChunkBlocksDialog.Hexadecimal =
+				findFGChunksDialog.Hexadecimal = findBGChunksDialog.Hexadecimal = chunkBlockEditor.Hexadecimal =
+				TileID.Hexadecimal = ChunkID.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
 
 			if (!loaded) return;
 			
@@ -7377,6 +7392,9 @@ namespace SonicRetro.SonLVL.GUI
 		private void remapChunksButton_Click(object sender, EventArgs e)
 		{
 			using (TileRemappingDialog dlg = new TileRemappingDialog("Chunks", LevelData.CompChunkBmps, 128, 128))
+			{
+				dlg.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
+
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 				{
 					List<RSDKv3_4.Tiles128x128.Block> oldchunks = LevelData.NewChunks.chunkList.ToList();
@@ -7405,11 +7423,15 @@ namespace SonicRetro.SonLVL.GUI
 					ChunkSelector_SelectedIndexChanged(this, EventArgs.Empty);
 					SaveState("Remap Chunks");
 				}
+			}
 		}
 
 		private void remapTilesButton_Click(object sender, EventArgs e)
 		{
 			using (TileRemappingDialog dlg = new TileRemappingDialog("Tiles", TileSelector.Images, TileSelector.ImageWidth, TileSelector.ImageHeight))
+			{
+				dlg.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
+
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 				{
 					List<BitmapBits> oldtiles = LevelData.NewTiles.ToList();
@@ -7446,6 +7468,7 @@ namespace SonicRetro.SonLVL.GUI
 					TileSelector_SelectedIndexChanged(this, EventArgs.Empty);
 					SaveState("Remap Tiles");
 				}
+			}
 		}
 
 		private void saveSectionToolStripMenuItem_Click(object sender, EventArgs e)

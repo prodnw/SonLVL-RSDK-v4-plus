@@ -21,6 +21,11 @@ namespace SonicRetro.SonLVL
 			TileMap = new Dictionary<int, int>();
 		}
 
+		public bool Hexadecimal
+		{
+			set => SourceTile.Hexadecimal = DestinationTile.Hexadecimal = value;
+		}
+
 		public Dictionary<int, int> TileMap { get; }
 
 		private void SourceTileList_SelectedIndexChanged(object sender, EventArgs e)

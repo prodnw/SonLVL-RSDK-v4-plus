@@ -996,7 +996,7 @@
             this.flipChunkVButton.AutoSize = true;
             this.flipChunkVButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flipChunkVButton.Enabled = false;
-            this.flipChunkVButton.Location = new System.Drawing.Point(267, 78);
+            this.flipChunkVButton.Location = new System.Drawing.Point(267, 63);
             this.flipChunkVButton.Margin = new System.Windows.Forms.Padding(6);
             this.flipChunkVButton.Name = "flipChunkVButton";
             this.flipChunkVButton.Size = new System.Drawing.Size(219, 35);
@@ -1022,7 +1022,7 @@
             this.flipChunkHButton.AutoSize = true;
             this.flipChunkHButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flipChunkHButton.Enabled = false;
-            this.flipChunkHButton.Location = new System.Drawing.Point(11, 78);
+            this.flipChunkHButton.Location = new System.Drawing.Point(11, 63);
             this.flipChunkHButton.Margin = new System.Windows.Forms.Padding(6);
             this.flipChunkHButton.Name = "flipChunkHButton";
             this.flipChunkHButton.Size = new System.Drawing.Size(244, 35);
@@ -1044,13 +1044,12 @@
             // chunkCtrlLabel
             // 
             this.chunkCtrlLabel.AutoSize = true;
-            this.chunkCtrlLabel.Location = new System.Drawing.Point(6, 137);
+            this.chunkCtrlLabel.Location = new System.Drawing.Point(6, 120);
             this.chunkCtrlLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.chunkCtrlLabel.Name = "chunkCtrlLabel";
             this.chunkCtrlLabel.Size = new System.Drawing.Size(476, 25);
             this.chunkCtrlLabel.TabIndex = 4;
-            this.chunkCtrlLabel.Text = "LMB: Paint w/ selected block, RMB: Select block";
-            this.chunkCtrlLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.chunkCtrlLabel.Text = "Left Click:   Paint with selected tile\nRight Click: Select tile";
             // 
             // ChunkID
             // 

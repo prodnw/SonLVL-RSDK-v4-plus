@@ -1571,13 +1571,13 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				chunkblockMouseDraw = MouseButtons.Right;
 				chunkblockMouseSelect = MouseButtons.Left;
-				chunkCtrlLabel.Text = "RMB: Paint w/ selected tile, LMB: Select tile";
+				chunkCtrlLabel.Text = "Right Click: Paint with selected tile\nLeft Click:   Select tile";
 			}
 			else
 			{
 				chunkblockMouseDraw = MouseButtons.Left;
 				chunkblockMouseSelect = MouseButtons.Right;
-				chunkCtrlLabel.Text = "LMB: Paint w/ selected tile, RMB: Select tile";
+				chunkCtrlLabel.Text = "Left Click:   Paint with selected tile\nRight Click: Select tile";
 			}
 			Settings.SwitchChunkBlockMouseButtons = switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem.Checked;
 		}

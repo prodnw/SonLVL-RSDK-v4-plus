@@ -54,6 +54,12 @@
     <Compile Include="AddGroupDialog.Designer.cs">
       <DependentUpon>AddGroupDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddParallaxGroupDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddParallaxGroupDialog.Designer.cs">
+      <DependentUpon>AddParallaxGroupDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="BackgroundColorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -230,6 +236,9 @@
     </Compile>
     <EmbeddedResource Include="AddGroupDialog.resx">
       <DependentUpon>AddGroupDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddParallaxGroupDialog.resx">
+      <DependentUpon>AddParallaxGroupDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BackgroundColorDialog.resx">
       <DependentUpon>BackgroundColorDialog.cs</DependentUpon>

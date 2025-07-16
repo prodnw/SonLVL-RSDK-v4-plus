@@ -95,7 +95,7 @@ namespace SonicRetro.SonLVL.GUI
 		byte ObjGrid = 0;
 		bool objdrag = false;
 		bool dragdrop = false;
-		internal Rectangle AddObjectsPreview = Rectangle.Empty;
+		internal Rectangle AddGroupPreview = Rectangle.Empty;
 		byte dragobj;
 		Point dragpoint;
 		bool selecting = false;
@@ -122,6 +122,12 @@ namespace SonicRetro.SonLVL.GUI
 		MouseButtons chunkblockMouseSelect = MouseButtons.Right;
 		Dictionary<int, int> objectTypeListMap = new Dictionary<int, int>();
 		readonly UndoSystem undoSystem = new SonLVLUndoSystem();
+
+		// (just a small workaround for CS1690, aka accessing AddGroupPreview's values directly from another form, namely the Add Parallax Series one)
+		public int PreviewLineSpacing
+		{
+			set => AddGroupPreview.X = value;
+		}
 
 		internal void Log(params string[] lines)
 		{
@@ -2303,51 +2309,69 @@ namespace SonicRetro.SonLVL.GUI
 				switch (LevelData.Background.layers[bglayer].type)
 				{
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
-						int scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.Y);
-						if (scrlind > 0)
-							scrlind--;
-						else
-							scrlind = 0;
-						for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Bottom; scrlind++)
+						if (AddGroupPreview != Rectangle.Empty)
 						{
-							ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
-							int height;
-							if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
-								height = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+							// If we have the Add Parallax Series form out, let's only show the new lines we'll add
+							for (int i = AddGroupPreview.Top; i <= AddGroupPreview.Bottom; i += AddGroupPreview.Left)
+								LevelImg8bpp.DrawLine(Color.Yellow, 0, i - camera.Y, dispRect.Width, i - camera.Y);
+						}
+						else
+						{
+							int scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.Y);
+							if (scrlind > 0)
+								scrlind--;
 							else
-								height = Math.Min(dispRect.Bottom, lvlsize.Height * 128) - scrollData.StartPos;
-
-							if (scrollList.SelectedIndex == scrlind)
+								scrlind = 0;
+							for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Bottom; scrlind++)
 							{
-								LevelImg8bpp.DrawLine(Color.Blue, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
-								LevelImg8bpp.FillRectangle(Color.FromArgb(254, Color.Blue), 0, scrollData.StartPos - camera.Y, dispRect.Width, height);
+								ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
+								int height;
+								if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
+									height = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+								else
+									height = Math.Min(dispRect.Bottom, lvlsize.Height * 128) - scrollData.StartPos;
+
+								if (scrollList.SelectedIndex == scrlind)
+								{
+									LevelImg8bpp.DrawLine(Color.Blue, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
+									LevelImg8bpp.FillRectangle(Color.FromArgb(254, Color.Blue), 0, scrollData.StartPos - camera.Y, dispRect.Width, height);
+								}
+								else
+									LevelImg8bpp.DrawLine(Color.Yellow, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
 							}
-							else
-								LevelImg8bpp.DrawLine(Color.Yellow, 0, scrollData.StartPos - camera.Y, dispRect.Width, scrollData.StartPos - camera.Y);
 						}
 						break;
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
-						scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.X);
-						if (scrlind > 0)
-							scrlind--;
-						else
-							scrlind = 0;
-						for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Right; scrlind++)
+						if (AddGroupPreview != Rectangle.Empty)
 						{
-							ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
-							int width;
-							if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
-								width = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+							// If we have the Add Parallax Series form out, let's only show the new lines we'll add
+							for (int i = AddGroupPreview.Top; i <= AddGroupPreview.Bottom; i += AddGroupPreview.Left)
+								LevelImg8bpp.DrawLine(Color.Yellow, i - camera.X, 0, i - camera.X, dispRect.Height);
+						}
+						else
+						{
+							int scrlind = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos > camera.X);
+							if (scrlind > 0)
+								scrlind--;
 							else
-								width = Math.Min(dispRect.Right, lvlsize.Width * 128) - scrollData.StartPos;
-
-							if (scrollList.SelectedIndex == scrlind)
+								scrlind = 0;
+							for (; scrlind < LevelData.BGScroll[bglayer].Count && LevelData.BGScroll[bglayer][scrlind].StartPos < dispRect.Right; scrlind++)
 							{
-								LevelImg8bpp.DrawLine(Color.Blue, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
-								LevelImg8bpp.FillRectangle(Color.FromArgb(254, Color.Blue), scrollData.StartPos - camera.X, 0, width, dispRect.Height);
+								ScrollData scrollData = LevelData.BGScroll[bglayer][scrlind];
+								int width;
+								if (scrlind != LevelData.BGScroll[bglayer].Count - 1)
+									width = LevelData.BGScroll[bglayer][scrlind + 1].StartPos - scrollData.StartPos;
+								else
+									width = Math.Min(dispRect.Right, lvlsize.Width * 128) - scrollData.StartPos;
+
+								if (scrollList.SelectedIndex == scrlind)
+								{
+									LevelImg8bpp.DrawLine(Color.Blue, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
+									LevelImg8bpp.FillRectangle(Color.FromArgb(254, Color.Blue), scrollData.StartPos - camera.X, 0, width, dispRect.Height);
+								}
+								else
+									LevelImg8bpp.DrawLine(Color.Yellow, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
 							}
-							else
-								LevelImg8bpp.DrawLine(Color.Yellow, scrollData.StartPos - camera.X, 0, scrollData.StartPos - camera.X, dispRect.Height);
 						}
 						break;
 				}
@@ -2388,23 +2412,26 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				if (dragdrop)
 					LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, dragpoint);
-				else if (AddObjectsPreview != Rectangle.Empty)
+				else if (AddGroupPreview != Rectangle.Empty)
 				{
+					// Let's show a preview of all the objects that this Add Group of Objects form is going to place
+					// (Let's not take the the entity limit into account here, we don't need to)
+
 					double gs = snapObjectsToolStripCheckBoxButton.Checked ? 1 << ObjGrid : 1;
 					Point pt = new Point(
 						(short)(Math.Round((menuLoc.X / ZoomLevel + objectPanel.HScrollValue) / gs, MidpointRounding.AwayFromZero) * gs),
 						(short)(Math.Round((menuLoc.Y / ZoomLevel + objectPanel.VScrollValue) / gs, MidpointRounding.AwayFromZero) * gs)
 						);
 					int xst = pt.X;
-					for (int y = 0; y < AddObjectsPreview.Width; y++)
+					for (int y = 0; y < AddGroupPreview.Width; y++)
 					{
-						for (int x = 0; x < AddObjectsPreview.Height; x++)
+						for (int x = 0; x < AddGroupPreview.Height; x++)
 						{
 							LevelImg8bpp.DrawSprite(LevelData.GetObjectDefinition(dragobj).Image, pt.X - camera.X, pt.Y - camera.Y);
-							pt.X += AddObjectsPreview.X;
+							pt.X += AddGroupPreview.X;
 						}
 						pt.X = xst;
-						pt.Y += AddObjectsPreview.Y;
+						pt.Y += AddGroupPreview.Y;
 					}
 				}
 			}
@@ -2463,7 +2490,37 @@ namespace SonicRetro.SonLVL.GUI
 					}
 					break;
 				case Tab.Background:
-					if (tabControl3.SelectedIndex != 2)
+					if (tabControl3.SelectedIndex == 2)
+					{
+						// If we're dragging our mouse for a parallax series, then let's preview that selected area
+						if (selecting)
+						{
+							switch (LevelData.Background.layers[bglayer].type)
+							{
+								case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+									Rectangle selbnds = Rectangle.FromLTRB(
+									0,
+									Math.Min(selpoint.X, selpoint.Y) - camera.Y,
+									panel.Width,
+									Math.Max(selpoint.X, selpoint.Y) - camera.Y);
+									LevelGfx.FillRectangle(selectionBrush, selbnds);
+									selbnds.Width--; selbnds.Height--;
+									LevelGfx.DrawRectangle(selectionPen, selbnds);
+									break;
+								case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+									selbnds = Rectangle.FromLTRB(
+									Math.Min(selpoint.X, selpoint.Y) - camera.X,
+									0,
+									Math.Max(selpoint.X, selpoint.Y) - camera.X,
+									panel.Height);
+									LevelGfx.FillRectangle(selectionBrush, selbnds);
+									selbnds.Width--; selbnds.Height--;
+									LevelGfx.DrawRectangle(selectionPen, selbnds);
+									break;
+							}
+						}
+					}
+					else
 					{
 						if (tabControl3.SelectedIndex == 0)
 						{
@@ -3152,7 +3209,13 @@ namespace SonicRetro.SonLVL.GUI
 						break;
 					case Keys.Escape:
 						if (!loaded) return;
-						BGSelection = Rectangle.Empty;
+						
+						// Whether we be in the Scrolling tab or the chunk placement ones, let's clear the current selection
+						if (tabControl3.SelectedIndex == 2)
+							selecting = false;
+						else
+							BGSelection = Rectangle.Empty;
+
 						DrawLevel();
 						break;
 				}
@@ -3593,91 +3656,111 @@ namespace SonicRetro.SonLVL.GUI
 				switch (LevelData.Background.layers[bglayer].type)
 				{
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
-						int i = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos == mouse.Y);
-						if (i == -1)
-							i = LevelData.BGScroll[bglayer].FindIndex(a => Math.Abs(a.StartPos - mouse.Y) == 1);
-						if (i > 0)
+						if (e.Clicks < 2)
 						{
-							switch (e.Button)
+							int i = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos == mouse.Y);
+							if (i == -1)
+								i = LevelData.BGScroll[bglayer].FindIndex(a => Math.Abs(a.StartPos - mouse.Y) == 1);
+							if (i > 0)
 							{
-								case MouseButtons.Left:
-									int max;
-									if (i == LevelData.BGScroll[bglayer].Count - 1)
-										max = LevelData.BGHeight[bglayer] * 128 - 1;
-									else
-										max = LevelData.BGScroll[bglayer][i + 1].StartPos - 1;
-									if (max != LevelData.BGScroll[bglayer][i - 1].StartPos + 1)
-										scrollList.SelectedIndex = selectedScrollLine = i;
-									break;
-								case MouseButtons.Right:
-									int ind = scrollList.SelectedIndex;
-									LevelData.BGScroll[bglayer].RemoveAt(ind);
-									scrollList.Items.RemoveAt(ind);
-									if (ind == scrollList.Items.Count)
-										--ind;
-									scrollList.SelectedIndex = ind;
-									DrawLevel();
-									SaveState("Delete Scroll Line");
-									break;
+								switch (e.Button)
+								{
+									case MouseButtons.Left:
+										int max;
+										if (i == LevelData.BGScroll[bglayer].Count - 1)
+											max = LevelData.BGHeight[bglayer] * 128 - 1;
+										else
+											max = LevelData.BGScroll[bglayer][i + 1].StartPos - 1;
+										if (max != LevelData.BGScroll[bglayer][i - 1].StartPos + 1)
+											scrollList.SelectedIndex = selectedScrollLine = i;
+										break;
+									case MouseButtons.Right:
+										int ind = scrollList.SelectedIndex;
+										LevelData.BGScroll[bglayer].RemoveAt(ind);
+										scrollList.Items.RemoveAt(ind);
+										if (ind == scrollList.Items.Count)
+											--ind;
+										scrollList.SelectedIndex = ind;
+										DrawLevel();
+										SaveState("Delete Scroll Line");
+										break;
+								}
+							}
+							else if (i == -1 && e.Button == MouseButtons.Right)
+							{
+								i = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < mouse.Y);
+								LevelData.BGScroll[bglayer].Insert(i + 1, new ScrollData((ushort)mouse.Y)
+								{
+									Deform = LevelData.BGScroll[bglayer][i].Deform,
+									ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
+									ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
+								});
+								scrollList.Items.Insert(i + 1, mouse.Y.ToString("D4"));
+								SaveState("Insert Scroll Line");
+								scrollList.SelectedIndex = i + 1;
+								DrawLevel();
 							}
 						}
-						else if (i == -1 && e.Button == MouseButtons.Right)
+						else
 						{
-							i = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < mouse.Y);
-							LevelData.BGScroll[bglayer].Insert(i + 1, new ScrollData((ushort)mouse.Y)
-							{
-								Deform = LevelData.BGScroll[bglayer][i].Deform,
-								ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
-								ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
-							});
-							scrollList.Items.Insert(i + 1, mouse.Y.ToString("D4"));
-							SaveState("Insert Scroll Line");
-							scrollList.SelectedIndex = i + 1;
-							DrawLevel();
+							// If the user double clicked, let's go ahead and start a parallax series area
+							int p = Math.Min(mouse.Y, LevelData.BGHeight[bglayer] * 128 - 1);
+							selpoint = new Point(p, p);
+							selecting = true;
 						}
 						break;
 					case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
-						i = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos == mouse.X);
-						if (i == -1)
-							i = LevelData.BGScroll[bglayer].FindIndex(a => Math.Abs(a.StartPos - mouse.X) == 1);
-						if (i > 0)
+						if (e.Clicks < 2)
 						{
-							switch (e.Button)
+							int i = LevelData.BGScroll[bglayer].FindIndex(a => a.StartPos == mouse.X);
+							if (i == -1)
+								i = LevelData.BGScroll[bglayer].FindIndex(a => Math.Abs(a.StartPos - mouse.X) == 1);
+							if (i > 0)
 							{
-								case MouseButtons.Left:
-									int max;
-									if (i == LevelData.BGScroll[bglayer].Count - 1)
-										max = LevelData.BGWidth[bglayer] * 128 - 1;
-									else
-										max = LevelData.BGScroll[bglayer][i + 1].StartPos - 1;
-									if (max != LevelData.BGScroll[bglayer][i - 1].StartPos + 1)
-										scrollList.SelectedIndex = selectedScrollLine = i;
-									break;
-								case MouseButtons.Right:
-									int ind = scrollList.SelectedIndex;
-									LevelData.BGScroll[bglayer].RemoveAt(ind);
-									scrollList.Items.RemoveAt(ind);
-									if (ind == scrollList.Items.Count)
-										--ind;
-									scrollList.SelectedIndex = ind;
-									DrawLevel();
-									SaveState("Delete Scroll Line");
-									break;
+								switch (e.Button)
+								{
+									case MouseButtons.Left:
+										int max;
+										if (i == LevelData.BGScroll[bglayer].Count - 1)
+											max = LevelData.BGWidth[bglayer] * 128 - 1;
+										else
+											max = LevelData.BGScroll[bglayer][i + 1].StartPos - 1;
+										if (max != LevelData.BGScroll[bglayer][i - 1].StartPos + 1)
+											scrollList.SelectedIndex = selectedScrollLine = i;
+										break;
+									case MouseButtons.Right:
+										int ind = scrollList.SelectedIndex;
+										LevelData.BGScroll[bglayer].RemoveAt(ind);
+										scrollList.Items.RemoveAt(ind);
+										if (ind == scrollList.Items.Count)
+											--ind;
+										scrollList.SelectedIndex = ind;
+										DrawLevel();
+										SaveState("Delete Scroll Line");
+										break;
+								}
+							}
+							else if (i == -1 && e.Button == MouseButtons.Right)
+							{
+								i = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < mouse.X);
+								LevelData.BGScroll[bglayer].Insert(i + 1, new ScrollData((ushort)mouse.X)
+								{
+									Deform = LevelData.BGScroll[bglayer][i].Deform,
+									ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
+									ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
+								});
+								scrollList.Items.Insert(i + 1, mouse.X.ToString("D4"));
+								scrollList.SelectedIndex = i + 1;
+								DrawLevel();
+								SaveState("Insert Scroll Line");
 							}
 						}
-						else if (i == -1 && e.Button == MouseButtons.Right)
+						else
 						{
-							i = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < mouse.X);
-							LevelData.BGScroll[bglayer].Insert(i + 1, new ScrollData((ushort)mouse.X)
-							{
-								Deform = LevelData.BGScroll[bglayer][i].Deform,
-								ParallaxFactor = LevelData.BGScroll[bglayer][i].ParallaxFactor,
-								ScrollSpeed = LevelData.BGScroll[bglayer][i].ScrollSpeed
-							});
-							scrollList.Items.Insert(i + 1, mouse.X.ToString("D4"));
-							scrollList.SelectedIndex = i + 1;
-							DrawLevel();
-							SaveState("Insert Scroll Line");
+							// If the user double clicked, let's go ahead and start a parallax series area
+							int p = Math.Min(mouse.X, LevelData.BGWidth[bglayer] * 128 - 1);
+							selpoint = new Point(p, p);
+							selecting = true;
 						}
 						break;
 				}
@@ -3726,6 +3809,23 @@ namespace SonicRetro.SonLVL.GUI
 			if (tabControl3.SelectedIndex == 2)
 			{
 				if (!showScrollAreas.Checked) return;
+
+				if (e.Button == MouseButtons.Left && selecting)
+				{
+					switch (LevelData.Background.layers[bglayer].type)
+					{
+						case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
+							selpoint.Y = Math.Min(mouse.Y, LevelData.BGHeight[bglayer] * 128 - 1);
+							break;
+						case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
+							selpoint.Y = Math.Min(mouse.X, LevelData.BGWidth[bglayer] * 128 - 1);
+							break;
+					}
+
+					DrawLevel();
+					return;
+				}
+
 				if (e.Button == MouseButtons.Left && selectedScrollLine != -1)
 				{
 					switch (LevelData.Background.layers[bglayer].type)
@@ -3846,6 +3946,94 @@ namespace SonicRetro.SonLVL.GUI
 			if (!loaded || scrollPreviewButton.Checked) return;
 			if (tabControl3.SelectedIndex == 2)
 			{
+				if (selecting)
+				{
+					// User let go of their mouse after making a parallax area, so let's go ahead and continue the rest of the process!
+
+					selecting = false;
+
+					// Sorry, looks like your selection isn't big enough..
+					if (selpoint.X == selpoint.Y) return;
+
+					using (AddParallaxGroupDialog dlg = new AddParallaxGroupDialog())
+					{
+						int top = Math.Min(selpoint.X, selpoint.Y);
+						int bottom = Math.Max(selpoint.X, selpoint.Y);
+						AddGroupPreview = new Rectangle(1, top, 0, bottom - top);
+						DrawLevel();
+
+						// Let's match starting values with the previous scroll index
+						int index = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < top);
+						if (index > -1)
+						{
+							dlg.parallaxFactorStartingValue.Value = LevelData.BGScroll[bglayer][index].ParallaxFactor;
+							dlg.scrollSpeedStartingValue.Value = LevelData.BGScroll[bglayer][index].ScrollSpeed;
+							dlg.deformCheckBox.Checked = LevelData.BGScroll[bglayer][index].Deform;
+						}
+
+						if (dlg.ShowDialog(this) == DialogResult.OK)
+						{
+							AddGroupPreview = Rectangle.Empty;
+
+							// If both increment values are 0, then let's just do nothin
+							if (dlg.parallaxFactorIncreaseValue.Value == 0 && dlg.scrollSpeedIncreaseValue.Value == 0)
+							{
+								DrawLevel();
+								return;
+							}
+
+							// First, let's clear all parallax between the two endpoints
+							int start = LevelData.BGScroll[bglayer].FindIndex(a => (a.StartPos >= top) && (a.StartPos <= bottom));
+							int end = LevelData.BGScroll[bglayer].FindLastIndex(a => (a.StartPos >= top) && (a.StartPos <= bottom));
+
+							if (start != end)
+							{
+								// If there's more than one, let's do RemoveRange
+								LevelData.BGScroll[bglayer].RemoveRange(start, end - start + 1);
+
+								// (ListBoxes don't have RemoveRange, so..)
+								scrollList.BeginUpdate();
+								for (int i = end; i >= start; i--)
+									scrollList.Items.RemoveAt(i);
+								scrollList.EndUpdate();
+							}
+							else if (start != -1)
+							{
+								// If there's only one, just do a single remove
+								scrollList.Items.RemoveAt(start);
+								LevelData.BGScroll[bglayer].RemoveAt(start);
+							}
+							else
+								start = LevelData.BGScroll[bglayer].FindLastIndex(a => a.StartPos < top) + 1;
+
+							// Now.. let's add in that parallax info!
+
+							index = start;
+							decimal parallaxFactor = dlg.parallaxFactorStartingValue.Value;
+							decimal scrollSpeed = dlg.scrollSpeedStartingValue.Value;
+							for (int i = top; i <= bottom; i += (int)dlg.spacingNumericUpDown.Value)
+							{
+								LevelData.BGScroll[bglayer].Insert(index, new ScrollData((ushort)i)
+								{
+									Deform = dlg.deformCheckBox.Checked,
+									ParallaxFactor = parallaxFactor,
+									ScrollSpeed = scrollSpeed
+								});
+
+								scrollList.Items.Insert(index++, i.ToString("D4"));
+
+								parallaxFactor += dlg.parallaxFactorIncreaseValue.Value / 256;
+								scrollSpeed += dlg.scrollSpeedIncreaseValue.Value / 64;
+							}
+
+							SaveState("Add Parallax Group");
+						}
+					}
+					AddGroupPreview = Rectangle.Empty;
+					DrawLevel();
+					return;
+				}
+
 				if (selectedScrollLine != -1)
 				{
 					scrollList.Items[selectedScrollLine] = LevelData.BGScroll[bglayer][selectedScrollLine].StartPos.ToString("D4");
@@ -4035,7 +4223,7 @@ namespace SonicRetro.SonLVL.GUI
 							pt.X = xst;
 							pt += ysz;
 						}
-						AddObjectsPreview = Rectangle.Empty;
+						AddGroupPreview = Rectangle.Empty;
 						SelectedObjectChanged();
 						DrawLevel();
 						SaveState("Add Objects");
@@ -4044,7 +4232,7 @@ namespace SonicRetro.SonLVL.GUI
 				}
 			}
 
-			AddObjectsPreview = Rectangle.Empty;
+			AddGroupPreview = Rectangle.Empty;
 			DrawLevel();
 		}
 
@@ -8630,12 +8818,14 @@ namespace SonicRetro.SonLVL.GUI
 		private void layerParallaxFactor_ValueChanged(object sender, EventArgs e)
 		{
 			LevelData.Background.layers[bglayer].parallaxFactor = (ushort)(layerParallaxFactor.Value * 256);
+			layerParallaxFactor.Value = (decimal)LevelData.Background.layers[bglayer].parallaxFactorF;
 			SaveState($"Change BG {bglayer + 1} Parallax Factor");
 		}
 
 		private void layerScrollSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			LevelData.Background.layers[bglayer].scrollSpeed = (byte)(layerScrollSpeed.Value * 64m);
+			layerScrollSpeed.Value = (decimal)LevelData.Background.layers[bglayer].scrollSpeedF;
 			SaveState($"Change BG {bglayer + 1} Scroll Speed");
 		}
 
@@ -8733,14 +8923,20 @@ namespace SonicRetro.SonLVL.GUI
 			SaveState("Change Scroll Line Deform");
 		}
 
+		const decimal parallaxFactorMultiple = 1 / 256m;
 		private void scrollParallaxFactor_ValueChanged(object sender, EventArgs e)
 		{
+			// We have limited precision, so let's round the number to match that
+			scrollParallaxFactor.Value = Math.Round(scrollParallaxFactor.Value / parallaxFactorMultiple, MidpointRounding.AwayFromZero) * parallaxFactorMultiple;
 			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ParallaxFactor = scrollParallaxFactor.Value;
 			SaveState("Change Scroll Line Parallax Factor");
 		}
 
+		const decimal speedFactorMultiple = 1 / 64m;
 		private void scrollScrollSpeed_ValueChanged(object sender, EventArgs e)
 		{
+			// See above, we also have limited precision here, so let's round the number to match that again
+			scrollScrollSpeed.Value = Math.Round(scrollScrollSpeed.Value / speedFactorMultiple, MidpointRounding.AwayFromZero) * speedFactorMultiple;
 			LevelData.BGScroll[bglayer][scrollList.SelectedIndex].ScrollSpeed = scrollScrollSpeed.Value;
 			SaveState("Change Scroll Line Speed");
 		}

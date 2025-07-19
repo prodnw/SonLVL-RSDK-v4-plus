@@ -18,12 +18,12 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void parallaxFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			parallaxFactorLabel.Text = $" / 256 = +{parallaxFactorIncreaseValue.Value / 256}";
+			parallaxFactorLabel.Text = $" / 256 = {(parallaxFactorIncreaseValue.Value > 0 ? "+" : "")}{parallaxFactorIncreaseValue.Value / 256}";
 		}
 
 		private void scrollSpeedNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			scrollSpeedLabel.Text = $" / 64 = +{scrollSpeedIncreaseValue.Value / 64}";
+			scrollSpeedLabel.Text = $" / 64 = {(scrollSpeedIncreaseValue.Value > 0 ? "+" : "")}{scrollSpeedIncreaseValue.Value / 64}";
 		}
 	}
 }

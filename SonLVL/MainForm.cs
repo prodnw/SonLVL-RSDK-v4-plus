@@ -4016,8 +4016,8 @@ namespace SonicRetro.SonLVL.GUI
 								LevelData.BGScroll[bglayer].Insert(index, new ScrollData((ushort)i)
 								{
 									Deform = dlg.deformCheckBox.Checked,
-									ParallaxFactor = parallaxFactor,
-									ScrollSpeed = scrollSpeed
+									ParallaxFactor = Math.Max(0, parallaxFactor),
+									ScrollSpeed = Math.Max(0, scrollSpeed)
 								});
 
 								scrollList.Items.Insert(index++, i.ToString("D4"));

@@ -78,9 +78,14 @@
             0,
             0,
             0});
+            this.parallaxFactorIncreaseValue.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.parallaxFactorIncreaseValue.Name = "parallaxFactorIncreaseValue";
             this.parallaxFactorIncreaseValue.Size = new System.Drawing.Size(106, 31);
-            this.parallaxFactorIncreaseValue.TabIndex = 2;
+            this.parallaxFactorIncreaseValue.TabIndex = 3;
             this.parallaxFactorIncreaseValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.parallaxFactorIncreaseValue.Value = new decimal(new int[] {
             1,
@@ -95,7 +100,7 @@
             this.okButton.Location = new System.Drawing.Point(31, 462);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(132, 40);
-            this.okButton.TabIndex = 3;
+            this.okButton.TabIndex = 7;
             this.okButton.Text = "&OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
@@ -105,7 +110,7 @@
             this.cancelButton.Location = new System.Drawing.Point(215, 462);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(132, 40);
-            this.cancelButton.TabIndex = 4;
+            this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -128,7 +133,7 @@
             0});
             this.spacingNumericUpDown.Name = "spacingNumericUpDown";
             this.spacingNumericUpDown.Size = new System.Drawing.Size(120, 31);
-            this.spacingNumericUpDown.TabIndex = 6;
+            this.spacingNumericUpDown.TabIndex = 1;
             this.spacingNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.spacingNumericUpDown.Value = new decimal(new int[] {
             1,
@@ -145,9 +150,14 @@
             0,
             0,
             0});
+            this.scrollSpeedIncreaseValue.Minimum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            -2147483648});
             this.scrollSpeedIncreaseValue.Name = "scrollSpeedIncreaseValue";
             this.scrollSpeedIncreaseValue.Size = new System.Drawing.Size(120, 31);
-            this.scrollSpeedIncreaseValue.TabIndex = 9;
+            this.scrollSpeedIncreaseValue.TabIndex = 5;
             this.scrollSpeedIncreaseValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.scrollSpeedIncreaseValue.ValueChanged += new System.EventHandler(this.scrollSpeedNumericUpDown_ValueChanged);
             // 
@@ -156,18 +166,18 @@
             this.scrollSpeedLabel.AutoSize = true;
             this.scrollSpeedLabel.Location = new System.Drawing.Point(183, 354);
             this.scrollSpeedLabel.Name = "scrollSpeedLabel";
-            this.scrollSpeedLabel.Size = new System.Drawing.Size(102, 25);
+            this.scrollSpeedLabel.Size = new System.Drawing.Size(90, 25);
             this.scrollSpeedLabel.TabIndex = 8;
-            this.scrollSpeedLabel.Text = " / 64 = +0";
+            this.scrollSpeedLabel.Text = " / 64 = 0";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(26, 249);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(140, 25);
+            this.label5.Size = new System.Drawing.Size(241, 25);
             this.label5.TabIndex = 7;
-            this.label5.Text = "Scroll Speed:";
+            this.label5.Text = "Automatic Scroll Speed:";
             // 
             // deformCheckBox
             // 
@@ -175,7 +185,7 @@
             this.deformCheckBox.Location = new System.Drawing.Point(31, 411);
             this.deformCheckBox.Name = "deformCheckBox";
             this.deformCheckBox.Size = new System.Drawing.Size(113, 29);
-            this.deformCheckBox.TabIndex = 10;
+            this.deformCheckBox.TabIndex = 6;
             this.deformCheckBox.Text = "Deform";
             this.deformCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -195,7 +205,7 @@
             0});
             this.parallaxFactorStartingValue.Name = "parallaxFactorStartingValue";
             this.parallaxFactorStartingValue.Size = new System.Drawing.Size(120, 31);
-            this.parallaxFactorStartingValue.TabIndex = 11;
+            this.parallaxFactorStartingValue.TabIndex = 2;
             this.parallaxFactorStartingValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label2
@@ -241,7 +251,7 @@
             393216});
             this.scrollSpeedStartingValue.Name = "scrollSpeedStartingValue";
             this.scrollSpeedStartingValue.Size = new System.Drawing.Size(120, 31);
-            this.scrollSpeedStartingValue.TabIndex = 15;
+            this.scrollSpeedStartingValue.TabIndex = 4;
             // 
             // label7
             // 

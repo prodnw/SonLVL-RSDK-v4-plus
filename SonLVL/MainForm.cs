@@ -503,7 +503,7 @@ namespace SonicRetro.SonLVL.GUI
 								string name = item.name;
 								string text = item.name;
 								if (item.highlighted)
-									text = text.Remove(0, basename.Length);
+									text = text.Remove(0, basename.Length).Trim();
 								else
 									name = basename + name;
 								LevelStuff ls = new LevelStuff() { FullName = name, Stage = item };

@@ -6,10 +6,14 @@ namespace SonicRetro.SonLVL.API
 	{
 		public string EXEFile { get; set; }
 		public string DataFile { get; set; }
+		public OriginsGames OriginsGame { get; set; }
 		public EngineVersion RSDKVer { get; set; }
 		public bool IsV5U { get; set; }
 		[IniCollection(IniCollectionMode.IndexOnly)]
 		public Dictionary<string, LevelInfo> Levels { get; set; }
+
+		[IniIgnore]
+		public bool IsOrigins { get => OriginsGame != OriginsGames.Invalid; }
 
 		public static GameInfo Load(string filename) => IniSerializer.Deserialize<GameInfo>(filename);
 

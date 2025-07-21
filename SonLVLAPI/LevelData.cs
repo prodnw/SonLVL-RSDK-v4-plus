@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using RSDKv3_4;
 using System;
 using System.CodeDom.Compiler;
@@ -19,6 +20,7 @@ namespace SonicRetro.SonLVL.API
 		public static IDataPack DataFile;
 		public static string EXEFolder;
 		public static string ModFolder;
+		public static ModInfo ModInfo;
 		public static GameConfig GameConfig;
 		public static GameXML GameXML;
 		public static string GameTitle;
@@ -91,40 +93,73 @@ namespace SonicRetro.SonLVL.API
 		{
 			Log($"Opening game \"{filename}\"...");
 			GamePath = Path.GetFullPath(filename);
-			Game = IniSerializer.Deserialize<GameInfo>(filename);
 			Directory.SetCurrentDirectory(Path.GetDirectoryName(GamePath));
-			EXEFolder = Path.GetDirectoryName(Path.GetFullPath(Game.EXEFile));
 			UnknownImg = Properties.Resources.UnknownImg.Copy();
 			UnknownSprite = new Sprite(new BitmapBits(UnknownImg), true, -8, -7);
-			Log("Game type is " + Game.RSDKVer + ".");
-			string dataFile = Path.Combine(EXEFolder, Game.DataFile);
-			if (File.Exists(dataFile))
+
+			if (Game.IsOrigins)
 			{
-				if (Game.IsV5U)
+				Log($"Origins Project File opened, game type is {Game.OriginsGame}.");
+				
+				// Auto-locate the Origins location
+				// (steam only, i don't have egs to test sorry lol)
+				// On the decomp, you're supposed to put the project files in the game folder, meanwhlie with Origins you can leave 'em anywhere
+				string dataFile = "";
+				var key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default).OpenSubKey("Software\\Valve\\Steam");
+				if (key != null)
+				{
+					if (key.GetValue("SteamPath") is string path)
+					{
+						EXEFolder = Path.Combine(path, "steamapps", "common", "SonicOrigins", "build", "main", "projects", "exec");
+						dataFile = Path.Combine(path, "steamapps", "common", "SonicOrigins", "image", "x64", "raw", "retro", Game.OriginsGame + ".rsdk");
+					}
+					key.Close();
+				}
+
+				if (File.Exists(dataFile))
 				{
 					Log($"Using RSDKv5u DataFile {dataFile}...");
 					DataFile = new RSDKv5.DataPack(dataFile, rsdk_files_list);
 				}
 				else
-					switch (Game.RSDKVer)
-					{
-						case EngineVersion.V4:
-							Log($"Using RSDKv4 DataFile {dataFile}...");
-							DataFile = new RSDKv4.DataPack(dataFile, rsdk_files_list);
-							break;
-						case EngineVersion.V3:
-							Log($"Using RSDKv3 DataFile {dataFile}...");
-							DataFile = new RSDKv3.DataPack(dataFile);
-							break;
-					}
+				{
+					throw new FileNotFoundException("Origins Data Pack could not be loaded... is Origins installed?");
+				}
 			}
 			else
 			{
-				Log($"No DataFile found at {dataFile}, assuming Data Folder mode in folder {EXEFolder}...");
-				DataFile = new DataFolder(EXEFolder);
+				Log("Decomp Project File opened, game type is " + Game.RSDKVer + ".");
+				EXEFolder = Path.GetDirectoryName(Path.GetFullPath(Game.EXEFile));
+				string dataFile = Path.Combine(EXEFolder, Game.DataFile);
+				if (File.Exists(dataFile))
+				{
+					if (Game.IsV5U)
+					{
+						Log($"Using RSDKv5u DataFile {dataFile}...");
+						DataFile = new RSDKv5.DataPack(dataFile, rsdk_files_list);
+					}
+					else
+						switch (Game.RSDKVer)
+						{
+							case EngineVersion.V4:
+								Log($"Using RSDKv4 DataFile {dataFile}...");
+								DataFile = new RSDKv4.DataPack(dataFile, rsdk_files_list);
+								break;
+							case EngineVersion.V3:
+								Log($"Using RSDKv3 DataFile {dataFile}...");
+								DataFile = new RSDKv3.DataPack(dataFile);
+								break;
+						}
+				}
+				else
+				{
+					Log($"No DataFile found at {dataFile}, assuming Data Folder mode in folder {EXEFolder}...");
+					DataFile = new DataFolder(EXEFolder);
+				}
 			}
 
 			ModFolder = null;
+			ModInfo = null;
 			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
@@ -139,6 +174,12 @@ namespace SonicRetro.SonLVL.API
 		public static void LoadMod(string path)
 		{
 			ModFolder = path;
+			
+			if (ModFolder != null)
+				ModInfo = ModInfo.Load(Path.Combine(ModFolder, "mod.ini"), true);
+			else
+				ModInfo = null;
+
 			switch (Game.RSDKVer)
 			{
 				case EngineVersion.V4:
@@ -163,7 +204,14 @@ namespace SonicRetro.SonLVL.API
 			GameXML = null;
 			if (ModFolder != null)
 			{
-				string xmlpath = Path.Combine(ModFolder, "Data/Game/game.xml");
+				string xmlpath = "";
+				foreach (string dir in ModInfo.Directories)
+					if (File.Exists(Path.Combine(dir, "Data/Game/game.xml")))
+					{
+						xmlpath = Path.Combine(dir, "Data/Game/game.xml");
+						break;
+					}
+
 				if (File.Exists(xmlpath))
 				{
 					GameXML = GameXML.Load(xmlpath);
@@ -184,17 +232,20 @@ namespace SonicRetro.SonLVL.API
 		public static T ReadFile<T>(string filename)
 			where T : new()
 		{
-			if (ModFolder != null)
+			if (ModInfo != null)
 			{
-				string modpath = Path.Combine(ModFolder, filename);
-				if (File.Exists(modpath))
-					return (T)Activator.CreateInstance(typeof(T), modpath);
+				foreach (string dir in ModInfo.Directories)
+					if (File.Exists(Path.Combine(dir, filename)))
+						return (T)Activator.CreateInstance(typeof(T), Path.Combine(dir, filename));
 			}
+
 			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
 				using (MemoryStream ms = new MemoryStream(data))
 					return (T)Activator.CreateInstance(typeof(T), ms);
+
 			if (File.Exists(filename))
 				return (T)Activator.CreateInstance(typeof(T), filename);
+
 			return new T();
 		}
 
@@ -204,23 +255,28 @@ namespace SonicRetro.SonLVL.API
 			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
 				using (MemoryStream ms = new MemoryStream(data))
 					return (T)Activator.CreateInstance(typeof(T), ms);
+			
 			if (File.Exists(filename))
 				return (T)Activator.CreateInstance(typeof(T), filename);
+
 			return new T();
 		}
 
 		public static byte[] ReadFileRaw(string filename)
 		{
-			if (ModFolder != null)
+			if (ModInfo != null)
 			{
-				string modpath = Path.Combine(ModFolder, filename);
-				if (File.Exists(modpath))
-					return File.ReadAllBytes(modpath);
+				foreach (string dir in ModInfo.Directories)
+					if (File.Exists(Path.Combine(dir, filename)))
+						return File.ReadAllBytes(Path.Combine(dir, filename));
 			}
+
 			if (DataFile != null && DataFile.TryGetFileData(filename, out byte[] data))
 				return data;
+
 			if (File.Exists(filename))
 				return File.ReadAllBytes(filename);
+
 			return null;
 		}
 
@@ -336,17 +392,23 @@ namespace SonicRetro.SonLVL.API
 			unkobj = new DefaultObjectDefinition();
 			INIObjDefs = new Dictionary<string, ObjectData>();
 			spriteSheets = new Dictionary<string, BitmapBits>();
+
+			// Load base SonLVL-RSDK Object Definitions
 			if (Directory.Exists("SonLVLObjDefs"))
 				foreach (string file in Directory.EnumerateFiles("SonLVLObjDefs", "*.ini"))
 					LoadObjectDefinitionFile(file, false);
-			if (ModFolder != null && Directory.Exists(Path.Combine(ModFolder, "SonLVLObjDefs")))
+
+			// Now.. let's load the mod ones
+			// Instead of going through every single dir, let's just load from the base one
+			if (ModInfo != null && Directory.Exists(Path.Combine(ModInfo.Directories.Last(), "SonLVLObjDefs")))
 			{
-				foreach (string file in Directory.EnumerateFiles(Path.Combine(ModFolder, "SonLVLObjDefs"), "*.ini"))
+				foreach (string file in Directory.EnumerateFiles(Path.Combine(ModInfo.Directories.Last(), "SonLVLObjDefs"), "*.ini"))
 					LoadObjectDefinitionFile(file, true);
-				dllcache = Path.Combine(ModFolder, "SonLVLObjDefs", "dllcache");
+				dllcache = Path.Combine(ModInfo.Directories.Last(), "SonLVLObjDefs", "dllcache");
 			}
 			else
 				dllcache = Path.Combine("SonLVLObjDefs", "dllcache");
+			
 			unkobj.Init(new ObjectData());
 			if (INIObjDefs.Count > 0 && !Directory.Exists(dllcache))
 			{
@@ -356,10 +418,12 @@ namespace SonicRetro.SonLVL.API
 			InitObjectDefinitions();
 			foreach (ObjectEntry obj in Objects)
 				obj.UpdateSprite();
+
 			Log("Drawing tile bitmaps...");
 			NewTileBmps = new Bitmap[NewTiles.Length];
 			for (int bi = 0; bi < NewTiles.Length; bi++)
 				RedrawBlock(bi, false);
+			
 			Log("Drawing collision bitmaps...");
 			NewColBmpBits = new BitmapBits[Collision.collisionMasks[0].Length][];
 			NewColBmps = new Bitmap[Collision.collisionMasks[0].Length][];
@@ -369,6 +433,7 @@ namespace SonicRetro.SonLVL.API
 				NewColBmps[i] = new Bitmap[2];
 				RedrawCol(i, false);
 			}
+			
 			Log("Drawing chunk bitmaps...");
 			ChunkSprites = new Sprite[NewChunks.chunkList.Length];
 			ChunkBmps = new Bitmap[NewChunks.chunkList.Length][];
@@ -384,6 +449,7 @@ namespace SonicRetro.SonLVL.API
 				ChunkColSprites[i] = new Sprite[2];
 				RedrawChunk(i);
 			}
+			
 			stopwatch.Stop();
 			Log($"Level loaded in {stopwatch.Elapsed.TotalSeconds} second(s).");
 		}
@@ -524,7 +590,15 @@ namespace SonicRetro.SonLVL.API
 						result = a.index.CompareTo(b.index);
 					return result;
 				});
-				GameXML.Save(Path.Combine(ModFolder, "Data/Game/game.xml"));
+
+				string xmlpath = Path.Combine(ModInfo.Directories.Last(), "Data/Game/game.xml");
+				foreach (string dir in ModInfo.Directories)
+					if (File.Exists(Path.Combine(dir, "Data/Game/game.xml")))
+					{
+						xmlpath = Path.Combine(dir, "Data/Game/game.xml");
+						break;
+					}
+				GameXML.Save(xmlpath);
 			}
 			else
 			{
@@ -555,10 +629,19 @@ namespace SonicRetro.SonLVL.API
 								}
 								v += 3;
 							}
+
 							if (edit)
 							{
-								Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Palettes"));
-								File.WriteAllBytes(Path.Combine(ModFolder, "Data/Palettes/MasterPalette.act"), pal);
+								string mpalpath = Path.Combine(ModInfo.Directories.Last(), "Data/Palettes/MasterPalette.act");
+								foreach (string dir in ModInfo.Directories)
+									if (File.Exists(Path.Combine(dir, "Data/Palettes/MasterPalette.act")))
+									{
+										mpalpath = Path.Combine(dir, "Data/Palettes/MasterPalette.act");
+										break;
+									}
+
+								Directory.CreateDirectory(Path.GetDirectoryName(mpalpath));
+								File.WriteAllBytes(mpalpath, pal);
 							}
 						}
 						break;
@@ -580,17 +663,31 @@ namespace SonicRetro.SonLVL.API
 								}
 							if (edit)
 							{
-								Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Game"));
-								GameConfig.Write(Path.Combine(ModFolder, "Data/Game/GameConfig.bin"));
+								string path = Path.Combine(ModInfo.Directories.Last(), "Data/Game/GameConfig.bin");
+								foreach (string dir in ModInfo.Directories)
+									if (File.Exists(Path.Combine(dir, "Data/Game/GameConfig.bin")))
+									{
+										path = Path.Combine(dir, "Data/Game/GameConfig.bin");
+										break;
+									}
+
+								Directory.CreateDirectory(Path.GetDirectoryName(path));
+								GameConfig.Write(path);
 							}
 						}
 						break;
 				}
 			}
-			Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Stages", StageInfo.folder));
+
+			Directory.CreateDirectory(Path.Combine(ModInfo.Directories.Last(), "Data/Stages", StageInfo.folder));
+			
 			for (int i = 0; i < 32; i++)
 				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.colors[0].Length][i % StageConfig.stagePalette.colors[0].Length] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
+			
 			SaveFile("StageConfig.bin", fn => StageConfig.Write(fn));
+			
+			// TODO: apparently this causes issues on Linux when running SonLVL-RSDK through wine/proton/whatever linux uses?
+			// Possibly replacing this with the RSDKv3_4.Gif class could make it work.. but i have no way of testing that myself lol
 			BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
 			for (int i = 0; i < NewTiles.Length; i++)
 				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
@@ -601,6 +698,7 @@ namespace SonicRetro.SonLVL.API
 				using (Bitmap bmp = tiles.ToBitmap(palette))
 					bmp.Save(fn, ImageFormat.Gif);
 			});
+
 			SaveFile("128x128Tiles.bin", fn => NewChunks.Write(fn));
 			SaveFile("CollisionMasks.bin", fn => Collision.Write(fn));
 
@@ -694,10 +792,24 @@ namespace SonicRetro.SonLVL.API
 
 		private static void SaveFile(string name, Action<string> action)
 		{
-			string fullpath = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder, name);
+			// Default to the last include dir
+			string fullpath = Path.Combine(ModInfo.Directories.Last(), "Data/Stages", StageInfo.folder, name);
+
+			// Go through the list, see if any of the include dirs have their own versions
+			foreach (string dir in ModInfo.Directories)
+			{
+				string path = Path.Combine(dir, "Data/Stages", StageInfo.folder, name);
+				if (File.Exists(path))
+				{
+					fullpath = path;
+					break;
+				}
+			}
+
 			bool isnew = !File.Exists(fullpath);
-			bool noModExists = (DataFile != null && DataFile.FileExists($"Data/Stages/{StageInfo.folder}/{name}")) || File.Exists($"Data/Stages/{StageInfo.folder}/{name}");
+			bool noModExists = DataFile != null && DataFile.FileExists($"Data/Stages/{StageInfo.folder}/{name}");
 			action(fullpath);
+
 			if (isnew && noModExists && ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}").FastArrayEqual(File.ReadAllBytes(fullpath)))
 				File.Delete(fullpath);
 		}
@@ -2214,6 +2326,14 @@ namespace SonicRetro.SonLVL.API
 			value2 = src.value2,
 			value3 = src.value3
 		};
+	}
+
+	public enum OriginsGames
+	{
+		Invalid,
+		Sonic1u,
+		SonicCDu,
+		Sonic2u,
 	}
 
 	public enum EngineVersion

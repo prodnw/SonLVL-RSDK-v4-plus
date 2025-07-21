@@ -910,6 +910,52 @@ namespace SonicRetro.SonLVL.API
 		public bool SkipStartMenu { get; set; }
 		public bool ForceSonic1 { get; set; }
 		public string TargetVersion { get; set; }
+		
+		// (Used for partial HMM mod support)
+		[IniIgnore]
+		public List<string> Directories { get; set; }
+		
+		[IniIgnore]
+		public bool IsHMMMod { get; set; }
+
+		public static ModInfo Load(string filename, bool loadDirs = false)
+		{
+			var text = File.ReadAllLines(filename);
+
+			// i... am aware of how stupid this is, but the short of it is, HMM okay with this but our own deseralizer isn't as okay with backslashes
+			// it just gets rid of the slashes entirely, and...... yeah this is SUPER stupid but this HMM support thing as a whole is hacked on anyways don't judge me :sob:
+			for (int i = 0; i < text.Length; i++)
+				text[i] = text[i].Replace('\\', '/');
+
+			var ini = IniFile.Load(text);
+
+			ModInfo info = IniSerializer.Deserialize<ModInfo>(ini);
+			info.Directories = new List<string>();
+			string path = Path.GetDirectoryName(filename);
+
+			// If "Name" is null, then let's assume we're an HMM mod
+			// So... not only are we gonna get our "Title", but let's fetch those IncludeDirs as well if we need to
+			if (info.Name == null)
+			{
+				info.Name = ini["Desc"]["Title"].Trim('"');
+				info.IsHMMMod = true;
+
+				if (loadDirs)
+				{
+					int count = int.Parse(ini["Main"]["IncludeDirCount"]);
+					for (int i = 0; i < count; i++)
+						info.Directories.Add(Path.Combine(path, ini["Main"][$"IncludeDir{i}"].Trim('"'), LevelData.Game.OriginsGame.ToString()));
+				}
+			}
+			else
+			{
+				// We're just a standard decomp mod, not much special goin on here
+				info.Directories.Add(path);
+				info.IsHMMMod = false;
+			}
+			
+			return info;
+		}
 
 		public static IEnumerable<string> GetModFiles(DirectoryInfo directoryInfo)
 		{

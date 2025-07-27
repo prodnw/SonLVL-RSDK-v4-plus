@@ -1456,8 +1456,13 @@ namespace SonicRetro.SonLVL.GUI
 					cursize = LevelData.BGSize[bglayer];
 				else
 					cursize = LevelData.FGSize;
+				
 				if (cursize.IsEmpty)
+				{
+					dg.Text = "Create Layer";
 					cursize = new Size(1, 1);
+				}
+
 				dg.levelHeight.Value = cursize.Height;
 				dg.levelWidth.Value = cursize.Width;
 				if (dg.ShowDialog(this) == DialogResult.OK)
@@ -2499,20 +2504,22 @@ namespace SonicRetro.SonLVL.GUI
 							{
 								case RSDKv3_4.Backgrounds.Layer.LayerTypes.HScroll:
 									Rectangle selbnds = Rectangle.FromLTRB(
-									0,
-									Math.Min(selpoint.X, selpoint.Y) - camera.Y,
-									panel.Width,
-									Math.Max(selpoint.X, selpoint.Y) - camera.Y);
+										0,
+										Math.Min(selpoint.X, selpoint.Y) - camera.Y,
+										panel.Width,
+										Math.Max(selpoint.X, selpoint.Y) - camera.Y);
+									
 									LevelGfx.FillRectangle(selectionBrush, selbnds);
 									selbnds.Width--; selbnds.Height--;
 									LevelGfx.DrawRectangle(selectionPen, selbnds);
 									break;
 								case RSDKv3_4.Backgrounds.Layer.LayerTypes.VScroll:
 									selbnds = Rectangle.FromLTRB(
-									Math.Min(selpoint.X, selpoint.Y) - camera.X,
-									0,
-									Math.Max(selpoint.X, selpoint.Y) - camera.X,
-									panel.Height);
+										Math.Min(selpoint.X, selpoint.Y) - camera.X,
+										0,
+										Math.Max(selpoint.X, selpoint.Y) - camera.X,
+										panel.Height);
+									
 									LevelGfx.FillRectangle(selectionBrush, selbnds);
 									selbnds.Width--; selbnds.Height--;
 									LevelGfx.DrawRectangle(selectionPen, selbnds);
@@ -8596,13 +8603,23 @@ namespace SonicRetro.SonLVL.GUI
 			scrollPreviewButton.Checked = false;
 			if (LevelData.BGSize[bglayer].IsEmpty)
 			{
+				// Hide the scrolling tab and etc since we're empty..
 				tabPage13.Hide();
 				replaceBackgroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = bgDuplicateLayerOverToolStripButton.Enabled = false;
+
+				// Let's rename the Resize text and make it stick out, so that if the user wants to place chunks here, they know which button to press first
+				resizeBackgroundToolStripButton.Text = "Create";
+				resizeBackgroundToolStripButton.Font = new Font(resizeBackgroundToolStripButton.Font, FontStyle.Bold);
 				return;
 			}
-			
+
+			// This layer exists, so we can go back to normal
+
 			tabPage13.Show();
 			replaceBackgroundToolStripButton.Enabled = clearBackgroundToolStripButton.Enabled = bgDuplicateLayerOverToolStripButton.Enabled = true;
+
+			resizeBackgroundToolStripButton.Text = "Resize";
+			resizeBackgroundToolStripButton.Font = new Font(resizeBackgroundToolStripButton.Font, FontStyle.Regular);
 
 			layerScrollType.SelectedIndex = (int)LevelData.Background.layers[bglayer].type - 1;
 			switch (LevelData.Background.layers[bglayer].type)

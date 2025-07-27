@@ -397,19 +397,14 @@ namespace SonicRetro.SonLVL.GUI
 				if (i > 0 && i % 10 == 0)
 					parent = (ToolStripMenuItem)selectModToolStripMenuItem.DropDownItems.Add($"Set {i / 10 + 1}");
 				ms = new ModStuff() { Path = mods[i] };
-				menuitem = new ToolStripMenuItem(ModInfo.Load(mods[i]).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms };
+				menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(mods[i]).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms };
 				ms.MenuItem = menuitem;
 				parent.DropDownItems.Add(menuitem);
 				modMenuItems.Add(ms);
 			}
-
-			// TODO/temp: for now, you gotta create your mod in HMM, sorry..
-			if (!LevelData.Game.IsOrigins)
-				selectModToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem("New Mod...", null, new EventHandler(NewModToolStripMenuItem_Clicked)));
-			
+			selectModToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem("New Mod...", null, new EventHandler(NewModToolStripMenuItem_Clicked)));
 			if (Settings.MRUList.Count == 0)
 				recentProjectsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem2);
-			
 			if (Settings.MRUList.Contains(filename))
 			{
 				recentProjectsToolStripMenuItem.DropDownItems.RemoveAt(Settings.MRUList.IndexOf(filename));
@@ -417,7 +412,6 @@ namespace SonicRetro.SonLVL.GUI
 			}
 			Settings.MRUList.Insert(0, filename);
 			recentProjectsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(filename));
-			
 			switch (LevelData.Game.RSDKVer)
 			{
 				case EngineVersion.V4:
@@ -429,35 +423,20 @@ namespace SonicRetro.SonLVL.GUI
 				default:
 					throw new NotImplementedException("Game type is not supported!");
 			}
-
 			tabControl1.Enabled = editToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = saveToolStripMenuItem.Enabled = editGameConfigToolStripMenuItem.Enabled = changeLevelToolStripMenuItem.Enabled = false;
-			
-			selectModToolStripMenuItem.Enabled = true;
-
-			// Not in Origins, sorry..
-			buildAndRunToolStripMenuItem.Enabled = !LevelData.Game.IsOrigins;
-
+			selectModToolStripMenuItem.Enabled = buildAndRunToolStripMenuItem.Enabled = true;
 			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
 		}
 
 		private void NewModToolStripMenuItem_Clicked(object sender, EventArgs e)
 		{
-			if (LevelData.Game.IsOrigins)
-			{
-				// such a cop out i know lol but i'll do something... eventually
-				// TODO: do something about this lol
-				// (if you change this, then make sure to add this item to the list, too)
-				MessageBox.Show("Make a new mod in HedgeModManager by pressing the \"Add Mod\" button, and then reload SonLVL-RSDK and select that mod!", "SonLVL-RSDK");
-				return;
-			}
-
 			using (NewModDialog dlg = new NewModDialog())
 				if (dlg.ShowDialog(this) == DialogResult.OK)
 				{
 					foreach (var item in modMenuItems)
 						item.MenuItem.Checked = false;
 					ModStuff ms = new ModStuff() { Path = dlg.ModFile };
-					ToolStripMenuItem menuitem = new ToolStripMenuItem(ModInfo.Load(dlg.ModFile).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms, Checked = true };
+					ToolStripMenuItem menuitem = new ToolStripMenuItem(IniSerializer.Deserialize<ModInfo>(dlg.ModFile).Name ?? "Unknown Mod", null, new EventHandler(ModToolStripMenuItem_Clicked)) { Tag = ms, Checked = true };
 					ms.MenuItem = menuitem;
 					modMenuItems.Add(ms);
 					selectModToolStripMenuItem.DropDownItems.Insert(selectModToolStripMenuItem.DropDownItems.Count - 1, menuitem);
@@ -548,62 +527,39 @@ namespace SonicRetro.SonLVL.GUI
 			changeLevelToolStripMenuItem.Enabled = true;
 
 			scriptFiles = new List<string>();
-			sfxFiles = new List<string>();
+			
+			// originally "Scripts" was supposed to be in the EXE folder, but both work
+			// (and RE2 has it be in the Data folder) so let's support both, but with just "Scripts" at higher priority
+			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
+			else if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/Scripts")))
+				scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/Scripts"), "*.txt"));
+			
+			// base decomp mods use "Data/Scripts" while S1F/S2A/SCDU mods use just "Scripts", let's go ahead and support 'em both too
+			if (LevelData.ModFolder != null)
+				if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
+					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+				else if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Scripts")))
+					scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
+			
 			objectScriptBox.AutoCompleteCustomSource.Clear();
-			sfxFileBox.AutoCompleteCustomSource.Clear();
-
-			if (!LevelData.Game.IsOrigins)
-			{
-				// We're on the decomp
-
-				// originally "Scripts" was supposed to be in the EXE folder, but both work
-				// (and RE2 has it be in the Data folder) so let's support both, but with just "Scripts" at higher priority
-				if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Scripts")))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Scripts"), "*.txt"));
-				else if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/Scripts")))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/Scripts"), "*.txt"));
-
-				// base decomp mods use "Data/Scripts" while S1F/S2A/SCDU mods use just "Scripts", let's go ahead and support 'em both too
-				if (LevelData.ModFolder != null)
-					if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/Scripts")))
-						scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
-					else if (Directory.Exists(Path.Combine(LevelData.ModFolder, "Scripts")))
-						scriptFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
-
-				if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/SoundFX")))
-				{
-					sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.wav"));
-					if (LevelData.Game.RSDKVer == EngineVersion.V4)
-						sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.ogg"));
-				}
-
-				if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
-				{
-					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
-					if (LevelData.Game.RSDKVer == EngineVersion.V4)
-						sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.ogg").Where(a => !sfxFiles.Contains(a)));
-				}
-			}
-			else
-			{
-				// We're in Origins, so luckily things are way simpler here
-
-				// Base game scripts get auto downloaded by HMM
-				if (Directory.Exists(Path.Combine(LevelData.EXEFolder, LevelData.Game.OriginsGame.ToString(), "Scripts")))
-					scriptFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, LevelData.Game.OriginsGame.ToString(), "Scripts"), "*.txt"));
-
-				// And then if the mod has any, let's go ahead and load 'em too
-				if (LevelData.ModInfo != null)
-					foreach (string dir in LevelData.ModInfo.Directories)
-						if (Directory.Exists(Path.Combine(dir, "Data/Scripts")))
-							scriptFiles.AddRange(GetFilesRelative(Path.Combine(dir, "Data/Scripts"), "*.txt").Where(a => !scriptFiles.Contains(a)));
-
-				// no sfx autocomplete for origins users sorry lol
-			}
-			
 			objectScriptBox.AutoCompleteCustomSource.AddRange(scriptFiles.ToArray());
+
+			sfxFiles = new List<string>();
+			if (Directory.Exists(Path.Combine(LevelData.EXEFolder, "Data/SoundFX")))
+			{
+				sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.wav"));
+				if (LevelData.Game.RSDKVer == EngineVersion.V4)
+					sfxFiles.AddRange(GetFilesRelative(Path.Combine(LevelData.EXEFolder, "Data/SoundFX"), "*.ogg"));
+			}
+			if (LevelData.ModFolder != null && Directory.Exists(Path.Combine(LevelData.ModFolder, "Data/SoundFX")))
+			{
+				sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.wav").Where(a => !sfxFiles.Contains(a)));
+				if (LevelData.Game.RSDKVer == EngineVersion.V4)
+					sfxFiles.AddRange(GetFilesRelative(Path.Combine(Directory.GetCurrentDirectory(), LevelData.ModFolder, "Data/SoundFX"), "*.ogg").Where(a => !sfxFiles.Contains(a)));
+			}
+			sfxFileBox.AutoCompleteCustomSource.Clear();
 			sfxFileBox.AutoCompleteCustomSource.AddRange(sfxFiles.ToArray());
-			
 			if (Settings.RecentMods.Count == 0)
 				recentModsToolStripMenuItem.DropDownItems.Remove(noneToolStripMenuItem);
 			int ind = Settings.RecentMods.FindIndex(a => a.INIPath == LevelData.GamePath && a.ModPath == path);
@@ -616,7 +572,7 @@ namespace SonicRetro.SonLVL.GUI
 			if (path == null)
 				modname = $"No Mod ({LevelData.GameTitle})";
 			else
-				modname = $"{ModInfo.Load(path).Name ?? "Unknown Mod"} ({LevelData.GameTitle})";
+				modname = $"{IniSerializer.Deserialize<ModInfo>(path).Name ?? "Unknown Mod"} ({LevelData.GameTitle})";
 			Settings.RecentMods.Insert(0, new MRUModItem(modname, LevelData.GamePath, path));
 			recentModsToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(modname));
 			Text = "SonLVL-RSDK - " + LevelData.GameTitle;
@@ -9427,10 +9383,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			using (FileSelectDialog dlg = new FileSelectDialog("Scripts", scriptFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
-				{
 					objectScriptBox.Text = dlg.SelectedPath;
-					objectNameBox.Focus(); // you still gotta enter in the name, don't forget that..
-				}
 		}
 
 		private void sfxListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -9503,12 +9456,7 @@ namespace SonicRetro.SonLVL.GUI
 		{
 			using (FileSelectDialog dlg = new FileSelectDialog("Sound Effects", sfxFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
-				{
 					sfxFileBox.Text = dlg.SelectedPath;
-
-					if (LevelData.Game.RSDKVer == EngineVersion.V4)
-						sfxNameBox.Focus();
-				}
 		}
 
 		private void sfxUpButton_Click(object sender, EventArgs e)

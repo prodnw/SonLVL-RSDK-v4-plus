@@ -490,6 +490,7 @@ namespace SonicRetro.SonLVL.GUI
 			{
 				ToolStripMenuItem parent = (ToolStripMenuItem)changeLevelToolStripMenuItem.DropDownItems[i];
 				parent.DropDownItems.Clear();
+				parent.Enabled = groups[i].Count > 0;
 				foreach (var grp in groups[i])
 				{
 					if (grp.Count > 1)

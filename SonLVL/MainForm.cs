@@ -8096,7 +8096,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void usageCountsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (StatisticsDialog dlg = new StatisticsDialog())
+			using (StatisticsDialog dlg = new StatisticsDialog(useHexadecimalToolStripMenuItem.Checked))
 				dlg.ShowDialog(this);
 		}
 

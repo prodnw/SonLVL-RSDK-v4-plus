@@ -28,20 +28,20 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.objectsListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.listView2 = new System.Windows.Forms.ListView();
+            this.chunksListView = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.listView4 = new System.Windows.Forms.ListView();
+            this.tilesListView = new System.Windows.Forms.ListView();
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
@@ -50,25 +50,25 @@
             this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
+            // objectsListView
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.objectsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader5});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(6, 6);
-            this.listView1.Margin = new System.Windows.Forms.Padding(6);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(562, 444);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
+            this.objectsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.objectsListView.FullRowSelect = true;
+            this.objectsListView.GridLines = true;
+            this.objectsListView.HideSelection = false;
+            this.objectsListView.LabelWrap = false;
+            this.objectsListView.Location = new System.Drawing.Point(6, 6);
+            this.objectsListView.Margin = new System.Windows.Forms.Padding(6);
+            this.objectsListView.Name = "objectsListView";
+            this.objectsListView.Size = new System.Drawing.Size(562, 444);
+            this.objectsListView.TabIndex = 0;
+            this.objectsListView.UseCompatibleStateImageBehavior = false;
+            this.objectsListView.View = System.Windows.Forms.View.Details;
+            this.objectsListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             // 
             // columnHeader1
             // 
@@ -99,7 +99,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Controls.Add(this.objectsListView);
             this.tabPage1.Location = new System.Drawing.Point(8, 39);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage1.Name = "tabPage1";
@@ -111,7 +111,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.listView2);
+            this.tabPage2.Controls.Add(this.chunksListView);
             this.tabPage2.Location = new System.Drawing.Point(8, 39);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage2.Name = "tabPage2";
@@ -121,26 +121,26 @@
             this.tabPage2.Text = "Chunks";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // listView2
+            // chunksListView
             // 
-            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chunksListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader6,
             this.columnHeader9});
-            this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView2.FullRowSelect = true;
-            this.listView2.GridLines = true;
-            this.listView2.HideSelection = false;
-            this.listView2.LabelWrap = false;
-            this.listView2.Location = new System.Drawing.Point(6, 6);
-            this.listView2.Margin = new System.Windows.Forms.Padding(6);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(562, 444);
-            this.listView2.TabIndex = 1;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
-            this.listView2.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
+            this.chunksListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chunksListView.FullRowSelect = true;
+            this.chunksListView.GridLines = true;
+            this.chunksListView.HideSelection = false;
+            this.chunksListView.LabelWrap = false;
+            this.chunksListView.Location = new System.Drawing.Point(6, 6);
+            this.chunksListView.Margin = new System.Windows.Forms.Padding(6);
+            this.chunksListView.Name = "chunksListView";
+            this.chunksListView.Size = new System.Drawing.Size(562, 444);
+            this.chunksListView.TabIndex = 1;
+            this.chunksListView.UseCompatibleStateImageBehavior = false;
+            this.chunksListView.View = System.Windows.Forms.View.Details;
+            this.chunksListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             // 
             // columnHeader3
             // 
@@ -164,7 +164,7 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.listView4);
+            this.tabPage4.Controls.Add(this.tilesListView);
             this.tabPage4.Location = new System.Drawing.Point(8, 39);
             this.tabPage4.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage4.Name = "tabPage4";
@@ -174,24 +174,24 @@
             this.tabPage4.Text = "Tiles";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // listView4
+            // tilesListView
             // 
-            this.listView4.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.tilesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7,
             this.columnHeader8});
-            this.listView4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView4.FullRowSelect = true;
-            this.listView4.GridLines = true;
-            this.listView4.HideSelection = false;
-            this.listView4.LabelWrap = false;
-            this.listView4.Location = new System.Drawing.Point(6, 6);
-            this.listView4.Margin = new System.Windows.Forms.Padding(6);
-            this.listView4.Name = "listView4";
-            this.listView4.Size = new System.Drawing.Size(562, 444);
-            this.listView4.TabIndex = 1;
-            this.listView4.UseCompatibleStateImageBehavior = false;
-            this.listView4.View = System.Windows.Forms.View.Details;
-            this.listView4.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
+            this.tilesListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tilesListView.FullRowSelect = true;
+            this.tilesListView.GridLines = true;
+            this.tilesListView.HideSelection = false;
+            this.tilesListView.LabelWrap = false;
+            this.tilesListView.Location = new System.Drawing.Point(6, 6);
+            this.tilesListView.Margin = new System.Windows.Forms.Padding(6);
+            this.tilesListView.Name = "tilesListView";
+            this.tilesListView.Size = new System.Drawing.Size(562, 444);
+            this.tilesListView.TabIndex = 1;
+            this.tilesListView.UseCompatibleStateImageBehavior = false;
+            this.tilesListView.View = System.Windows.Forms.View.Details;
+            this.tilesListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             // 
             // columnHeader7
             // 
@@ -225,17 +225,17 @@
 
 		#endregion
 
-		private System.Windows.Forms.ListView listView1;
+		private System.Windows.Forms.ListView objectsListView;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.ListView listView2;
+		private System.Windows.Forms.ListView chunksListView;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.TabPage tabPage4;
-		private System.Windows.Forms.ListView listView4;
+		private System.Windows.Forms.ListView tilesListView;
 		private System.Windows.Forms.ColumnHeader columnHeader7;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
 		private System.Windows.Forms.ColumnHeader columnHeader5;

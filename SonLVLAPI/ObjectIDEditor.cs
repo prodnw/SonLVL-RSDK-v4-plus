@@ -152,7 +152,11 @@ namespace SonicRetro.SonLVL.API
 		// Displays the UI for value selection.
 		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 		{
-			if (!(context.Instance is ObjectEntry)) return value;
+			if (context.Instance is Entry[] entries)
+				value = ((ObjectEntry)entries[0]).Type; // Whether they all match or not, go with the first object's Type
+			else if (!(context.Instance is ObjectEntry))
+				return value;
+
 			// Uses the IWindowsFormsEditorService to display a 
 			// drop-down UI in the Properties window.
 			IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
@@ -174,6 +178,7 @@ namespace SonicRetro.SonLVL.API
 		public override void PaintValue(PaintValueEventArgs e)
 		{
 			if (e.Value == null) return;
+
 			byte val = (byte)e.Value;
 			if (val < LevelData.ObjTypes.Count)
 				e.Graphics.DrawImage(LevelData.ObjTypes[val].Image.GetBitmap().ToBitmap(LevelData.BmpPal).Resize(e.Bounds.Size), e.Bounds);

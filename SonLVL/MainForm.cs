@@ -31,8 +31,6 @@ namespace SonicRetro.SonLVL.GUI
 			LevelData.LogEvent += Log;
 			LevelData.PaletteChangedEvent += LevelData_PaletteChangedEvent;
 			InitializeComponent();
-			if (Program.IsMonoRuntime)
-				floorAngle.TextChanged += ColAngle_TextChanged;
 		}
 
 		const int ColorGrid = 255;
@@ -5742,13 +5740,6 @@ namespace SonicRetro.SonLVL.GUI
 			if (TileSelector.SelectedIndex == -1) return;
 			LevelData.Collision.collisionMasks[collisionLayerSelector.SelectedIndex][SelectedTile].roofAngle = (byte)ceilingAngle.Value;
 			SaveState("Change Ceiling Angle");
-		}
-
-		private void ColAngle_TextChanged(object sender, EventArgs e)
-		{
-			if (!loaded) return;
-			if (byte.TryParse(floorAngle.Text, System.Globalization.NumberStyles.HexNumber, null, out byte value))
-				floorAngle.Value = value;
 		}
 
 		private void colFlags_ValueChanged(object sender, EventArgs e)

@@ -591,16 +591,54 @@ namespace SonicRetro.SonLVL.API
 			for (int i = 0; i < 32; i++)
 				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.colors[0].Length][i % StageConfig.stagePalette.colors[0].Length] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
 			SaveFile("StageConfig.bin", fn => StageConfig.Write(fn));
-			BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
-			for (int i = 0; i < NewTiles.Length; i++)
-				tiles.DrawBitmap(NewTiles[i], 0, i * 16);
-			SaveFile("16x16Tiles.gif", fn =>
+
+			// TODO: Apparently saving the gif with the standard Bitmap class causes issues on Linux when running SonLVL-RSDK through wine/proton/whatever linux uses?
+			// Possibly replacing it with the RSDKv3_4.Gif class could make it work.. but i have no way of testing that myself lol
+
+			if (IsMonoRuntime)
 			{
-				Color[] palette = (Color[])NewPalette.Clone();
-				palette.Fill(NewPalette[0], 1, 95);
-				using (Bitmap bmp = tiles.ToBitmap(palette))
-					bmp.Save(fn, ImageFormat.Gif);
-			});
+				// See above, temp (and untested) fix for said issue on Linux
+				// The "untested" bit is to say that i'm not sure if Linux likes it, the code itself works fine on Windows at least--
+				// It's noticably slower than using the standard Bitmap class, which is why we only wanna resort to it when we have to
+
+				Gif tilebmp = new Gif
+				{
+					width = 16,
+					height = (ushort)(NewTiles.Length * 16)
+				};
+
+				// okay so tbh i think FromSystemColor is supposed to be static, but it isn't, so..
+				// pardon the odd synatx, sorry!--
+				tilebmp.palette[0] = tilebmp.palette[0].FromSystemColor(NewPalette[0]);
+
+				// (note that Palette.Color is a class and not a struct, but since we immediatly discard this gif it's okay to do this--)
+				tilebmp.palette.Fill(tilebmp.palette[0], 1, 95);
+
+				for (int i = 96; i < 256; i++)
+					tilebmp.palette[i] = tilebmp.palette[i].FromSystemColor(NewPalette[i]);
+
+				for (int i = 0; i < NewTiles.Length; i++)
+					Array.Copy(NewTiles[i].Bits, 0, tilebmp.pixels, i * 256, 256);
+
+				SaveFile("16x16Tiles.gif", fn => tilebmp.Write(fn));
+			}
+			else
+			{
+				// We're just on Windows, so it's okay to use the standard Bitmap class to save
+
+				BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
+				for (int i = 0; i < NewTiles.Length; i++)
+					tiles.DrawBitmap(NewTiles[i], 0, i * 16);
+
+				SaveFile("16x16Tiles.gif", fn =>
+				{
+					Color[] palette = (Color[])NewPalette.Clone();
+					palette.Fill(NewPalette[0], 1, 95);
+					using (Bitmap bmp = tiles.ToBitmap(palette))
+						bmp.Save(fn, ImageFormat.Gif);
+				});
+			}
+
 			SaveFile("128x128Tiles.bin", fn => NewChunks.Write(fn));
 			SaveFile("CollisionMasks.bin", fn => Collision.Write(fn));
 

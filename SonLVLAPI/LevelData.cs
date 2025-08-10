@@ -710,12 +710,28 @@ namespace SonicRetro.SonLVL.API
 								si = BGScroll[i][datind++].GetInfoV4();
 								break;
 						}
+						
+						// Now, let's match that ScrollData and see if we can find a matching entry in the hScroll/vScroll arrays
+						// Normally, we'd like to merge all identical entries in the arrays..
 						int tmpind = scrlist.FindIndex(a => si.Equal(a));
+
+						// ..However, if this scroll line is identical to the very previous one, then..
+						if (tmpind == scrind)
+						{
+							// Instead of merging the two together, let's keep 'em separate
+							// (So that it doesn't appear as if the new one just disappears, also relevant for when scroll indexes are controlled by script)
+							// (Not a *complete* fix for the above TODO, but it still helps at least a little!..)
+							tmpind = -1;
+						}
+
 						if (tmpind == -1)
 						{
+							// Either we don't have an existing matching scroll entry, or we're intentionally trying to keep ourselves separate
+							// Whatever the case is, let's go ahead and make a new entry!
 							tmpind = scrlist.Count;
 							scrlist.Add(si);
 						}
+
 						scrind = (byte)tmpind;
 					}
 

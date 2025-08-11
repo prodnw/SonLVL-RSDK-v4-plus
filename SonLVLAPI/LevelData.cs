@@ -750,10 +750,14 @@ namespace SonicRetro.SonLVL.API
 		{
 			string fullpath = Path.Combine(ModFolder, "Data/Stages", StageInfo.folder, name);
 			bool isnew = !File.Exists(fullpath);
-			bool noModExists = (DataFile != null && DataFile.FileExists($"Data/Stages/{StageInfo.folder}/{name}")) || File.Exists($"Data/Stages/{StageInfo.folder}/{name}");
 			action(fullpath);
-			if (isnew && noModExists && ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}").FastArrayEqual(File.ReadAllBytes(fullpath)))
-				File.Delete(fullpath);
+
+			if (isnew)
+			{
+				var baseFile = ReadFileRawNoMod($"Data/Stages/{StageInfo.folder}/{name}");
+				if (baseFile != null && baseFile.FastArrayEqual(File.ReadAllBytes(fullpath)))
+					File.Delete(fullpath);
+			}
 		}
 
 		public static BitmapBits DrawForeground(Rectangle? section, bool includeObjects, bool includeDebugObjects, bool objectsAboveHighPlane, bool lowPlane, bool highPlane, bool collisionPath1, bool collisionPath2)

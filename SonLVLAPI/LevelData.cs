@@ -587,20 +587,23 @@ namespace SonicRetro.SonLVL.API
 						break;
 				}
 			}
+
+			// Let's make sure the stage folder exists within the mod, before anything else
 			Directory.CreateDirectory(Path.Combine(ModFolder, "Data/Stages", StageInfo.folder));
+			
+			// First, let's save the StageConfig
 			for (int i = 0; i < 32; i++)
 				StageConfig.stagePalette.colors[i / StageConfig.stagePalette.colors[0].Length][i % StageConfig.stagePalette.colors[0].Length] = new Palette.Color(NewPalette[i + 96].R, NewPalette[i + 96].G, NewPalette[i + 96].B);
 			SaveFile("StageConfig.bin", fn => StageConfig.Write(fn));
 
-			// TODO: Apparently saving the gif with the standard Bitmap class causes issues on Linux when running SonLVL-RSDK through wine/proton/whatever linux uses?
-			// Possibly replacing it with the RSDKv3_4.Gif class could make it work.. but i have no way of testing that myself lol
+			// Next, let's do the stage's 16x16Tiles.gif
+			// The Bitmap.Save implementation in Mono (in the context of running SonLVL-RSDK on Linux) is very prone to causing issues when saving the stage tiles gif
+			// (Namely, instead of saving the gif with a global palette, it instead assigns the palette to the "first frame" in the gif instead, which RSDK doesn't like..)
+			// Because of that, we wanna use the existing RSDKv3_4.Gif writer instead, if necessary
 
+			// This is noticably slower than using the standard Bitmap class, which is why we only wanna resort to it when we have to..
 			if (IsMonoRuntime)
 			{
-				// See above, temp (and untested) fix for said issue on Linux
-				// The "untested" bit is to say that i'm not sure if Linux likes it, the code itself works fine on Windows at least--
-				// It's noticably slower than using the standard Bitmap class, which is why we only wanna resort to it when we have to
-
 				Gif tilebmp = new Gif
 				{
 					width = 16,
@@ -625,6 +628,7 @@ namespace SonicRetro.SonLVL.API
 			else
 			{
 				// We're just on Windows, so it's okay to use the standard Bitmap class to save
+				// Compared to the RSDKv3_4.Gif method, this is much faster, so we choose to stick with this when possible
 
 				BitmapBits tiles = new BitmapBits(16, NewTiles.Length * 16);
 				for (int i = 0; i < NewTiles.Length; i++)

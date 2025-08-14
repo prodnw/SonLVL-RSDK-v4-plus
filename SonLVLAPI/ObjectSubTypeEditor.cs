@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
@@ -135,16 +136,32 @@ namespace SonicRetro.SonLVL.API
 		// Displays the UI for value selection.
 		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 		{
-			if (!(context.Instance is ObjectEntry)) return value;
+			ObjectEntry entry = null;
+
+			if (context.Instance is Entry[] entries)
+			{
+				// If we're selecting multiple objects, let's check a bit more, only show it if all selected objects are of the same type..
+				var oes = Array.ConvertAll(entries, ent => (ObjectEntry)ent);
+				if (oes.Length < 1 || oes.Any((obj) => obj.Type != oes[0].Type)) return value; // First check *should* never be true by this point, but just in case..
+				entry = oes[0];
+			}
+			else if (context.Instance is ObjectEntry oe)
+				entry = oe;
+			else
+				return value;
+
+			// Worst case scenario let's just show a blank Subtype form, we don't need to hide it altogether
 			//if (!LevelData.ObjTypes.ContainsKey(((ObjectEntry)context.Instance).ID)) return value;
+
 			// Uses the IWindowsFormsEditorService to display a 
 			// drop-down UI in the Properties window.
 			IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
 			if (edSvc != null)
 			{
 				// Display an angle selection control and retrieve the value.
-				byte sub = (byte)value;
-				SubTypeControl SubTypeControl = new SubTypeControl(((ObjectEntry)context.Instance).Type, sub, edSvc);
+				// If we're selecting objects with differing Property Values, just show the value of the first one
+				byte sub = (byte)(value ?? entry.PropertyValue);
+				SubTypeControl SubTypeControl = new SubTypeControl(entry.Type, sub, edSvc);
 				edSvc.DropDownControl(SubTypeControl);
 				return SubTypeControl.value;
 			}
@@ -158,11 +175,25 @@ namespace SonicRetro.SonLVL.API
 
 		public override void PaintValue(PaintValueEventArgs e)
 		{
-			if (!(e.Context.Instance is ObjectEntry)) return;
 			if (e.Value == null) return;
-			if (((ObjectEntry)e.Context.Instance).Type >= LevelData.ObjTypes.Count) return;
+
+			ObjectEntry entry = null;
+
+			if (e.Context.Instance is Entry[] entries)
+			{
+				// If we're selecting multiple objects, let's check a bit more..
+				var oes = Array.ConvertAll(entries, ent => (ObjectEntry)ent);
+				if (oes.Length < 1 || oes.Any((obj) => obj.Type != oes[0].Type || obj.PropertyValue != oes[0].PropertyValue)) return; // First and last check *should* never be true by this point, but just in case..
+				entry = oes[0];
+			}
+			else if (e.Context.Instance is ObjectEntry oe)
+				entry = oe;
+			else
+				return;
+
+			if (entry.Type >= LevelData.ObjTypes.Count) return;
 			byte sub = (byte)e.Value;
-			e.Graphics.DrawImage(LevelData.ObjTypes[((ObjectEntry)e.Context.Instance).Type].SubtypeImage(sub).GetBitmap().ToBitmap(LevelData.BmpPal).Resize(e.Bounds.Size), e.Bounds);
+			e.Graphics.DrawImage(LevelData.ObjTypes[entry.Type].SubtypeImage(sub).GetBitmap().ToBitmap(LevelData.BmpPal).Resize(e.Bounds.Size), e.Bounds);
 		}
 
 		public override bool IsDropDownResizable { get { return true; } }

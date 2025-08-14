@@ -59,7 +59,7 @@ Right click, drag: Select an area.
 Right click inside selected area: Open context menu.
 A: Decrease index of selected chunk.
 Z: Increase index of selected chunk.
-P: View Objects (Foreground Tab Only).
+P: Toggle Objects View in Foreground Tab, Toggle Scroll Area View in Background Tab.
 Ctrl+F: Find chunk.
 Ctrl+H: Find and replace chunk.
 Use the list on the right to select a chunk.

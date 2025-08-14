@@ -13,7 +13,7 @@ namespace SonicRetro.SonLVL.GUI
 
 		private void value_ValueChanged(object sender, EventArgs e)
 		{
-			MainForm.Instance.AddObjectsPreview = new System.Drawing.Rectangle(
+			MainForm.Instance.AddGroupPreview = new System.Drawing.Rectangle(
 				(int)XDist.Value, (int)YDist.Value, (int)Rows.Value, (int)Columns.Value);
 			MainForm.Instance.DrawLevel();
 		}

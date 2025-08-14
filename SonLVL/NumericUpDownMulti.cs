@@ -6,7 +6,7 @@ namespace SonicRetro.SonLVL
 	{
 		protected override void UpdateEditText()
 		{
-			if (Hexadecimal && Value == -1)
+			if (Value == -1)
 			{
 				ChangingText = true;
 				Text = "-1";

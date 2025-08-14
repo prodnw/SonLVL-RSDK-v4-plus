@@ -8,6 +8,11 @@ namespace SonicRetro.SonLVL
 {
 	public partial class ReplaceChunksDialog : Form
 	{
+		public bool Hexadecimal
+		{
+			set => findChunk.Hexadecimal = replaceChunk.Hexadecimal = value;
+		}
+
 		public ReplaceChunksDialog()
 		{
 			InitializeComponent();

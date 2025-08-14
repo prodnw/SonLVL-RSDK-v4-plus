@@ -249,7 +249,10 @@ namespace SonicRetro.SonLVL
 		{
 			using (FileSelectDialog dlg = new FileSelectDialog("Scripts", scriptFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
+				{
 					objectScriptBox.Text = dlg.SelectedPath;
+					objectNameBox.Focus(); // you still gotta enter in the name, don't forget that..
+				}
 		}
 
 		private void objectForceLoad_CheckedChanged(object sender, EventArgs e)
@@ -426,7 +429,12 @@ namespace SonicRetro.SonLVL
 		{
 			using (FileSelectDialog dlg = new FileSelectDialog("Sound Effects", sfxFiles))
 				if (dlg.ShowDialog(this) == DialogResult.OK)
+				{
 					sfxFileBox.Text = dlg.SelectedPath;
+
+					if (LevelData.Game.RSDKVer != EngineVersion.V4)
+						sfxNameBox.Focus();
+				}
 		}
 
 		private void playerListBox_SelectedIndexChanged(object sender, EventArgs e)

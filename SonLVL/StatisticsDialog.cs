@@ -7,50 +7,66 @@ namespace SonicRetro.SonLVL
 {
 	public partial class StatisticsDialog : Form
 	{
-		public StatisticsDialog()
+		bool Hexadecimal { get; set; }
+
+		public StatisticsDialog(bool useHexadecimal)
 		{
 			InitializeComponent();
-			listView1.ListViewItemSorter = new ListViewColumnSorter();
-			listView2.ListViewItemSorter = new ListViewColumnSorter();
-			listView4.ListViewItemSorter = new ListViewColumnSorter();
+			objectsListView.ListViewItemSorter = new ListViewColumnSorter();
+			chunksListView.ListViewItemSorter = new ListViewColumnSorter();
+			tilesListView.ListViewItemSorter = new ListViewColumnSorter();
+
+			Hexadecimal = useHexadecimal;
 		}
 
 		private void StatisticsDialog_Load(object sender, EventArgs e)
 		{
 			Dictionary<int, int[]> counts = new Dictionary<int, int[]>();
+
+			// First, let's do the objects tab
+			// Index 0 in the array is the currently opened stage, while index 1 is the folder total
 			for (int i = 0; i < LevelData.ObjTypes.Count; i++)
 				counts.Add(i, new int[] { 0, 0 });
+
+			// Go through all objects in the scene, add 'em to the first column
 			foreach (ObjectEntry item in LevelData.Objects)
 				if (counts.ContainsKey(item.Type))
 					counts[item.Type][0]++;
 				else
 					counts.Add(item.Type, new int[] { 1, 0 });
 
+			// Set the starting values for the folder total column
 			foreach (KeyValuePair<int, int[]> item in counts)
 				item.Value[1] = item.Value[0];
 			
+			// Now, go through all additional scenes and add their counts into the folder total column
 			foreach (var scene in LevelData.AdditionalScenes)
 				foreach (var entity in scene.Scene.entities)
 					if (counts.ContainsKey(entity.type))
 						counts[entity.type][1]++;
 					else
 						counts.Add(entity.type, new int[] { 0, 1 });
-			listView1.BeginUpdate();
+
+			objectsListView.BeginUpdate();
+
 			foreach (KeyValuePair<int, int[]> item in counts)
 			{
 				ListViewItem lvi = new ListViewItem((item.Key == 0) ? "Blank Object" : LevelData.GetObjectDefinition((byte)item.Key).Name);
 				lvi.SubItems[0].Tag = item.Key;
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[1].ToString()) { Tag = item.Value[1] });
-				listView1.Items.Add(lvi);
+				objectsListView.Items.Add(lvi);
 			}
-			listView1.Sort();
-			listView1.EndUpdate();
+			objectsListView.Sort();
+			objectsListView.EndUpdate();
 			counts.Clear();
 
+			// Now, the Chunks tab
+			// Index 0 in the array is Foreground, Index 1 is Background, and Index 2 is folder total
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 				counts.Add(i, new int[] { 0, 0, 0 });
 			
+			// Go through the Foreground..
 			for (int y = 0; y < LevelData.FGHeight; y++)
 				for (int x = 0; x < LevelData.FGWidth; x++)
 					if (counts.ContainsKey(LevelData.Scene.layout[y][x]))
@@ -58,6 +74,7 @@ namespace SonicRetro.SonLVL
 					else
 						counts.Add(LevelData.Scene.layout[y][x], new int[] { 1, 0, 0 });
 
+			// And then the background..
 			for (int layer = 0; layer < 8; layer++)
 				for (int y = 0; y < LevelData.BGHeight[layer]; y++)
 					for (int x = 0; x < LevelData.BGWidth[layer]; x++)
@@ -66,9 +83,11 @@ namespace SonicRetro.SonLVL
 						else
 							counts.Add(LevelData.Background.layers[layer].layout[y][x], new int[] { 0, 1, 0 });
 
+			// Add the two together to get the starting value for the folder total
 			foreach (KeyValuePair<int, int[]> item in counts)
 				item.Value[2] = item.Value[0] + item.Value[1];
 
+			// And now, let's go through the rest of the stage folder
 			foreach (var scene in LevelData.AdditionalScenes)
 				foreach (ushort[] row in scene.Scene.layout)
 					foreach (ushort chunk in row)
@@ -77,21 +96,26 @@ namespace SonicRetro.SonLVL
 						else
 							counts.Add(chunk, new int[] { 0, 0, 1 });
 
-			listView2.BeginUpdate();
+			chunksListView.BeginUpdate();
+
 			foreach (KeyValuePair<int, int[]> item in counts)
 			{
-				ListViewItem lvi = new ListViewItem(item.Key.ToString("X2"));
+				ListViewItem lvi = new ListViewItem(item.Key.ToString(Hexadecimal ? "X3" : "D3"));
 				lvi.SubItems[0].Tag = item.Key;
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[1].ToString()) { Tag = item.Value[1] });
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[2].ToString()) { Tag = item.Value[2] });
-				listView2.Items.Add(lvi);
+				chunksListView.Items.Add(lvi);
 			}
-			listView2.Sort();
-			listView2.EndUpdate();
+			chunksListView.Sort();
+			chunksListView.EndUpdate();
 			counts.Clear();
+
+			// Now, tiles!
+			// We're simply tallying up how many times the tiles are used in chunks, not how often they're used in the stage
 			for (int i = 0; i < LevelData.NewTiles.Length; i++)
 				counts.Add(i, new int[] { 0 });
+
 			for (int i = 0; i < LevelData.NewChunks.chunkList.Length; i++)
 				for (int y = 0; y < 8; y++)
 					for (int x = 0; x < 8; x++)
@@ -99,16 +123,17 @@ namespace SonicRetro.SonLVL
 							counts[LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex][0]++;
 						else
 							counts.Add(LevelData.NewChunks.chunkList[i].tiles[y][x].tileIndex, new int[] { 1 });
-			listView4.BeginUpdate();
+			
+			tilesListView.BeginUpdate();
 			foreach (KeyValuePair<int, int[]> item in counts)
 			{
-				ListViewItem lvi = new ListViewItem(item.Key.ToString("X3"));
+				ListViewItem lvi = new ListViewItem(item.Key.ToString(Hexadecimal ? "X3" : "D3"));
 				lvi.SubItems[0].Tag = item.Key;
 				lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, item.Value[0].ToString()) { Tag = item.Value[0] });
-				listView4.Items.Add(lvi);
+				tilesListView.Items.Add(lvi);
 			}
-			listView4.Sort();
-			listView4.EndUpdate();
+			tilesListView.Sort();
+			tilesListView.EndUpdate();
 		}
 
 		private void listView_ColumnClick(object sender, ColumnClickEventArgs e)

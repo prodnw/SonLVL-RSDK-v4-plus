@@ -222,8 +222,8 @@ namespace SonicRetro.SonLVL.GUI
 			// Without a level loaded, we can't know the real chunk/tile max, so let's hardcode some default placeholder text
 			if (!useHexadecimalToolStripMenuItem.Checked)
 			{
-				ChunkCount.Text = $"/ 511";
-				TileCount.Text = $"/ 1023";
+				ChunkCount.Text = $"/ 1023";
+				TileCount.Text = $"/ 2047";
 			}
 
 			switchMouseButtonsInChunkAndBlockEditorsToolStripMenuItem.Checked = Settings.SwitchChunkBlockMouseButtons;

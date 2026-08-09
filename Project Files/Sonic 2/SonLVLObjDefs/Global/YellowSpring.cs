@@ -46,13 +46,21 @@ namespace S2ObjectDefinitions.Global
 			
 			properties[2] = new PropertySpec("Override XVel", typeof(int), "Extended",
 				"The override x velocity this spring should use. Up right springs only.", null,
-				(obj) => ((V4ObjectEntry)obj).Value0,
-				(obj, value) => ((V4ObjectEntry)obj).Value0 = (int)value);
+				(obj) => (obj.PropertyValue == 4) ? ((V4ObjectEntry)obj).Value0 : 0,
+				(obj, value) => {
+						if (obj.PropertyValue == 4) // only set it if we're an up-right spring
+							((V4ObjectEntry)obj).Value0 = (int)value;
+					}
+				);
 			
 			properties[3] = new PropertySpec("Override YVel", typeof(int), "Extended",
 				"The override y velocity this spring should use. Up right springs only.", null,
-				(obj) => ((V4ObjectEntry)obj).Value1,
-				(obj, value) => ((V4ObjectEntry)obj).Value1 = (int)value);
+				(obj) => (obj.PropertyValue == 4) ? ((V4ObjectEntry)obj).Value1 : 0,
+				(obj, value) => {
+						if (obj.PropertyValue == 4) // only set it if we're an up-right spring
+							((V4ObjectEntry)obj).Value1 = (int)value;
+					}
+				);
 		}
 		
 		public override ReadOnlyCollection<byte> Subtypes

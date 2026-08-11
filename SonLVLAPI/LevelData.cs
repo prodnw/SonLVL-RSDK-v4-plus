@@ -317,7 +317,7 @@ namespace SonicRetro.SonLVL.API
 		{
 			System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 			stopwatch.Start();
-			Log("Loading level " + stage.name + "...");
+			Log($"Loading act {stage.actID} from folder {stage.folder}...");
 			StageInfo = stage;
 			string stgfol = $"Data/Stages/{stage.folder}/";
 			switch (Game.RSDKVer)

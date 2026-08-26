@@ -247,7 +247,7 @@
             this.chunkNumericUpDown.Location = new System.Drawing.Point(0, 485);
             this.chunkNumericUpDown.Margin = new System.Windows.Forms.Padding(6);
             this.chunkNumericUpDown.Maximum = new decimal(new int[] {
-            511,
+            1023,
             0,
             0,
             0});

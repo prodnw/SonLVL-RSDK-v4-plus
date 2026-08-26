@@ -69,7 +69,7 @@ namespace SonicRetro.SonLVL
             this.chunkSelect.Location = new System.Drawing.Point(0, 531);
             this.chunkSelect.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.chunkSelect.Maximum = new decimal(new int[] {
-            1023,
+            511,
             0,
             0,
             0});

@@ -815,7 +815,7 @@
             this.TileID.Location = new System.Drawing.Point(11, 41);
             this.TileID.Margin = new System.Windows.Forms.Padding(6);
             this.TileID.Maximum = new decimal(new int[] {
-            2047,
+            1023,
             0,
             0,
             0});
@@ -1089,7 +1089,7 @@
             this.ChunkID.Location = new System.Drawing.Point(194, 18);
             this.ChunkID.Margin = new System.Windows.Forms.Padding(6);
             this.ChunkID.Maximum = new decimal(new int[] {
-            1023,
+            511,
             0,
             0,
             0});

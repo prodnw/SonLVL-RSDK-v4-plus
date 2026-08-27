@@ -8,6 +8,12 @@ namespace SonicRetro.SonLVL
 {
 	public partial class FindChunksDialog : Form
 	{
+		public decimal ChunkMaximum
+		{
+			get => chunkSelect.Maximum;
+			set => chunkSelect.Maximum = value;
+		}
+
 		public bool Hexadecimal
 		{
 			get => chunkSelect.Hexadecimal;

@@ -8,6 +8,11 @@ namespace SonicRetro.SonLVL
 {
 	public partial class ReplaceChunksDialog : Form
 	{
+		public decimal ChunkMaximum
+		{
+			set => findChunk.Maximum = replaceChunk.Maximum = value;
+		}
+		
 		public bool Hexadecimal
 		{
 			set => findChunk.Hexadecimal = replaceChunk.Hexadecimal = value;

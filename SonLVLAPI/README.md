@@ -14,7 +14,7 @@ The maximum entity count is stored in _Scene.cs_, under the _ENTITY_LIST_SIZE_ c
 
 #### Tile Limit
 
-The number of 16x16 tiles in the stage is controlled in _Tileconfig.cs_, under the _TILE_LIST_SIZE_ constant. Normally, this number is 1024, or 0x400 in hexadecimal. Note that the file format for chunks stores the tile index in a space of 24 bits. As such, the largest tile index that can be used in a chunk (without altering the file format) is 0xFFF, or 4095 in decimal.
+The number of 16x16 tiles in the stage is controlled in _Tileconfig.cs_, under the _TILE_LIST_SIZE_ constant. Normally, this number is 1024, or 0x400 in hexadecimal. Note that the file format for chunks stores the tile index in a space of 10 bits, which means a maximum index of 0x3FF (or the existing maximum). As such, increasing the tile count would require updating the file format that chunks use (which is again only managed in the RSDKv3_4 library, and not included as part of SonLVL-RSDK at all).
 
 #### Chunk Limit
 

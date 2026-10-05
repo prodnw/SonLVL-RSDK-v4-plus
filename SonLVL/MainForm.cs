@@ -919,9 +919,15 @@ namespace SonicRetro.SonLVL.GUI
 			UpdateScrollControls();
 			loaded = false;
 
+			// Update the maximum values automatically, based on what the LevelData's counts are
 			ChunkID.Maximum = LevelData.NewChunks.chunkList.Length - 1;
 			TileID.Maximum = LevelData.NewTiles.Length - 1;
 			useHexadecimalToolStripMenuItem_CheckedChanged(this, EventArgs.Empty);
+			
+			// And then let's make sure to update some of the other forms, too..
+			replaceFGChunksDialog.ChunkMaximum = ChunkID.Maximum;
+			replaceBGChunksDialog.ChunkMaximum = ChunkID.Maximum;
+			findFGChunksDialog.ChunkMaximum = findBGChunksDialog.ChunkMaximum = ChunkID.Maximum;
 			
 			// Not pretty, but let's enable all the controls of the form now
 			tableLayoutPanel4.Enabled = importToolStripButton.Enabled = deleteToolStripButton.Enabled = fgToolStrip.Enabled = bgToolStrip.Enabled =
@@ -5427,6 +5433,7 @@ namespace SonicRetro.SonLVL.GUI
 			using (PaletteCycleDialog dialog = new PaletteCycleDialog(LevelImgPalette.Entries, colors, cycle.Index))
 			{
 				dialog.chunkNumericUpDown.Value = SelectedChunk;
+				dialog.chunkNumericUpDown.Maximum = ChunkID.Maximum;
 				dialog.Hexadecimal = useHexadecimalToolStripMenuItem.Checked;
 				if (dialog.ShowDialog(this) == DialogResult.OK)
 				{
